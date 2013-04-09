@@ -1,6 +1,6 @@
 // Copyright (C) 2010  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXSystem1 {		// system module 1  
+TXSystem1 {		// system module 1
 
 	/*	use the following code to show all class methods:
 
@@ -8,20 +8,20 @@ TXSystem1 {		// system module 1
 	*/
 	////////////////////////////////////////////////////////////////////////////////////
 	//	define class variables:
-	
-	classvar	<systemVersion = "082";	// version of the TX Modular system shown in gui
+
+	classvar	<systemVersion = "086";	// version of the TX Modular system shown in gui
 	classvar	<systemRevision = 1001;	// current revision no of the system
 
-	classvar	<arrAllPossModules;		// array of all possible modules. 
-	classvar	<arrAllPossCurSeqModules;	// array of all possible current sequencer modules. 
+	classvar	<arrAllPossModules;		// array of all possible modules.
+	classvar	<arrAllPossCurSeqModules;	// array of all possible current sequencer modules.
 	classvar	<arrAllPossOldSeqModules;	// array of all possible older sequencer modules (for old builds)
-	classvar	<arrSystemModules;			// array of modules in system. 
-	classvar	<arrModuleClipboards;		// array of modules clipboards for copying/pasting. 
+	classvar	<arrSystemModules;			// array of modules in system.
+	classvar	<arrModuleClipboards;		// array of modules clipboards for copying/pasting.
 
-	classvar	<arrMainOutBusses;		// array of main out busses 
+	classvar	<arrMainOutBusses;		// array of main out busses
 	classvar	<arrFXSendBusses;		// array of FX send busses
-	classvar	<arrAudioAuxBusses;	// array of Audio Aux busses 
-	classvar	<arrControlAuxBusses;	// array of Control Aux busses 
+	classvar	<arrAudioAuxBusses;	// array of Audio Aux busses
+	classvar	<arrControlAuxBusses;	// array of Control Aux busses
 	classvar	<arrAllBusses;		// single array of all busses used
 
 	classvar <server;				// server variable
@@ -34,15 +34,15 @@ TXSystem1 {		// system module 1
 	classvar <arrScreenUpdFuncs;	// for gui
 	classvar <instName = "System";	// system name
 	classvar <arrActionSpecs;		// specs for system actions available to widgets
-	classvar <guiSpecTitleArray; 	
+	classvar <guiSpecTitleArray;
 	classvar <>showFrontScreen;
 	classvar <showSystemControls;
 	classvar <arrSnapshots;			// array of system snapshots
-	classvar <>snapshotNo = 0;	
-	classvar <>snapshotName = "";	
-	classvar <holdLoadQueue;			
+	classvar <>snapshotNo = 0;
+	classvar <>snapshotName = "";
+	classvar <holdLoadQueue;
 	classvar <defSampleRate = 44100;	//	default sample rate. (also set in TXModuleBase)
-	classvar <txStandAlone = 0;		
+	classvar <txStandAlone = 0;
 	classvar <>arrModulesForMeters;	// holds all modules that could be displayed on meters
 
 	// bypass globalMouseDown test for now, can cause crashes
@@ -54,7 +54,7 @@ TXSystem1 {		// system module 1
 	classvar <showWindow;			// for gui
 
 	classvar mainWindowWidth = 1390;	// width and height of main window
-	classvar mainWindowHeight = 775;
+	classvar mainWindowHeight = 786;
 	classvar closingDown = false;	// only used when closing down
 	classvar screenChanged = false;	// for gui
 	classvar screenRebuild = false;	// for gui
@@ -66,7 +66,7 @@ TXSystem1 {		// system module 1
 	classvar stTextFileName;		// for gui
 	classvar screenUpdRoutine;		// for gui
 	classvar holdBootSeconds;		// for gui
-	classvar historyEvents;			// for gui 
+	classvar historyEvents;			// for gui
 	classvar historyIndex;			// for gui
 	classvar notes0, notes1, notes2, notes3, notes4, notes5, notes6, notes7;   // for notes view gui
 
@@ -83,15 +83,15 @@ TXSystem1 {		// system module 1
 		// create event and set variable:
 		dataBank = ();
 		dataBank.modulesVisibleOrigin = Point.new(0,0);
-	} 
+	}
 	// start the system
-	
-	*startCocoa { 
+
+	*startCocoa {
 		this.start;
-	} 
+	}
 
 
-	*start { arg argStandAlone = 0, argFileNameString, showAudioOptions = true; 
+	*start { arg argStandAlone = 0, argFileNameString, showAudioOptions = true;
 		var holdString;
 		if (argStandAlone == 1, {
 			txStandAlone = 1; // for running TX system as a standalone
@@ -100,7 +100,10 @@ TXSystem1 {		// system module 1
 		});
 
 		// removed for now
-		//	GUI.cocoa; // use cocoa in subsequent GUI creation procedures 
+		//	GUI.cocoa; // use cocoa in subsequent GUI creation procedures
+
+		//GUI.skin.fontSpecs = [ "Helvetica", 9 ];
+		Font.default =  Font("Helvetica", 12);
 
 		//  set variables:
 		dataBank.loadingDataFlag = false;
@@ -118,9 +121,9 @@ TXSystem1 {		// system module 1
 		this.loadSystemSettings;
 		this.clearHistory;
 
-		// check argFileNameString 
+		// check argFileNameString
 		if (argFileNameString.isNil, {
-			holdString = TXSystem1.filenameSymbol.asString.dirname 
+			holdString = TXSystem1.filenameSymbol.asString.dirname
 			++ "/TXDefaultSystemData/TXDefaultSystem";
 			if( File.exists(holdString), {
 				argFileNameString = holdString;
@@ -135,14 +138,14 @@ TXSystem1 {		// system module 1
 		},{
 			showWindow = "Modules & Channels";
 			showFrontScreen = false;
-		}); 
-		
+		});
+
 		// bypass globalMouseDown test for now - causes crashes
 		//	globalMouseDown = false;
 
 		// create Load Queue
 		holdLoadQueue = TXLoadQueue.new;
-		// create array of all possible modules  
+		// create array of all possible modules
 		arrAllPossModules = [
 
 			// required system modules
@@ -164,8 +167,8 @@ TXSystem1 {		// system module 1
 			TXAnimateCode2,
 			TXAudioIn4,
 			TXAudioTrigger3,
-			TXBitCrusher2, 
-			TXBitCrusher2St, 
+			TXBitCrusher2,
+			TXBitCrusher2St,
 			TXChorus,
 			TXChorusSt,
 			TXCodeInsertAu,
@@ -187,20 +190,20 @@ TXSystem1 {		// system module 1
 			TXDelay4St,
 			TXDisintegrator,
 			TXDisintegratorSt,
-			TXDistortion2, 
+			TXDistortion2,
 			TXDistortion2St,
 			TXEnv16Stage,
 			TXEnvCurve,
 			TXEnvDADSR4,
-			TXEnvFollow, 
-			TXEnvFollowSt, 
+			TXEnvFollow,
+			TXEnvFollowSt,
 			TXEQGraphic,
 			TXEQGraphicSt,
 			TXEQPara,
 			TXEQParaSt,
 			TXEQShelf,
 			TXEQShelfSt,
-			TXFilePlayer6,   
+			TXFilePlayer6,
 			TXFilePlayer6St,
 			TXFileRecorder2,
 			TXFileRecorder2St,
@@ -246,13 +249,13 @@ TXSystem1 {		// system module 1
 			TXOSCController,
 			TXOSCController2D,
 			TXOSCControlOut,
-			TXOSCOut, 
-			TXOSCRemote, 
-			TXOSCTrigger, 
+			TXOSCOut,
+			TXOSCRemote,
+			TXOSCTrigger,
 			TXPerlinNoise,
 			TXPhaser,
 			TXPItchFollower4,
-			TXPitchShifter, 
+			TXPitchShifter,
 			TXPitchShifterSt,
 			TXPingPong,
 			TXPingPongSt,
@@ -269,7 +272,7 @@ TXSystem1 {		// system module 1
 			TXSampleHold,
 			TXSamplePlayer5a,
 			TXSamplePlayerSt6,
-			TXSamplePlayerPlus, 
+			TXSamplePlayerPlus,
 			TXSamplePlayerPlusSt,
 			TXSimpleSlider2,
 			TXSlope,
@@ -296,7 +299,7 @@ TXSystem1 {		// system module 1
 			TXWiiControllerOSC3,
 			TXWiiTrigger,
 			TXWiiTrigOSC2,
-			TXXDistort, 
+			TXXDistort,
 			TXXDistortSt,
 			TXWXFader2to1,
 			TXWXFader2to1C,
@@ -304,246 +307,206 @@ TXSystem1 {		// system module 1
 		];
 		// the following strings are formatted as popup item with categories and modules
 		dataBank.arrSourceModulesByCategory = [
-			[" ([ AUDIO SOURCE MODULES: ]", nil // ) dummy bracket
-			],
-			["   ([ Polyphonic, triggered  ]", nil // )
-			],
-			["      Filter Synth", TXFilterSynth2],
-			["      FM Synth", TXFMSynth4],
-			["      Granulator", TXGranulator],
-			["      Loop Player", TXLoopPlayer],
-			["      Loop Player St", TXLoopPlayerSt2],
-			["      Pluck", TXPluckSynth],
-			["      Sample Player", TXSamplePlayer5a], 
-			["      Sample Player St", TXSamplePlayerSt6],
-			["      Sample Player+ ", TXSamplePlayerPlus],
-			["      Sample Player+ St", TXSamplePlayerPlusSt],
-			["      Table Synth", TXTableSynth4],
-			["      Wave Synth", TXWaveSynth8],
-			["      Wave Synth+", TXWaveSynthPlus2],
-			["   ([ Drones, not triggered ]", nil // )
-			],
-			["      Noise White-Pink", TXNoiseWhitePink],
-			["      Vosim", TXVosim],
-			["      Waveform ", TXWaveform5],
-			["      Waveform St", TXWaveform5St],
-			["      Wave Terrain", TXWaveTerrain],
-			["   ([ Audio File]", nil // )
-			],
-			["      File Player ", TXFilePlayer6],
-			["      File Player St", TXFilePlayer6St],
-			["   ([ Audio Inputs ]", nil // )
-			],
-			["      Audio Inputs", TXAudioIn4],
-			["   ([ Mid-Side Encoding ]", nil // )
-			],
-			["      M-S Decoder", TXMidSideDecoder],
-			["      M-S Encoder", TXMidSideEncoder],
-			["   ([ Mixing ]", nil // )
-			],
-			["      Matrix A 8x8 ", TXMatrixAudio8x8],
-			["      Mix Audio 8-1 ", TXMixAudio8to1],
-			["      Mix Audio 16-2", TXMixAudio16to2],
-			["      X-Fader", TXWXFader2to1],
-			["      X-Fader St", TXWXFader4to2],
-			["   ([ SuperCollider Code ]", nil // )
-			],
-			["      Code Source A", TXCodeSourceAu],
-			["      Code Source A St", TXCodeSourceAuSt],
-			["([ CONTROL SOURCE & ACTION MODULES: ]", nil // )
-			],
-			["   ([ Analysis ]", nil // )
-			],
-			["      Amp Follower", TXAmpFollower3],
-			["      Analyser", TXAnalyser3],
-			["      Audio Trigger", TXAudioTrigger3],
-			["      CyclOSC Colour", TXCyclOSCCol],
-			["      CyclOSC Grey", TXCyclOSCGrey],
-			["      Pitch Follower", TXPItchFollower4],
-			["   ([ Envelopes, triggered ]", nil // )
-			],
-			["      Env 16-stage", TXEnv16Stage],
-			["      Env Curve", TXEnvCurve],
-			["      Env DADSR", TXEnvDADSR4],
-			["      Trigger Impulse", TXTrigImpulse],
-			["   ([ MIDI ]", nil // )
-			],
-			["      MIDI Controller", TXMIDIController2],
-			["      MIDI Control Out", TXMIDIControlOut3],
-			["      MIDI Note", TXMIDINote2],
-			["      MIDI Out ", TXMIDIOut],
-			["      MIDI Pitchbend", TXMIDIPitchbend2],
-			["      MIDI Velocity", TXMIDIVelocity2],
-			["   ([ Mixing ]", nil // )
-			],
-			["      Group Morph", TXGroupMorph],
-			["      Matrix C 8x8", TXMatrixControl8x8],
-			["      Mix Control 8-1", TXMixControl8to1],
-			["      X-Fader 2-1 C", TXWXFader2to1C],
-			["   ([ Modulation ]", nil // )
-			],
-			["      LFO", TXLFOMulti2],
-			["      LFO Curve", TXLFOCurve],
-			["      Perlin Noise", TXPerlinNoise],
-			["   ([ OSC ]", nil // )
-			],
-			["      OSC Controller", TXOSCController],
-			["      OSC Control 2D ", TXOSCController2D],
-			["      OSC Control Out", TXOSCControlOut],
-			["      OSC Out", TXOSCOut],
-			["      OSC Remote", TXOSCRemote],
-			["      OSC Trigger", TXOSCTrigger],
-			["   ([ Note Stacker ]", nil // )
-			],
-			["      Note Stacker", TXNoteStacker],
-			["   ([ Sequencers ]", nil // )
-			],
-			["      Action Sequencer", TXActionSeq3],
-			["      Step Sequencer", TXStepSequencer], 
-			["   ([ Sliders ]", nil // )
-			],
-			["      Action Slider", TXActionSlider],
-			["      Simple Slider", TXSimpleSlider2],
-			["   ([ SuperCollider Code ]", nil // )
-			],
-			["      Code Source C", TXCodeSourceCtrl],
-			["   ([ Visual ]", nil // )
-			],
-			["      QC Particles", TXQCParticles2],
-			["      Quartz Player", TXQCPlayer4],
-			["      Animate Code", TXAnimateCode2],
-			["   ([ Wii ]", nil // )
-			],
-			["      Wii Ctrl Darwiin", TXWiiController],
-			["      Wii Ctrl OSC", TXWiiControllerOSC2],
-			["      Wii Trig Darwiin", TXWiiTrigger],
-			["      Wii Trig OSC", TXWiiTrigOSC2],
-		];
+		["AUDIO SOURCE MODULES...", nil ],
+		["TYPE: Polyphonic, triggered...", nil ],
+		["   Filter Synth", TXFilterSynth2],
+		["   FM Synth", TXFMSynth4],
+		["   Granulator", TXGranulator],
+		["   Loop Player", TXLoopPlayer],
+		["   Loop Player St", TXLoopPlayerSt2],
+		["   Pluck", TXPluckSynth],
+		["   Sample Player", TXSamplePlayer5a],
+		["   Sample Player St", TXSamplePlayerSt6],
+		["   Sample Player+ ", TXSamplePlayerPlus],
+		["   Sample Player+ St", TXSamplePlayerPlusSt],
+		["   Table Synth", TXTableSynth4],
+		["   Wave Synth", TXWaveSynth8],
+		["   Wave Synth+", TXWaveSynthPlus2],
+		["TYPE: Drones, not triggered...", nil ],
+		["   Noise White-Pink", TXNoiseWhitePink],
+		["   Vosim", TXVosim],
+		["   Waveform ", TXWaveform5],
+		["   Waveform St", TXWaveform5St],
+		["   Wave Terrain", TXWaveTerrain],
+		["TYPE: Audio File...", nil ],
+		["   File Player ", TXFilePlayer6],
+		["   File Player St", TXFilePlayer6St],
+		["TYPE: Audio Inputs...", nil ],
+		["   Audio Inputs", TXAudioIn4],
+		["TYPE: Mid-Side Encoding...", nil ],
+		["   M-S Decoder", TXMidSideDecoder],
+		["   M-S Encoder", TXMidSideEncoder],
+		["TYPE: Mixing...", nil ],
+		["   Matrix A 8x8 ", TXMatrixAudio8x8],
+		["   Mix Audio 8-1 ", TXMixAudio8to1],
+		["   Mix Audio 16-2", TXMixAudio16to2],
+		["   X-Fader", TXWXFader2to1],
+		["   X-Fader St", TXWXFader4to2],
+		["TYPE: SuperCollider Code...", nil ],
+		["   Code Source A", TXCodeSourceAu],
+		["   Code Source A St", TXCodeSourceAuSt],
+		["CONTROL SOURCE & ACTION MODULES...", nil ],
+		["TYPE: Analysis...", nil ],
+		["   Amp Follower", TXAmpFollower3],
+		["   Analyser", TXAnalyser3],
+		["   Audio Trigger", TXAudioTrigger3],
+		["   CyclOSC Colour", TXCyclOSCCol],
+		["   CyclOSC Grey", TXCyclOSCGrey],
+		["   Pitch Follower", TXPItchFollower4],
+		["TYPE: Envelopes, triggered...", nil ],
+		["   Env 16-stage", TXEnv16Stage],
+		["   Env Curve", TXEnvCurve],
+		["   Env DADSR", TXEnvDADSR4],
+		["   Trigger Impulse", TXTrigImpulse],
+		["TYPE: MIDI...", nil ],
+		["   MIDI Controller", TXMIDIController2],
+		["   MIDI Control Out", TXMIDIControlOut3],
+		["   MIDI Note", TXMIDINote2],
+		["   MIDI Out ", TXMIDIOut],
+		["   MIDI Pitchbend", TXMIDIPitchbend2],
+		["   MIDI Velocity", TXMIDIVelocity2],
+		["TYPE: Mixing...", nil ],
+		["   TYPE Morph", TXTYPEMorph],
+		["   Matrix C 8x8", TXMatrixControl8x8],
+		["   Mix Control 8-1", TXMixControl8to1],
+		["   X-Fader 2-1 C", TXWXFader2to1C],
+		["TYPE: Modulation...", nil ],
+		["   LFO", TXLFOMulti2],
+		["   LFO Curve", TXLFOCurve],
+		["   Perlin Noise", TXPerlinNoise],
+		["TYPE: OSC...", nil ],
+		["   OSC Controller", TXOSCController],
+		["   OSC Control 2D ", TXOSCController2D],
+		["   OSC Control Out", TXOSCControlOut],
+		["   OSC Out", TXOSCOut],
+		["   OSC Remote", TXOSCRemote],
+		["   OSC Trigger", TXOSCTrigger],
+		["TYPE: Note Stacker...", nil ],
+		["   Note Stacker", TXNoteStacker],
+		["TYPE: Sequencers...", nil ],
+		["   Action Sequencer", TXActionSeq3],
+		["   Step Sequencer", TXStepSequencer],
+		["TYPE: Sliders...", nil ],
+		["   Action Slider", TXActionSlider],
+		["   Simple Slider", TXSimpleSlider2],
+		["TYPE: SuperCollider Code...", nil ],
+		["   Code Source C", TXCodeSourceCtrl],
+		["TYPE: Visual...", nil ],
+		["   QC Particles", TXQCParticles2],
+		["   Quartz Player", TXQCPlayer4],
+		["   Animate Code", TXAnimateCode2],
+		["TYPE: Wii...", nil ],
+		["   Wii Ctrl Darwiin", TXWiiController],
+		["   Wii Ctrl OSC", TXWiiControllerOSC2],
+		["   Wii Trig Darwiin", TXWiiTrigger],
+		["   Wii Trig OSC", TXWiiTrigOSC2],
+	];
 
 		dataBank.arrAudioInsertModulesByCategory = [
-			["([ AUDIO INSERT MODULES: ]", nil // )
-			],
-			["   ([ Channel tools ]", nil // )
-			],
-			["      Mono to Stereo", TXMonoToStereo],
-			["      Stereo To Mono", TXStereoToMono2],
-			["      Stereo Width", TXStereoWidth],
-			["   ([ Delay ]", nil // )
-			],
-			["      Delay", TXDelay4],
-			["      Delay St", TXDelay4St],
-			["      Live Looper", TXLiveLooper2],
-			["      MultiTap Delay", TXMultiTapDelay2],
-			["      Ping Pong", TXPingPong],
-			["      Ping Pong St", TXPingPongSt],
-			["   ([ Distortion ]", nil // )
-			],
-			["      Amp Sim", TXAmpSim],
-			["      Amp Sim St", TXAmpSimSt],
-			["      Bit Crusher", TXBitCrusher2],
-			["      Bit Crusher St", TXBitCrusher2St],
-			["      Disintegrator", TXDisintegrator],
-			["      Disintegrator St", TXDisintegratorSt],
-			["      Distortion", TXDistortion2],
-			["      Distortion St", TXDistortion2St],
-			["      Waveshaper", TXWaveshaper],
-			["      Waveshaper St", TXWaveshaperSt],
-			["      X Distort", TXXDistort],
-			["      X Distort St", TXXDistortSt],
-			["   ([ Dynamics ]", nil // )
-			],
-			["      Compander", TXCompander3],
-			["      Compander St", TXCompander3St],
-			["      Env Follow", TXEnvFollow],
-			["      Env Follow St", TXEnvFollowSt],
-			["      Gain", TXGain],
-			["      Gain St", TXGainSt],
-			["      Limiter", TXLimiter],
-			["      Limiter St", TXLimiterSt],
-			["      Normalizer", TXNormalizer],
-			["      Normalizer St", TXNormalizerSt],
-			["      Transient Shape", TXTransientShape],
-			["      Transient Shape St", TXTransientShapeSt],
-			["   ([ EQ & Filter ]", nil // )
-			],
-			["      DC Remove", TXDCRemove],
-			["      DC Remove St", TXDCRemoveSt],
-			["      EQ Graphic", TXEQGraphic],
-			["      EQ Graphic St", TXEQGraphicSt],
-			["      EQ Para", TXEQPara],
-			["      EQ Para St", TXEQParaSt],
-			["      EQ Shelf", TXEQShelf],
-			["      EQ Shelf St", TXEQShelfSt],
-			["      Filter", TXFilterExt2],
-			["      Filter St", TXFilterExt2St],
-			["   ([ Modulation ]", nil // )
-			],
-			["      Chorus", TXChorus],
-			["      Chorus St", TXChorusSt],
-			["      Flanger", TXFlanger3],
-			["      Flanger St", TXFlanger3St],
-			["      Notch Phaser", TXNotchPhaser],
-			["      Notch Phaser St", TXNotchPhaserSt],
-			["      Phaser", TXPhaser],
-			["      Ring Modulator", TXRingMod2],
-			["   ([ Pitch Shift ]", nil // )
-			],
-			["      Pitch Shifter", TXPitchShifter],
-			["      Pitch Shifter St", TXPitchShifterSt],
-			["   ([ Recording ]", nil // )
-			],
-			["      File Recorder", TXFileRecorder2],
-			["      File Recorder St", TXFileRecorder2St],
-			["   ([ Reverb ]", nil // )
-			],
-			["      Convolution ", TXConvolution],
-			["      Convolution St ", TXConvolutionSt],
-			["      Reverb", TXReverb2],
-			["      Reverb St", TXReverbSt2],
-			["      ReverbA", TXReverbA],
-			["      ReverbF", TXReverbF],
-			["      ReverbF St", TXReverbFSt],
-			["      ReverbG", TXReverbG],
-			["   ([ Spectral ]", nil // )
-			],
-			["      Spectral FX", TXSpectralFX],
-			["      Vocoder", TXVocoder2],
-			["      Vocoder FX", TXVocoderFX2],
-			["   ([ SuperCollider Code ]", nil // )
-			],
-			["      Code Insert A", TXCodeInsertAu],
-			["      Code Insert A St", TXCodeInsertAuSt],
-			["   ([ Synthesis ]", nil // )
-			],
-			["      Harmoniser", TXHarmoniser],
+			["AUDIO INSERT MODULES: ]", nil 			],
+			["TYPE: Channel tools ]", nil 			],
+			["   Mono to Stereo", TXMonoToStereo],
+			["   Stereo To Mono", TXStereoToMono2],
+			["   Stereo Width", TXStereoWidth],
+			["TYPE: Delay ]", nil 			],
+			["   Delay", TXDelay4],
+			["   Delay St", TXDelay4St],
+			["   Live Looper", TXLiveLooper2],
+			["   MultiTap Delay", TXMultiTapDelay2],
+			["   Ping Pong", TXPingPong],
+			["   Ping Pong St", TXPingPongSt],
+			["TYPE: Distortion ]", nil 			],
+			["   Amp Sim", TXAmpSim],
+			["   Amp Sim St", TXAmpSimSt],
+			["   Bit Crusher", TXBitCrusher2],
+			["   Bit Crusher St", TXBitCrusher2St],
+			["   Disintegrator", TXDisintegrator],
+			["   Disintegrator St", TXDisintegratorSt],
+			["   Distortion", TXDistortion2],
+			["   Distortion St", TXDistortion2St],
+			["   Waveshaper", TXWaveshaper],
+			["   Waveshaper St", TXWaveshaperSt],
+			["   X Distort", TXXDistort],
+			["   X Distort St", TXXDistortSt],
+			["TYPE: Dynamics ]", nil 			],
+			["   Compander", TXCompander3],
+			["   Compander St", TXCompander3St],
+			["   Env Follow", TXEnvFollow],
+			["   Env Follow St", TXEnvFollowSt],
+			["   Gain", TXGain],
+			["   Gain St", TXGainSt],
+			["   Limiter", TXLimiter],
+			["   Limiter St", TXLimiterSt],
+			["   Normalizer", TXNormalizer],
+			["   Normalizer St", TXNormalizerSt],
+			["   Transient Shape", TXTransientShape],
+			["   Transient Shape St", TXTransientShapeSt],
+			["TYPE: EQ & Filter ]", nil ],
+			["   DC Remove", TXDCRemove],
+			["   DC Remove St", TXDCRemoveSt],
+			["   EQ Graphic", TXEQGraphic],
+			["   EQ Graphic St", TXEQGraphicSt],
+			["   EQ Para", TXEQPara],
+			["   EQ Para St", TXEQParaSt],
+			["   EQ Shelf", TXEQShelf],
+			["   EQ Shelf St", TXEQShelfSt],
+			["   Filter", TXFilterExt2],
+			["   Filter St", TXFilterExt2St],
+			["TYPE: Modulation ]", nil ],
+			["   Chorus", TXChorus],
+			["   Chorus St", TXChorusSt],
+			["   Flanger", TXFlanger3],
+			["   Flanger St", TXFlanger3St],
+			["   Notch Phaser", TXNotchPhaser],
+			["   Notch Phaser St", TXNotchPhaserSt],
+			["   Phaser", TXPhaser],
+			["   Ring Modulator", TXRingMod2],
+			["TYPE: Pitch Shift ]", nil ],
+			["   Pitch Shifter", TXPitchShifter],
+			["   Pitch Shifter St", TXPitchShifterSt],
+			["TYPE: Recording ]", nil ],
+			["   File Recorder", TXFileRecorder2],
+			["   File Recorder St", TXFileRecorder2St],
+			["TYPE: Reverb ]", nil ],
+			["   Convolution ", TXConvolution],
+			["   Convolution St ", TXConvolutionSt],
+			["   Reverb", TXReverb2],
+			["   Reverb St", TXReverbSt2],
+			["   ReverbA", TXReverbA],
+			["   ReverbF", TXReverbF],
+			["   ReverbF St", TXReverbFSt],
+			["   ReverbG", TXReverbG],
+			["TYPE: Spectral ]", nil ],
+			["   Spectral FX", TXSpectralFX],
+			["   Vocoder", TXVocoder2],
+			["   Vocoder FX", TXVocoderFX2],
+			["TYPE: SuperCollider Code ]", nil ],
+			["   Code Insert A", TXCodeInsertAu],
+			["   Code Insert A St", TXCodeInsertAuSt],
+			["TYPE: Synthesis ]", nil ],
+			["   Harmoniser", TXHarmoniser],
 		];
 
 		dataBank.arrControlInsertModulesByCategory = [
-			["([ CONTROL INSERT MODULES: ]", nil // )
-			],
-			["   ([ Analysis ]", nil // )
-			],
-			["      Slope", TXSlope],
-			["   ([ Delay ]", nil // )
-			],
-			["      Control Delay", TXControlDelay4], 
-			["   ([ Modify ]", nil // )
-			],
-			["      Smooth", TXSmooth2],
-			["      Warp ", TXWarp2],
-			["      Sample and Hold", TXSampleHold],	
-			["   ([ SuperCollider Code ]", nil // )
-			],
-			["      Code Insert C", TXCodeInsertCtrl],
+			["CONTROL INSERT MODULES: ]", nil ],
+			["TYPE: Analysis ]", nil ],
+			["   Slope", TXSlope],
+			["TYPE: Delay ]", nil ],
+			["   Control Delay", TXControlDelay4],
+			["TYPE: Modify ]", nil ],
+			["   Smooth", TXSmooth2],
+			["   Warp ", TXWarp2],
+			["   Sample and Hold", TXSampleHold],
+			["TYPE: SuperCollider Code ]", nil ],
+			["    Code Insert C", TXCodeInsertCtrl],
 		];
 		// adjust for cocoa
 		if (GUI.current.asSymbol != \cocoa, {
-			// if swing remove certain modules 	
 			arrAllPossModules.remove(TXQCParticles2);
 			arrAllPossModules.remove(TXQCPlayer4);
-			dataBank.arrSourceModulesByCategory.remove(["      QC Particles", TXQCParticles2]);
-			dataBank.arrSourceModulesByCategory.remove(["      Quartz Player", TXQCPlayer4]);
-		}); 
+			dataBank.arrSourceModulesByCategory.remove(["   QC Particles", TXQCParticles2]);
+			dataBank.arrSourceModulesByCategory.remove(["   Quartz Player", TXQCPlayer4]);
+		});
 		// create arrays of all possible old and current sequencer modules
 		arrAllPossOldSeqModules = [	// kept for instruments saved using earlier builds
 			TXSequencer4,
@@ -559,8 +522,8 @@ TXSystem1 {		// system module 1
 			TXStepSequencer,
 		];
 		autoOpen = false;
-		closingDown = false;	
-		
+		closingDown = false;
+
 		// initialise
 		notes0 = " ";
 		notes1 = " ";
@@ -571,20 +534,22 @@ TXSystem1 {		// system module 1
 		notes6 = " ";
 		notes7 = " ";
 		arrSnapshots  = Array.newClear(100);
-		snapshotNo = 0;	
-		snapshotName = "";	
+		snapshotNo = 0;
+		snapshotName = "";
 		arrModuleClipboards = Dictionary.new;
-		
+
 		// assign  server
 		//	if (txStandAlone == 1, {
 		//		server = Server.internal;
 		//	},{//		server = Server.local;
 		//	});	// server now always internal
-		Platform.case(
-			\osx,   { server = Server.internal },
-			\linux, { server = Server.default }
-		);
-		Server.default = server;
+		// Platform.case(
+		// 	\osx,   { server = Server.internal },
+		// 	\linux, { server = Server.default }
+		// );
+		//Server.default = server;
+
+		server = Server.default;
 		server.quit;
 
 		audioSetupQuit = false;
@@ -593,8 +558,8 @@ TXSystem1 {		// system module 1
 	}	// end of *start method
 
 	*startMain{ arg argFileNameString;
-		var	holdFileName, holdData, holdFileNameString, holdString;	var holdInfoScreen, holdStartFunction; 
-		
+		var	holdFileName, holdData, holdFileNameString, holdString;	var holdInfoScreen, holdStartFunction;
+
 		// Create a new instance of ServerOptions
 		holdServerOptions = ServerOptions.new;
 		holdServerOptions.numOutputBusChannels = 16;
@@ -609,28 +574,28 @@ TXSystem1 {		// system module 1
 		holdServerOptions.sampleRate = dataBank.sampleRate ? defSampleRate;
 
 		holdStartFunction = {
-			
+
 			// Show starting info screen
 			server.options = holdServerOptions;
-			holdInfoScreen = TXInfoScreen.new("   TX MODULAR SYSTEM - STARTING . . .", 
+			holdInfoScreen = TXInfoScreen.new("   TX MODULAR SYSTEM - STARTING . . .",
 				0, TXColor.sysGuiCol1, 20, 800 );
 
 			server.waitForBoot({		// wait for server to boot before running other actions
 				// use Routine to pause - for safety
 				Routine.run {
 					// set server.latency
-					server.latency = latency;	
+					server.latency = latency;
 					// pause longer if standalone
 					if (txStandAlone == 1, {
 						0.5.wait;
 					},{
 						0.1.wait;
 					});
-					
+
 					{ // defer function
-						
+
 						// close info screen
-						holdInfoScreen.close;
+						{holdInfoScreen.close;}.defer;
 						// set class variables
 						guiSpecTitleArray = [
 							["xxxxx"]    // dummy  used to override behaviour in TXBuildActions
@@ -639,23 +604,23 @@ TXSystem1 {		// system module 1
 							["commandAction", "Refresh screen", {this.flagGuiUpd;}],
 							["commandAction", "Sync Start", {this.syncStart;}],
 							["commandAction", "Sync Stop", {this.syncStop;}],
-							["commandAction", "Stop all syncable modules", 
+							["commandAction", "Stop all syncable modules",
 								{this.stopAllSyncModules; this.showView;}],
 							["commandAction", "Panic - stop all notes", {this.allNotesOff;}],
-							["EmptyValueAction", \popup], 
-							["TXPopupAction", "Snapshot", 
-								{["Load Snapshot ..."] ++ 
+							["EmptyValueAction", \popup],
+							["TXPopupAction", "Snapshot",
+								{["Load Snapshot ..."] ++
 									(1 .. 99).collect({arg item, i;
 										var holdName;
 										holdName = this.getSnapshotName(item);
 										if (holdName == "", {holdName = "EMPTY"});
 										"Snapshot " ++ item.asString ++ ": " ++ holdName;
 									});},
-								"Snapshot", 
-								{arg view; 
+								"Snapshot",
+								{arg view;
 									this.loadSnapshot(view.value);
 								}
-							], 
+							],
 							["commandAction", "Show Screen 1", {
 								TXFrontScreen.storeCurrLoadNewLayer(0); this.showView;}],
 							["commandAction", "Show Screen 2", {
@@ -700,30 +665,30 @@ TXSystem1 {		// system module 1
 								TXFrontScreen.storeCurrLoadNextLayer; this.showView;}],
 							["commandAction", "Show Previous Screen", {
 								TXFrontScreen.storeCurrLoadPrevLayer; this.showView;}],
-							["EmptyValueAction", \number], 
-							["EmptyValueAction", \checkbox], 
-							["EmptyValueAction", \text], 
-							["EmptyValueAction", \textedit], 
-							["EmptyValueAction", \ipaddress], 
-						]);	
+							["EmptyValueAction", \number],
+							["EmptyValueAction", \checkbox],
+							["EmptyValueAction", \text],
+							["EmptyValueAction", \textedit],
+							["EmptyValueAction", \ipaddress],
+						]);
 						// start MIDI
 						try {this.midiConnect};
 
-						// initialise  
+						// initialise
 						holdNextModuleID = 100;
 						arrSystemModules = [];
 						// create groups
 						groupModules = Group.tail(server);
 						groupChannels = Group.tail(server);
-						
+
 						// initialise all module classes
 						arrAllPossModules.do({ arg item, i;
 							item.initClass;
 							item.system = this;
-							if (item.moduleType == "channel", 
-								{item.group = groupChannels;}, 
+							if (item.moduleType == "channel",
+								{item.group = groupChannels;},
 								{item.group = groupModules;}
-							); 
+							);
 						});
 						// initialise other classes
 						//			TXModGui.initClass;
@@ -746,45 +711,45 @@ TXSystem1 {		// system module 1
 						// 	NOTE - MouseSynth removed for now, can cause crashes
 						//	this.startMouseSynth;
 						// create stereo Main Outs Busses
-						arrMainOutBusses = 
-						["Main Outs"] 
+						arrMainOutBusses =
+						["Main Outs"]
 						.collect({ arg item, i;
 							TXBusMainOuts.new(item);
 						});
 						// create mono FX Send Busses
-						arrFXSendBusses = 
+						arrFXSendBusses =
 						["FX Send 1", "FX Send 2", "FX Send 3", "FX Send 4"]
 						.collect({ arg item, i;
 							TXBusFXSend.new(item);
 						});
 						// create Audio Aux Busses
-						arrAudioAuxBusses = 
-						["Audio Aux 1+2", "Audio Aux 3+4", "Audio Aux 5+6", 
+						arrAudioAuxBusses =
+						["Audio Aux 1+2", "Audio Aux 3+4", "Audio Aux 5+6",
 							"Audio Aux 7+8", "Audio Aux 9+10"]
 						.collect({ arg item, i;
 							TXBusAudioAux.new(item);
 						});
 						// create Audio Aux Busses
-						arrControlAuxBusses = 
-						["Control Aux 1", "Control Aux 2", "Control Aux 3", 
-							"Control Aux 4", "Control Aux 5", 
-							"Control Aux 6", "Control Aux 7", "Control Aux 8", 
+						arrControlAuxBusses =
+						["Control Aux 1", "Control Aux 2", "Control Aux 3",
+							"Control Aux 4", "Control Aux 5",
+							"Control Aux 6", "Control Aux 7", "Control Aux 8",
 							"Control Aux 9", "Control Aux 10"]
 						.collect({ arg item, i;
 							TXBusControlAux.new(item);
 						});
 						// create arrAllBusses
-						arrAllBusses = arrMainOutBusses ++ arrFXSendBusses ++ arrAudioAuxBusses 
+						arrAllBusses = arrMainOutBusses ++ arrFXSendBusses ++ arrAudioAuxBusses
 						++ arrControlAuxBusses;
 						// Initialise module layout x/y positions of all busses
 						this.initBusPositions;
 						// create gui
-						this.makeGui;	
+						this.makeGui;
 					}.defer;
-					
+
 					// pause
 					0.1.wait;
-					
+
 					// create routine to keep screen up to date
 					screenUpdRoutine = Routine { arg inval;
 						loop {
@@ -799,41 +764,52 @@ TXSystem1 {		// system module 1
 						holdData = thisProcess.interpreter.executeFile(holdFileNameString);
 						holdFileName = "    File name: " ++ holdFileNameString;
 						this.loadData(holdData);
-					}); 
+					});
 				};	// end of Routine.run
 
 			});	// end of server.waitForBoot
-			
+
 		};  // end of holdStartFunction
 
 		if (dataBank.showAudioOptions == false, {
 			holdStartFunction.value;
 		},{
 			if (audioSetupQuit == false, {
-				TXAudioOptionsScreen.makeWindow (this, holdServerOptions, holdStartFunction);	
-			});	
+				TXAudioOptionsScreen.makeWindow (this, holdServerOptions, holdStartFunction);
+			});
 		});
-	} 
+	}
 
 	///  SYSTEM SETTINGS /////////////////////////////////////
 
 	*saveSystemSettings {
-		var holdFile, holdFileData, holdPath;
+		var holdFile, holdFileData, holdPath, holdPath2;
 
 		holdPath = PathName.new(Platform.userAppSupportDir +/+ "TXModular/TXModSettings.tx");
-		holdFileData = ["TXModSystemSystemSettingsData", 
+
+		holdFileData = ["TXModSystemSystemSettingsData",
 			[dataBank.audioDevice, dataBank.bufferSize, dataBank.sampleRate,
-				dataBank.confirmDeletions, dataBank.windowAlpha, dataBank.windowColour.red, 
-				dataBank.windowColour.green, dataBank.windowColour.blue, 
+				dataBank.confirmDeletions, dataBank.windowAlpha, dataBank.windowColour.red,
+				dataBank.windowColour.green, dataBank.windowColour.blue,
 				dataBank.windowColour.alpha, dataBank.imageFileName, dataBank.displayModeIndex,
 				dataBank.audioInDevice, dataBank.audioOutDevice
-			] 
+			]
 		];
 		holdFile = File(holdPath.fullPath, "w");
-		holdFile << "#" <<< holdFileData << "\n";
-		//	use file as an io stream
-		//	<<< means store the compile string of the object
-		//	<< means store a print string of the object
+
+		if (File.exists(holdPath.fullPath)) {
+			/*  OLD CODE
+			holdFile << "#" <<< holdFileData << "\n";
+			//	use file as an io stream
+			//	<<< means store the compile string of the object
+			//	<< means store a print string of the object
+			NEW CODE:*/
+			holdFile.write("#" ++  holdFileData.asCompileString ++ "\n");
+		} {
+			"".postln;
+			"TX Warning: TXSystem1.saveSystemSettings: File doesn't exist: ".postln;
+			holdPath.postln;
+		};
 		holdFile.close;
 	}
 
@@ -841,16 +817,21 @@ TXSystem1 {		// system module 1
 		var validData, holdPath, holdFile, holdFileData;
 
 		holdPath = PathName.new(Platform.userAppSupportDir +/+ "TXModular");
-		holdFile = PathName.new(holdPath.pathOnly ++ "TxModSettings.tx");
+		//OLD holdFile = PathName.new(holdPath.pathOnly ++ "TxModSettings.tx");
+		//NEW:
+		holdFile = PathName.new(holdPath.pathOnly ++ "TXModSettings.tx");
 
 		// if TXModular directory doesn't exist, create it.
-		// FIXME: this won't work on Windows
 		if (holdPath.isFolder.not, {
-			("mkdir" + holdPath.fullPath).unixCmd;
+			// OLD CODE
+			// FIXME: this won't work on Windows
+			// ("mkdir" + holdPath.fullPath).unixCmd;
+			// NEW CODE
+			holdPath.asString.makeDir;
 		});
 
 		if (File.exists(holdFile.fullPath),  {
-			// if file TXMODSettings.tx  exists, update values. 
+			// if file TXMODSettings.tx  exists, update values.
 			holdFileData = thisProcess.interpreter.executeFile(holdFile.fullPath);
 			if (holdFileData.class == Array, {
 				if (dataBank.showAudioOptions == true, {
@@ -868,7 +849,7 @@ TXSystem1 {		// system module 1
 					this.showView;
 				});
 				if (holdFileData[1][5].notNil, {
-					dataBank.windowColour = Color(holdFileData[1][5], holdFileData[1][6], 
+					dataBank.windowColour = Color(holdFileData[1][5], holdFileData[1][6],
 						holdFileData[1][7], holdFileData[1][8]);
 				});
 				dataBank.imageFileName =  holdFileData[1][9];
@@ -880,7 +861,7 @@ TXSystem1 {		// system module 1
 			});
 		});
 		if (validData != true,  {
-			// if file TXMODSettings.tx  doesn't exist, create it. 
+			// if file TXMODSettings.tx  doesn't exist, create it.
 			this.saveSystemSettings;
 		});
 	}
@@ -891,82 +872,82 @@ TXSystem1 {		// system module 1
 		this.syncStartSequencers;
 		this.syncStartRecorders;
 		this.syncStartPlayers;
-	} 
+	}
 
 	*syncStop{
 		this.syncStopSequencers;
 		this.syncStopRecorders;
 		this.syncStopPlayers;
-	} 
+	}
 
 	*stopAllSyncModules {
 		this.stopAllSequencers;
 		this.stopAllRecorders;
 		this.stopAllPlayers;
-	} 
+	}
 	/////// called by above 3: //////
 
 	*syncStartSequencers{
 		(this.arrAllPossCurSeqModules ++ this.arrAllPossOldSeqModules).do ({ arg item, i;
 			item.syncStartAllSequencers;
 		});
-	} 
+	}
 	*syncStopSequencers{
 		(this.arrAllPossCurSeqModules ++ this.arrAllPossOldSeqModules).do ({ arg item, i;
 			try{item.syncStopAllSequencers;};
 		});
-	} 
+	}
 	*stopAllSequencers{
 		(this.arrAllPossCurSeqModules ++ this.arrAllPossOldSeqModules).do ({ arg item, i;
 			item.stopAllSequencers;
 		});
-	} 
+	}
 	*syncStartRecorders{
 		TXFileRecorder.syncStartAllRecorders;
 		TXFileRecorderSt.syncStartAllRecorders;
 		TXFileRecorder2.syncStartAllRecorders;
 		TXFileRecorder2St.syncStartAllRecorders;
-	} 
+	}
 	*syncStopRecorders{
 		TXFileRecorder2.syncStopAllRecorders;
 		TXFileRecorder2St.syncStopAllRecorders;
-	} 
+	}
 	*stopAllRecorders {
 		TXFileRecorder2.stopAllRecorders;
 		TXFileRecorder2St.stopAllRecorders;
-	} 
+	}
 	*syncStartSeqsAndRecorders{
 		this.syncStartSequencers;
 		this.syncStartRecorders;
-	} 
+	}
 	*syncStartPlayers{
 		TXFilePlayer3.syncStartAllPlayers;
 		TXFilePlayer3St.syncStartAllPlayers;
-		TXFilePlayer4.syncStartAllPlayers;   
+		TXFilePlayer4.syncStartAllPlayers;
 		TXFilePlayer4St.syncStartAllPlayers;
-		TXFilePlayer5.syncStartAllPlayers;   
+		TXFilePlayer5.syncStartAllPlayers;
 		TXFilePlayer5St.syncStartAllPlayers;
-		TXFilePlayer6.syncStartAllPlayers;   
+		TXFilePlayer6.syncStartAllPlayers;
 		TXFilePlayer6St.syncStartAllPlayers;
-	} 
+	}
 	*syncStopPlayers{
 		TXFilePlayer3.syncStopAllPlayers;
 		TXFilePlayer3St.syncStopAllPlayers;
-		TXFilePlayer4.syncStopAllPlayers;   
+		TXFilePlayer4.syncStopAllPlayers;
 		TXFilePlayer4St.syncStopAllPlayers;
-		TXFilePlayer5.syncStopAllPlayers;   
+		TXFilePlayer5.syncStopAllPlayers;
 		TXFilePlayer5St.syncStopAllPlayers;
-		TXFilePlayer6.syncStopAllPlayers;   
+		TXFilePlayer6.syncStopAllPlayers;
 		TXFilePlayer6St.syncStopAllPlayers;
-	} 
+	}
 	*stopAllPlayers {
 		TXFilePlayer3.stopAllPlayers;
 		TXFilePlayer3St.stopAllPlayers;
-		TXFilePlayer4.stopAllPlayers;   
+		TXFilePlayer4.stopAllPlayers;
 		TXFilePlayer4St.stopAllPlayers;
-		TXFilePlayer5.stopAllPlayers;   
+		TXFilePlayer5.stopAllPlayers;
 		TXFilePlayer5St.stopAllPlayers;
-		TXFilePlayer6.stopAllPlayers;   
+		TXFilePlayer6.stopAllPlayers;
 		TXFilePlayer6St.stopAllPlayers;
 	}
 	////////////////////////////////////////////////////////////////////////////////////
@@ -978,13 +959,13 @@ TXSystem1 {		// system module 1
 		var mouseTrigID;
 		// create unique id
 		mouseTrigID = UniqueID.next;
-		// defer 
+		// defer
 		{
 		SynthDef("mouseButtonTrig",{|rate= 10|
 		var trig, mouseVal;
 		mouseVal = MouseButton.kr(0, 1, 0);
 		// trigger mouse value to be sent when value changes
-		trig = Trig.kr(HPZ1.kr(mouseVal).abs, 0.1); 
+		trig = Trig.kr(HPZ1.kr(mouseVal).abs, 0.1);
 		SendTrig.kr( trig, mouseTrigID, mouseVal);
 		}).send(server);
 		mouseButtonResponder = OSCresponder(server.addr,'/tr',{ arg time,responder,msg;
@@ -996,28 +977,28 @@ TXSystem1 {		// system module 1
 		});
 		});
 		}).add;
-		}.defer(1);	
-		// defer 
+		}.defer(1);
+		// defer
 		{
 		mouseButtonSynth = Synth("mouseButtonTrig");
-		}.defer(2);	
+		}.defer(2);
 		}
 	*/
 	////////////////////////////////////////////////////////////////////////////////////
 	*setModuleClipboard { arg moduleClass, argData;
 		arrModuleClipboards.put(moduleClass.asString, argData);
-	} 
+	}
 
 	*getModuleClipboard { arg moduleClass;
 		^arrModuleClipboards.at(moduleClass.asString).deepCopy;
-	} 
+	}
 
 	*getSynthArgSpec {arg argString;
 		// Dummy method - here just used for snapshot no
 		if (argString == "Snapshot", {^snapshotNo});
 		^0;
 	}
-	*setSynthValue {	
+	*setSynthValue {
 		// Dummy method
 		^0;
 	}
@@ -1033,34 +1014,34 @@ TXSystem1 {		// system module 1
 		NetAddr("255.255.255.255", NetAddr.langPort).sendMsg('/getMyIP');
 	}
 
-	*midiConnect {	
+	*midiConnect {
 		var inPorts = 8;
 		var outPorts = 8;
 		MIDIClient.init(inPorts,outPorts);			// explicitly intialize the client
-		inPorts.do({ arg i; 
+		inPorts.do({ arg i;
 			MIDIIn.connect(i, MIDIClient.sources.at(i));
 		});
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
 
-	*arrWidgetActionModules {	
+	*arrWidgetActionModules {
 		// returns all modules including system itself that can perform actions for widgets
 		// only selects modules where size of arrActionSpecs > 0
-		^(	[TXSystem1] 
-			++ arrSystemModules.sort({ arg a, b; 
+		^(	[TXSystem1]
+			++ arrSystemModules.sort({ arg a, b;
 				this.adjustNameForSorting(a.instName) < this.adjustNameForSorting(b.instName);
 			})
 			++ TXChannelRouting.arrChannels)
 		.select({arg item, i; item.arrActionSpecs.size > 0; });
 	}
 
-	*arrWidgetValueActionModules {	
-		// returns all modules including system itself that can perform value actions for widgets 
+	*arrWidgetValueActionModules {
+		// returns all modules including system itself that can perform value actions for widgets
 		// value actions are for continuous controls
-		// only selects modules where size of arrActionSpecs > 0 and no of valueActions > 0 
-		^(	[TXSystem1] 
-			++ arrSystemModules.sort({ arg a, b; 
+		// only selects modules where size of arrActionSpecs > 0 and no of valueActions > 0
+		^(	[TXSystem1]
+			++ arrSystemModules.sort({ arg a, b;
 				this.adjustNameForSorting(a.instName) < this.adjustNameForSorting(b.instName);
 			})
 			++ TXChannelRouting.arrChannels)
@@ -1075,22 +1056,22 @@ TXSystem1 {		// system module 1
 		index1 = oldName.findBackwards("[");
 		index2 = oldName.findBackwards("]");
 		holdZeros = "0000".keep(5 - (index2-index1));
-		newName = oldName.keep(index1+1) ++ holdZeros ++  
+		newName = oldName.keep(index1+1) ++ holdZeros ++
 		oldName.keep(1 - (oldName.size - index1));
 		^newName;
 	}
 
 	*arrPatternEvents {
-		// returns an array of events that can be used with Pbind patterns 
+		// returns an array of events that can be used with Pbind patterns
 		var holdArrModules, holdArrActionSpecs, holdArrAllEvents;
 		holdArrAllEvents = (); // this is in itself an Event
 		holdArrModules = this.arrWidgetActionModules;
 		holdArrModules.do({arg argModule, i;
 			var holdArrNumericalActionSpecs, holdArrModuleEvents;
 			holdArrModuleEvents = [];
-			holdArrNumericalActionSpecs = argModule.arrActionSpecs.select({arg action, i; 
-				(action.guiObjectType == \number and: (action.arrControlSpecFuncs.size > 0)) 
-				or: (action.guiObjectType == \checkbox); 
+			holdArrNumericalActionSpecs = argModule.arrActionSpecs.select({arg action, i;
+				(action.guiObjectType == \number and: (action.arrControlSpecFuncs.size > 0))
+				or: (action.guiObjectType == \checkbox);
 			});
 			holdArrNumericalActionSpecs.do({arg argActionSpec, i;
 				var holdEvent, arrValNames;
@@ -1133,23 +1114,23 @@ TXSystem1 {		// system module 1
 					" ".postln;
 				});
 
-			}); 
+			});
 			// end of holdArrNumericalActionSpecs.do
 			holdArrAllEvents[argModule.moduleID] = holdArrModuleEvents;
-		}); 
+		});
 		// end of holdArrModules.do
 		^holdArrAllEvents;
 	}
 	////////////////////////////////////////////////////////////////////////////////////
 
-	*makeGui {	
+	*makeGui {
 		var cmdPeriodFunc, holdScreenHeight, holdScreenWidth;
-		
+
 		holdScreenHeight = Window.screenBounds.height;
 		holdScreenWidth = Window.screenBounds.width;
 
-		w = Window("TX Modular System", 
-			Rect(0, holdScreenHeight - mainWindowHeight - 10, mainWindowWidth, mainWindowHeight), 
+		w = Window("TX Modular System",
+			Rect(0, holdScreenHeight - mainWindowHeight - 10, mainWindowWidth, mainWindowHeight),
 			scroll: true);
 		w.front;
 		w.view.decorator = FlowLayout(w.view.bounds);
@@ -1159,13 +1140,13 @@ TXSystem1 {		// system module 1
 		this.setWindowImage;
 
 		this.showView;
-		
+
 		// cmd-period action       -------to be added if needed--------
 		//	cmdPeriodFunc = {
 		// add any actions here
 		//	 };
 		//	CmdPeriod.add(cmdPeriodFunc);
-		
+
 		// when window closes remove cmdPeriodFunc.
 		w.onClose = {
 			//	CmdPeriod.remove(cmdPeriodFunc);
@@ -1186,62 +1167,62 @@ TXSystem1 {		// system module 1
 				});
 			}.defer;
 		});
-	}		
+	}
 
 
 	/// SAVE AND LOAD SYSTEM /////////////////////////////////////////////////////////////////////////////////
 
 	*saveData {
 		// this method returns an array of all data for saving with various components:
-		// 0- string "TXSystemSaveData", 1- this class, 2- holdNextModuleID, 3- arrAllModulesData, 
+		// 0- string "TXSystemSaveData", 1- this class, 2- holdNextModuleID, 3- arrAllModulesData,
 		// 4- channelRoutingData, 5- arrBusData, 6 - arrSampleBanks, 7 - arrLoopBanks, 8 - notes
 		// 9- arrFrontScreenData, 10- arrSnapshots, 11- arrModuleLayoutData, 12 - systemRevision
-		// 13-background imageFileName, 14-background image displayModeIndex, 15-windowAlpha, 
+		// 13-background imageFileName, 14-background image displayModeIndex, 15-windowAlpha,
 		// 16-windowColour.red, 17-windowColour.green, 18-windowColour.blue, 19-windowColour.alpha
 		var arrData, arrAllModulesData, channelRoutingData, arrBusData, arrNotes, arrFrontScreenData, arrModuleLayoutData;
-		// collect saveData from  all modules 
+		// collect saveData from  all modules
 		arrAllModulesData = arrSystemModules.collect({ arg item, i; item.saveData; });
-		// collect data from TXChannelRouting 
+		// collect data from TXChannelRouting
 		channelRoutingData = TXChannelRouting.saveData;
-		// collect bus data  
-		arrBusData = arrAllBusses.collect({ arg item, i; [item.moduleID, item.posX, item.posY]}); 
-		// collect notes  
+		// collect bus data
+		arrBusData = arrAllBusses.collect({ arg item, i; [item.moduleID, item.posX, item.posY]});
+		// collect notes
 		arrNotes = [notes0, notes1, notes2, notes3, notes4, notes5, notes6, notes7];
-		// collect front screen data  
+		// collect front screen data
 		arrFrontScreenData = TXFrontScreen.saveData;
-		// collect module layout data  
+		// collect module layout data
 		arrModuleLayoutData = TXSignalFlow.saveData;
 		// build output
-		arrData = ["TXSystemSaveData", this.class.asString, holdNextModuleID, arrAllModulesData, 
-			channelRoutingData, arrBusData, this.arrSampleBanks, this.arrLoopBanks, arrNotes, 
+		arrData = ["TXSystemSaveData", this.class.asString, holdNextModuleID, arrAllModulesData,
+			channelRoutingData, arrBusData, this.arrSampleBanks, this.arrLoopBanks, arrNotes,
 			arrFrontScreenData, arrSnapshots, arrModuleLayoutData, systemRevision,
-			dataBank.imageFileName, dataBank.displayModeIndex,dataBank.windowAlpha, 
+			dataBank.imageFileName, dataBank.displayModeIndex,dataBank.windowAlpha,
 			dataBank.windowColour.red, dataBank.windowColour.green, dataBank.windowColour.blue,
-			dataBank.windowColour.alpha, 
-		]; 
+			dataBank.windowColour.alpha,
+		];
 		^arrData;
 	}
 
-	*loadData { arg arrData;   
+	*loadData { arg arrData;
 		// this method updates all data by loading arrData. format:
-		// 0- string "TXSystemSaveData", 1- this class, 2- holdNextModuleID, 3- arrAllModulesData, 
+		// 0- string "TXSystemSaveData", 1- this class, 2- holdNextModuleID, 3- arrAllModulesData,
 		// 4- channelRoutingData, 5- arrBusData, 6 - arrSampleBanks, 7 - arrLoopBanks, 8 - notes
 		// 9- arrFrontScreenData, 10- arrSnapshots, 11- arrModuleLayoutData, 12 - systemRevision
 		// 13-background imageFileName, 14-background image displayModeIndex, 15-windowAlpha,
 		// 16-windowColour.red, 17-windowColour.green, 18-windowColour.blue, 19-windowColour.alpha
 
-		var arrAllModulesData, channelRoutingData, newModule, holdAutoOpen, holdModuleClass, 
+		var arrAllModulesData, channelRoutingData, newModule, holdAutoOpen, holdModuleClass,
 		arrBusData, arrNotes, arrFrontScreenData, windowLoading, arrModuleLayoutData;
 		// error check
 		if (arrData.class != Array, {
-			TXInfoScreen.new("Error: invalid data. cannot load.");   
+			TXInfoScreen.new("Error: invalid data. cannot load.");
 			^0;
-		});	
+		});
 		if (arrData.at(1) != this.class.asString, {
-			TXInfoScreen.new("Error: invalid data class. cannot load.");   
+			TXInfoScreen.new("Error: invalid data class. cannot load.");
 			^0;
-		});	
-		
+		});
+
 		// delete all modules in system
 		this.emptySystem;
 		// reset layout positions of all busses
@@ -1249,12 +1230,12 @@ TXSystem1 {		// system module 1
 
 		// show loading window
 		windowLoading = TXInfoScreen.new(
-			"LOADING ... (this can take more than 10 secs)", 0, TXColour.orange);   
+			"LOADING ... (this can take more than 10 secs)", 0, TXColour.orange);
 
 		// temporarily store and turn off system.autoOpen while building system
 		holdAutoOpen = autoOpen;
 		autoOpen = false;
-		
+
 		// flag loading data
 		dataBank.loadingDataFlag = true;
 
@@ -1276,8 +1257,8 @@ TXSystem1 {		// system module 1
 		arrFrontScreenData = arrData.at(9).deepCopy;
 		arrSnapshots  = arrData.at(10).deepCopy ? Array.newClear(100);
 		arrModuleLayoutData = arrData.at(11).deepCopy;
-		if (arrModuleLayoutData.notNil, 
-			{TXSignalFlow.loadData(arrModuleLayoutData); 
+		if (arrModuleLayoutData.notNil,
+			{TXSignalFlow.loadData(arrModuleLayoutData);
 			});
 		if (arrData.at(13).notNil, {
 			dataBank.imageFileName = arrData.at(13);
@@ -1287,10 +1268,10 @@ TXSystem1 {		// system module 1
 			dataBank.displayModeIndex = arrData.at(14) ? 1;
 		});
 		if (arrData.at(15).notNil, {
-			dataBank.windowColour = Color(arrData.at(15), arrData.at(16), 
+			dataBank.windowColour = Color(arrData.at(15), arrData.at(16),
 				arrData.at(17), arrData.at(18));
 		});
-		
+
 		this.setWindowImage;
 
 		// set notes
@@ -1303,7 +1284,7 @@ TXSystem1 {		// system module 1
 		notes6 = arrNotes.at(6);
 		notes7 = arrNotes.at(7);
 		// set bus data
-		arrAllBusses.do({ arg item, i; 
+		arrAllBusses.do({ arg item, i;
 			var holdData;
 			holdData = arrBusData.at(i).asArray;
 			item.moduleID = holdData.at(0);
@@ -1317,18 +1298,18 @@ TXSystem1 {		// system module 1
 		// use routine to pause between modules
 		Routine.run {
 			var holdCondition, holdChanLoadQueue, holdLastChanCondition, totalWidgets;
-			
+
 			// for each saved module - recreate module, add to arrSystemModules and run loadData
 			arrAllModulesData.do({ arg item, i;
 				var holdModCondition;
-				
+
 				// add condition to load queue
 				holdModCondition = holdLoadQueue.addCondition;
 				// pause
 				holdModCondition.wait;
 				// pause
 				this.server.sync;
-				// run the Module's new method to get new instance of module 
+				// run the Module's new method to get new instance of module
 				holdModuleClass = item.at(1).interpret;
 				newModule = holdModuleClass.new;
 				// pause
@@ -1367,7 +1348,7 @@ TXSystem1 {		// system module 1
 
 			// load data to channelRouting & create channels
 			TXChannelRouting.loadData(channelRoutingData, holdChanLoadQueue, holdLastChanCondition);
-			
+
 			// pause
 			holdLastChanCondition.wait;
 			// pause
@@ -1387,7 +1368,7 @@ TXSystem1 {		// system module 1
 			TXNoteStacker.restoreAllOutputs;
 			// resync TXOSCRemote modules
 			TXOSCRemote.syncAllModules;
-			
+
 			// restore system.autoOpen to original value
 			autoOpen = holdAutoOpen;
 
@@ -1411,7 +1392,7 @@ TXSystem1 {		// system module 1
 			holdCondition.wait;
 
 			// close loading window
-			windowLoading.close;   
+			{windowLoading.close;}.defer;
 			// reset flag loading data
 			dataBank.loadingDataFlag = false;
 			// rebuild required modules
@@ -1420,32 +1401,32 @@ TXSystem1 {		// system module 1
 			// remove condition from load queue
 			holdLoadQueue.removeCondition(holdCondition);
 
-			// automatically set position data if missing 
+			// automatically set position data if missing
 			if (arrModuleLayoutData.isNil, {
-				TXSignalFlow.rebuildPositionData; 
+				TXSignalFlow.rebuildPositionData;
 			});
 			// update view
 			this.showView;
-			
+
 		};
 	}
 
 	////////  SNAPSHOTS  ////////////////////////////////////////////////////////////
 
-	*getSnapshotName { arg argSnapshotNo;   
+	*getSnapshotName { arg argSnapshotNo;
 		var holdName, holdSnapshot;
 		holdSnapshot = arrSnapshots.at(argSnapshotNo.asInteger);
 		if (holdSnapshot.notNil, {holdName = holdSnapshot.at(0);}, {holdName = "";});
 		^holdName;
 	}
 
-	*snapshotIsEmpty { arg argSnapshotNo;   
+	*snapshotIsEmpty { arg argSnapshotNo;
 		var holdSnapshot;
 		holdSnapshot = arrSnapshots.at(argSnapshotNo.asInteger);
 		if (holdSnapshot.isNil, {^true}, {^false});
 	}
 
-	*saveCurrentSnapshot { arg argSnapshotName;   
+	*saveCurrentSnapshot { arg argSnapshotName;
 		var holdSnapshot;
 		snapshotName = argSnapshotName ? "";
 		if (snapshotName == "", {snapshotName = "Snapshot " ++ snapshotNo.asString;});
@@ -1453,7 +1434,7 @@ TXSystem1 {		// system module 1
 		arrSnapshots.put(snapshotNo, holdSnapshot);
 	}
 
-	*overwriteCurrentSnapshot {    
+	*overwriteCurrentSnapshot {
 		var holdSnapshot, holdSnapshotName;
 		holdSnapshotName = this.getSnapshotName(snapshotNo);
 		holdSnapshot = [holdSnapshotName, this.saveSnapshotData].deepCopy;
@@ -1462,22 +1443,22 @@ TXSystem1 {		// system module 1
 
 	*saveSnapshotData {
 		var arrData, arrAllModulesData, channelRoutingData;
-		// collect saveData from  all modules 
+		// collect saveData from  all modules
 		arrAllModulesData = arrSystemModules.collect({ arg item, i; item.saveData; });
-		// collect data from TXChannelRouting 
+		// collect data from TXChannelRouting
 		channelRoutingData = TXChannelRouting.saveData;
 		// build output
-		arrData = [nil, nil, nil, arrAllModulesData, channelRoutingData]; 
+		arrData = [nil, nil, nil, arrAllModulesData, channelRoutingData];
 		^arrData;
 	}
 
-	*deleteCurrentSnapshot {    
+	*deleteCurrentSnapshot {
 		arrSnapshots.put(snapshotNo, nil);
 		snapshotName = "";
 	}
 
 
-	*loadSnapshot { arg argSnapshotNo;   
+	*loadSnapshot { arg argSnapshotNo;
 		var holdSnapshot;
 		holdSnapshot = arrSnapshots.at(argSnapshotNo.asInteger);
 		snapshotNo = argSnapshotNo;
@@ -1489,12 +1470,12 @@ TXSystem1 {		// system module 1
 		});
 	}
 
-	*loadSnapshotData { arg arrData;   
+	*loadSnapshotData { arg arrData;
 		// this method updates all data by loading arrData. format:
-		// 0- string "TXSystemSaveData", 1- this class, 2- holdNextModuleID, 3- arrAllModulesData, 
+		// 0- string "TXSystemSaveData", 1- this class, 2- holdNextModuleID, 3- arrAllModulesData,
 		// 4- channelRoutingData, 5- arrBusData, 6 - sampleBank, 7 - loopBank, 8 - notes
 		var arrAllModulesData, channelRoutingData, arrAllChannelData;
-		
+
 		arrAllModulesData = arrData.at(3).deepCopy;
 		channelRoutingData = arrData.at(4).deepCopy;
 		arrAllChannelData = channelRoutingData.at(3).deepCopy;
@@ -1516,7 +1497,7 @@ TXSystem1 {		// system module 1
 				holdArrSynthArgSpecs = item.at(9).deepCopy;
 				holdArrSynthArgSpecs.do({ arg holdSynthArgSpec, i;
 					holdModule.setSynthValue(holdSynthArgSpec.at(0),holdSynthArgSpec.at(1));
-					
+
 				});
 			});
 		});
@@ -1528,7 +1509,7 @@ TXSystem1 {		// system module 1
 
 	////////////////////////////////////////////////////////////////////////////////////
 
-	*emptySystem { 
+	*emptySystem {
 		// stop all sequencers in system
 		this.stopAllSyncModules;
 		// clear system clock
@@ -1546,8 +1527,8 @@ TXSystem1 {		// system module 1
 		TXBankBuilder2.initClass;
 		TXWidget.initClass;
 		TXFrontScreen.initClass;
-		//	TXSeqGui.initClass;//	TXModGui.initClass;	snapshotNo = 0;	
-		snapshotName = "";	
+		//	TXSeqGui.initClass;//	TXModGui.initClass;	snapshotNo = 0;
+		snapshotName = "";
 		this.clearHistory;
 	}
 
@@ -1556,16 +1537,16 @@ TXSystem1 {		// system module 1
 	*addModule {arg argModClass;
 		var newModule, moduleIndex;
 		if (server.serverRunning.not, {
-			TXInfoScreen.new("Error: Server not running");   
+			TXInfoScreen.new("Error: Server not running");
 			^0;
 		});
-		// run the Module's new method to get new instance of module 
+		// run the Module's new method to get new instance of module
 		newModule = argModClass.new;
 		// add module to array of system modules
 		arrSystemModules = arrSystemModules.add(newModule);
 		// if module type is source or groupsource or insert
-		if ( (argModClass.moduleType == "source") or: (argModClass.moduleType == "groupsource") 
-			or: (argModClass.moduleType == "groupaction") 
+		if ( (argModClass.moduleType == "source") or: (argModClass.moduleType == "groupsource")
+			or: (argModClass.moduleType == "groupaction")
 			or: (argModClass.moduleType == "insert"), {
 				// set module index no in arrSystemModules
 				moduleIndex = arrSystemModules.size - 1;
@@ -1574,13 +1555,13 @@ TXSystem1 {		// system module 1
 		if ((argModClass.moduleType == "source") or: (argModClass.moduleType == "groupsource"), {
 			// set position
 			TXSignalFlow.setPosition(newModule);
-			TXChannelRouting.addChannel(newModule); 
+			TXChannelRouting.addChannel(newModule);
 		});
 		if (argModClass.moduleType == "action" or: (argModClass.moduleType == "groupaction"), {
 			// set position
 			TXSignalFlow.setPosition(newModule);
 		});
-		// post message 
+		// post message
 		//	("Adding Module: " ++ newModule.instName).postln;
 		^newModule;
 	}
@@ -1603,10 +1584,10 @@ TXSystem1 {		// system module 1
 		// if not closing down update screen
 		if (closingDown == false, {
 			// check TXChannelRouting for deletion effects
-			TXChannelRouting.checkDeletions;   
+			TXChannelRouting.checkDeletions;
 			// check historyEvents
 			historyEvents = historyEvents.reject({arg item, i;
-				(item.showWindow == "Modules & Channels") 
+				(item.showWindow == "Modules & Channels")
 				and: {item.displayModule.notNil}
 				and: {item.displayModule.deletedStatus == true};
 			});
@@ -1617,10 +1598,10 @@ TXSystem1 {		// system module 1
 			// run checkDeletions method on all frontscreen widgets
 			TXFrontScreen.checkDeletions;
 			// delete any modules in arrSystemModules newly marked for deletion
-			arrSystemModules.do({ arg item, i;  
+			arrSystemModules.do({ arg item, i;
 				if (item.toBeDeletedStatus==true, {
 					item.deleteModule
-				}); 
+				});
 			});
 			// recreate arrSystemModules without deleted ones
 			arrSystemModules = arrSystemModules.select({ arg item, i; item.deletedStatus == false; });
@@ -1647,21 +1628,21 @@ TXSystem1 {		// system module 1
 		dataBank.arrModulesForRebuilding = [].asSet;
 	}
 
-	*rebuildAllModules {    
+	*rebuildAllModules {
 		// this method rebuilds all modules in case of module crashes:
 		arrSystemModules.do({ arg item, i;
 			item.rebuildSynth;
 		});
 	}
-	
+
 	*checkRebuilds {
 		// check TXChannelRouting for rebuild effects
-		TXChannelRouting.checkRebuilds;   
+		TXChannelRouting.checkRebuilds;
 	}
 
 	*checkChannelsDest { arg argModule, argOptionNo;
 		// check TXChannelRouting for destination change
-		TXChannelRouting.checkChannelsDest(argModule, argOptionNo);   
+		TXChannelRouting.checkChannelsDest(argModule, argOptionNo);
 		//  update screen
 		this.showView;
 	}
@@ -1676,7 +1657,7 @@ TXSystem1 {		// system module 1
 			holdFileName = "";
 			// stop routines
 			screenUpdRoutine.stop;
-			TXFrontScreenGuiProperties.closeWindow;
+			{TXFrontScreenGuiProperties.closeWindow;}.defer;
 			// empty system
 			this.emptySystem;
 			//	NOTE - removed for now, can cause crashes
@@ -1684,7 +1665,7 @@ TXSystem1 {		// system module 1
 			//		mouseButtonSynth.free;
 			//		mouseButtonResponder.remove;
 			//	end
-			//	server.freeAll; 
+			//	server.freeAll;
 			server.quit;
 		});
 	}
@@ -1711,7 +1692,7 @@ TXSystem1 {		// system module 1
 	}
 
 	*arrSampleBanks_ { arg argArrBanks;
-		// set bank 
+		// set bank
 		if (argArrBanks.notNil, {
 			TXBankBuilder2.arrSampleBanks_(argArrBanks);
 		});
@@ -1725,7 +1706,7 @@ TXSystem1 {		// system module 1
 	}
 
 	*arrLoopBanks_ { arg argArrBanks;
-		// set bank 
+		// set bank
 		if (argArrBanks.notNil, {
 			TXBankBuilder2.arrLoopBanks_(argArrBanks);
 		});
@@ -1735,39 +1716,39 @@ TXSystem1 {		// system module 1
 	}
 
 	*sampleBank{ arg bankNo=0;
-		// get bank 
+		// get bank
 		^TXBankBuilder2.sampleBank(bankNo);
 	}
 
 	*sampleBank_ { arg argBank, bankNo=0;
-		// set bank 
+		// set bank
 		if (argBank.notNil, {
 			TXBankBuilder2.sampleBank_(argBank, bankNo);
 		});
 	}
 
 	*sampleFiles{ arg bankNo=0;
-		// get bank 
+		// get bank
 		^this.sampleBank(bankNo)[0];
 	}
 
 	*sampleFilesMono{ arg bankNo=0;
-		// get bank 
+		// get bank
 		^this.sampleFiles(bankNo).select({arg item, i; item.at(2) == 1;});
 	}
 
 	*sampleFilesStereo{ arg bankNo=0;
-		// get bank 
+		// get bank
 		^this.sampleFiles(bankNo).select({arg item, i; item.at(2) == 2;});
 	}
 
 	*sampleFileNames{ arg bankNo=0, cleanForPopup = false;
-		// get bank 
-		^this.sampleFiles(bankNo).collect({arg item, i; 
-			var errorText, nameString; 
+		// get bank
+		^this.sampleFiles(bankNo).collect({arg item, i;
+			var errorText, nameString;
 			errorText = "";
 			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: "; 
+				errorText = "** INVALID FILE: ";
 			});
 			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
 			if (cleanForPopup == true, {
@@ -1778,12 +1759,12 @@ TXSystem1 {		// system module 1
 	}
 
 	*sampleMonoFileNames{ arg bankNo=0, cleanForPopup = false;
-		// get bank 
-		^this.sampleFilesMono(bankNo).collect({arg item, i; 
-			var errorText, nameString; 
+		// get bank
+		^this.sampleFilesMono(bankNo).collect({arg item, i;
+			var errorText, nameString;
 			errorText = "";
 			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: "; 
+				errorText = "** INVALID FILE: ";
 			});
 			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
 			if (cleanForPopup == true, {
@@ -1794,12 +1775,12 @@ TXSystem1 {		// system module 1
 	}
 
 	*sampleStereoFileNames{ arg bankNo=0, cleanForPopup = false;
-		// get bank 
-		^this.sampleFilesStereo(bankNo).collect({arg item, i; 
-			var errorText, nameString; 
+		// get bank
+		^this.sampleFilesStereo(bankNo).collect({arg item, i;
+			var errorText, nameString;
 			errorText = "";
 			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: "; 
+				errorText = "** INVALID FILE: ";
 			});
 			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
 			if (cleanForPopup == true, {
@@ -1809,39 +1790,39 @@ TXSystem1 {		// system module 1
 		});
 	}
 	*loopBank{ arg bankNo=0;
-		// get bank 
+		// get bank
 		^TXBankBuilder2.loopBank(bankNo);
 	}
 
 	*loopBank_ { arg argBank, bankNo=0;
-		// set bank 
+		// set bank
 		if (argBank.notNil, {
 			TXBankBuilder2.loopBank_(argBank, bankNo);
 		});
 	}
 
 	*loopFiles{ arg bankNo=0;
-		// get bank 
+		// get bank
 		^this.loopBank(bankNo)[0];
 	}
 
 	*loopFilesMono{ arg bankNo=0;
-		// get bank 
+		// get bank
 		^this.loopFiles(bankNo).select({arg item, i; item.at(2) == 1;});
 	}
 
 	*loopFilesStereo{ arg bankNo=0;
-		// get bank 
+		// get bank
 		^this.loopFiles(bankNo).select({arg item, i; item.at(2) == 2;});
 	}
 
 	*loopFileNames{ arg bankNo=0, cleanForPopup = false;
-		// get bank 
-		^this.loopFiles(bankNo).collect({arg item, i; 
-			var errorText, nameString; 
+		// get bank
+		^this.loopFiles(bankNo).collect({arg item, i;
+			var errorText, nameString;
 			errorText = "";
 			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: "; 
+				errorText = "** INVALID FILE: ";
 			});
 			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
 			if (cleanForPopup == true, {
@@ -1852,12 +1833,12 @@ TXSystem1 {		// system module 1
 	}
 
 	*loopMonoFileNames{ arg bankNo=0, cleanForPopup = false;
-		// get bank 
-		^this.loopFilesMono(bankNo).collect({arg item, i; 
-			var errorText, nameString; 
+		// get bank
+		^this.loopFilesMono(bankNo).collect({arg item, i;
+			var errorText, nameString;
 			errorText = "";
 			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: "; 
+				errorText = "** INVALID FILE: ";
 			});
 			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
 			if (cleanForPopup == true, {
@@ -1868,12 +1849,12 @@ TXSystem1 {		// system module 1
 	}
 
 	*loopStereoFileNames{ arg bankNo=0, cleanForPopup = false;
-		// get bank 
-		^this.loopFilesStereo(bankNo).collect({arg item, i; 
-			var errorText, nameString; 
+		// get bank
+		^this.loopFilesStereo(bankNo).collect({arg item, i;
+			var errorText, nameString;
 			errorText = "";
 			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: "; 
+				errorText = "** INVALID FILE: ";
 			});
 			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
 			if (cleanForPopup == true, {
@@ -1892,7 +1873,7 @@ TXSystem1 {		// system module 1
 	*addScreenUpdFunc { arg argArray, argScreenUpdFunc;
 		// passed argument array and function to be valued
 		arrScreenUpdFuncs = arrScreenUpdFuncs.add([argArray, argScreenUpdFunc]);
-	} 
+	}
 
 	*runScreenUpdFuncs {
 
@@ -1910,7 +1891,7 @@ TXSystem1 {		// system module 1
 				// don't run if Design Interface shown
 				if (showWindow != "Design Interface" and: {screenChanged == true}, {
 					{ // defer function
-						arrScreenUpdFuncs.do({arg item, i; 
+						arrScreenUpdFuncs.do({arg item, i;
 							var arrArgs = item.at(0);
 							var holdFunc = item.at(1);
 							holdFunc.value(arrArgs);
@@ -1924,7 +1905,7 @@ TXSystem1 {		// system module 1
 
 		//	});
 
-	} 
+	}
 
 	*flagGuiUpd {
 		screenChanged = true;
@@ -1932,24 +1913,24 @@ TXSystem1 {		// system module 1
 
 	*clearScreenUpdFuncs {
 		arrScreenUpdFuncs = [];
-	} 
+	}
 
 	*flagGuiIfModDisplay {	arg argModule;
 		// if argModule is currently being displayed on screen, then rebuild view
-		if ((showWindow == "Modules & Channels") and: (TXChannelRouting.displayModule == argModule), 
+		if ((showWindow == "Modules & Channels") and: (TXChannelRouting.displayModule == argModule),
 			{this.flagGuiUpd});
 	}
 
 	*showViewIfModDisplay {	arg argModule;
 		// if argModule is currently being displayed on screen, then rebuild view
-		if ((showWindow == "Modules & Channels") and: (TXChannelRouting.displayModule == argModule), 
+		if ((showWindow == "Modules & Channels") and: (TXChannelRouting.displayModule == argModule),
 			{this.showView});
 	}
 
 	*isModDisplay {	arg argModule;
 		var returnVal = false;
 		// if argModule is currently being displayed on screen, then return true
-		if ((showWindow == "Modules & Channels") and: (TXChannelRouting.displayModule == argModule), 
+		if ((showWindow == "Modules & Channels") and: (TXChannelRouting.displayModule == argModule),
 			{returnVal = true;});
 		^returnVal;
 	}
@@ -1960,7 +1941,7 @@ TXSystem1 {		// system module 1
 
 	///////////////////////////////////////////////////////////////////////////////////
 	*showViewAction {	// this creates the view
-		var btnTitle, buttonLabels, sliderVol, btnVol;	
+		var btnTitle, buttonLabels, sliderVol, btnVol;
 		var btnHelp, btnLoadSystem, btnSaveSystem, btnNewSystem, btnRebuildSystem, btnCloseSystem;
 		var btnAllNotesOff, popNewModule, btnAddModule, btnFrontBack, frontText, backText;
 		var holdLeftVal, holdTopVal, btnBack, btnForward;
@@ -1970,493 +1951,491 @@ TXSystem1 {		// system module 1
 		// if not closing down update screen
 		if (closingDown == false, {
 			// wait for server sync
-			Routine.run {
+			// run Routine in AppClock
+			Routine.run ({
 				server.sync;
-				{	// defer function
-					// clear array
-					this.clearScreenUpdFuncs;
-					// deactivate any midi and keydown functions
-					TXFrontScreen.midiDeActivate;
-					TXFrontScreen.keyDownDeActivate;
-					// set globalKeyDownAction
-					View.globalKeyDownAction = { arg view,char,modifiers,unicode,keycode;
-						TXFrontScreen.runKeyDownActionFunctions (char,modifiers,unicode,keycode);
+				// clear array
+				this.clearScreenUpdFuncs;
+				// deactivate any midi and keydown functions
+				TXFrontScreen.midiDeActivate;
+				TXFrontScreen.keyDownDeActivate;
+				// set globalKeyDownAction
+				View.globalKeyDownAction = { arg view,char,modifiers,unicode,keycode;
+					TXFrontScreen.runKeyDownActionFunctions (char,modifiers,unicode,keycode);
+				};
+				// clear boxes
+				if (headerBox.notNil, {
+					this.deferRemoveView(headerBox);
+				});
+				if (viewBox.notNil, {
+					this.deferRemoveView(viewBox);
+				});
+				w.view.decorator.reset;
+				w.refresh;
+				// if showSystemControls is on create headerBox to display system controls
+				if (showSystemControls == 1, {
+					// prepare to display header
+					headerBox = CompositeView(w,Rect(0,0,1420,95));
+					headerBox.decorator = FlowLayout(headerBox.bounds);
+
+					// system title
+					btnTitle = Button(headerBox,Rect(0,0,140,27))
+					.font_(Font.new("Helvetica-Bold",16));
+					btnTitle.states = [["TX Modular " ++ systemVersion, TXColor.sysGuiCol1,
+						TXColor.white]];
+					btnTitle.action = {
+						"TX_Links".openHelpFile;
 					};
-					// clear boxes
-					if (headerBox.notNil, {
-						this.deferRemoveView(headerBox);
-					});
-					if (viewBox.notNil, {
-						this.deferRemoveView(viewBox);
-					});
-					w.view.decorator.reset;
-					w.refresh;
-					// if showSystemControls is on create headerBox to display system controls
-					if (showSystemControls == 1, {
-						// prepare to display header
-						headerBox = CompositeView(w,Rect(0,0,1420,95));
-						headerBox.decorator = FlowLayout(headerBox.bounds);
-						
-						// system title	
-						btnTitle = Button(headerBox,Rect(0,0,140,27))
-						.font_(Font.new("Helvetica-Bold",16));
-						btnTitle.states = [["TX Modular " ++ systemVersion, TXColor.sysGuiCol1, 
-							TXColor.white]];
-						btnTitle.action = {
-							"TX_Links".openHelpFile;
-						};
-						// space
-						headerBox.decorator.shift(4, 0);
-						// Row of system buttons	
-						// button - help 
-						btnHelp = Button(headerBox, 40 @ 27);
-						btnHelp.states = [["Help", TXColor.white, TXColor.sysHelpCol]];
-						btnHelp.action = {
-							"TX_0 TX Modular Help".openHelpFile;
-						};
-						// button - Open file 
-						btnLoadSystem = Button(headerBox, 70 @ 27);
-						btnLoadSystem.states = [["Open File", TXColor.white, TXColor.sysGuiCol2]];
-						btnLoadSystem.action = {
-							var newPath, newFile, newString, newData;
-							if (server.serverRunning.not, {server.boot}); 
-							Dialog.getPaths({ arg paths;
-								// reload system settings
+					// space
+					headerBox.decorator.shift(4, 0);
+					// Row of system buttons
+					// button - help
+					btnHelp = Button(headerBox, 40 @ 27);
+					btnHelp.states = [["Help", TXColor.white, TXColor.sysHelpCol]];
+					btnHelp.action = {
+						"TX_0 TX Modular Help".openHelpFile;
+					};
+					// button - Open file
+					btnLoadSystem = Button(headerBox, 70 @ 27);
+					btnLoadSystem.states = [["Open File", TXColor.white, TXColor.sysGuiCol2]];
+					btnLoadSystem.action = {
+						var newPath, newFile, newString, newData;
+						if (server.serverRunning.not, {server.boot});
+						Dialog.getPaths({ arg paths;
+							// reload system settings
+							this.loadSystemSettings;
+							this.setWindowImage;
+							newPath = paths.at(0);
+							//	newFile = File(newPath,"r");
+							//	newString = newFile.readAllString;
+							//	newFile.close;
+							newData = thisProcess.interpreter.executeFile(newPath);
+							holdFileName = "    File name: " ++ newPath;
+							this.loadData(newData);
+							// post message
+							("TX Opening File: " ++ newPath).postln;
+						});
+					};
+					// button - save file
+					btnSaveSystem = Button(headerBox, 70 @ 27);
+					btnSaveSystem.states = [["Save File", TXColor.white, TXColor.sysGuiCol2]];
+					btnSaveSystem.action = {
+						var newPath, newFile, newData;
+						Dialog.savePanel({ arg path;
+							newPath = path;
+							newData = this.saveData;
+							newFile = File(newPath,"w");
+							newFile << "#" <<< newData << "\n";
+							//	use file as an io stream
+							//	<<< means store the compile string of the object
+							//	<< means store a print string of the object
+							newFile.close;
+							stTextFileName.string = "    File name: " ++ newPath.copy;
+							holdFileName = "    File name: " ++ newPath.copy;
+						});
+					};
+					// button - rebuild system
+					btnRebuildSystem = Button(headerBox, 90 @ 27);
+					btnRebuildSystem.states = [["Rebuild System", TXColor.white, TXColor.sysDeleteCol]];
+					btnRebuildSystem.action = {
+						this.rebuildAllModules;
+					};
+					// button - clear system
+					btnNewSystem = Button(headerBox, 90 @ 27);
+					btnNewSystem.states = [["Clear System", TXColor.white, TXColor.sysDeleteCol]];
+					btnNewSystem.action = {
+						// confirm before action
+						TXInfoScreen.newConfirmWindow(
+							{
+								this.emptySystem;
 								this.loadSystemSettings;
 								this.setWindowImage;
-								newPath = paths.at(0);
-								//	newFile = File(newPath,"r");
-								//	newString = newFile.readAllString;
-								//	newFile.close;
-								newData = thisProcess.interpreter.executeFile(newPath);
-								holdFileName = "    File name: " ++ newPath;
-								this.loadData(newData);
-								// post message 
-								("TX Opening File: " ++ newPath).postln;
-							});
-						};
-						// button - save file 
-						btnSaveSystem = Button(headerBox, 70 @ 27);
-						btnSaveSystem.states = [["Save File", TXColor.white, TXColor.sysGuiCol2]];
-						btnSaveSystem.action = {
-							var newPath, newFile, newData;
-							Dialog.savePanel({ arg path;
-								newPath = path;
-								newData = this.saveData;
-								newFile = File(newPath,"w");
-								newFile << "#" <<< newData << "\n";
-								//	use file as an io stream
-								//	<<< means store the compile string of the object
-								//	<< means store a print string of the object
-								newFile.close;
-								stTextFileName.string = "    File name: " ++ newPath.copy;
-								holdFileName = "    File name: " ++ newPath.copy;
-							});
-						};
-						// button - rebuild system 
-						btnRebuildSystem = Button(headerBox, 90 @ 27);
-						btnRebuildSystem.states = [["Rebuild System", TXColor.white, TXColor.sysDeleteCol]];
-						btnRebuildSystem.action = {
-							this.rebuildAllModules;
-						};
-						// button - clear system 
-						btnNewSystem = Button(headerBox, 90 @ 27);
-						btnNewSystem.states = [["Clear System", TXColor.white, TXColor.sysDeleteCol]];
-						btnNewSystem.action = {
-							// confirm before action
-							TXInfoScreen.newConfirmWindow(
-								{
-									this.emptySystem;
-									this.loadSystemSettings;
-									this.setWindowImage;
-									holdFileName = " ";
-									// reset layout positions of all busses
-									this.initBusPositions;
-									// update view
-									this.showView;
-								},
-								"Are you sure you want to clear the system?"
-							);
-						};
-						// button - Quit 
-						btnCloseSystem = Button(headerBox, 40 @ 27);
-						btnCloseSystem.states = [["Quit", TXColor.white, TXColor.sysDeleteCol]];
-						btnCloseSystem.action = {
-							// confirm before action
-							TXInfoScreen.newConfirmWindow(
-								{
-									// if standalone system then quit completely else just close TX
-									if (txStandAlone == 1, {
-										0.exit;
-									},{
-										w.close;
-									});
-								},
-								"Are you sure you want to quit?"
-							);
-						};
-						// button - sync start 
-						Button(headerBox, 70 @ 27)
-						.states_([
-							["Sync Start", TXColor.white, TXColor.sysGuiCol2]
-						])
-						.action_({|view|
-							// run action function
-							this.syncStart;
-						});
-						// button - sync stop 
-						Button(headerBox, 70 @ 27)
-						.states_([
-							["Sync Stop", TXColor.white, TXColor.sysGuiCol2]
-						])
-						.action_({|view|
-							// run action function
-							this.syncStop;
-						});
-						// button - stop all sequencers 
-						Button(headerBox, 60 @ 27)
-						.states_([
-							["Stop All", TXColor.white, TXColor.sysGuiCol2]
-						])
-						.action_({|view|
-							// run action function
-							this.stopAllSyncModules;
-							this.showView;
-						});
-						// button - Panic! - all notes off
-						btnAllNotesOff = Button(headerBox, 120 @ 27)
-						.states_([["Panic! All Notes Off", TXColor.white, TXColor.sysDeleteCol]])
-						.action_({ this.allNotesOff; });
-
-						// test note button
-						btnTestNote = Button(headerBox, 90 @ 27);
-						btnTestNote.states = [["Play Test Note", TXColor.white, TXColor.sysGuiCol2]];
-						btnTestNote.action = {
-							{ (EnvGen.kr(Env.sine(2,1), 1.0, doneAction: 2) 
-								* Saw.ar(440, 0.1))!8 
-							}.play;
-						};
-						// popup - Meters  
-						popMeters = PopUpMenu(headerBox, 60 @ 27)
-						.background_(TXColor.sysGuiCol2).stringColor_(TXColor.white);
-						arrModulesForMeters = arrSystemModules
-						.select({arg item, i; item.class.noOutChannels > 0 ;})
-						.sort({arg item1, item2; item2.instName > item1.instName;}); 
-						popMeters.items = ["Meters"] 
-						++ arrModulesForMeters.collect({ arg item, i; item.instName; })
-						++ [	"Audio Out 1+2", "Audio Out 3+4", "Audio Out 5+6", "Audio Out 7+8",  
-							"Audio Out 9+10", "Audio Out 11+12", "Audio Out 13+14", "Audio Out 15+16",
-							"Audio Out 1-4", "Audio Out 1-8", "Audio Out 1-16",
-							"Audio In 1+2", "Audio In 3+4", "Audio In 5+6", "Audio In 7+8", 
-							"Audio In 1-4", "Audio In 1-8",
-						] ++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
-						.collect({ arg item, i; item.instName; });
-						popMeters.action = {|view|
-							var arrAllBusArrays, arrBusses, meterRate, arrBusRates, holdMethod;
-
-							arrAllBusArrays = [ [] ]
-							++ arrModulesForMeters.collect({
-								arg item, i;
-								var holdIndex, outArray;
-								holdIndex = item.outBus.index;
-								item.class.noOutChannels.do({arg item, i;
-									outArray = outArray.add(holdIndex + i + 1);
+								holdFileName = " ";
+								// reset layout positions of all busses
+								this.initBusPositions;
+								// update view
+								this.showView;
+							},
+							"Are you sure you want to clear the system?"
+						);
+					};
+					// button - Quit
+					btnCloseSystem = Button(headerBox, 40 @ 27);
+					btnCloseSystem.states = [["Quit", TXColor.white, TXColor.sysDeleteCol]];
+					btnCloseSystem.action = {
+						// confirm before action
+						TXInfoScreen.newConfirmWindow(
+							{
+								// if standalone system then quit completely else just close TX
+								if (txStandAlone == 1, {
+									0.exit;
+								},{
+									{w.close;}.defer;
 								});
-								outArray;
-							})
-							++ [
-								[1,2], [3,4], [5,6], [7,8],  
-								[9,10], [11,12], [13,14], [15,16],
-								(1..4), (1..8),(1..16),
-								[1,2], [3,4], [5,6], [7,8], 
-								(1..4), (1..8),
-							] 
-							++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
-							.collect({ arg item, i; item.arrOutBusChoices.at(0).at(1) + 1; });	
-							arrBusses = arrAllBusArrays.at(view.value);
-
-							arrBusRates = [\audio]
-							++ arrModulesForMeters.collect({ arg item, i; item.class.moduleRate; })
-							++ (\audio ! 17) 
-							++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
-							.collect({ arg item, i; item.class.moduleRate; });
-
-							meterRate = arrBusRates.at(view.value);
-
-							if (arrBusses.size > 0, {
-								case
-								{ view.value > (17 + arrModulesForMeters.size) } {
-									holdMeter = TXMeter.perform(
-										'new', arrBusses-1, nil, nil, 10 @ 80, 
-										popMeters.items.at(view.value), meterRate
-									);
-								}
-								{ view.value > (11 + arrModulesForMeters.size) } {
-									holdMeter = TXMeter.perform(
-										'input', arrBusses-1, nil, 10 @ 80, 
-										popMeters.items.at(view.value)
-									);
-								}
-								{ view.value > arrModulesForMeters.size } {
-									holdMeter = TXMeter.perform(
-										'output', arrBusses-1, nil, 10 @ 80, 
-										popMeters.items.at(view.value)
-									);
-								}
-								{ view.value > 0 } {
-									holdMeter = TXMeter.perform(
-										'new', arrBusses-1, nil, nil, 10 @ 80, 
-										popMeters.items.at(view.value), meterRate
-									);
-								}
-								;
-								// defer to allow meter synth to be built:
-								if (holdMeter.notNil, {
-									{holdMeter.autoreset = 3.0; holdMeter.rate = 20;}.defer(0.5); });
-								arrMeters = arrMeters.add(holdMeter);
-							});
-							popMeters.value = 0;
-						};
-						// spacing
-						headerBox.decorator.nextLine;
-						headerBox.decorator.shift(0, 6);
-						// text
-						StaticText(headerBox, 90 @ 24)
-						.string_("SYSTEM:")
-						.background_(TXColor.sysLabelBackground)
-						.stringColor_(TXColor.white)
-						.font_(Font.new("Helvetica", 13))
-						.align_('center');
-
-						// display system buttons 
-						buttonLabels = ["Modules & Channels", "Signal Flow", "Sample Banks", 
-							"Loop Banks", "Notes & Options"];
-						buttonLabels.do({arg item, i;
-							var holdButton, holdBoxColour, holdTextColour;
-							if (showWindow == item, {
-								holdBoxColour = TXColor.white;
-								holdTextColour = TXColor.sysGuiCol1;
-							},{
-								holdBoxColour = TXColor.sysGuiCol1;
-								holdTextColour = TXColor.white;
-							});
-							holdButton = Button(headerBox, 122 @ 24);
-							holdButton.states = [[item, holdTextColour, holdBoxColour]];
-							holdButton.action = {
-								showWindow = item;
-								showFrontScreen = false;
-								this.addHistoryEvent;
-								this.showView;
-							};
-						});	
-						// spacing
-						headerBox.decorator.shift(20, 0);
-						// text
-						StaticText(headerBox, 100 @ 24)
-						.string_("INTERFACE:")
-						.background_(TXColor.sysLabelBackground)
-						.stringColor_(TXColor.white)
-						.font_(Font.new("Helvetica", 13))
-						.align_('center');
-
-						// display Interface buttons 
-						buttonLabels = ["Run Interface", "Design Interface"];
-						buttonLabels.do({arg item, i;
-							var holdButton, holdBoxColour, holdTextColour;
-							if (showWindow == item, {
-								holdBoxColour = TXColor.white;
-								holdTextColour = TXColor.sysInterfaceButton;
-							},{
-								holdBoxColour = TXColor.sysInterfaceButton;
-								holdTextColour = TXColor.white;
-							});
-							holdButton = Button(headerBox, 122 @ 24);
-							holdButton.states = [[item, holdTextColour, holdBoxColour]];
-							holdButton.action = {
-								showWindow = item;
-								showFrontScreen = true;
-								this.addHistoryEvent;
-								this.showView;
-							};
-						});	
-						// spacing
-						headerBox.decorator.shift(20, 0);
-						// history buttons
-						if (historyIndex > 0, {
-							holdColor = TXColor.white;
-						},{
-							holdColor = TXColor.grey;
-						});
-						// button  
-						btnBack = Button(headerBox, 24 @ 24);
-						btnBack.states = [["<", holdColor, TXColor.sysGuiCol1]];
-						btnBack.action = {this.shiftHistory(-1);};
-						if (historyIndex < (historyEvents.size - 1), {
-							holdColor = TXColor.white;
-						},{
-							holdColor = TXColor.grey;
-						});
-						// button  
-						btnForward = Button(headerBox, 24 @ 24);
-						btnForward.states = [[">", holdColor, TXColor.sysGuiCol1]];
-						btnForward.action = {this.shiftHistory(1);};
-						// spacing
-						headerBox.decorator.nextLine;
-						headerBox.decorator.shift(0, 4);
-						//				if (GUI.current.asSymbol == \SwingGUI, {
-						//					stTextFileName .font_(JFont("Gill Sans", 11));
-						//				},{
-						//					stTextFileName .font_(Font("Gill Sans", 11));
-						//				});
-						// static text - file name
-						stTextFileName = StaticText(headerBox, 1298 @ 24)
-						.background_(TXColor.white.alpha_(0.1))
-						.string_(holdFileName)
-						.stringColor_(TXColor.white);
-						// spacing	
-						headerBox.decorator.shift(-214, 0);
-						// keep vals	
-						holdLeftVal = headerBox.decorator.left;
-						holdTopVal = headerBox.decorator.top;
-						// spacing	
-						headerBox.decorator.shift(0, -70);
-						// text
-						StaticText(headerBox, 50 @ 27)
-						.string_("Volume")
-						.background_(TXColor.sysGuiCol2)
-						.stringColor_(TXColor.white)
-						.font_(Font.new("Helvetica", 13))
-						.align_('center');
-
-						// volume slider
-						volumeSpec = [ -90, 6, \db].asSpec;
-						sliderVol = Slider(headerBox, 118 @ 27)
-						.background_(TXColor.sysGuiCol2)
-						//	.align_(\right)
-						.knobColor_(TXColor.white)
-						.thumbSize_ (6)
-						.value_(volumeSpec.unmap(dataBank.volume))
-						.action_({arg view; 
-							var holdVol;
-							holdVol = volumeSpec.map(view.value);
-							dataBank.volume = holdVol; 
-							server.volume = holdVol;
-						});
-
-						// button  
-						btnVol = Button(headerBox, 34 @ 27);
-						btnVol.states = [["0 dB", TXColor.white, TXColor.sysGuiCol2]];
-						btnVol.action = {
-							dataBank.volume = 0; 
-							server.volume = 0;
-							sliderVol.value_(volumeSpec.unmap(0))
-						};
-					},{
-						// system title	
-						btnTitle = Button(w,Rect(0,0,140,26))
-						.font_(Font.new("Helvetica-Bold",16));
-						btnTitle.states = [["TX Modular " ++ systemVersion, TXColor.sysGuiCol1, 
-							TXColor.white]];
-						btnTitle.action = {
-							"TX_Modular_Standalone_Links".openHelpFile;
-						};
-						// spacing	
-						w.view.decorator.shift(60, 0);	
-						// button - Quit 
-						btnCloseSystem = Button(w, 60 @ 27);
-						btnCloseSystem.states = [["Quit", TXColor.white, TXColor.sysGuiCol1]];
-						btnCloseSystem.action = {
-							// confirm before action
-							TXInfoScreen.newConfirmWindow(
-								{
-									// if standalone system then quit completely else just close TX
-									if (txStandAlone == 1, {
-										0.exit;
-									},{
-										w.close;
-									});
-								},
-								"Are you sure you want to quit?"
-							);
-						};
-						// spacing	
-						w.view.decorator.shift(60, 0);	
-						// text
-						StaticText(w, Rect(0,0, 60, 27))
-						.string_("Volume")
-						.background_(TXColor.sysGuiCol1)
-						.stringColor_(TXColor.white)
-						.font_(Font.new("Helvetica", 13))
-						.align_('center');
-
-						// volume slider
-						volumeSpec = [ -90, 6, \db].asSpec;
-						sliderVol = Slider(w, Rect(350,0, 250, 27))
-						.background_(TXColor.white)
-						//	.align_(\right)
-						.knobColor_(TXColor.sysGuiCol1)
-						.value_(volumeSpec.unmap(dataBank.volume))
-						.action_({arg view; 
-							var holdVol;
-							holdVol = volumeSpec.map(view.value);
-							dataBank.volume = holdVol; 
-							server.volume = holdVol;
-						});
-						// button  
-						btnVol = Button(w, Rect(610,0, 30, 27));
-						btnVol.states = [["<>", TXColor.white, TXColor.sysGuiCol1]];
-						btnVol.action = {
-							dataBank.volume = 0; 
-							server.volume = 0;
-							sliderVol.value_(volumeSpec.unmap(0))
-						};
-
-					});	// end of headerBox creation
-
-					// create viewBox to display selected window
-					viewBox = CompositeView(w, Rect(0, 0, 2200, 1000));
-					if (showFrontScreen == false, {
-						viewBox.decorator = FlowLayout(viewBox.bounds);
+							},
+							"Are you sure you want to quit?"
+						);
+					};
+					// button - sync start
+					Button(headerBox, 70 @ 27)
+					.states_([
+						["Sync Start", TXColor.white, TXColor.sysGuiCol2]
+					])
+					.action_({|view|
+						// run action function
+						this.syncStart;
 					});
-					if (showWindow == "Modules & Channels", {TXChannelRouting.makeGui(viewBox);});
-					//	OLD			if (showWindow == "Modules & Channels", {TXModGui.makeGui(viewBox);});
-					//	OLD			if (showWindow == "Sequencers", {TXSeqGui.makeGui(viewBox);});
-					if (showWindow == "Signal Flow", {TXSignalFlow.makeGui(viewBox);});
-					if (showWindow == "Sample Banks", {TXBankBuilder2.makeSampleGui(viewBox);});
-					if (showWindow == "Loop Banks", {TXBankBuilder2.makeLoopGui(viewBox);});
-					if (showWindow == "Notes & Options", {this.guiViewNotes});
-					if (showFrontScreen == true, {TXFrontScreen.makeGui(viewBox, showWindow)});
+					// button - sync stop
+					Button(headerBox, 70 @ 27)
+					.states_([
+						["Sync Stop", TXColor.white, TXColor.sysGuiCol2]
+					])
+					.action_({|view|
+						// run action function
+						this.syncStop;
+					});
+					// button - stop all sequencers
+					Button(headerBox, 60 @ 27)
+					.states_([
+						["Stop All", TXColor.white, TXColor.sysGuiCol2]
+					])
+					.action_({|view|
+						// run action function
+						this.stopAllSyncModules;
+						this.showView;
+					});
+					// button - Panic! - all notes off
+					btnAllNotesOff = Button(headerBox, 120 @ 27)
+					.states_([["Panic! All Notes Off", TXColor.white, TXColor.sysDeleteCol]])
+					.action_({ this.allNotesOff; });
 
-					// make or close Gui Properties window
-					if (showFrontScreen == true 
-						and: (showWindow == "Design Interface")
-						and: (TXFrontScreen.classData.showGuiProperties == true)
-						, {
-							TXFrontScreenGuiProperties.makeGui(this);
-						}, {
-							TXFrontScreenGuiProperties.closeWindow;
+					// test note button
+					btnTestNote = Button(headerBox, 90 @ 27);
+					btnTestNote.states = [["Play Test Note", TXColor.white, TXColor.sysGuiCol2]];
+					btnTestNote.action = {
+						{ (EnvGen.kr(Env.sine(2,1), 1.0, doneAction: 2)
+							* Saw.ar(440, 0.1))!8
+						}.play;
+					};
+					// popup - Meters
+					popMeters = PopUpMenu(headerBox, 60 @ 27)
+					.background_(TXColor.sysGuiCol2).stringColor_(TXColor.white);
+					arrModulesForMeters = arrSystemModules
+					.select({arg item, i; item.class.noOutChannels > 0 ;})
+					.sort({arg item1, item2; item2.instName > item1.instName;});
+					popMeters.items = ["Meters"]
+					++ arrModulesForMeters.collect({ arg item, i; item.instName; })
+					++ [	"Audio Out 1+2", "Audio Out 3+4", "Audio Out 5+6", "Audio Out 7+8",
+						"Audio Out 9+10", "Audio Out 11+12", "Audio Out 13+14", "Audio Out 15+16",
+						"Audio Out 1-4", "Audio Out 1-8", "Audio Out 1-16",
+						"Audio In 1+2", "Audio In 3+4", "Audio In 5+6", "Audio In 7+8",
+						"Audio In 1-4", "Audio In 1-8",
+					] ++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
+					.collect({ arg item, i; item.instName; });
+					popMeters.action = {|view|
+						var arrAllBusArrays, arrBusses, meterRate, arrBusRates, holdMethod;
+
+						arrAllBusArrays = [ [] ]
+						++ arrModulesForMeters.collect({
+							arg item, i;
+							var holdIndex, outArray;
+							holdIndex = item.outBus.index;
+							item.class.noOutChannels.do({arg item, i;
+								outArray = outArray.add(holdIndex + i + 1);
+							});
+							outArray;
+						})
+						++ [
+							[1,2], [3,4], [5,6], [7,8],
+							[9,10], [11,12], [13,14], [15,16],
+							(1..4), (1..8),(1..16),
+							[1,2], [3,4], [5,6], [7,8],
+							(1..4), (1..8),
+						]
+						++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
+						.collect({ arg item, i; item.arrOutBusChoices.at(0).at(1) + 1; });
+						arrBusses = arrAllBusArrays.at(view.value);
+
+						arrBusRates = [\audio]
+						++ arrModulesForMeters.collect({ arg item, i; item.class.moduleRate; })
+						++ (\audio ! 17)
+						++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
+						.collect({ arg item, i; item.class.moduleRate; });
+
+						meterRate = arrBusRates.at(view.value);
+
+						if (arrBusses.size > 0, {
+							case
+							{ view.value > (17 + arrModulesForMeters.size) } {
+								holdMeter = TXMeter.perform(
+									'new', arrBusses-1, nil, nil, 10 @ 80,
+									popMeters.items.at(view.value), meterRate
+								);
+							}
+							{ view.value > (11 + arrModulesForMeters.size) } {
+								holdMeter = TXMeter.perform(
+									'input', arrBusses-1, nil, 10 @ 80,
+									popMeters.items.at(view.value)
+								);
+							}
+							{ view.value > arrModulesForMeters.size } {
+								holdMeter = TXMeter.perform(
+									'output', arrBusses-1, nil, 10 @ 80,
+									popMeters.items.at(view.value)
+								);
+							}
+							{ view.value > 0 } {
+								holdMeter = TXMeter.perform(
+									'new', arrBusses-1, nil, nil, 10 @ 80,
+									popMeters.items.at(view.value), meterRate
+								);
+							}
+							;
+							// defer to allow meter synth to be built:
+							if (holdMeter.notNil, {
+								{holdMeter.autoreset = 3.0; holdMeter.rate = 20;}.defer(0.5); });
+							arrMeters = arrMeters.add(holdMeter);
 						});
+						popMeters.value = 0;
+					};
+					// spacing
+					headerBox.decorator.nextLine;
+					headerBox.decorator.shift(0, 6);
+					// text
+					StaticText(headerBox, 90 @ 24)
+					.string_("SYSTEM:")
+					.background_(TXColor.sysLabelBackground)
+					.stringColor_(TXColor.white)
+					.font_(Font.new("Helvetica", 13))
+					.align_('center');
 
-				}.defer;
-			}; // end of Routine.run
+					// display system buttons
+					buttonLabels = ["Modules & Channels", "Signal Flow", "Sample Banks",
+						"Loop Banks", "Notes & Options"];
+					buttonLabels.do({arg item, i;
+						var holdButton, holdBoxColour, holdTextColour;
+						if (showWindow == item, {
+							holdBoxColour = TXColor.white;
+							holdTextColour = TXColor.sysGuiCol1;
+						},{
+							holdBoxColour = TXColor.sysGuiCol1;
+							holdTextColour = TXColor.white;
+						});
+						holdButton = Button(headerBox, 122 @ 24);
+						holdButton.states = [[item, holdTextColour, holdBoxColour]];
+						holdButton.action = {
+							showWindow = item;
+							showFrontScreen = false;
+							this.addHistoryEvent;
+							this.showView;
+						};
+					});
+					// spacing
+					headerBox.decorator.shift(20, 0);
+					// text
+					StaticText(headerBox, 100 @ 24)
+					.string_("INTERFACE:")
+					.background_(TXColor.sysLabelBackground)
+					.stringColor_(TXColor.white)
+					.font_(Font.new("Helvetica", 13))
+					.align_('center');
+
+					// display Interface buttons
+					buttonLabels = ["Run Interface", "Design Interface"];
+					buttonLabels.do({arg item, i;
+						var holdButton, holdBoxColour, holdTextColour;
+						if (showWindow == item, {
+							holdBoxColour = TXColor.white;
+							holdTextColour = TXColor.sysInterfaceButton;
+						},{
+							holdBoxColour = TXColor.sysInterfaceButton;
+							holdTextColour = TXColor.white;
+						});
+						holdButton = Button(headerBox, 122 @ 24);
+						holdButton.states = [[item, holdTextColour, holdBoxColour]];
+						holdButton.action = {
+							showWindow = item;
+							showFrontScreen = true;
+							this.addHistoryEvent;
+							this.showView;
+						};
+					});
+					// spacing
+					headerBox.decorator.shift(20, 0);
+					// history buttons
+					if (historyIndex > 0, {
+						holdColor = TXColor.white;
+					},{
+						holdColor = TXColor.grey;
+					});
+					// button
+					btnBack = Button(headerBox, 24 @ 24);
+					btnBack.states = [["<", holdColor, TXColor.sysGuiCol1]];
+					btnBack.action = {this.shiftHistory(-1);};
+					if (historyIndex < (historyEvents.size - 1), {
+						holdColor = TXColor.white;
+					},{
+						holdColor = TXColor.grey;
+					});
+					// button
+					btnForward = Button(headerBox, 24 @ 24);
+					btnForward.states = [[">", holdColor, TXColor.sysGuiCol1]];
+					btnForward.action = {this.shiftHistory(1);};
+					// spacing
+					headerBox.decorator.nextLine;
+					headerBox.decorator.shift(0, 4);
+					//				if (GUI.current.asSymbol == \SwingGUI, {
+					//					stTextFileName .font_(JFont("Gill Sans", 11));
+					//				},{
+					//					stTextFileName .font_(Font("Gill Sans", 11));
+					//				});
+					// static text - file name
+					stTextFileName = StaticText(headerBox, 1298 @ 24)
+					.background_(TXColor.white.alpha_(0.1))
+					.string_(holdFileName)
+					.stringColor_(TXColor.white);
+					// spacing
+					headerBox.decorator.shift(-214, 0);
+					// keep vals
+					holdLeftVal = headerBox.decorator.left;
+					holdTopVal = headerBox.decorator.top;
+					// spacing
+					headerBox.decorator.shift(0, -70);
+					// text
+					StaticText(headerBox, 50 @ 27)
+					.string_("Volume")
+					.background_(TXColor.sysGuiCol2)
+					.stringColor_(TXColor.white)
+					.font_(Font.new("Helvetica", 13))
+					.align_('center');
+
+					// volume slider
+					volumeSpec = [ -90, 6, \db].asSpec;
+					sliderVol = Slider(headerBox, 118 @ 27)
+					.background_(TXColor.sysGuiCol2)
+					//	.align_(\right)
+					.knobColor_(TXColor.white)
+					.thumbSize_ (6)
+					.value_(volumeSpec.unmap(dataBank.volume))
+					.action_({arg view;
+						var holdVol;
+						holdVol = volumeSpec.map(view.value);
+						dataBank.volume = holdVol;
+						server.volume = holdVol;
+					});
+
+					// button
+					btnVol = Button(headerBox, 34 @ 27);
+					btnVol.states = [["0 dB", TXColor.white, TXColor.sysGuiCol2]];
+					btnVol.action = {
+						dataBank.volume = 0;
+						server.volume = 0;
+						sliderVol.value_(volumeSpec.unmap(0))
+					};
+				},{
+					// system title
+					btnTitle = Button(w,Rect(0,0,140,26))
+					.font_(Font.new("Helvetica-Bold",16));
+					btnTitle.states = [["TX Modular " ++ systemVersion, TXColor.sysGuiCol1,
+						TXColor.white]];
+					btnTitle.action = {
+						"TX_Modular_Standalone_Links".openHelpFile;
+					};
+					// spacing
+					w.view.decorator.shift(60, 0);
+					// button - Quit
+					btnCloseSystem = Button(w, 60 @ 27);
+					btnCloseSystem.states = [["Quit", TXColor.white, TXColor.sysGuiCol1]];
+					btnCloseSystem.action = {
+						// confirm before action
+						TXInfoScreen.newConfirmWindow(
+							{
+								// if standalone system then quit completely else just close TX
+								if (txStandAlone == 1, {
+									0.exit;
+								},{
+									{w.close;}.defer;
+								});
+							},
+							"Are you sure you want to quit?"
+						);
+					};
+					// spacing
+					w.view.decorator.shift(60, 0);
+					// text
+					StaticText(w, Rect(0,0, 60, 27))
+					.string_("Volume")
+					.background_(TXColor.sysGuiCol1)
+					.stringColor_(TXColor.white)
+					.font_(Font.new("Helvetica", 13))
+					.align_('center');
+
+					// volume slider
+					volumeSpec = [ -90, 6, \db].asSpec;
+					sliderVol = Slider(w, Rect(350,0, 250, 27))
+					.background_(TXColor.white)
+					//	.align_(\right)
+					.knobColor_(TXColor.sysGuiCol1)
+					.value_(volumeSpec.unmap(dataBank.volume))
+					.action_({arg view;
+						var holdVol;
+						holdVol = volumeSpec.map(view.value);
+						dataBank.volume = holdVol;
+						server.volume = holdVol;
+					});
+					// button
+					btnVol = Button(w, Rect(610,0, 30, 27));
+					btnVol.states = [["<>", TXColor.white, TXColor.sysGuiCol1]];
+					btnVol.action = {
+						dataBank.volume = 0;
+						server.volume = 0;
+						sliderVol.value_(volumeSpec.unmap(0))
+					};
+
+				});	// end of headerBox creation
+
+				// create viewBox to display selected window
+				viewBox = CompositeView(w, Rect(0, 0, 2200, 1000));
+				if (showFrontScreen == false, {
+					viewBox.decorator = FlowLayout(viewBox.bounds);
+				});
+				if (showWindow == "Modules & Channels", {TXChannelRouting.makeGui(viewBox);});
+				//	OLD			if (showWindow == "Modules & Channels", {TXModGui.makeGui(viewBox);});
+				//	OLD			if (showWindow == "Sequencers", {TXSeqGui.makeGui(viewBox);});
+				if (showWindow == "Signal Flow", {TXSignalFlow.makeGui(viewBox);});
+				if (showWindow == "Sample Banks", {TXBankBuilder2.makeSampleGui(viewBox);});
+				if (showWindow == "Loop Banks", {TXBankBuilder2.makeLoopGui(viewBox);});
+				if (showWindow == "Notes & Options", {this.guiViewNotes});
+				if (showFrontScreen == true, {TXFrontScreen.makeGui(viewBox, showWindow)});
+
+				// make or close Gui Properties window
+				if (showFrontScreen == true
+					and: (showWindow == "Design Interface")
+					and: (TXFrontScreen.classData.showGuiProperties == true)
+					, {
+						TXFrontScreenGuiProperties.makeGui(this);
+				}, {
+					TXFrontScreenGuiProperties.closeWindow;
+				});
+			}, clock: AppClock); // end of Routine.run
 		}); // end of if
 	} // end of method showViewAction
 
-	*deferRemoveView {arg holdView; 
+	*deferRemoveView {arg holdView;
 		if (holdView.notNil, {
 			if (holdView.notClosed, {
-				holdView.visible_(false); 
-				holdView.focus(false); 
+				holdView.visible_(false);
+				holdView.focus(false);
 				{holdView.remove}.defer(1);
 			});
 		});
 	}
-	*addImageDialog  { 
+	*addImageDialog  {
 		var holdString;
 		// get path/filenames
 		Dialog.getPaths({ arg paths;
 			var holdFile;
-			holdFile = SCImage.open(paths[0]); 
+			holdFile = SCImage.open(paths[0]);
 			if (holdFile.isNil, {
 				TXInfoScreen.new(
 					"Error: the following is not a valid image files:",
@@ -2524,18 +2503,18 @@ TXSystem1 {		// system module 1
 		var imageNameText;
 
 		arrAllSourceActionModules = arrSystemModules
-		.select({ arg item, i; 
-			(item.class.moduleType == "source") 
-			or: 
-			(item.class.moduleType == "groupsource") 
-			or: 
-			(item.class.moduleType == "groupaction") 
-			or: 
-			(item.class.moduleType == "action") 
-			or: 
+		.select({ arg item, i;
+			(item.class.moduleType == "source")
+			or:
+			(item.class.moduleType == "groupsource")
+			or:
+			(item.class.moduleType == "groupaction")
+			or:
+			(item.class.moduleType == "action")
+			or:
 			(item.class.moduleType == "insert") ;
 		})
-		.sort({ arg a, b; 
+		.sort({ arg a, b;
 			this.adjustNameForSorting(a.instName) < this.adjustNameForSorting(b.instName);
 		});
 		arrAllSourceActionModNames = arrAllSourceActionModules
@@ -2553,12 +2532,14 @@ TXSystem1 {		// system module 1
 		//  spacer
 		noteView.decorator.nextLine;
 		noteView.decorator.shift(0, 10);
-		// label - background image 
+
+		/* IMMAGE REMOVED FOR NOW
+		// label - background image
 		StaticText(noteView, Rect(0, 0, 120, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\right)
 		.string_("Background Image" );
-		// text - image file name 
+		// text - image file name
 		imageNameText = StaticText(noteView, Rect(0, 0, 300, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\left);
@@ -2586,7 +2567,7 @@ TXSystem1 {		// system module 1
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\right)
 		.string_("Image mode" );
-		//display mode 
+		//display mode
 		displayModeItems = [
 			"0 - off - image not shown, show window colour",
 			"1 - fix left, fix top - default",
@@ -2606,11 +2587,11 @@ TXSystem1 {		// system module 1
 			"15 - fix right, center vertically",
 			"16 - center horizontally, center vertically - no scale",
 		];
-		// number box - display mode 
+		// number box - display mode
 		displayModeNumberView = NumberBox(noteView, Rect(0, 0, 20, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			var holdValue;
 			holdValue = view.value.clip(0,16);
 			dataBank.displayModeIndex = holdValue;
@@ -2620,11 +2601,11 @@ TXSystem1 {		// system module 1
 			this.showView;
 		});
 		displayModeNumberView.value = dataBank.displayModeIndex;
-		// popup - display mode 
+		// popup - display mode
 		displayModePopupView = PopUpMenu(noteView, Rect(0, 0, 20, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_(displayModeItems)
-		.action_({arg view; 
+		.action_({arg view;
 			dataBank.displayModeIndex = view.value;
 			this.saveSystemSettings;
 			this.setWindowImage;
@@ -2632,6 +2613,8 @@ TXSystem1 {		// system module 1
 			this.showView;
 		});
 		displayModePopupView.value = dataBank.displayModeIndex;
+		*/
+
 		//  spacer
 		noteView.decorator.nextLine;
 		noteView.decorator.shift(0, 10);
@@ -2660,7 +2643,7 @@ TXSystem1 {		// system module 1
 			// update view
 			w.refresh;
 		};
-		// button 
+		// button
 		btnDefault = Button(noteView, 60 @ 24);
 		btnDefault.states = [["Default", TXColor.white, TXColor.sysMainWindow]];
 		btnDefault.action = {
@@ -2670,7 +2653,7 @@ TXSystem1 {		// system module 1
 			this.saveSystemSettings;
 		};
 
-		// colourPickerButton			
+		// colourPickerButton
 		Button(noteView, 60 @ 24)
 		.states_([["Picker", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({
@@ -2680,9 +2663,9 @@ TXSystem1 {		// system module 1
 		screenColourPopup = PopUpMenu(noteView, 140 @ 24)
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_(["Presets"] ++ TXColour.colourNames)
-		.action_({arg view; 
+		.action_({arg view;
 			if (view.value > 0, {
-				w.view.background = 
+				w.view.background =
 				TXColour.perform(TXColour.colourNames.at(view.value - 1).asSymbol).copy;
 				screenColourBox.background_(w.view.background);
 				dataBank.windowColour = w.view.background;
@@ -2697,7 +2680,7 @@ TXSystem1 {		// system module 1
 		.string_("Window Transparancy")
 		.align_(\center)
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
-		// buttons 
+		// buttons
 		6.do({ arg i;
 			var btn, col1, col2;
 			if (dataBank.windowAlpha == (1 - (0.1 * i)), {
@@ -2724,9 +2707,9 @@ TXSystem1 {		// system module 1
 		.string_("Ask for confirmation before deleting Modules and Channels?")
 		.align_(\center)
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
-		TXCheckBox(noteView, 70 @ 24, "", TXColor.sysGuiCol1, TXColour.grey(0.8), 
+		TXCheckBox(noteView, 70 @ 24, "", TXColor.sysGuiCol1, TXColour.grey(0.8),
 			TXColor.white, TXColor.sysGuiCol1, 10)
-		.action_({arg view; dataBank.confirmDeletions = view.value.booleanValue; 
+		.action_({arg view; dataBank.confirmDeletions = view.value.booleanValue;
 			this.saveSystemSettings;})
 		.value_(dataBank.confirmDeletions.binaryValue;);
 		//  spacer
@@ -2738,15 +2721,15 @@ TXSystem1 {		// system module 1
 		//  spacer
 		noteView.decorator.nextLine;
 		noteView.decorator.shift(0,10);
-		//  display Network  info 
+		//  display Network  info
 		StaticText(noteView, 500 @ 24)
-		.string_("Network IP address for receiving OSC messages:  " 
-			++ dataBank.ipAddress.asString ++ 
+		.string_("Network IP address for receiving OSC messages:  "
+			++ dataBank.ipAddress.asString ++
 			"      Network Port:  " ++ NetAddr.langPort.asString)
-		.align_(\center) 
-		.background_(TXColor.sysChannelHighlight) 
+		.align_(\center)
+		.background_(TXColor.sysChannelHighlight)
 		.stringColor_(TXColor.sysGuiCol1);
-		//	// button 
+		//	// button
 		//	btnUpdateIP = Button(noteView, 140 @ 24);
 		//	btnUpdateIP.states = [["Update Network Info", TXColor.white, TXColor.sysGuiCol1]];
 		//	btnUpdateIP.action = {
@@ -2755,7 +2738,7 @@ TXSystem1 {		// system module 1
 		//  spacer
 		noteView.decorator.nextLine;
 		noteView.decorator.shift(0,10);
-		//  display all notes 
+		//  display all notes
 		StaticText(noteView, 60 @ 24).string_("Notes 1").align_(\center)
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
 		TextField(noteView, 700 @ 24)
@@ -2825,19 +2808,19 @@ TXSystem1 {		// system module 1
 		.string_(notes7)
 		.action_({arg view; notes7 = view.value;});
 
-		/* new code for multiple deletions. Not currently needed since moved to modules page 
+		/* new code for multiple deletions. Not currently needed since moved to modules page
 
 			//  decorator.reset
 			noteView.decorator.reset;
 			noteView.decorator.shift(800,20);
 
-			// make box	
+			// make box
 			modListBoxWidth = 250;
 			modListBoxHeight = 600;
-			modListBox =  CompositeView(noteView, Rect(0,0, modListBoxWidth, modListBoxHeight));  
+			modListBox =  CompositeView(noteView, Rect(0,0, modListBoxWidth, modListBoxHeight));
 			modListBox.background = TXColour.sysChannelAudio;
 			modListBox.decorator = FlowLayout(modListBox.bounds);
-			// Heading	  
+			// Heading
 			holdView = StaticText(modListBox, Rect(0,0, 168, 30));
 			holdView.string = "All System Modules";
 			holdView.stringColor_(TXColour.sysGuiCol4).background_(TXColor.white);
@@ -2849,20 +2832,20 @@ TXSystem1 {		// system module 1
 			modulesScrollView = ScrollView(modListBox, Rect(0,0, modListBoxWidth-8, modListBoxHeight-38))
 			.hasBorder_(false).autoScrolls_(false);
 			modulesScrollView.action = {
-			arg view; dataBank.modulesVisibleOrigin = view.visibleOrigin; 
+			arg view; dataBank.modulesVisibleOrigin = view.visibleOrigin;
 			};
-			modulesBox = CompositeView(modulesScrollView, 
+			modulesBox = CompositeView(modulesScrollView,
 			Rect(0,0, modListBoxWidth-14, (arrAllSourceActionModNames.size * 30).max(20)));
 			modulesBox.decorator = FlowLayout(modulesBox.bounds);
 
 			arrAllSourceActionModNames.do({arg item, i;
 			var strModule, btnDelete;
-			// button -  module	  
+			// button -  module
 			strModule = StaticText(modulesBox, 140 @ 20);
 			strModule.string = item;
 			strModule.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 			strModule.setProperty(\align,\center);
-			// button -  delete	  
+			// button -  delete
 			btnDelete = Button(modulesBox, 24 @ 20);
 			btnDelete.states = [["Del", TXColor.white, TXColor.sysDeleteCol]];
 			btnDelete.action = {arrAllSourceActionModules.at(i).confirmDeleteModule; this.showView;};

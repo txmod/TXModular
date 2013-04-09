@@ -1,18 +1,18 @@
 // Copyright (C) 2008  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
-		
+
 TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 	var <>scrollView, <>scrollView2, <>noteGrid, <>midiKeyboard, <>labelView, <>popupOctave, holdButton, <>action, <value;
 	var <size, system, holdOctave, numKeybOctaves, heightPerOctave;
-	
-	*new { arg window, dimensions, action, initVal, initAction=false, labelWidth=80, numberWidth = 20, 
-			system, getOctaveFunction, setOctaveFunction, numKeybOctaves, arrParmNames, 
+
+	*new { arg window, dimensions, action, initVal, initAction=false, labelWidth=80, numberWidth = 20,
+			system, getOctaveFunction, setOctaveFunction, numKeybOctaves, arrParmNames,
 			getParmIndexFunction, setParmIndexFunction, scrollViewAction, scrollViewWidth;
-		^super.new.init(window, dimensions, action, initVal, initAction, labelWidth, numberWidth, 
-				system, getOctaveFunction, setOctaveFunction, numKeybOctaves, arrParmNames, 
+		^super.new.init(window, dimensions, action, initVal, initAction, labelWidth, numberWidth,
+				system, getOctaveFunction, setOctaveFunction, numKeybOctaves, arrParmNames,
 				getParmIndexFunction, setParmIndexFunction, scrollViewAction, scrollViewWidth);
 	}
-	init { arg window, dimensions, argAction, initVal, initAction, labelWidth, numberWidth, 
-			argsystem, getOctaveFunction, setOctaveFunction, argnumKeybOctaves, arrParmNames, 
+	init { arg window, dimensions, argAction, initVal, initAction, labelWidth, numberWidth,
+			argsystem, getOctaveFunction, setOctaveFunction, argnumKeybOctaves, arrParmNames,
 			getParmIndexFunction, setParmIndexFunction, scrollViewAction, scrollViewWidth;
 		var holdNumberBox, holdParmIndex, holdButtonColour;
 		var left, top;
@@ -21,7 +21,7 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 
 		initVal = initVal ? Array.fill(16, 0);
 		action = argAction;
-		
+
 		value = initVal;
 		// size of array of number is derived from initVal size
 		size = initVal.size;
@@ -32,10 +32,13 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 		numKeybOctaves = argnumKeybOctaves;
 		heightPerOctave = dimensions.y / numKeybOctaves;
 		holdParmIndex = getParmIndexFunction.value;
-		
+
 		if (scrollViewAction.notNil, {
 			// add ScrollView
-			scrollView = ScrollView(window, Rect(0, 0, 78, dimensions.y)).hasBorder_(false).autoScrolls_(false);
+			scrollView = ScrollView(window, Rect(0, 0, 78, dimensions.y)).hasBorder_(false);
+			if (GUI.current.asSymbol == \cocoa, {
+				scrollView.autoScrolls_(false);
+			});
 			scrollView.hasHorizontalScroller = false;
 			scrollView.hasVerticalScroller = false;
 			scrollBox = CompositeView(scrollView, Rect(0, 0, 78, heightPerOctave * 10.3));
@@ -51,7 +54,7 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 		});
 		// create midiKeyboard
 		midiKeyboard = TXMIDIKeyboard.new(scrollBox?window, Rect(0, 0, 78, holdMidiKeyHeight), numKeybOctaves, 48, horizontal: false);
-		
+
 
 		if (scrollViewAction.notNil, {
 			// add note numbers to keyboard
@@ -63,8 +66,11 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 			// add ScrollView
 			holdGridHeight = heightPerOctave * 10;
 			holdGridWidth = 384 * 4;
-			scrollView2 = ScrollView(window, 
-				Rect(0, 0, scrollViewWidth, dimensions.y+12)).hasBorder_(false).autoScrolls_(false);
+			scrollView2 = ScrollView(window,
+				Rect(0, 0, scrollViewWidth, dimensions.y+12)).hasBorder_(false);
+			if (GUI.current.asSymbol == \cocoa, {
+				scrollView2.autoScrolls_(false);
+			});
 			scrollView2.hasHorizontalScroller = true;
 			scrollView2.hasVerticalScroller = true;
 			scrollView2.action = scrollViewAction;
@@ -83,14 +89,14 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 			top = window.decorator.top;
 		});
 		//  grid
-		noteGrid = TXBoxGrid.new(scrollBox2?window, Rect(left, top, holdGridWidth, holdGridHeight), 
+		noteGrid = TXBoxGrid.new(scrollBox2?window, Rect(left, top, holdGridWidth, holdGridHeight),
 			columns: size, rows: (12 * numKeybOctaves))
 			.setBackgrColor_(TXColor.white)
 			.setNodeBorder_(0)
 			.setFillMode_(true)
 			.setFillColor_(TXColor.blue);
-		noteGrid.nodeUpAction_({arg nodeloc; 
-			// set target 
+		noteGrid.nodeUpAction_({arg nodeloc;
+			// set target
 			this.updValueFromNodeloc(nodeloc);
 			// update gui
 			system.flagGuiUpd;
@@ -100,30 +106,30 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 //		noteGrid.setNodeStates_(Array.fill2D(noteGrid.rows, noteGrid.columns, 0));
 
 		// update grid
-		this.updNoteGridFromValue;		
-		
+		this.updNoteGridFromValue;
+
 		// adjust spacing
 //		if (window.class == Window, {
 //			window.view.decorator.nextLine;
 //		}, {
 //			window.decorator.nextLine;
 //		});
-		
+
 
 // No longer used
 //		// add octave popup if not scrolling
 //		if (scrollViewAction.isNil, {
-//			// create octave popup//			popupOctave = PopUpMenu(window, 110 @ 20);//			popupOctave.items = (12 - numKeybOctaves).collect({arg item, i; //				"Show C" ++ (item - 2).asString ++ " to B" ++ (item - 2 + (numKeybOctaves - 1)).asString; //			});//			popupOctave.stringColor_(TXColour.black).background_(TXColor.paleVioletRed);//			popupOctave.action = { arg view;//				setOctaveFunction.value(view.value);//				// recreate view//				system.showView;//			};//			popupOctave.value = holdOctave;//	
-//			// adjust spacing//			if (window.class == Window, {//				window.view.decorator.shift(-74, 24);//			}, {//				window.decorator.shift(-74, 24);//			});	
+//			// create octave popup//			popupOctave = PopUpMenu(window, 110 @ 20);//			popupOctave.items = (12 - numKeybOctaves).collect({arg item, i; //				"Show C" ++ (item - 2).asString ++ " to B" ++ (item - 2 + (numKeybOctaves - 1)).asString; //			});//			popupOctave.stringColor_(TXColour.black).background_(TXColor.paleVioletRed);//			popupOctave.action = { arg view;//				setOctaveFunction.value(view.value);//				// recreate view//				system.showView;//			};//			popupOctave.value = holdOctave;//
+//			// adjust spacing//			if (window.class == Window, {//				window.view.decorator.shift(-74, 24);//			}, {//				window.decorator.shift(-74, 24);//			});
 //			Button(window, 18 @ 18)
-//			.states_([["-", TXColor.white, TXColor.sysGuiCol1]])//			.action_({|view|//				popupOctave.valueAction = (popupOctave.value - 1).max(0);//			});//			Button(window, 18 @ 18)//			.states_([["+", TXColor.white, TXColor.sysGuiCol1]])//			.action_({|view|//				popupOctave.valueAction = (popupOctave.value + 1).min(popupOctave.items.size - 1);//			});//	
+//			.states_([["-", TXColor.white, TXColor.sysGuiCol1]])//			.action_({|view|//				popupOctave.valueAction = (popupOctave.value - 1).max(0);//			});//			Button(window, 18 @ 18)//			.states_([["+", TXColor.white, TXColor.sysGuiCol1]])//			.action_({|view|//				popupOctave.valueAction = (popupOctave.value + 1).min(popupOctave.items.size - 1);//			});//
 //			// adjust spacing//			if (window.class == Window, {//				window.view.decorator.shift(-74, -24);//			}, {//				window.decorator.shift(-74, -24);//			});//		});
-		
+
 		// optional parameter buttons
 		if (arrParmNames.notNil, {
 			arrParmNames.do({ arg item, i;
-				if (holdParmIndex == i, 
-					{holdButtonColour = TXColor.sysGuiCol4;}, 
+				if (holdParmIndex == i,
+					{holdButtonColour = TXColor.sysGuiCol4;},
 					{holdButtonColour = TXColor.sysGuiCol1;}
 				);
 				holdButton = Button(window, 100 @ 18)
@@ -152,29 +158,29 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 			action.value(this);
 		};
 	}
-	
-	value_ { arg argValue; 
+
+	value_ { arg argValue;
 		value = argValue;
-		this.updNoteGridFromValue;		
+		this.updNoteGridFromValue;
 	}
 
-	valueAction_ { arg argValue; 
+	valueAction_ { arg argValue;
 		value = argValue;
-		this.updNoteGridFromValue;		
+		this.updNoteGridFromValue;
 		action.value(this);
 	}
 
-	updValueFromNodeloc { arg nodeloc; 
+	updValueFromNodeloc { arg nodeloc;
 		var row, col, holdMidiNote;
 		col = nodeloc.at(0);
 		row = nodeloc.at(1);
 		holdMidiNote = (holdOctave * 12) + ((numKeybOctaves * 12) - 1 - row);
 		value.put(col, holdMidiNote);
 		action.value(this);
-		this.updNoteGridFromValue;		
+		this.updNoteGridFromValue;
 	}
 
-	updNoteGridFromValue {  
+	updNoteGridFromValue {
 		var arrBlackNotes;
 		noteGrid.reconstruct({
 			// clear grid and show black notes
@@ -194,8 +200,8 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 					noteGrid.setState_(argCol, ((numKeybOctaves * 12) - 1 - holdRow), 1);
 					noteGrid.setBoxColor_(argCol, ((numKeybOctaves * 12) - 1 - holdRow), TXColor.blue);
 				});
-			});	
+			});
 		});
 	}
-	
+
 }

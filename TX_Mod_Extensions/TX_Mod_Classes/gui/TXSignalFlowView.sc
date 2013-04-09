@@ -1,6 +1,6 @@
 // Copyright (C) 2009  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXSignalFlowView {	
+TXSignalFlowView {
 //	var resizeHandles, resizeFixed, dropX, dropY;
 //	var isSelected=false;
 	var window, <>userView, arrAllModules, arrChannels, arrFXBusses, system;
@@ -8,7 +8,7 @@ TXSignalFlowView {
 	var <gridStep = 10,<gridOn = false, dragging = false, indent, multipleDragBy;
 	var boxWidth = 130, boxHeight = 22;
 	var height, width, holdString;
-	
+
 	*new { arg argWindow, dimensions, argSystem;
 		^super.new.init(argWindow, dimensions, argSystem);
 	}
@@ -31,14 +31,14 @@ TXSignalFlowView {
 		userView.mouseMoveAction = { |v,x,y,m| this.drag(x,y,m) };
 //		userView.background_(TXColor.sysModuleWindow);
 		userView.background_(Color.grey(0.9, 0.2));
-		userView.drawFunc = {	
+		userView.drawFunc = {
 			// draw grid
 		//	this.drawGrid;
 			// draw lines for each channel connection
-			arrChannels.do({ arg argChannel, i; 
+			arrChannels.do({ arg argChannel, i;
 				var arrModules, nonDestModules;
-				arrModules = [argChannel.sourceModule, argChannel, argChannel.insert1Module, 
-					argChannel.insert2Module, argChannel.insert3Module, 
+				arrModules = [argChannel.sourceModule, argChannel, argChannel.insert1Module,
+					argChannel.insert2Module, argChannel.insert3Module,
 					argChannel.insert4Module, argChannel.insert5Module
 				];
 				nonDestModules = arrModules.reject({arg item; item.isNil});
@@ -65,7 +65,7 @@ TXSignalFlowView {
 				});
 			});
 			// make boxes for each module
-			arrAllModules.do({ arg argModule, i; 
+			arrAllModules.do({ arg argModule, i;
 				var holdRect, holdSmallRect, holdDefaultCol, holdRate, holdModuleType;
 				holdRect = Rect(argModule.posX, argModule.posY+6, boxWidth, boxHeight);
 				if (argModule.class.moduleType == "channel", {
@@ -94,7 +94,7 @@ TXSignalFlowView {
 					Pen.addRect(holdRect.insetBy(8));
 					Pen.fill;
 				}, {
-					if (argModule.class.moduleType == "bus", { 
+					if (argModule.class.moduleType == "bus", {
 						Pen.fillColor = Color.new255(0, 0, 60);
 						Pen.addRect(holdRect.insetBy(5));
 						Pen.fill;
@@ -112,30 +112,30 @@ TXSignalFlowView {
 				// Draw the connectors
 				holdModuleType = argModule.class.moduleType;
 				Pen.strokeColor = TXColor.sysGuiCol2;
-				if (((holdRate ==  "control") and: 
+				if (((holdRate ==  "control") and:
 						((holdModuleType == "insert") or: (holdModuleType == "bus")
 							or: (holdModuleType == "channel")
 						)
-					) or: 
+					) or:
 					(argModule.class.arrCtlSCInBusSpecs.asArray.size > 0), {
 					Pen.addRect(Rect(argModule.posX+50, argModule.posY, 4, 4););
 				});
-				if ((holdRate ==  "control") and: 
+				if ((holdRate ==  "control") and:
 					 	((argModule.class.noOutChannels > 0) or: (holdModuleType == "channel")), {
 					Pen.addRect(Rect(argModule.posX+50, argModule.posY+30, 4, 4););
 				});
 				Pen.stroke;
 				Pen.strokeColor = TXColor.sysGuiCol1;
-				if (		((holdRate ==  "audio") and: 
+				if (		((holdRate ==  "audio") and:
 							((holdModuleType == "insert") or: (holdModuleType == "bus")
 								or: (holdModuleType == "channel")
 							)
-						) or: 
-						(argModule.class.arrAudSCInBusSpecs.asArray.size > 0), 
+						) or:
+						(argModule.class.arrAudSCInBusSpecs.asArray.size > 0),
 				{
 					Pen.addRect(Rect(argModule.posX+80, argModule.posY, 4, 4););
 				});
-				if ((holdRate ==  "audio") and: 
+				if ((holdRate ==  "audio") and:
 					 	((argModule.class.noOutChannels > 0) or: (holdModuleType == "channel")), {
 					Pen.addRect(Rect(argModule.posX+80, argModule.posY+30, 4, 4););
 				});
@@ -144,7 +144,7 @@ TXSignalFlowView {
 				Pen.color = TXColor.white;
 				Pen.font = Font( "Helvetica", 12 );
 				if (argModule.class.moduleType == "channel", {
-					holdString = "Ch " ++ argModule.channelNo.asString ++ ": " 
+					holdString = "Ch " ++ argModule.channelNo.asString ++ ": "
 						++ argModule.getSourceBusName;
 				},{
 					holdString = argModule.instName;
@@ -194,28 +194,28 @@ TXSignalFlowView {
 
 	mouseDown { |x,y, mod|
 		var view, point, handle;
-		
+
 		point = x @ y;
-		
+
 		view = this.viewContainingPoint(point);
-		
+
 		if (view.notNil, {
 			this.highlightView(view);
 		});
-		
+
 		dragging = view.notNil;
-		
+
 		if( dragging, {
-			
+
 			indent = point - Point(view.posX, view.posY);
-			
+
 			if (mod.isShift == true, {
 				if ( not(selectedViews.includes(view)), {
 					selectedViews = selectedViews.add(view);
 				});
 			});
 
-			if( (selectedViews.size > 1) and: 
+			if( (selectedViews.size > 1) and:
 				{ selectedViews.includes(view)},
 			{
 				multipleDragBy = view
@@ -228,11 +228,11 @@ TXSignalFlowView {
 				this.unhighlightAllViews;
 				selectedViews = [];
 			});
-			selection = SCIBAreaSelection(point)
+			selection = TXAreaSelection(point);
 		});
 		userView.refresh;
 	}
-	
+
 	mouseUp { |x,y, mod|
 		if (selectionChanged == true, {
 			if (mod.isShift == false, {
@@ -248,7 +248,7 @@ TXSignalFlowView {
 		this.fitToGrid;
 		this.checkLayoutBoundaries;
 		if(selection.notNil,{
-			selection = nil; 
+			selection = nil;
 		});
 		userView.refresh;
 	}
@@ -265,8 +265,8 @@ TXSignalFlowView {
 				yMin = selectedViews.collect({ |v| v.posY;}).minItem;
 				f.x = f.x.max(xMin.neg);
 				f.y = f.y.max(yMin.neg);
-				
-				selectedViews.do({ |v| 
+
+				selectedViews.do({ |v|
 					v.posX = (v.posX + f.x).max(0);
 					v.posY = (v.posY + f.y).max(0);
 				})
@@ -284,7 +284,7 @@ TXSignalFlowView {
 		});
 		userView.refresh;
 	}
-	
+
 	viewContainingPoint { |point|
 		arrAllModules.do({ |view|
 			var viewRect;
@@ -327,7 +327,7 @@ TXSignalFlowView {
 	drawGrid {
 		// draw grid lines if gridStep > 1
 		if (gridStep > 1, {
-		
+
 			Pen.use {
 				Pen.strokeColor = Color.black.alpha_(0.1);
 				Pen.width = 1;

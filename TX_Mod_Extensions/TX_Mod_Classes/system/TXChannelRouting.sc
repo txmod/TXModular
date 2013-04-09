@@ -1,6 +1,6 @@
 // Copyright (C) 2010  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXChannelRouting {	// Channel Routing  
+TXChannelRouting {	// Channel Routing
 
 classvar	<>system;	    			// parent system - set by parent
 classvar <arrChannels;  		// array of channels created
@@ -22,9 +22,9 @@ classvar modulesVisibleOrigin;
 classvar showDelButtons;
 
 *initClass{
-	arrChannels = [];		
+	arrChannels = [];
 	startChannel = 0;
-	chanWidth = "Narrow";	
+	chanWidth = "Narrow";
 	arrControls = nil;
 	multiWindow = false;
 	displayModule = nil;
@@ -34,35 +34,35 @@ classvar showDelButtons;
 	channelsVisibleOrigin = Point.new(0,0);
 	modulesVisibleOrigin = Point.new(0,0);
 	showDelButtons = false;
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-*saveData {	
+*saveData {
 	// this method returns an array of all data for saving with various components:
 	// 0- string "TXModuleSaveData", 1- module class, 2- arrControlVals, 3- arrAllChannelData
 	var arrData, arrAllChannelData;
-	// collect saveData from  all modules 
+	// collect saveData from  all modules
 	arrAllChannelData = arrChannels.collect({ arg item, i; item.saveData; });
-	arrData = ["TXModuleSaveData", this.class.asString, arrControlVals, arrAllChannelData]; 
+	arrData = ["TXModuleSaveData", this.class.asString, arrControlVals, arrAllChannelData];
 	^arrData;
 }
 
-*loadData { arg arrData, holdLoadQueue, holdLastChanCondition;   
+*loadData { arg arrData, holdLoadQueue, holdLastChanCondition;
 	// this method updates all data by loading arrData. format:
 	// 0- string "TXModuleSaveData", 1- module class, 2- arrControlVals, 3- arrAllChannelData
 	var arrAllChannelData, holdSourceModuleID, holdSourceModule, newChannel;
 	// error check
 	if (arrData.class != Array, {
-		TXInfoScreen.new("Error: invalid data. cannot load.");   
+		TXInfoScreen.new("Error: invalid data. cannot load.");
 		^0;
-	});	
+	});
 	if (arrData.at(1) != this.class.asString, {
-		TXInfoScreen.new("Error: invalid data class. cannot load.");   
+		TXInfoScreen.new("Error: invalid data class. cannot load.");
 		^0;
-	});	
+	});
 	// reset variable
-	showChannelType = "all";	
+	showChannelType = "all";
 	arrChannels = [];
 	// assign values
 //	arrControlVals = arrData.at(2).copy;	// no longer used
@@ -81,13 +81,13 @@ classvar showDelButtons;
 			holdChanCondition.wait;
 			// pause
 			system.server.sync;
-			
+
 			// get source module data
 			holdSourceModuleID = item.at(4).at(0);
 			holdSourceModule = system.getModuleFromID(holdSourceModuleID);
-			// create new instance of channel 
+			// create new instance of channel
 			newChannel = TXChannel.new(holdSourceModule);
-			// add module to array 
+			// add module to array
 			arrChannels = arrChannels.add(newChannel);
 			// load ModuleID into new module
 			newChannel.loadModuleID(item);
@@ -149,7 +149,7 @@ classvar showDelButtons;
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-*arrShowChannels{ 
+*arrShowChannels{
 	var holdArrShowChannels;
 	//	create array of channels to be shown
 	if (showChannelType == "all", {
@@ -165,7 +165,7 @@ classvar showDelButtons;
 *addChannel{ arg argModule;
 	var newChannel;
 	if (system.server.serverRunning.not, {
-		TXInfoScreen.new("Error: Server not running");   
+		TXInfoScreen.new("Error: Server not running");
 		^0;
 	});
 	newChannel = TXChannel.new(argModule);
@@ -176,23 +176,23 @@ classvar showDelButtons;
 	// make sure new channel is displayed
 	if ( (showChannelType == "control") and: (newChannel.channelRate ==  "audio"), {showChannelType = "all";});
 	if ( (showChannelType == "audio") and: (newChannel.channelRate ==  "control"), {showChannelType = "all";});
-	// post message 
+	// post message
 //	("Adding Channel: " ++ newChannel.instName).postln;
 	^newChannel;
-} 
+}
 
 *checkDeletions {
-	// reset variable 
+	// reset variable
 	if (displayModule.notNil, {
 		if (displayModule.deletedStatus == true, {
 			displayModule = nil;
 		});
-	});	
+	});
 	// run deletions check in all channels
 	arrChannels.do({ arg item, i;  item.checkDeletions; });
 	// delete any channels in  arrChannels marked for deletion
-	arrChannels.do({ arg item, i;  
-		if (item.toBeDeletedStatus==true, {item.deleteChannel}); 
+	arrChannels.do({ arg item, i;
+		if (item.toBeDeletedStatus==true, {item.deleteChannel});
 	});
 	// recreate arrChannels without deleted ones
 	arrChannels = arrChannels.select({ arg item, i; item.deletedStatus == false; });
@@ -208,9 +208,9 @@ classvar showDelButtons;
 }
 
 *deleteAllChannels {
-	// reset variables 
+	// reset variables
 	showModuleBox = false;
-	displayModule = nil;	
+	displayModule = nil;
 	startChannel = 0;
 	// delete all channels
 	arrChannels.do({ arg item, i;  item.deleteChannel; });
@@ -222,11 +222,11 @@ classvar showDelButtons;
 
 *checkChannelsDest { arg argModule, argOptionNo;
 	// run channel dest check on all channels
-	arrChannels.do({ arg item, i; 
+	arrChannels.do({ arg item, i;
 		if (item.destModule == argModule, {
 			if (item.destBusNo == argOptionNo, {
 				item.deactivate;
-				item.chanError = 
+				item.chanError =
 					"error: Modulation needs to be switched on for this bus "
 					++ "in Modulation Options of destination module";
 			});
@@ -247,11 +247,11 @@ classvar showDelButtons;
 			argModule.openGui;
 		});
 	});
-} 
+}
 
 *sortChannels { arg sortOption = 0;
-	// sort channels 
-	arrChannels.sort({ arg a, b;   a.sortKey(sortOption) <= b.sortKey(sortOption);}); 
+	// sort channels
+	arrChannels.sort({ arg a, b;   a.sortKey(sortOption) <= b.sortKey(sortOption);});
 	// reset startChannel
 	startChannel = 0;
 }
@@ -260,9 +260,9 @@ classvar showDelButtons;
 	// wait for server sync
 	Routine.run {
 		system.server.sync;
-		arrChannels.do({ arg item, i;   
+		arrChannels.do({ arg item, i;
 			item.sendSynthToTail;
-		}); 
+		});
 	};
 }
 
@@ -300,7 +300,7 @@ classvar showDelButtons;
 	var popWidthOption, popDisplayOption, popSortOption, btnSortChannels, popMultiWindow, btnHideModule;
 	var maxChannels, totalChannels, arrSelectedChannels;
 	var arrAllPossSourceActClasses, arrAllPossSourceActNames, arrAllSourceModules, arrAllSourceModNames;
-	var arrAllSourceModsBusses, arrAllSourceModBusNames; 
+	var arrAllSourceModsBusses, arrAllSourceModBusNames;
 	var channelsScrollView;
 	var arrAllSourceActionModules, arrAllSourceActionModNames;
 	var modListBox, listModules, listViewModules;
@@ -313,15 +313,15 @@ classvar showDelButtons;
 	startChannel = startChannel.min(this.arrShowChannels.size-1).max(0);
 
 /* // OLDER CODE:
-	// create array of names of all possible source modules. 
+	// create array of names of all possible source modules.
 	arrAllPossSourceActClasses = system.arrAllPossModules
-		.select({ arg item, i; 
-			(item.moduleType == "source") 
-				or: (item.moduleType == "groupsource") 
-				or: (item.moduleType == "groupaction") 
-				or: (item.moduleType == "action"); 
+		.select({ arg item, i;
+			(item.moduleType == "source")
+				or: (item.moduleType == "groupsource")
+				or: (item.moduleType == "groupaction")
+				or: (item.moduleType == "action");
 		});  // only show source, groupsource, groupaction or action modules
-	arrAllPossSourceActNames = arrAllPossSourceActClasses.collect({ arg item, i; 
+	arrAllPossSourceActNames = arrAllPossSourceActClasses.collect({ arg item, i;
 		var holdType;
 		if (item.moduleType == "action", {
 			holdType = "action";
@@ -329,17 +329,17 @@ classvar showDelButtons;
 			if (item.moduleType == "groupaction", {
 				holdType = "action";
 			},{
-				holdType = item.moduleRate;	
+				holdType = item.moduleRate;
 			});
 		});
-		item.defaultName + " ["++ holdType ++ "]"; 
+		item.defaultName + " ["++ holdType ++ "]";
 	});
 */
-	// create array of names of all possible source modules. 
-	arrAllPossSourceActClasses = 
+	// create array of names of all possible source modules.
+	arrAllPossSourceActClasses =
 		system.dataBank.arrSourceModulesByCategory.collect({arg item; item[1]});
 	arrAllPossSourceActNames =  system.dataBank.arrSourceModulesByCategory.collect({
-		arg item; 
+		arg item;
 		var holdType;
 		if (item[1].notNil, {
 			if (item[1].moduleType == "action", {
@@ -353,41 +353,41 @@ classvar showDelButtons;
 		item[0] ++ holdType;
 	});
 
-	// create array of names of all system's source modules. 
+	// create array of names of all system's source modules.
 	arrAllSourceModules = 	system.arrSystemModules
-		.select({ arg item, i; 
-			(item.class.moduleType == "source") 
-			or: 
-			(item.class.moduleType == "groupsource") 
-			or: 
+		.select({ arg item, i;
+			(item.class.moduleType == "source")
+			or:
+			(item.class.moduleType == "groupsource")
+			or:
 			(item.class.moduleType == "insert") ;    // allow inserts to be sources for channels
 		 })
 		.sort({ arg a, b; a.instSortingName < b.instSortingName; });
 	arrAllSourceModNames = arrAllSourceModules.collect({arg item, i;  item.instName; });
 
-	// create array of names of all system's source, insert & action modules. 
+	// create array of names of all system's source, insert & action modules.
 	arrAllSourceActionModules = system.arrSystemModules
-		.select({ arg item, i; 
-			(item.class.moduleType == "source") 
-			or: 
-			(item.class.moduleType == "groupsource") 
-			or: 
-			(item.class.moduleType == "groupaction") 
-			or: 
-			(item.class.moduleType == "action") 
-			or: 
+		.select({ arg item, i;
+			(item.class.moduleType == "source")
+			or:
+			(item.class.moduleType == "groupsource")
+			or:
+			(item.class.moduleType == "groupaction")
+			or:
+			(item.class.moduleType == "action")
+			or:
 			(item.class.moduleType == "insert") ;
 		 })
 		.sort({ arg a, b; a.instSortingName < b.instSortingName; });
 	arrAllSourceActionModNames = arrAllSourceActionModules
 		.collect({arg item, i;  item.instName; });
-	// create array of names of all system's source modules and busses. 
+	// create array of names of all system's source modules and busses.
 	arrAllSourceModsBusses = (
 		arrAllSourceModules
 		++ system.arrFXSendBusses	// array of FX send busses
-		++ system.arrAudioAuxBusses	// array of Audio Aux busses 
-		++ system.arrControlAuxBusses	// array of Control Aux busses 
-		++ system.arrMainOutBusses	// array of Main Out busses 
+		++ system.arrAudioAuxBusses	// array of Audio Aux busses
+		++ system.arrControlAuxBusses	// array of Control Aux busses
+		++ system.arrMainOutBusses	// array of Main Out busses
 	);
 	arrAllSourceModBusNames = arrAllSourceModsBusses.collect({arg item, i;  item.instName; });
 
@@ -397,12 +397,12 @@ classvar showDelButtons;
 	// create colourBox1 to display selected window
 	colourBox1 = CompositeView(parent, 436 @ 32).background_(TXColor.sysLabelBackground);
 	colourBox1.decorator = FlowLayout(colourBox1.bounds);
-	// popup - new module  
+	// popup - new module
 	popNewModule = PopUpMenu(colourBox1, 190 @ 24).background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
 	popNewModule.items = ["Select module ..."] ++ arrAllPossSourceActNames;
 	popNewModule.action = {|view|
-		// store current data 
+		// store current data
 		popNewModuleInd = view.value;
 	};
 	popNewModule.value = popNewModuleInd ? 0;
@@ -411,27 +411,27 @@ classvar showDelButtons;
 	// popup - new module copies
 	popNewModuleCopies = PopUpMenu(colourBox1, 90 @ 24).background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
-	popNewModuleCopies.items = 20.collect({ arg item, i; 
+	popNewModuleCopies.items = 20.collect({ arg item, i;
 		"copies X " ++ (item + 1).asString;
 	});
 	popNewModuleCopies.action = {|view|
-		// store current data 
+		// store current data
 		newModuleCopies = view.value + 1;
-		if (popNewModuleCopies.value>0, { 
+		if (popNewModuleCopies.value>0, {
 			popNewModuleCopies.background_(TXColor.paleYellow)
 		},{
 			popNewModuleCopies.background_(TXColor.white)
 		});
 	};
 	popNewModuleCopies.value = (newModuleCopies ? 1) - 1;
-	if (popNewModuleCopies.value>0, { 
+	if (popNewModuleCopies.value>0, {
 		popNewModuleCopies.background_(TXColor.paleYellow)
 	},{
 		popNewModuleCopies.background_(TXColor.white)
 	});
 	arrControls = arrControls.add(popNewModuleCopies);
 
-	// button - Add new Source module	  
+	// button - Add new Source module
 	btnAddModule = Button(colourBox1, 140 @ 24);
 	btnAddModule.states = [["Add new module(s)", TXColor.white, TXColor.sysGuiCol1]];
 	btnAddModule.action = {
@@ -439,7 +439,7 @@ classvar showDelButtons;
 		// set new module class
 		newModuleClass = arrAllPossSourceActClasses.at(popNewModule.value - 1);
 		// first item has no effect
-		if ( popNewModule.value > 0, {
+			if ( (popNewModule.value > 0) and: (newModuleClass.notNil), {
 			Routine.run {
 				var holdCondition;
 				// create multiple copies
@@ -464,8 +464,8 @@ classvar showDelButtons;
 				system.holdLoadQueue.removeCondition(holdCondition);
 				// defer gui stuff
 				{
-					// set startChannel 
-					displayModule = newModule;	
+					// set startChannel
+					displayModule = newModule;
 					showModuleBox = true;
 					system.addHistoryEvent;
 					// scroll to end
@@ -489,7 +489,7 @@ classvar showDelButtons;
 			if ( showModuleBox == true, {
 				// reset variables
 				showModuleBox = false;
-				displayModule = nil;	
+				displayModule = nil;
 				system.addHistoryEvent;
 				// update view
 				system.showView;
@@ -497,20 +497,20 @@ classvar showDelButtons;
 		};
 		arrControls = arrControls.add(btnHideModule);
 	}, {
-		// spacer 
+		// spacer
 		StaticText(parent, 134 @ 24);
 	});
 
 	// spacing
-	parent.decorator.shift(24, 0);	
+	parent.decorator.shift(24, 0);
 	// create colourBox2 to display selected window
 	colourBox2 = CompositeView(parent, 436 @ 32).background_(TXColor.sysLabelBackground);
 	colourBox2.decorator = FlowLayout(colourBox2.bounds);
-	// popup - new channel  
+	// popup - new channel
 	popNewChannel = PopUpMenu(colourBox2, 190 @ 24).background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
 	popNewChannel.items = ["Select channel source ..."] ++ arrAllSourceModBusNames;
 	popNewChannel.action = {|view|
-		// store current data 
+		// store current data
 		popNewChannelInd  = view.value;
 	};
 	popNewChannel.value = popNewChannelInd ? 0;
@@ -518,27 +518,27 @@ classvar showDelButtons;
 
 	// popup - new channel copies
 	popNewChannelCopies = PopUpMenu(colourBox2, 90 @ 24).background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
-	popNewChannelCopies.items = 20.collect({ arg item, i; 
+	popNewChannelCopies.items = 20.collect({ arg item, i;
 		"copies X " ++ (item + 1).asString;
 	});
 	popNewChannelCopies.action = {|view|
-		// store current data 
+		// store current data
 		newChannelCopies = view.value + 1;
-	if (popNewChannelCopies.value>0, { 
+	if (popNewChannelCopies.value>0, {
 		popNewChannelCopies.background_(TXColor.paleYellow)
 	},{
 		popNewChannelCopies.background_(TXColor.white)
 	});
 	};
 	popNewChannelCopies.value = (newChannelCopies ? 1) - 1;
-	if (popNewChannelCopies.value>0, { 
+	if (popNewChannelCopies.value>0, {
 		popNewChannelCopies.background_(TXColor.paleYellow)
 	},{
 		popNewChannelCopies.background_(TXColor.white)
 	});
 	arrControls = arrControls.add(popNewChannelCopies);
 
-	// button - add new Channel  
+	// button - add new Channel
 	btnAddChannel = Button(colourBox2, 140 @ 24);
 	btnAddChannel.states = [["Add new channel(s)", TXColor.white, TXColor.sysGuiCol1]];
 	btnAddChannel.action = {
@@ -557,11 +557,11 @@ classvar showDelButtons;
 	};
 
 // Removed for now
-//	// popup - open modules in multiple windows  
+//	// popup - open modules in multiple windows
 //	popMultiWindow = PopUpMenu(parent, 110 @ 24).background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
-//	popMultiWindow.items = [ 
+//	popMultiWindow.items = [
 //		"Single Window",
-//		"Multiple Windows" 
+//		"Multiple Windows"
 //	];
 //	popMultiWindow.action = {|view|
 //		// store current data to arrControlVals
@@ -572,17 +572,17 @@ classvar showDelButtons;
 //		system.showView;
 //	};
 //	arrControls = arrControls.add(popMultiWindow);
-	
 
 
-	// spacer 
+
+	// spacer
 	StaticText(parent, 24 @ 20);
 
-	// popup - display option selector  
+	// popup - display option selector
 	popDisplayOption  = PopUpMenu(parent, 200 @ 32)
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
-	popDisplayOption.items = ["Show audio & control channels", 
-		"Show audio channels only", 
+	popDisplayOption.items = ["Show audio & control channels",
+		"Show audio channels only",
 		"Show control channels only"
 	];
 	popDisplayOption.action = {|view|
@@ -593,19 +593,19 @@ classvar showDelButtons;
 		// update view
 		system.showView;
 	};
-	// update value	
+	// update value
 	popDisplayOption.value = ['all', 'audio', 'control'].indexOf(showChannelType.asSymbol);
 	arrControls = arrControls.add(popDisplayOption);
 
-	// spacer 
+	// spacer
 	StaticText(parent, 14 @ 20);
 
 	// spacing
 	parent.decorator.shift(0, 5);
 
-	// spacer line	
+	// spacer line
 	parent.decorator.nextLine;
-	
+
 	if ( showDelButtons == false, {
 		modListBoxWidth = 166;
 		plusMinusString = "->";
@@ -615,29 +615,31 @@ classvar showDelButtons;
 		plusMinusString = "<-";
 		plusMinusActionFunc = {showDelButtons = false; system.showView;};
 	});
-	// make box	
-	modListBox =  CompositeView(parent, Rect(0,0, modListBoxWidth, 595));  
+	// make box
+	modListBox =  CompositeView(parent, Rect(0,0, modListBoxWidth, 595));
 	modListBox.background = TXColour.sysChannelAudio;
 	modListBox.decorator = FlowLayout(modListBox.bounds);
-	// Heading	  
+	// Heading
 	holdView = StaticText(modListBox, Rect(0,0, 122, 24));
 	holdView.string = "System Modules";
 	holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 	holdView.setProperty(\align,\center);
-	// plus minus button	  
+	// plus minus button
 	holdView = Button(modListBox, 24 @ 24);
 	holdView.states = [[plusMinusString, TXColor.white, TXColor.sysGuiCol1]];
 	holdView.action = {plusMinusActionFunc.value;};
 
 	modulesScrollView = ScrollView(modListBox, Rect(0,0, modListBoxWidth-8, 595-32))
 		.hasBorder_(false);
+	modulesScrollView.background = TXColor.sysModuleWindow;
 	if (GUI.current.asSymbol == \cocoa, {
 		modulesScrollView.autoScrolls_(false);
 	});
 	modulesScrollView.action = {arg view; modulesVisibleOrigin = view.visibleOrigin; };
-	modulesBox = CompositeView(modulesScrollView, 
+	modulesBox = CompositeView(modulesScrollView,
 		Rect(0,0, modListBoxWidth-20, (arrAllSourceActionModNames.size * 26).max(20)));
-	modulesBox.decorator = FlowLayout(modulesBox.bounds);
+	modulesBox.background = TXColour.sysChannelAudio;
+		modulesBox.decorator = FlowLayout(modulesBox.bounds);
 	modulesBox.decorator.margin.x = 0;
 	modulesBox.decorator.margin.y = 0;
 	modulesBox.decorator.reset;
@@ -657,7 +659,7 @@ classvar showDelButtons;
 			stringCol = btnModuleCol;
 			backCol = TXColor.white;
 		});
-		// button -  module	  
+		// button -  module
 		btnModule = Button(modulesBox, 140 @ 20);
 		btnModule.states = [[item, stringCol, backCol]];
 		btnModule.action = {
@@ -667,37 +669,37 @@ classvar showDelButtons;
 			system.showView;
 		};
 		if ( showDelButtons == true, {
-			// button -  delete	  
+			// button -  delete
 			btnDelete = Button(modulesBox, 24 @ 20);
 			btnDelete.states = [["Del", TXColor.white, TXColor.sysDeleteCol]];
 			btnDelete.action = {
-				arrAllSourceActionModules.at(i).confirmDeleteModule; 
+				arrAllSourceActionModules.at(i).confirmDeleteModule;
 				system.showView;
 			};
 		});
 	});
 	modulesScrollView.visibleOrigin = modulesVisibleOrigin;
 
-	// decorator shift	
+	// decorator shift
 	parent.decorator.shift(10, 0);
 
 	// display module gui
 	if ( (multiWindow == false) and: (showModuleBox == true), {
 		if ( displayModule.notNil, {
 			// display module
-			displayModule.openGui(parent);		 
-		},{	 
+			displayModule.openGui(parent);
+		},{
 			TextView(parent,Rect(0,0, 500, 595))
 				.background_(TXColor.sysModuleWindow);
 		});
-		// decorator shift	
+		// decorator shift
 		parent.decorator.shift(10, 0);
 	});
 
 	if ( (multiWindow == false) and: (showModuleBox == true), {
-		maxChannels = 4;		// max no of channels to be displayed at a time 
-	},{	
-		maxChannels = 7;		// max no of channels to be displayed at a time 
+		maxChannels = 4;		// max no of channels to be displayed at a time
+	},{
+		maxChannels = 7;		// max no of channels to be displayed at a time
 	});
 	totalChannels = (this.arrShowChannels.size - startChannel).min(maxChannels);
 
@@ -705,17 +707,19 @@ classvar showDelButtons;
 	if (totalChannels > 0, {
 		TXChannel.makeTitleGui(parent);
 	});
-	
-	// show channels	
+
+	// show channels
 
 /* NEW CODE FOR CHANNEL SCROLLING */
-	channelsScrollView = ScrollView(parent, Rect(0, 0, 4 + (maxChannels * 151), 610))
+	channelsScrollView = ScrollView(parent, Rect(0, 0, 4 + (maxChannels * 151), 612))
 		.hasBorder_(false);
+	channelsScrollView.background = TXColor.sysModuleWindow;
 	if (GUI.current.asSymbol == \cocoa, {
 		channelsScrollView.autoScrolls_(false);
 	});
 	channelsScrollView.action = {arg view; channelsVisibleOrigin = view.visibleOrigin; };
 	channelBox = CompositeView(channelsScrollView, Rect(0, 0, 4 + ((this.arrShowChannels.size+3) * 151), 595));
+	channelBox.background = TXColor.sysModuleWindow;
 	channelBox.decorator = FlowLayout(channelBox.bounds);
 	channelBox.decorator.margin.x = 0;
 	channelBox.decorator.margin.y = 0;
@@ -725,19 +729,19 @@ classvar showDelButtons;
 	totalChannels.do({ arg item, i;
 		this.arrShowChannels.at(i).makeChannelGui(channelBox);
 	});
-	
-	this.setScrollToCurrentChannel(maxChannels);	
+
+	this.setScrollToCurrentChannel(maxChannels);
 	channelsScrollView.visibleOrigin = channelsVisibleOrigin;
-} 
+}
 
 *setScrollToCurrentChannel { arg maxChannels;
-	var	holdIndex, curChannelLeft; 
+	var	holdIndex, curChannelLeft;
 	// if current channel not visible then move origin
 	if (displayChannel.notNil, {
 		holdIndex = this.arrShowChannels.indexOf(displayChannel);
 		if (holdIndex.notNil, {
 			curChannelLeft = 4 + (holdIndex * 151);
-			if ( (curChannelLeft < channelsVisibleOrigin.x) or: 
+			if ( (curChannelLeft < channelsVisibleOrigin.x) or:
 				(curChannelLeft > (channelsVisibleOrigin.x +(maxChannels * 151))) , {
 					channelsVisibleOrigin.x = curChannelLeft;
 				channelsVisibleOrigin = Point.new(curChannelLeft, 0);

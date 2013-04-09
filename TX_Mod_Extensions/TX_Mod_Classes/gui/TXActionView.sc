@@ -153,13 +153,14 @@ TXActionView {	// self-building module popup, action popup, and value fields
 					holdControlSpec1 =
 						 holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
 					val1NumberBox = TXScrollNumBox(argParent, Rect(0, 0, 55, 20))
+					.maxDecimals_(4)
 					.action_({arg view;
 						view.value = holdControlSpec1.value.constrain(view.value);
 						holdArrActions.at(i).put(2, view.value);
 						if (val1Slider.class == Slider.redirectClass,
 							{val1Slider.value = holdControlSpec1.value.unmap(view.value);})
 					});
-					val1NumberBox.updateSpec(holdControlSpec1);
+					TXScrollNumBox.updateNumberBoxFromSpec(val1NumberBox, holdControlSpec1);
 					val1NumberBox.value = holdControlSpec1.value.constrain(
 						holdArrActions.at(i).at(2) ? holdControlSpec1.value.default);
 				});
@@ -208,6 +209,7 @@ TXActionView {	// self-building module popup, action popup, and value fields
 				holdControlSpec2 =
 					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(1);
 				val2NumberBox = TXScrollNumBox(argParent, Rect(0, 0, 55, 20))
+				.maxDecimals_(4)
 				.action_({arg view;
 					view.value = holdControlSpec2.value.constrain(view.value);
 					holdArrActions.at(i).put(3, view.value);
@@ -229,6 +231,7 @@ TXActionView {	// self-building module popup, action popup, and value fields
 				holdControlSpec3 =
 					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(2);
 				val3NumberBox = TXScrollNumBox(argParent, Rect(0, 0, 55, 20))
+				.maxDecimals_(4)
 				.action_({arg view;
 					view.value = holdControlSpec3.value.constrain(view.value);
 					holdArrActions.at(i).put(4, view.value);
@@ -248,6 +251,7 @@ TXActionView {	// self-building module popup, action popup, and value fields
 				holdControlSpec4 =
 					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(3);
 				val4NumberBox = TXScrollNumBox(argParent, Rect(0, 0, 55, 20))
+				.maxDecimals_(4)
 				.action_({arg view;
 					view.value = holdControlSpec4.value.constrain(view.value);
 					holdArrActions.at(i).put(5, view.value);

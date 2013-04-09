@@ -26,7 +26,10 @@ TXMultiSlider {	// MultiSlider module with label
 		
 		if (scrollViewWidth.notNil, {
 			scrollView = ScrollView(window, Rect(0, 0, scrollViewWidth, dimensions.y))
-				.hasBorder_(false).autoScrolls_(false);
+				.hasBorder_(false);
+			if (GUI.current.asSymbol == \cocoa, {
+				scrollView.autoScrolls_(false);
+			});
 			scrollView.hasHorizontalScroller = false;
 			scrollView.hasVerticalScroller = false;
 			scrollBox = CompositeView(scrollView, Rect(0, 0, (initVal.size * 24), dimensions.y));

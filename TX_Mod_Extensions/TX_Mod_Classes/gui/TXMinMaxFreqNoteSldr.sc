@@ -55,12 +55,12 @@ TXMinMaxFreqNoteSldr {
 			if (numberView.value < minNumberView.value, {
 				controlSpec2.minval = numberView.value;
 				minNumberView.value = numberView.value;
-				numberView.updateSpec(controlSpec2);
+				TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			});
 			if (numberView.value > maxNumberView.value, {
 				controlSpec2.maxval = numberView.value;
 				maxNumberView.value = numberView.value;
-				numberView.updateSpec(controlSpec2);
+				TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			});
 			rangeView.lo = controlSpec.unmap(minNumberView.value);
 			rangeView.hi = controlSpec.unmap(maxNumberView.value);
@@ -99,8 +99,7 @@ TXMinMaxFreqNoteSldr {
 			controlSpec2.minval = minNumberView.value;
 			maxNumberView.value = controlSpec.map(rangeView.hi).round(round);
 			controlSpec2.maxval = maxNumberView.value;
-			numberView.updateSpec(controlSpec2);
-			sliderView.doAction;
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);			sliderView.doAction;
 		};
 		if (controlSpec.step != 0) {
 			rangeView.step = (controlSpec.step / (controlSpec.maxval - controlSpec.minval));
@@ -114,7 +113,7 @@ TXMinMaxFreqNoteSldr {
 			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
 			rangeView.lo = controlSpec.unmap(minNumberView.value);
 			controlSpec2.minval = minNumberView.value;
-			numberView.updateSpec(controlSpec2);
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			viewValue = controlSpec2.constrain(viewValue);
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
@@ -128,7 +127,7 @@ TXMinMaxFreqNoteSldr {
 			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
 			rangeView.hi = controlSpec.unmap(maxNumberView.value);
 			controlSpec2.maxval = maxNumberView.value;
-			numberView.updateSpec(controlSpec2);
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			viewValue = controlSpec2.constrain(viewValue);
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
@@ -182,7 +181,7 @@ TXMinMaxFreqNoteSldr {
 		maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
 		rangeView.hi = controlSpec.unmap(maxNumberView.value);
 		controlSpec2.maxval = maxNumberView.value;
-		numberView.updateSpec(controlSpec2);
+		TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 		sliderView.value = valueArray.at(0) ? 0;
 		viewValue = controlSpec2.map(sliderView.value);
 		numberView.value = viewValue.round(round);
@@ -203,7 +202,7 @@ TXMinMaxFreqNoteSldr {
 		controlSpec2 = controlSpec.deepCopy.asSpec;
 		controlSpec2.minval = initMinVal;
 		controlSpec2.maxval = initMaxVal;
-		numberView.updateSpec(controlSpec2);
+		TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 
 		action = argAction;
 

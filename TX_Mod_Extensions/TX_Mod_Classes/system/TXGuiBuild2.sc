@@ -726,7 +726,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		.round_(0.001);    
 		argModule.arrControls = argModule.arrControls.add(holdView);
 		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.numberView.inc = item.at(7) ? 1;
+		holdView.numberView.scroll_step = holdView.numberView.step = item.at(7) ? 1;
+		
 		// add screen update function
 		system.addScreenUpdFunc(
 			[holdView, argModule], 
@@ -767,7 +768,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		.round_(0.001);    
 		argModule.arrControls = argModule.arrControls.add(holdView);
 		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.numberView.inc = item.at(7) ? 1;
+		holdView.numberView.scroll_step = holdView.numberView.step = item.at(7) ? 1;
 		// add screen update function
 		system.addScreenUpdFunc(
 			[holdView, argModule], 
@@ -806,7 +807,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 0, item.at(4) ? 60 
 		)
 		.round_(0.001);  
-		holdView.numberView.inc = item.at(5) ? 1;
+		holdView.numberView.scroll_step = holdView.numberView.step = item.at(5) ? 1;
 		argModule.arrControls = argModule.arrControls.add(holdView);
 		// add screen update function
 		system.addScreenUpdFunc(

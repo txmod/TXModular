@@ -8,7 +8,7 @@ TXWidget {
 	var height, <>heightMin=2, <>heightMax=2000, width, <>widthMin=2, <>widthMax=2000;
 	var <>layoutX, <>layoutY;
 	var <>widgetID, <background, <guiObjectType;
-	var <arrViews; 
+	var <arrViews;
 	var <>highlight = false;
 
 //	var onScreen=false;	// not sure if needed in new design?
@@ -33,57 +33,57 @@ TXWidget {
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		//	assign variables
 		layoutX = argLayoutX ? 1;
-		layoutY = argLayoutY ? 1; 
+		layoutY = argLayoutY ? 1;
 		height = (argHeight ? 20).max(heightMin).min(heightMax);
 		width = (argWidth ? 150).max(widthMin).min(widthMax);
 		this.newWidgetID;
 		background = TXColour.white;
-	}	
+	}
 	newWidgetID{
 		//	create widgetID
-		widgetID = this.class.nextWidgetID; 
+		widgetID = this.class.nextWidgetID;
 	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		// this method should be overridden in subclasses
 		//     arrViews = arrViews.add(XXXXXX);
-		//     add action here to build views  
+		//     add action here to build views
 		// re: limitWidgetUpdates switch
 		// if designing Interface, then certain Widgets need to be display only
 		// this is to stop a selection bug when trying to drag widgets around the layout
-	}	
+	}
 	updateViews {
 		//
 		//	N.B. NOT SURE IF STILL NEEDED IN NEW DESIGN?
 		//
-		//	 add action here to update views with data 
+		//	 add action here to update views with data
 		//    & refresh if the widget is on the screen:
 		//      if (onScreen == true, {});
 	}
-	height{ 
+	height{
 		^height.round(1);
 	}
-	width{ 
+	width{
 		^width.round(1);
 	}
 	height_ { arg argHeight, screenHeight = 550;
 		height = argHeight.min(heightMax).min(screenHeight-layoutY).max(heightMin);
 		this.updateViews;
-	}	
+	}
 	width_ { arg argWidth, screenWidth = 1000;
 		width = argWidth.min(widthMax).min(screenWidth-layoutX).max(widthMin);
 		this.updateViews;
-	}	
+	}
 	fromLeft { arg screenWidth;
 		^(layoutX * (screenWidth - width)).round(1);
-	}	
+	}
 	fromTop { arg screenHeight;
 		^((1- layoutY) * (screenHeight - height)).round(1);
-	}	
+	}
 	fromLeft_ { arg argFromLeft, screenWidth;
 		layoutX = argFromLeft / (screenWidth - width);
 		layoutX = layoutX.max(0).min(1);
 		this.updateViews;
-	}	
+	}
 	fromTop_ { arg argFromTop, screenHeight;
 		layoutY = 1 - (argFromTop /  (screenHeight - height));
 		layoutY = layoutY.max(0).min(1);
@@ -91,22 +91,22 @@ TXWidget {
 	}
 	bounds { arg layoutWidth, layoutHeight;
 		^Rect(this.fromLeft(layoutWidth), this.fromTop(layoutHeight), this.width, this.height);
-	}	
+	}
 	bounds_ { arg r, layoutWidth, layoutHeight;
 		 this.fromLeft_( r.left, layoutWidth);
 		 this.fromTop_(r.top, layoutHeight);
 		 this.width_(r.width, layoutWidth);
 		 this.height_(r.height, layoutHeight);
-	}	
+	}
 	fitToGrid {arg screenGridSize, screenWidth, screenHeight;
 		this.fromLeft_(this.fromLeft(screenWidth).round(screenGridSize), screenWidth);
 		this.fromTop_(this.fromTop(screenHeight).round(screenGridSize), screenHeight);
-	}	
+	}
 	background_ { arg argColor;
 		background = argColor;
 		this.updateViews;
 	}
-	backgroundAsArgs { 
+	backgroundAsArgs {
 		^background.storeArgs;
 	}
 	backgroundAsArgs_ { arg arrArgs;
@@ -124,8 +124,8 @@ TXWidget {
 	getTemplatePropertyList {
 		var templateProps;
 		templateProps = this.properties;
-		templateProps.removeAll([\arrActions, \arrActions2, \pressureActions, 
-			\tiltXActions, \tiltYActions, \mouseDownActions, \mouseDragActions, 
+		templateProps.removeAll([\arrActions, \arrActions2, \pressureActions,
+			\tiltXActions, \tiltYActions, \mouseDownActions, \mouseDragActions,
 			\mouseUpActions, \mouseDoubleClickActions]);
 		^templateProps.collect({ arg name;
 			[name, this.perform(name)]
@@ -143,17 +143,17 @@ TXWidget {
 TXWLabelBox : TXWidget {
 
 	classvar <widgetName;
-	
+
 	var  <string, <stringColor, <fontSize, <font;
-	
+
 	*initClass{
 		// initialise class variables
 		widgetName = "Label Box";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth);
 		//	assign variables
 		arrDefaults = ["", TXColour.black, "Arial", 12];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
@@ -161,8 +161,8 @@ TXWLabelBox : TXWidget {
 		stringColor = arrExtraArgs.at(1) ? arrDefaults.at(1);
 		font = arrExtraArgs.at(2) ? arrDefaults.at(2);
 		fontSize = arrExtraArgs.at(3) ? arrDefaults.at(3);
-	}	
-	string_ { arg argString; 
+	}
+	string_ { arg argString;
 		string = argString;
 		this.updateViews;
 	}
@@ -170,28 +170,28 @@ TXWLabelBox : TXWidget {
 		stringColor = argStringColor;
 		this.updateViews;
 	}
-	stringColorAsArgs { 
+	stringColorAsArgs {
 		^stringColor.storeArgs;
 	}
 	stringColorAsArgs_ { arg arrArgs;
 		stringColor = Color.fromArray(arrArgs);
 	}
-	font_ { arg argFont; 
+	font_ { arg argFont;
 		font = argFont;
 		this.updateViews;
 	}
-	fontSize_ { arg argFontSize; 
+	fontSize_ { arg argFontSize;
 		fontSize = argFontSize;
 		this.updateViews;
 	}
-	properties { 
-		^super.properties ++ #[\string, \stringColorAsArgs, \font, \fontSize] 
+	properties {
+		^super.properties ++ #[\string, \stringColorAsArgs, \font, \fontSize]
 	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
-		holdView = StaticText(window, 
+		holdView = StaticText(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		holdView.string = string;
 		holdView.stringColor = stringColor;
@@ -201,28 +201,28 @@ TXWLabelBox : TXWidget {
 		//	add to arrViews
 		arrViews = arrViews.add(holdView);
 //		onScreen = true;
-	}	
+	}
 }
 
 TXWNotesBox : TXWLabelBox {
 
 	classvar <widgetName;
-	
+
 //	var  <string, <stringColor, <fontSize, <font;
-	
+
 	*initClass{
 		// initialise class variables
 		widgetName = "Notes Box";
-	}	
+	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
 		if (limitWidgetUpdates == true, {
-			holdView = TXDisplayTextNum(window, 
+			holdView = TXDisplayTextNum(window,
 				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		},{
-			holdView = TextView(window, 
+			holdView = TextView(window,
 				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height))
 				.enterInterpretsSelection_(false)
 				.canFocus_(false);
@@ -234,13 +234,13 @@ TXWNotesBox : TXWLabelBox {
 		//	add to arrViews
 		arrViews = arrViews.add(holdView);
 //		onScreen = true;
-	}	
+	}
 }
 
 TXWActionButton : TXWLabelBox {
 
 	classvar <widgetName;
-	
+
 	var <>arrActions, <>midiListen, <>midiNote, <>midiMinChannel, <>midiMaxChannel, midiNoteResponder;
 	var <>keyListen, <>keyChar, <arrActions2, <>showActions6to10;
 	var arrDefaults;
@@ -248,7 +248,7 @@ TXWActionButton : TXWLabelBox {
 	*initClass{
 		// initialise class variables
 		widgetName = "Action Button";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		//	assign variables
 		arrDefaults = [ [99,0,0,0,0,0,0, nil].dup(5), [99,0,0,0,0,0,0, nil].dup(5) ];
@@ -259,24 +259,24 @@ TXWActionButton : TXWLabelBox {
 		argHeight = argHeight ? 20;
 		argWidth = argWidth ? 80;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth);
 		background = TXColour.blue;
 		stringColor = TXColour.white;
 		midiListen = 0;
-		midiNote = 0; 
-		midiMinChannel = 1; 
+		midiNote = 0;
+		midiMinChannel = 1;
 		midiMaxChannel = 16;
-	}	
-	properties { 
-		^super.properties ++ #[\arrActions, \midiListen, \midiNote, \midiMinChannel, 
+	}
+	properties {
+		^super.properties ++ #[\arrActions, \midiListen, \midiNote, \midiMinChannel,
 			\midiMaxChannel, \keyListen, \keyChar, \arrActions2
-			] 
+			]
 	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
-		holdView = Button(window, 
+		holdView = Button(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		holdView.states = [[string, stringColor, background]];
 		holdView.action = {this.performCommandActions};
@@ -285,10 +285,10 @@ TXWActionButton : TXWLabelBox {
 		this.midiNoteActivate;
 		this.keyActivate;
 //		onScreen = true;
-	}	
+	}
 	performCommandActions {
 		(arrActions ++ arrActions2).do({ arg item, i;
-			var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText, 
+			var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText,
 				holdAction, holdVal1, holdVal2, holdVal3, holdVal4;
 			holdModuleID = item.at(0);
 			holdActionInd = item.at(1);
@@ -327,26 +327,26 @@ TXWActionButton : TXWLabelBox {
 		system.flagGuiUpd;
 	}
 	midiNoteActivate {
-		//	stop any previous Responder 
+		//	stop any previous Responder
 		this.midiNoteDeactivate;
-		//	start Responder 
+		//	start Responder
 		if (midiListen == 1, {
 			midiNoteResponder = NoteOnResponder ({  |src, chan, note, vel|
 				//  if channel and note match run the actions
-			 	if ( ((chan >= (midiMinChannel-1)) 
-			 		and: (chan <= (midiMaxChannel-1)) 
-			 		and: (note == midiNote)), 
+			 	if ( ((chan >= (midiMinChannel-1))
+			 		and: (chan <= (midiMaxChannel-1))
+			 		and: (note == midiNote)),
 			 		{
-			 		this.performCommandActions; 
+			 		this.performCommandActions;
 			 	});
 			});
 			TXFrontScreen.registerMidiResponder(midiNoteResponder);
 		});
 	}
-	midiNoteDeactivate { 
-		//	stop responding to midi. 
+	midiNoteDeactivate {
+		//	stop responding to midi.
 	 	if (midiNoteResponder.class == NoteOnResponder, {
-	 		midiNoteResponder.remove; 
+	 		midiNoteResponder.remove;
 	 	});
 	}
 	keyActivate {
@@ -369,18 +369,18 @@ TXWActionButton : TXWLabelBox {
 TXWSlider : TXWidget {
 
 	classvar <widgetName;
-	
+
 	var <>arrActions, <knobColour, <>thumbSize, <>viewHolder;
 	var <>midiListen, <>midiCCNo, <>midiMinChannel, <>midiMaxChannel, midiCCNoResponder;
 
 	*initClass{
 		// initialise class variables
 		widgetName = "Slider H";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
-		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], 
+		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil],
 			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]] , TXColour.blue, 12];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
 		arrActions = arrExtraArgs.at(0) ? arrDefaults.at(0);
@@ -390,31 +390,31 @@ TXWSlider : TXWidget {
 		argWidth = argWidth ? 150;
 		guiObjectType = \number;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth);
 		midiListen = 0;
-		midiCCNo = 0; 
-		midiMinChannel = 1; 
+		midiCCNo = 0;
+		midiMinChannel = 1;
 		midiMaxChannel = 16;
-	}	
+	}
 	knobColour_ { arg argColor;
 		knobColour = argColor;
 		this.updateViews;
 	}
-	knobColourAsArgs { 
+	knobColourAsArgs {
 		^knobColour.storeArgs;
 	}
 	knobColourAsArgs_ { arg arrArgs;
 		knobColour = Color.fromArray(arrArgs);
 	}
-	properties { 
-		^super.properties ++ #[\arrActions, \knobColourAsArgs, \thumbSize, \midiListen, 
-			\midiCCNo, \midiMinChannel, \midiMaxChannel] 
+	properties {
+		^super.properties ++ #[\arrActions, \knobColourAsArgs, \thumbSize, \midiListen,
+			\midiCCNo, \midiMinChannel, \midiMaxChannel]
 	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdControlSpec;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
-		holdView = Slider(window, 
+		holdView = Slider(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		holdControlSpec = this.getControlSpec;
 		if (holdControlSpec.step != 0) {
@@ -433,7 +433,7 @@ TXWSlider : TXWidget {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0), holdVal;
 				holdVal = this.getValue;
@@ -442,9 +442,9 @@ TXWSlider : TXWidget {
 				});
 			}
 		);
-	}	
-	getValue { arg argArrActions; 
-		var holdModuleID, holdModule, holdActionInd, holdActionSpecs, holdArrActionItems, 
+	}
+	getValue { arg argArrActions;
+		var holdModuleID, holdModule, holdActionInd, holdActionSpecs, holdArrActionItems,
 			holdActionText, holdAction, holdValue, holdVal2, holdVal3, holdVal4;
 		// use arrActions if argument is nil
 		argArrActions = argArrActions ? arrActions;
@@ -479,7 +479,7 @@ TXWSlider : TXWidget {
 		});
 		^holdValue;
 	}
-	getControlSpec {  arg argArrActions; 
+	getControlSpec {  arg argArrActions;
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdControlSpec;
 		// use arrActions if argument is nil
 		argArrActions = argArrActions ? arrActions;
@@ -499,7 +499,7 @@ TXWSlider : TXWidget {
 		// use arrActions if argument is nil
 		argArrActions = argArrActions ? arrActions;
 		argArrActions.do({ arg item, i;
-			var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText, holdAction, 
+			var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText, holdAction,
 				holdVal1, holdVal2, holdVal3, holdVal4, holdActionSpecs;
 			holdModuleID = item.at(0);
 			holdActionInd = item.at(1);
@@ -537,16 +537,16 @@ TXWSlider : TXWidget {
 		system.flagGuiUpd;
 	}
 	midiCCNoActivate {
-		//	stop any previous Responder 
+		//	stop any previous Responder
 		this.midiCCNoDeactivate;
-		//	start Responder 
+		//	start Responder
 		if (midiListen == 1, {
 			midiCCNoResponder = CCResponder({ |src, chan, num, val|
 				var holdCtlVal;
 				//  if channel and note match run the actions
-			 	if ( ((chan >= (midiMinChannel-1)) 
-			 		and: (chan <= (midiMaxChannel-1)) 
-			 		and: (num == midiCCNo)), 
+			 	if ( ((chan >= (midiMinChannel-1))
+			 		and: (chan <= (midiMaxChannel-1))
+			 		and: (num == midiCCNo)),
 		 		{
 		 			if (viewHolder.notNil, {
 			 			if (viewHolder.notClosed, {
@@ -559,10 +559,10 @@ TXWSlider : TXWidget {
 			TXFrontScreen.registerMidiResponder(midiCCNoResponder);
 		});
 	}
-	midiCCNoDeactivate { 
-		//	stop responding to midi. 
+	midiCCNoDeactivate {
+		//	stop responding to midi.
 	 	if (midiCCNoResponder.class == CCResponder, {
-	 		midiCCNoResponder.remove; 
+	 		midiCCNoResponder.remove;
 	 	});
 	}
 }
@@ -574,25 +574,25 @@ TXWSliderV : TXWSlider {
 	*initClass{
 		// initialise class variables
 		widgetName = "Slider V";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		argHeight = argHeight ? 20;
 		argWidth = argWidth ? 150;
 		//	call super.init with height and width swapped
-		super.init(argLayoutX, argLayoutY, argWidth, argHeight, arrExtraArgs); 
-	}	
+		super.init(argLayoutX, argLayoutY, argWidth, argHeight, arrExtraArgs);
+	}
 }
 
 TXW2DSlider : TXWSlider {
 
 	classvar <widgetName;
-	
+
 	var <>arrActions2, <>midiCCNo2, <>showYAxis;
 
 	*initClass{
 		// initialise class variables
 		widgetName = "2-D Slider";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
@@ -605,25 +605,25 @@ TXW2DSlider : TXWSlider {
 		argHeight = argHeight ? 100;
 		argWidth = argWidth ? 100;
 		guiObjectType = \number;
-		midiCCNo2 = 1; 
+		midiCCNo2 = 1;
 		showYAxis = 0;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
-	}	
-	properties { 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
+	}
+	properties {
 		^super.properties ++ #[\arrActions2, \midiCCNo2];
 	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdControlSpec, holdControlSpec2;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
-		holdView = Slider2D(window, 
+		holdView = Slider2D(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		holdView.background = background;
 		holdView.knobColor = knobColour;
 		holdControlSpec = this.getControlSpec(arrActions);
 		holdControlSpec2 = this.getControlSpec(arrActions2);
-		holdView.action = {arg view; 
+		holdView.action = {arg view;
 			this.performValueActions(holdControlSpec.map(view.x), arrActions);
 			this.performValueActions(holdControlSpec2.map(view.y), arrActions2);
 		};
@@ -637,7 +637,7 @@ TXW2DSlider : TXWSlider {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0), holdVal, holdVal2;
 				holdVal = this.getValue(arrActions);
@@ -650,8 +650,8 @@ TXW2DSlider : TXWSlider {
 				});
 			}
 		);
-	}	
-	getControlSpec2 {  arg argArrActions2; 
+	}
+	getControlSpec2 {  arg argArrActions2;
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdControlSpec2;
 		// use arrActions if argument is nil
 		argArrActions2 = argArrActions2 ? arrActions2;
@@ -667,15 +667,15 @@ TXW2DSlider : TXWSlider {
 		});
 		^(holdControlSpec2 ? nil.asSpec);
 	}
-	midiCCNoActivate { 
-		//	stop any previous Responder 
+	midiCCNoActivate {
+		//	stop any previous Responder
 		this.midiCCNoDeactivate;
-		//	start Responder 
+		//	start Responder
 		if (midiListen == 1, {
 			midiCCNoResponder = CCResponder({ |src, chan, num, val|
 				var holdCtlVal, holdCtlVal2;
 				//  if channel and note match run the actions
-			 	if ( (chan >= (midiMinChannel-1)) 
+			 	if ( (chan >= (midiMinChannel-1))
 			 		and: (chan <= (midiMaxChannel-1)),
 		 		{
 		 			if (viewHolder.notNil, {
@@ -697,27 +697,27 @@ TXW2DSlider : TXWSlider {
 	}
 
 }
-	
+
 TXW2DTablet : TXWSlider {
 
 	classvar <widgetName;
-	
+
 	var <>arrActions2, <>midiCCNo2, <>showActionIndex;
-	var <>pressureActions, <>tiltXActions, <>tiltYActions, <>mouseDownActions, 
+	var <>pressureActions, <>tiltXActions, <>tiltYActions, <>mouseDownActions,
 		<>mouseDragActions, <>mouseUpActions, <>mouseDoubleClickActions;
 
 
 	*initClass{
 		// initialise class variables
 		widgetName = "2-D Tablet";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults, arrDefaultActions;
 		//	assign variables
 		arrDefaultActions = [99,0,0,0,0,0,0, nil].dup(5);
-		arrDefaults = [ arrDefaultActions.deepCopy, TXColour.blue, 12, arrDefaultActions.deepCopy, 
-			arrDefaultActions.deepCopy, arrDefaultActions.deepCopy, arrDefaultActions.deepCopy, 
-			arrDefaultActions.deepCopy, arrDefaultActions.deepCopy, 
+		arrDefaults = [ arrDefaultActions.deepCopy, TXColour.blue, 12, arrDefaultActions.deepCopy,
+			arrDefaultActions.deepCopy, arrDefaultActions.deepCopy, arrDefaultActions.deepCopy,
+			arrDefaultActions.deepCopy, arrDefaultActions.deepCopy,
 			arrDefaultActions.deepCopy, arrDefaultActions.deepCopy
 		];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
@@ -732,31 +732,31 @@ TXW2DTablet : TXWSlider {
 		mouseDragActions = arrExtraArgs.at(8) ? arrDefaults.at(8);
 		mouseUpActions = arrExtraArgs.at(9) ? arrDefaults.at(9);
 		mouseDoubleClickActions = arrExtraArgs.at(10) ? arrDefaults.at(10);
-		
+
 		argHeight = argHeight ? 100;
 		argWidth = argWidth ? 100;
 		guiObjectType = \number;
-		midiCCNo2 = 1; 
+		midiCCNo2 = 1;
 		showActionIndex = 0;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
-	}	
-	properties { 
-		^super.properties ++ #[\arrActions2, \midiCCNo2, \pressureActions, \tiltXActions, \tiltYActions, 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
+	}
+	properties {
+		^super.properties ++ #[\arrActions2, \midiCCNo2, \pressureActions, \tiltXActions, \tiltYActions,
 			\mouseDownActions, \mouseDragActions, \mouseUpActions, \mouseDoubleClickActions];
 	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdControlSpec, holdControlSpec2;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
-		holdView = TabletSlider2D(window, 
+		holdView = TabletSlider2D(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		holdView.background = background;
 		holdView.knobColor = knobColour;
 		holdControlSpec = this.getControlSpec(arrActions);
 		holdControlSpec2 = this.getControlSpec(arrActions2);
-		holdView.action = { arg view,x,y,pressure,tiltx,tilty,deviceID, 
-				buttonNumber,clickCount,absoluteZ,rotation; 
+		holdView.action = { arg view,x,y,pressure,tiltx,tilty,deviceID,
+				buttonNumber,clickCount,absoluteZ,rotation;
 			this.performValueActions(holdControlSpec.map(view.x), arrActions);
 			this.performValueActions(holdControlSpec2.map(view.y), arrActions2);
 			this.performValueActions((pressure ? 0).clip(0,1), pressureActions);
@@ -766,8 +766,8 @@ TXW2DTablet : TXWSlider {
 			this.performValueActions((tilty ? 0 + 0.5).clip(0,1), tiltYActions);
 			this.performCommandActions(mouseDragActions);
 		};
-		holdView.mouseDownAction = { arg view,x,y,pressure,tiltx,tilty,deviceID, 
-				buttonNumber,clickCount,absoluteZ,rotation; 
+		holdView.mouseDownAction = { arg view,x,y,pressure,tiltx,tilty,deviceID,
+				buttonNumber,clickCount,absoluteZ,rotation;
 			this.performValueActions(holdControlSpec.map(view.x), arrActions);
 			this.performValueActions(holdControlSpec2.map(view.y), arrActions2);
 			this.performValueActions((pressure ? 0).clip(0,1), pressureActions);
@@ -778,8 +778,8 @@ TXW2DTablet : TXWSlider {
 			this.performCommandActions(mouseDownActions);
 			if (clickCount == 2, {this.performCommandActions(mouseDoubleClickActions) });
 		};
-		holdView.mouseUpAction = { arg view,x,y,pressure,tiltx,tilty,deviceID, 
-				buttonNumber,clickCount,absoluteZ,rotation; 
+		holdView.mouseUpAction = { arg view,x,y,pressure,tiltx,tilty,deviceID,
+				buttonNumber,clickCount,absoluteZ,rotation;
 			this.performValueActions(holdControlSpec.map(view.x), arrActions);
 			this.performValueActions(holdControlSpec2.map(view.y), arrActions2);
 			this.performValueActions((pressure ? 0).clip(0,1), pressureActions);
@@ -799,7 +799,7 @@ TXW2DTablet : TXWSlider {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0), holdVal, holdVal2;
 				holdVal = this.getValue(arrActions);
@@ -812,8 +812,8 @@ TXW2DTablet : TXWSlider {
 				});
 			}
 		);
-	}	
-	getControlSpec2 {  arg argArrActions2; 
+	}
+	getControlSpec2 {  arg argArrActions2;
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdControlSpec2;
 		// use arrActions if argument is nil
 		argArrActions2 = argArrActions2 ? arrActions2;
@@ -829,15 +829,15 @@ TXW2DTablet : TXWSlider {
 		});
 		^(holdControlSpec2 ? nil.asSpec);
 	}
-	midiCCNoActivate { 
-		//	stop any previous Responder 
+	midiCCNoActivate {
+		//	stop any previous Responder
 		this.midiCCNoDeactivate;
-		//	start Responder 
+		//	start Responder
 		if (midiListen == 1, {
 			midiCCNoResponder = CCResponder({ |src, chan, num, val|
 				var holdCtlVal, holdCtlVal2;
 				//  if channel and note match run the actions
-			 	if ( (chan >= (midiMinChannel-1)) 
+			 	if ( (chan >= (midiMinChannel-1))
 			 		and: (chan <= (midiMaxChannel-1)),
 		 		{
 		 			if (viewHolder.notNil, {
@@ -859,7 +859,7 @@ TXW2DTablet : TXWSlider {
 	}
 	performCommandActions { arg argArrActions;
 		argArrActions.do({ arg item, i;
-			var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText, 
+			var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText,
 				holdAction, holdVal1, holdVal2, holdVal3, holdVal4;
 			holdModuleID = item.at(0);
 			holdActionInd = item.at(1);
@@ -893,21 +893,21 @@ TXW2DTablet : TXWSlider {
 		system.flagGuiUpd;
 	}
 }
-	
+
 TXWNumberBox : TXWSlider {
 
 	classvar <widgetName;
-	
+
 	var  <stringColor, <fontSize, <font;
 
 	*initClass{
 		// initialise class variables
 		widgetName = "Number Box";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
-		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], 
+		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil],
 			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]],
 			TXColour.black, "Arial", 12 ];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
@@ -919,27 +919,27 @@ TXWNumberBox : TXWSlider {
 		argWidth = argWidth ? 80;
 		guiObjectType = \number;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
-	}	
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
+	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdControlSpec;
 		holdControlSpec = this.getControlSpec;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
 		if (limitWidgetUpdates == true, {
-			holdView = TXDisplayTextNum( window, 
+			holdView = TXDisplayTextNum( window,
 				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height)
 			);
 		},{
-			holdView = TXScrollNumBox( window, 
+			holdView = TXScrollNumBox( window,
 				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height),
 				holdControlSpec
-			);
+			).maxDecimals_(4);
 		});
 		holdView.background = background;
 		holdView.stringColor = stringColor;
 		holdView.font = Font(font, fontSize);
-		holdView.action = {arg view; 
+		holdView.action = {arg view;
 			view.value = holdControlSpec.constrain(view.value).round(0.001);
 			this.performValueActions(view.value)
 		};
@@ -948,7 +948,7 @@ TXWNumberBox : TXWSlider {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0), holdVal;
 				holdVal = this.getValue;
@@ -957,43 +957,43 @@ TXWNumberBox : TXWSlider {
 				});
 			}
 		);
-	}	
+	}
 	stringColor_ { arg argStringColor;
 		stringColor = argStringColor;
 		this.updateViews;
 	}
-	stringColorAsArgs { 
+	stringColorAsArgs {
 		^stringColor.storeArgs;
 	}
 	stringColorAsArgs_ { arg arrArgs;
 		stringColor = Color.fromArray(arrArgs);
 	}
-	font_ { arg argFont; 
+	font_ { arg argFont;
 		font = argFont;
 		this.updateViews;
 	}
-	fontSize_ { arg argFontSize; 
+	fontSize_ { arg argFontSize;
 		fontSize = argFontSize;
 		this.updateViews;
 	}
-	properties { 
-		^super.properties ++ #[\stringColorAsArgs, \font, \fontSize] 
+	properties {
+		^super.properties ++ #[\stringColorAsArgs, \font, \fontSize]
 	}
 }
 TXWSliderNo : TXWNumberBox {
 
 	classvar <widgetName;
-	
+
 	var  <>numberSize;
 
 	*initClass{
 		// initialise class variables
 		widgetName = "Slider Number H";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
-		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], 
+		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil],
 			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]],
 			TXColour.blue, "Arial", 12, 40, 12 ];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
@@ -1006,9 +1006,9 @@ TXWSliderNo : TXWNumberBox {
 		argWidth = argWidth ? 150;
 		guiObjectType = \number;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
 		thumbSize = arrExtraArgs.at(5) ? arrDefaults.at(5);
-	}	
+	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdSliderView, holdNumberView, holdFromLeft, holdFromTop, holdControlSpec;
 		var holdNumberWidth, holdSliderWidth;
@@ -1017,7 +1017,7 @@ TXWSliderNo : TXWNumberBox {
 		holdNumberWidth = numberSize.max(0).min(width);
 		holdSliderWidth = width - holdNumberWidth.max(0) - 2;
 		// slider
-		holdSliderView = Slider(window, 
+		holdSliderView = Slider(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, holdSliderWidth, height));
 		holdControlSpec = this.getControlSpec;
 		if (holdControlSpec.step != 0) {
@@ -1026,7 +1026,7 @@ TXWSliderNo : TXWNumberBox {
 		holdSliderView.background = background;
 		holdSliderView.knobColor = knobColour;
 		holdSliderView.thumbSize = thumbSize;
-		holdSliderView.action = {arg view; 
+		holdSliderView.action = {arg view;
 			this.performValueActions(holdControlSpec.map(view.value));
 			// update numberview
 			holdNumberView.value = holdControlSpec.map(view.value).round(0.001);
@@ -1041,22 +1041,22 @@ TXWSliderNo : TXWNumberBox {
 		holdControlSpec = this.getControlSpec;
 		if (limitWidgetUpdates == true, {
 			holdNumberView = TXDisplayTextNum(
-				window, 
-				Rect(offsetLeft + holdFromLeft + holdSliderWidth + 2, offsetTop + holdFromTop, 
+				window,
+				Rect(offsetLeft + holdFromLeft + holdSliderWidth + 2, offsetTop + holdFromTop,
 					holdNumberWidth, height)
 			);
 		},{
 			holdNumberView = TXScrollNumBox(
-				window, 
-				Rect(offsetLeft + holdFromLeft + holdSliderWidth + 2, offsetTop + holdFromTop, 
+				window,
+				Rect(offsetLeft + holdFromLeft + holdSliderWidth + 2, offsetTop + holdFromTop,
 					holdNumberWidth, height),
 					holdControlSpec
-			);
+			).maxDecimals_(4);
 		});
 		holdNumberView.stringColor = stringColor;
 		holdNumberView.font = Font(font, fontSize);
 		holdNumberView.background = background;
-		holdNumberView.action = {arg view; 
+		holdNumberView.action = {arg view;
 			view.value = holdControlSpec.constrain(view.value).round(0.001);
 			this.performValueActions(view.value);
 			// update sliderview
@@ -1067,7 +1067,7 @@ TXWSliderNo : TXWNumberBox {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdSliderView, holdNumberView], 
+			[holdSliderView, holdNumberView],
 			{ arg argArray;
 				var holdSliderView = argArray.at(0);
 				var holdNumberView = argArray.at(1);
@@ -1079,25 +1079,25 @@ TXWSliderNo : TXWNumberBox {
 				});
 			}
 		);
-	}	
-	properties { 
-		^super.properties ++ #[\numberSize] 
+	}
+	properties {
+		^super.properties ++ #[\numberSize]
 	}
 }
 TXWSliderNoV : TXWNumberBox {
 
 	classvar <widgetName;
-	
+
 	var  <>numberSize;
 
 	*initClass{
 		// initialise class variables
 		widgetName = "Slider Number V";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
-		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], 
+		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil],
 			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]],
 			TXColour.blue, "Arial", 12, 20, 12 ];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
@@ -1110,9 +1110,9 @@ TXWSliderNoV : TXWNumberBox {
 		argHeight = argHeight ? 20;
 		argWidth = argWidth ? 150;
 		//	call super.init with height and width swapped
-		super.init(argLayoutX, argLayoutY, argWidth, argHeight, arrExtraArgs); 
+		super.init(argLayoutX, argLayoutY, argWidth, argHeight, arrExtraArgs);
 		thumbSize = arrExtraArgs.at(5) ? arrDefaults.at(5);
-	}	
+	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdSliderView, holdNumberView, holdFromLeft, holdFromTop, holdControlSpec;
 		var holdNumberHeight, holdSliderHeight;
@@ -1121,7 +1121,7 @@ TXWSliderNoV : TXWNumberBox {
 		holdNumberHeight = numberSize.max(0).min(height);
 		holdSliderHeight = height - holdNumberHeight.max(0);
 		// slider
-		holdSliderView = Slider(window, 
+		holdSliderView = Slider(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, holdSliderHeight));
 		holdControlSpec = this.getControlSpec;
 		if (holdControlSpec.step != 0) {
@@ -1130,7 +1130,7 @@ TXWSliderNoV : TXWNumberBox {
 		holdSliderView.background = background;
 		holdSliderView.knobColor = knobColour;
 		holdSliderView.thumbSize = thumbSize;
-		holdSliderView.action = {arg view; 
+		holdSliderView.action = {arg view;
 			this.performValueActions(holdControlSpec.map(view.value));
 			// update numberview
 			holdNumberView.value = holdControlSpec.map(view.value).round(0.001);
@@ -1145,22 +1145,22 @@ TXWSliderNoV : TXWNumberBox {
 		holdControlSpec = this.getControlSpec;
 		if (limitWidgetUpdates == true, {
 			holdNumberView = TXDisplayTextNum(
-				window, 
-				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop + holdSliderHeight + 2, 
+				window,
+				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop + holdSliderHeight + 2,
 					width, holdNumberHeight)
 			);
 		},{
 			holdNumberView = TXScrollNumBox(
-				window, 
-				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop + holdSliderHeight + 2, 
+				window,
+				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop + holdSliderHeight + 2,
 					width, holdNumberHeight),
 				holdControlSpec
-			);
+			).maxDecimals_(4);
 		});
 		holdNumberView.stringColor = stringColor;
 		holdNumberView.font = Font(font, fontSize);
 		holdNumberView.background = background;
-		holdNumberView.action = {arg view; 
+		holdNumberView.action = {arg view;
 			view.value = holdControlSpec.constrain(view.value).round(0.001);
 			this.performValueActions(view.value);
 			// update sliderview
@@ -1171,7 +1171,7 @@ TXWSliderNoV : TXWNumberBox {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdSliderView, holdNumberView], 
+			[holdSliderView, holdNumberView],
 			{ arg argArray;
 				var holdSliderView = argArray.at(0);
 				var holdNumberView = argArray.at(1);
@@ -1183,38 +1183,38 @@ TXWSliderNoV : TXWNumberBox {
 				});
 			}
 		);
-	}	
-	properties { 
-		^super.properties ++ #[\numberSize] 
+	}
+	properties {
+		^super.properties ++ #[\numberSize]
 	}
 }
 TXWPopup : TXWNumberBox {
 
 	classvar <widgetName;
-	
+
 	*initClass{
 		// initialise class variables
 		widgetName = "Popup";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		//	assign variables
 		argWidth = argWidth ? 150;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
 		guiObjectType = \popup;
 	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdItems;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
-		holdView = PopUpMenu(window, 
+		holdView = PopUpMenu(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		holdView.stringColor = stringColor;
 		holdView.font = Font(font, fontSize);
 		holdView.background = background;
 		holdItems = this.getItemsFunction;
 		if (holdItems.notNil, {holdView.items = holdItems;});
-		holdView.action = {arg view; 
+		holdView.action = {arg view;
 			this.performValueActions(view.value)
 		};
 		holdView.value = this.getValue ? 0;
@@ -1222,14 +1222,14 @@ TXWPopup : TXWNumberBox {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0);
 				holdView.value = this.getValue ? 0;
 			}
 		);
-	}	
-	getItemsFunction { 
+	}
+	getItemsFunction {
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdItems;
 		holdModuleID = arrActions.at(0).at(0);
 		holdActionInd = arrActions.at(0).at(1);
@@ -1248,17 +1248,17 @@ TXWPopup : TXWNumberBox {
 TXWCheckBox : TXWNumberBox {
 
 	classvar <widgetName;
-	
+
 	var  <string, <>colourReverse;
 
 	*initClass{
 		// initialise class variables
 		widgetName = "Check Box";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
-		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], 
+		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil],
 			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]],
 			TXColour.black, "Arial", 12, "", 1];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
@@ -1271,15 +1271,15 @@ TXWCheckBox : TXWNumberBox {
 		argHeight = argHeight ? 20;
 		argWidth = argWidth ? 150;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
 		guiObjectType = \checkbox;
-	}	
-	string_ { arg argString; 
+	}
+	string_ { arg argString;
 		string = argString;
 		this.updateViews;
 	}
-	properties { 
-		^super.properties ++ #[\string, \colourReverse] 
+	properties {
+		^super.properties ++ #[\string, \colourReverse]
 	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdItems, holdStringColor2, holdBackground2;
@@ -1292,11 +1292,11 @@ TXWCheckBox : TXWNumberBox {
 			holdStringColor2 = stringColor;
 			holdBackground2 = background;
 		});
-		holdView = TXCheckBox(window, 
+		holdView = TXCheckBox(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height),
 			string, stringColor, background, holdStringColor2, holdBackground2);
 		holdView.buttonView.font = Font(font, fontSize);
-		holdView.action = {arg view; 
+		holdView.action = {arg view;
 			this.performValueActions(view.value)
 		};
 		holdView.value = this.getValue ? 0;
@@ -1304,7 +1304,7 @@ TXWCheckBox : TXWNumberBox {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0), holdVal;
 				holdVal = this.getValue;
@@ -1313,8 +1313,8 @@ TXWCheckBox : TXWNumberBox {
 				});
 			}
 		);
-	}	
-	getActionName { 
+	}
+	getActionName {
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdActionName;
 		holdModuleID = arrActions.at(0).at(0);
 		holdActionInd = arrActions.at(0).at(1);
@@ -1337,26 +1337,23 @@ TXWKnob : TXWSlider {
 	*initClass{
 		// initialise class variables
 		widgetName = "Knob";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		// force height to be same as width
 		argHeight = argWidth ? 40;
 		argWidth = argWidth ? 40;
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
 		// swap default colours
 		knobColour = TXColour.white;
 		background = TXColour.blue;
-	}	
+	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdControlSpec;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
-		GUI.skins.default.knob.default.center = knobColour;
-		GUI.skins.default.knob.default.scale = knobColour;
-		GUI.skins.default.knob.default.level = background;
-		GUI.skins.default.knob.default.dial = background;
-		holdView = Knob(window, 
+		holdView = Knob(window,
 			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
+		holdView.color = [knobColour, knobColour, background, background];
 		holdControlSpec = this.getControlSpec;
 		if (holdControlSpec.step != 0) {
 			holdView.step = (holdControlSpec.step / (holdControlSpec.maxval - holdControlSpec.minval));
@@ -1371,7 +1368,7 @@ TXWKnob : TXWSlider {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0), holdVal;
 				holdVal = this.getValue;
@@ -1380,34 +1377,34 @@ TXWKnob : TXWSlider {
 				});
 			}
 		);
-	}	
+	}
 	height_ { arg argHeight, screenHeight = 550;
 		// force height & width to be same
 		width = argHeight.min(heightMax).min(screenHeight-layoutX).max(heightMin);
 		height = width;
 		this.updateViews;
-	}	
+	}
 	width_ { arg argWidth, screenWidth = 1000;
 		// force height & width to be same
 		width = argWidth.min(widthMax).min(screenWidth-layoutX).max(widthMin);
 		height = width;
 		this.updateViews;
-	}	
+	}
 }
 
 TXWTextEditBox : TXWNumberBox {
 
 	classvar <widgetName;
-	
+
 	*initClass{
 		// initialise class variables
 		widgetName = "Text Edit Box";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
-		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], 
-			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]], 
+		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil],
+			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]],
 			TXColour.black, "Arial", 12 ];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
 		arrActions = arrExtraArgs.at(0) ? arrDefaults.at(0);
@@ -1417,24 +1414,24 @@ TXWTextEditBox : TXWNumberBox {
 		argHeight = argHeight ? 20;
 		argWidth = argWidth ? 150;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
 		guiObjectType = \textedit;
-	}	
+	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdControlSpec;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
 		if (limitWidgetUpdates == true, {
-			holdView = TXDisplayTextNum(window, 
+			holdView = TXDisplayTextNum(window,
 				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		},{
-			holdView = TextField(window, 
+			holdView = TextField(window,
 				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		});
 		holdView.background = background;
 		holdView.stringColor = stringColor;
 		holdView.font = Font(font, fontSize);
-		holdView.action = {arg view; 
+		holdView.action = {arg view;
 			this.performValueActions(view.string)
 		};
 		holdView.string = this.getString ? "";
@@ -1442,14 +1439,14 @@ TXWTextEditBox : TXWNumberBox {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0);
 				holdView.string = this.getString ? "";
 			}
 		);
-	}	
-	getString { 
+	}
+	getString {
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdString;
 		holdModuleID = arrActions.at(0).at(0);
 		holdActionInd = arrActions.at(0).at(1);
@@ -1468,15 +1465,15 @@ TXWTextEditBox : TXWNumberBox {
 TXWTextDisplayBox : TXWNumberBox {
 
 	classvar <widgetName;
-	
+
 	*initClass{
 		// initialise class variables
 		widgetName = "Text Display Box";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
-		arrDefaults = [ [[99,0,0,0,0,0,0, nil]], 
+		arrDefaults = [ [[99,0,0,0,0,0,0, nil]],
 			TXColour.black, "Arial", 12 ];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
 		arrActions = arrExtraArgs.at(0) ? arrDefaults.at(0);
@@ -1486,18 +1483,18 @@ TXWTextDisplayBox : TXWNumberBox {
 		argHeight = argHeight ? 20;
 		argWidth = argWidth ? 150;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
 		guiObjectType = \text;
-	}	
+	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdControlSpec;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
 		if (limitWidgetUpdates == true, {
-			holdView = TXDisplayTextNum(window, 
+			holdView = TXDisplayTextNum(window,
 				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		},{
-			holdView = TextView(window, 
+			holdView = TextView(window,
 				Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height));
 		});
 		holdView.background = background;
@@ -1511,14 +1508,14 @@ TXWTextDisplayBox : TXWNumberBox {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0);
 				holdView.string = this.getString ? "";
 			}
 		);
-	}	
-	getString { 
+	}
+	getString {
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdString;
 		holdModuleID = arrActions.at(0).at(0);
 		holdActionInd = arrActions.at(0).at(1);
@@ -1533,7 +1530,7 @@ TXWTextDisplayBox : TXWNumberBox {
 
 		^holdString;
 	}
-	initAction { 
+	initAction {
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdInitAction;
 		holdModuleID = arrActions.at(0).at(0);
 		holdActionInd = arrActions.at(0).at(1);
@@ -1557,12 +1554,12 @@ TXWIPAddress : TXWNumberBox {
 	*initClass{
 		// initialise class variables
 		widgetName = "IP Address";
-	}	
+	}
 	init { arg argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs;
 		var arrDefaults;
 		//	assign variables
-		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], 
-			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]], 
+		arrDefaults = [ [[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil],
+			[99,0,0,0,0,0,0, nil], [99,0,0,0,0,0,0, nil]],
 			TXColour.black, "Arial", 12];
 		arrExtraArgs = arrExtraArgs ? arrDefaults;
 		arrActions = arrExtraArgs.at(0) ? arrDefaults.at(0);
@@ -1573,20 +1570,20 @@ TXWIPAddress : TXWNumberBox {
 		argWidth = argWidth ? 260;
 		widthMin = 260;
 		//	call super.init
-		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs); 
+		super.init(argLayoutX, argLayoutY, argHeight, argWidth, arrExtraArgs);
 		guiObjectType = \ipaddress;
-	}	
+	}
 	buildGui { arg window, offsetLeft, offsetTop, screenWidth, screenHeight, limitWidgetUpdates;
 		var holdView, holdFromLeft, holdFromTop, holdControlSpec;
 		holdFromLeft = layoutX * (screenWidth - width);
 		holdFromTop = (1- layoutY) * (screenHeight - height);
-		holdView = TXNetAddress(window, 
-			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height), 
+		holdView = TXNetAddress(window,
+			Rect(offsetLeft + holdFromLeft, offsetTop + holdFromTop, width, height),
 			labelWidth: 0, showPresets: false, displayOnly: limitWidgetUpdates);
 		holdView.stringColor = stringColor;
 		holdView.font = Font(font, fontSize);
 		holdView.background = background;
-		holdView.action = {arg view; 
+		holdView.action = {arg view;
 			this.performValueActions(view.string)
 		};
 		holdView.stringNoAction = this.getString ? "0.0.0.0";
@@ -1594,14 +1591,14 @@ TXWIPAddress : TXWNumberBox {
 //		onScreen = true;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView], 
+			[holdView],
 			{ arg argArray;
 				var holdView = argArray.at(0);
 				holdView.stringNoAction = this.getString ? "";
 			}
 		);
-	}	
-	getString { 
+	}
+	getString {
 		var holdModuleID, holdModule, holdActionInd, holdAction, holdString;
 		holdModuleID = arrActions.at(0).at(0);
 		holdActionInd = arrActions.at(0).at(1);

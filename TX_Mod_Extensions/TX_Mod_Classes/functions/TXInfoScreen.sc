@@ -43,7 +43,9 @@ makeWindow{ arg message, showCloseBtn, winColour, inLeft, inTop, arrInfoLines;
 }
 
 close {		//	close window
-	if (w.isClosed.not, {w.close});
+		// OLD if (w.isClosed.not, {w.close;});
+		// NEW:
+		if (w.isClosed.not, {{w.close}.defer;});
 }
 
 makeConfirmWindow{ arg argConfirmedAction, message, winColour, inLeft, inTop;

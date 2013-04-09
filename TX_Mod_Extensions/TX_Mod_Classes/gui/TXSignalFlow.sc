@@ -11,13 +11,13 @@ classvar layoutHeight;
 	modulesVisibleOrigin = Point.new(0,0);
 	layoutWidth = 1600;
 	layoutHeight = 1600;
-} 
+}
 
 *saveData {
 	^[[modulesVisibleOrigin.x,modulesVisibleOrigin.y], layoutWidth, layoutHeight];
 }
 
-*loadData { arg arrData;   
+*loadData { arg arrData;
 	modulesVisibleOrigin.x = arrData[0][0] ? 0;
 	modulesVisibleOrigin.y = arrData[0][1] ? 0;
 	layoutWidth = arrData[1] ? 1600;
@@ -31,7 +31,7 @@ classvar layoutHeight;
 	module.posX = layoutPos.x;
 	module.posY = layoutPos.y;
 	this.sizeAdjustBeyond(layoutPos);
-} 
+}
 
 *setPositionNear{ arg module, otherModule, rows = 1;
 	var layoutPos;
@@ -40,13 +40,13 @@ classvar layoutHeight;
 	module.posX = layoutPos.x;
 	module.posY = layoutPos.y;
 	this.sizeAdjustBeyond(layoutPos);
-} 
+}
 
 *sizeAdjustBeyond { arg layoutPos, argAction;
 	var changed = false;
 	if ((layoutWidth - 300) < layoutPos.x, {
 		layoutWidth = layoutWidth + 300;
-		changed = true;		
+		changed = true;
 	});
 	if ((layoutHeight - 100) < layoutPos.y, {
 		layoutHeight = layoutHeight+100;
@@ -56,7 +56,7 @@ classvar layoutHeight;
 		argAction.value;
 	});
 
-} 
+}
 
 *nextFreePosition { arg rows = 1;
 	var arrAllModules;
@@ -88,10 +88,10 @@ classvar layoutHeight;
 
 *clearPositionData{
 	var arrAllModules;
-	arrAllModules = system.arrSystemModules 
+	arrAllModules = system.arrSystemModules
 		++ system.arrAllBusses
 		++ TXChannelRouting.arrChannels;
-	arrAllModules.do ({arg module, i; 
+	arrAllModules.do ({arg module, i;
 		module.posX = 0;
 		module.posY = 0;
 	});
@@ -101,10 +101,10 @@ classvar layoutHeight;
 	var arrChannels;
 	// reset layout positions of all modules in channels
 	arrChannels = TXChannelRouting.arrChannels;
-	arrChannels.do ({arg argChannel, i; 
+	arrChannels.do ({arg argChannel, i;
 		var arrModules, numModules;
 		// create var
-		arrModules = [argChannel.sourceModule, argChannel, argChannel.insert1Module, 
+		arrModules = [argChannel.sourceModule, argChannel, argChannel.insert1Module,
 			argChannel.insert2Module, argChannel.insert3Module,
 			argChannel.insert4Module, argChannel.insert5Module
 		];
@@ -123,8 +123,8 @@ classvar layoutHeight;
 			});
 		});
 	});
-	// reset layout positions any remaining modules 
-	system.arrSystemModules.do ({arg module, i; 
+	// reset layout positions any remaining modules
+	system.arrSystemModules.do ({arg module, i;
 		if ((module.posX == 0) and: (module.posY == 0), {
 			// set position
 			this.setPosition(module);
@@ -147,25 +147,25 @@ classvar layoutHeight;
 	var modListBox, listModules, listViewModules, displayModule;
 	var arrAllSourceActionModules, arrAllSourceActionModNames, btnRebuildLayout;
 
-	// create array of names of all system's source, insert & action modules. 
+	// create array of names of all system's source, insert & action modules.
 	arrAllSourceActionModules = system.arrSystemModules
-		.select({ arg item, i; 
-			(item.class.moduleType == "source") 
-			or: 
-			(item.class.moduleType == "groupsource") 
-			or: 
-			(item.class.moduleType == "action") 
-			or: 
+		.select({ arg item, i;
+			(item.class.moduleType == "source")
+			or:
+			(item.class.moduleType == "groupsource")
+			or:
+			(item.class.moduleType == "action")
+			or:
 			(item.class.moduleType == "insert") ;
 		 })
-		.sort({ arg a, b; 
-			a.instName < b.instName 
+		.sort({ arg a, b;
+			a.instName < b.instName
 		});
 	arrAllSourceActionModNames = arrAllSourceActionModules.collect({arg item, i;  item.instName; });
 
 
 // list of all modules	- REMOVED FOR NOW
-//	modListBox =  CompositeView(parent,Rect(0,0, 153, 570));  
+//	modListBox =  CompositeView(parent,Rect(0,0, 153, 570));
 //	modListBox.background = TXColour.sysChannelAudio;
 //	modListBox.decorator = FlowLayout(modListBox.bounds);
 //	listModules = [ "    System Modules"] ++ arrAllSourceActionModNames;
@@ -175,7 +175,7 @@ classvar layoutHeight;
 //			.stringColor_(TXColor.sysGuiCol1)
 //			.hiliteColor_(TXColor.sysGuiCol1)
 //			.action = {|view|
-//				// set variable 
+//				// set variable
 //				if (view.value > 0, {
 //					modLayoutView.unhighlightAllViews;
 //					arrAllSourceActionModules.at(view.value-1).highlight = true;
@@ -184,21 +184,22 @@ classvar layoutHeight;
 //					view.value = 0;
 //				});
 //			};
-			
-	// make ScrollView	
+
+	// make ScrollView
 	layoutsScrollView = ScrollView(parent, Rect(0, 0, 1200, 600)).hasBorder_(false);
 	if (GUI.current.asSymbol == \cocoa, {
 		layoutsScrollView.autoScrolls_(false);
 	});
 	layoutsScrollView.action = {arg view; modulesVisibleOrigin = view.visibleOrigin; };
 	layoutBox = CompositeView(layoutsScrollView, Rect(0,0, layoutWidth, layoutHeight));
+	layoutBox.background = TXColor.sysModuleWindow;
 	layoutsScrollView.visibleOrigin = modulesVisibleOrigin;
 //	layoutBox.decorator = FlowLayout(layoutBox.bounds);
 //	layoutBox.decorator.margin.x = 0;
 //	layoutBox.decorator.margin.y = 0;
 //	layoutBox.decorator.reset;
 	modLayoutView = TXSignalFlowView(layoutBox, Rect(0,0, layoutWidth, layoutHeight), system);
-	// button - Rebuild Layout 
+	// button - Rebuild Layout
 	btnRebuildLayout = Button(parent, 140 @ 27);
 	btnRebuildLayout.states = [["Auto Rebuild Layout", TXColor.white, TXColor.sysDeleteCol]];
 	btnRebuildLayout.action = {
@@ -209,7 +210,7 @@ classvar layoutHeight;
 				this.clearPositionData;
 				// reset layout positions of all busses
 				system.initBusPositions;
-				// Then rest channels and modules 
+				// Then rest channels and modules
 				this.rebuildPositionData;
 //				system.showView;
 			},

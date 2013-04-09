@@ -16,18 +16,18 @@ TXBuildActions {		// Action Builder
 	}, {
 		// add defaults
 		argArray = argArray ++ [
-			["RunPauseButton"], 
-			["RebuildModuleButton"], 
-			["ModuleInfoTxt"], 
+			["RunPauseButton"],
+			["RebuildModuleButton"],
+			["ModuleInfoTxt"],
 		];
 	});
 	// if not the system module, add presets
 	if (argModule.moduleID.notNil and: {argModule.moduleID > 99}, {
 		argArray = argArray ++ [
-			["TXPopupAction", "Load Preset :", 
-				{["Load Preset..."] 
-					++ argModule.arrPresets.collect ({ arg item, i; (i+1).asString +": "+ item[0]; })}, 
-				"dummyName", 
+			["TXPopupAction", "Load Preset :",
+				{["Load Preset..."]
+					++ argModule.arrPresets.collect ({ arg item, i; (i+1).asString +": "+ item[0]; })},
+				"dummyName",
 				{ arg view; if (view.value > 0, {argModule.loadPreset(argModule, view.value-1); }); }
 			],
 		];
@@ -35,17 +35,17 @@ TXBuildActions {		// Action Builder
 
 	// initialise variable
 	actionCounter = 0;
-	
+
 	// build array of TXActions based on argArray
 	argArray.do({ arg item, i;
 
-	// Note: legacyType is a variable that is used as a fix for systems saved in version 0.10.6,   
+	// Note: legacyType is a variable that is used as a fix for systems saved in version 0.10.6,
 	//    where action text was not saved for widgets. Only older actions are set "legacyType = 1"
-	//    if any new actions are added, they should NOT have "legacyType = 1", 
+	//    if any new actions are added, they should NOT have "legacyType = 1",
 	//    just leave it to default to 0 in class TXAction
 
-	// commandAction 
-		// arguments- index1 is action name, index2 is action function, 
+	// commandAction
+		// arguments- index1 is action name, index2 is action function,
 		//   index3 is optional array of controlspec functions
 		//   index4 is optional guiObjectType
 		//   index5 is optional getItemsFunction
@@ -64,9 +64,9 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// valueActionNumber 
-		// arguments- index1 is action name, index2 is array of controlspec functions, 
-		//   index3 is get value function, index4 is set value function, 
+	// valueActionNumber
+		// arguments- index1 is action name, index2 is array of controlspec functions,
+		//   index3 is get value function, index4 is set value function,
 		if (item.at(0) == "valueActionNumber", {
 			holdAction = TXAction.new(\valueAction, item.at(1));
 			holdAction.arrControlSpecFuncs = item.at(2);
@@ -76,9 +76,9 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// valueActionCheckBox 
-		// arguments- index1 is action name, index2 is array of controlspec functions, 
-		//   index3 is get value function, index4 is set value function, 
+	// valueActionCheckBox
+		// arguments- index1 is action name, index2 is array of controlspec functions,
+		//   index3 is get value function, index4 is set value function,
 		if (item.at(0) == "valueActionCheckBox", {
 			holdAction = TXAction.new(\valueAction, item.at(1));
 			holdAction.arrControlSpecFuncs = item.at(2);
@@ -88,7 +88,7 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// EmptyValueAction		
+	// EmptyValueAction
 		// arguments- index1 is guiObjectType
 		if (item.at(0) == "EmptyValueAction", {
 			holdAction = TXAction.new(\valueAction, "...");
@@ -99,7 +99,7 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// WetDryMixSlider 
+	// WetDryMixSlider
 		// N.B. no arguments - assumes synth has argument "wetDryMix"
 		if (item.at(0) == "WetDryMixSlider", {
 			holdAction = TXAction.new(\valueAction, "Set Dry-Wet Mix");
@@ -111,7 +111,7 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// Transpose		
+	// Transpose
 			// no arguments - assumes synth has argument "transpose"
 		if (item.at(0) == "Transpose", {
 			holdAction = TXAction.new(\valueAction, "Set Transpose semitones");
@@ -124,13 +124,13 @@ TXBuildActions {		// Action Builder
 		});
 
 	// TXMinMaxSliderSplit & TXTimeBpmMinMaxSldr - separate values are given for each of the 3 gui objects
-		// arguments- index1 is slider text, index2 is controlSpec, 
+		// arguments- index1 is slider text, index2 is controlSpec,
 		//   index3/4/5 are synth arg names to  be updated for slider, min & max
 		// 	index6 is an optional ACTION function to be valued in views action function
 		// e.g. ["TXMinMaxSliderSplit", "Freq", \freq, "freq", "freqMin", "freqMax"]
-		if (	(item.at(0) == "TXMinMaxSliderSplit") 
+		if (	(item.at(0) == "TXMinMaxSliderSplit")
 			or: (item.at(0) == "TXTimeBpmMinMaxSldr")
-			or: (item.at(0) == "TXMinMaxFreqNoteSldr"), 
+			or: (item.at(0) == "TXMinMaxFreqNoteSldr"),
 		{
 			// add value action
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1));
@@ -145,15 +145,15 @@ TXBuildActions {		// Action Builder
 				.maxval_(argModule.getSynthArgSpec(item.at(5)))
 				.minval_(argModule.getSynthArgSpec(item.at(4)))
 				.map(argModule.getSynthArgSpec(item.at(3)))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(3), 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy
 					.maxval_(argModule.getSynthArgSpec(item.at(5)))
 					.minval_(argModule.getSynthArgSpec(item.at(4)))
 					.unmap(item.at(2).asSpec.deepCopy
 						.maxval_(argModule.getSynthArgSpec(item.at(5)))
 						.minval_(argModule.getSynthArgSpec(item.at(4)))
-						.constrain(argValue))); 
+						.constrain(argValue)));
 				// run action function passing it value as arg
 				item.at(6).value(argValue);
 			};
@@ -164,8 +164,8 @@ TXBuildActions {		// Action Builder
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1) ++ " unmapped");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(3))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(3), 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(3),
 					ControlSpec(0,1).constrain(argValue));
 				// run action function passing it value as arg
 				item.at(6).value(item.at(2).asSpec.deepCopy
@@ -197,14 +197,14 @@ TXBuildActions {		// Action Builder
 					.map(argModule.getSynthArgSpec(item.at(3)));
 				//  update with new value
 				holdCurVal = holdOldVal + val1;
-				argModule.setSynthValue(item.at(3), 
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy
 					.maxval_(argModule.getSynthArgSpec(item.at(5)))
 					.minval_(argModule.getSynthArgSpec(item.at(4)))
 					.unmap(item.at(2).asSpec.deepCopy
 						.maxval_(argModule.getSynthArgSpec(item.at(5)))
 						.minval_(argModule.getSynthArgSpec(item.at(4)))
-						.constrain(holdCurVal))); 
+						.constrain(holdCurVal)));
 				// run action function passing it value as arg
 				item.at(6).value(holdCurVal);
 			};
@@ -222,14 +222,14 @@ TXBuildActions {		// Action Builder
 					.map(argModule.getSynthArgSpec(item.at(3)));
 				//  update with new value
 				holdCurVal = holdOldVal - val1;
-				argModule.setSynthValue(item.at(3), 
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy
 					.maxval_(argModule.getSynthArgSpec(item.at(5)))
 					.minval_(argModule.getSynthArgSpec(item.at(4)))
 					.unmap(item.at(2).asSpec.deepCopy
 						.maxval_(argModule.getSynthArgSpec(item.at(5)))
 						.minval_(argModule.getSynthArgSpec(item.at(4)))
-						.constrain(holdCurVal))); 
+						.constrain(holdCurVal)));
 				// run action function passing it value as arg
 				item.at(6).value(holdCurVal);
 			};
@@ -247,14 +247,14 @@ TXBuildActions {		// Action Builder
 					.map(argModule.getSynthArgSpec(item.at(3)));
 				//  update with new value
 				holdCurVal = holdOldVal * val1;
-				argModule.setSynthValue(item.at(3), 
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy
 					.maxval_(argModule.getSynthArgSpec(item.at(5)))
 					.minval_(argModule.getSynthArgSpec(item.at(4)))
 					.unmap(item.at(2).asSpec.deepCopy
 						.maxval_(argModule.getSynthArgSpec(item.at(5)))
 						.minval_(argModule.getSynthArgSpec(item.at(4)))
-						.constrain(holdCurVal))); 
+						.constrain(holdCurVal)));
 				// run action function passing it value as arg
 				item.at(6).value(holdCurVal);
 			};
@@ -272,14 +272,14 @@ TXBuildActions {		// Action Builder
 					.map(argModule.getSynthArgSpec(item.at(3)));
 				//  update with new value
 				if (val1 != 0, {holdCurVal = holdOldVal / val1}, {holdCurVal = 0});
-				argModule.setSynthValue(item.at(3), 
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy
 					.maxval_(argModule.getSynthArgSpec(item.at(5)))
 					.minval_(argModule.getSynthArgSpec(item.at(4)))
 					.unmap(item.at(2).asSpec.deepCopy
 						.maxval_(argModule.getSynthArgSpec(item.at(5)))
 						.minval_(argModule.getSynthArgSpec(item.at(4)))
-						.constrain(holdCurVal))); 
+						.constrain(holdCurVal)));
 				// run action function passing it value as arg
 				item.at(6).value(holdCurVal);
 			};
@@ -288,24 +288,24 @@ TXBuildActions {		// Action Builder
 			holdAction.guiObjectType = \number;
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
-		
-	// EZslider or EZNumber or TXNumberPlusMinus or TXFraction
-		// arguments- index1 is slider text, index2 is controlSpec, index3 is synth arg name to be updated, 
+
+	// EZslider or EZSlider or EZNumber or TXNumberPlusMinus or TXNumberPlusMinus2 or TXFraction
+		// arguments- index1 is slider text, index2 is controlSpec, index3 is synth arg name to be updated,
 		// 	index4 is an optional ACTION function to be valued in views action
 		// e.g. ["EZslider", "Volume", \amp, "vol"]
-		if ((item.at(0) == "EZslider") 
-				or: (item.at(0) == "EZNumber") 
-				or: (item.at(0) == "TXNumberPlusMinus") 
-				or: (item.at(0) == "TXNumberPlusMinus2") 
+		if ((item.at(0) == "EZslider")
+				or: (item.at(0) == "EZNumber")
+				or: (item.at(0) == "TXNumberPlusMinus")
+				or: (item.at(0) == "TXNumberPlusMinus2")
 				or: (item.at(0) == "TXFraction"), {
 			// add value action
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1));
 			holdAction.legacyType = 1;
 			holdControlSpecFunc = {item.at(2).asSpec.deepCopy};
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(3))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(3), 
-					item.at(2).asSpec.deepCopy.constrain(argValue)); 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(3),
+					item.at(2).asSpec.deepCopy.constrain(argValue));
 				// run action function passing it value as arg
 				item.at(4).value(argValue);
 			};
@@ -316,8 +316,8 @@ TXBuildActions {		// Action Builder
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1) ++ " unmapped");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {item.at(2).asSpec.deepCopy.unmap(argModule.getSynthArgSpec(item.at(3)))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(3), 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy.map(ControlSpec(0,1).constrain(argValue)));
 				// run action function passing it value as arg
 				item.at(4).value(item.at(2).asSpec.deepCopy.map(ControlSpec(0,1).constrain(argValue)));
@@ -330,7 +330,7 @@ TXBuildActions {		// Action Builder
 				var holdCurVal;
 				//  update with randomized value
 				holdCurVal = 1.0.rand;
-				argModule.setSynthValue(item.at(3), 
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy.map(holdCurVal));
 				// run action function passing it randomized value as arg
 				item.at(4).value(item.at(2).asSpec.deepCopy.map(holdCurVal));
@@ -344,7 +344,7 @@ TXBuildActions {		// Action Builder
 				holdOldVal = argModule.getSynthArgSpec(item.at(3));
 				//  update with new value
 				holdCurVal = holdOldVal + val1;
-				argModule.setSynthValue(item.at(3), 
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy.constrain(holdCurVal));
 				// run action function passing it randomized value as arg
 				item.at(4).value(item.at(2).asSpec.deepCopy.constrain(holdCurVal));
@@ -360,7 +360,7 @@ TXBuildActions {		// Action Builder
 				holdOldVal = argModule.getSynthArgSpec(item.at(3));
 				//  update with new value
 				holdCurVal = holdOldVal - val1;
-				argModule.setSynthValue(item.at(3), 
+				argModule.setSynthValue(item.at(3),
 					item.at(2).asSpec.deepCopy.constrain(holdCurVal));
 				// run action function passing it randomized value as arg
 				item.at(4).value(item.at(2).asSpec.deepCopy.constrain(holdCurVal));
@@ -372,8 +372,8 @@ TXBuildActions {		// Action Builder
 		});
 
 	// EZsliderUnmapped - same as EZslider but returns unmapped value (range 0-1) of slider
-		// arguments- index1 is slider text, index2 is controlSpec function, 
-		// index3 is synth arg name to be updated, 
+		// arguments- index1 is slider text, index2 is controlSpec function,
+		// index3 is synth arg name to be updated,
 		// 	index4 is an optional ACTION function to be valued in views action
 		// e.g. ["EZsliderUnmapped", "Attack", ControlSpec(0, 5), "attack"]
 		if (item.at(0) == "EZsliderUnmapped", {
@@ -382,9 +382,9 @@ TXBuildActions {		// Action Builder
 			holdAction.legacyType = 1;
 			holdControlSpecFunc = {item.at(2).asSpec.deepCopy};
 			holdAction.getValueFunction = {item.at(2).asSpec.deepCopy.map(argModule.getSynthArgSpec(item.at(3)))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(3), 
-					item.at(2).asSpec.deepCopy.unmap(item.at(2).asSpec.deepCopy.constrain(argValue))); 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(3),
+					item.at(2).asSpec.deepCopy.unmap(item.at(2).asSpec.deepCopy.constrain(argValue)));
 				// run action function passing it value as arg
 				item.at(4).value(item.at(2).asSpec.deepCopy.unmap(item.at(2).asSpec.deepCopy.constrain(argValue)));
 			};
@@ -395,8 +395,8 @@ TXBuildActions {		// Action Builder
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1) ++ " unmapped");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(3))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(3), 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(3),
 					ControlSpec(0,1).constrain(argValue));
 				// run action function passing it value as arg
 				item.at(4).value(ControlSpec(0,1).constrain(argValue));
@@ -417,21 +417,21 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// TXPopupAction 
-		// arguments- index1 is text, index2 is items array (function or value), 
-		//	index3 is synth arg name to be updated, index4 is optional popup action, 
-		// 	index5 is the optional width, 
-		// e.g. ["TXPopupAction", "Sample", holdSampleFileNames, "sampleNo", 
+	// TXPopupAction
+		// arguments- index1 is text, index2 is items array (function or value),
+		//	index3 is synth arg name to be updated, index4 is optional popup action,
+		// 	index5 is the optional width,
+		// e.g. ["TXPopupAction", "Sample", holdSampleFileNames, "sampleNo",
 		//		{ arg view; this.loadSample(view.value); }]
 		if ((item.at(0) == "TXPopupAction") or: (item.at(0) == "TXPopupActionPlusMinus"), {
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1));
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(3))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(3), argValue); 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(3), argValue);
 				// run action function passing it value as arg
 				item.at(4).value(argValue);
-			}; 
+			};
 			holdAction.guiObjectType = \popup;
 			holdAction.getItemsFunction = {item.at(2).value};
 			arrActionSpecs = arrActionSpecs.add(holdAction);
@@ -471,22 +471,22 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// SynthOptionPopup 
+	// SynthOptionPopup
 		// NOTE - this will automatically rebuild the synth once a synth option has been changed
-		// arguments- index1 is text, index2 is arrOptionData, 
-		// index3 is the index of arrOptions and arrOptionData to use, 
+		// arguments- index1 is text, index2 is arrOptionData,
+		// index3 is the index of arrOptions and arrOptionData to use,
 		// index4 is the width (optional and ignored here), index5 is optional popup action
 		if ( (item.at(0) == "SynthOptionPopup") or: (item.at(0) == "SynthOptionPopupPlusMinus"), {
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1));
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.arrOptions.at(item.at(3))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.arrOptions.put(item.at(3), argValue); 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.arrOptions.put(item.at(3), argValue);
 				// run action function passing it value as arg
 				item.at(5).value(argValue);
 				// set function must rebuild synth as synth options have changed
 				argModule.rebuildSynth;
-			}; 
+			};
 			holdAction.guiObjectType = \popup;
 			holdAction.getItemsFunction = {item.at(2).at(item.at(3)).collect({arg item, i; item.at(0)})};
 			arrActionSpecs = arrActionSpecs.add(holdAction);
@@ -497,7 +497,7 @@ TXBuildActions {		// Action Builder
 				maxVal = item.at(2).at(item.at(3)).collect({arg item, i; item.at(0)}).size - 1;
 				// get current val and update with new value
 				holdCurVal = argModule.arrOptions.at(item.at(3));
-				argModule.arrOptions.put(item.at(3), (holdCurVal + 1).min(maxVal)); 
+				argModule.arrOptions.put(item.at(3), (holdCurVal + 1).min(maxVal));
 				// run action function passing it value as arg
 				item.at(5).value((holdCurVal + 1).min(maxVal));
 				// must rebuild synth as synth options have changed
@@ -509,7 +509,7 @@ TXBuildActions {		// Action Builder
 			holdActionFunc = {
 				var holdCurVal;
 				holdCurVal = argModule.arrOptions.at(item.at(3));
-				argModule.arrOptions.put(item.at(3), (holdCurVal - 1).max(0)); 
+				argModule.arrOptions.put(item.at(3), (holdCurVal - 1).max(0));
 				// run action function passing it value as arg
 				item.at(5).value((holdCurVal - 1).max(0));
 				// must rebuild synth as synth options have changed
@@ -520,9 +520,9 @@ TXBuildActions {		// Action Builder
 			// add commandAction to randomize value
 			holdActionFunc = {
 				var holdCurVal;
-				// randomize value from item array size 
+				// randomize value from item array size
 				holdCurVal = item.at(2).at(item.at(3)).collect({arg item, i; item.at(0)}).size.rand;
-				argModule.arrOptions.put(item.at(3), holdCurVal); 
+				argModule.arrOptions.put(item.at(3), holdCurVal);
 				// run action function passing it randomized value as arg
 				item.at(5).value(holdCurVal);
 				// must rebuild synth as synth options have changed
@@ -532,15 +532,15 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// TXCheckBox 
-		// arguments- index1 is checkbox text, index2 is synth arg name to be updated,  
+	// TXCheckBox
+		// arguments- index1 is checkbox text, index2 is synth arg name to be updated,
 		// 	index3 is an optional ACTION function to be valued in views action, index 4 is optional width
 		// e.g. ["TXCheckBox", "Loop", "loop"]
 		if (item.at(0) == "TXCheckBox", {
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1));
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(2))};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				argModule.setSynthValue(item.at(2), argValue);
 				// run action function passing it value as arg
 				item.at(3).value(argValue);
@@ -559,14 +559,14 @@ TXBuildActions {		// Action Builder
 			holdAction = TXAction.new(\commandAction, "Toggle " ++ item.at(1), holdActionFunc);
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
-		
+
 	// SeqSyncStartCheckBox
-		// N.B. no arguments 
+		// N.B. no arguments
 		if (item.at(0) == "SeqSyncStartCheckBox", {
 			holdAction = TXAction.new(\valueAction, "Set Sync Start");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec("syncStart")};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				argModule.setSynthArgSpec("syncStart", argValue);
 			};
 			holdAction.guiObjectType = \checkbox;
@@ -574,21 +574,21 @@ TXBuildActions {		// Action Builder
 		});
 
 	// SeqSyncStartCheckBox
-		// N.B. no arguments 
+		// N.B. no arguments
 		if (item.at(0) == "SeqSyncStopCheckBox", {
 			holdAction = TXAction.new(\valueAction, "Set Sync Stop");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec("syncStop")};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				argModule.setSynthArgSpec("syncStop", argValue);
 			};
 			holdAction.guiObjectType = \checkbox;
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// TXRangeSlider 
-		// arguments- index1 is slider text, index2 is controlSpec function, 
-		//   index3/4 are synth arg names to be updated, 
+	// TXRangeSlider
+		// arguments- index1 is slider text, index2 is controlSpec function,
+		//   index3/4 are synth arg names to be updated,
 		// 	index5 is an optional ACTION function to be valued in views action
 		// e.g. ["TXRangeSlider", "Volume", \amp, "volMin", "volMax"]
 		if (item.at(0) == "TXRangeSlider", {
@@ -597,9 +597,9 @@ TXBuildActions {		// Action Builder
 			holdAction.legacyType = 1;
 			holdControlSpecFunc = {item.at(2).asSpec.deepCopy};
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(3))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(3), 
-					item.at(2).asSpec.deepCopy.constrain(argValue)); 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(3),
+					item.at(2).asSpec.deepCopy.constrain(argValue));
 				// run action function passing it value as arg
 				item.at(5).value(argValue);
 			};
@@ -610,9 +610,9 @@ TXBuildActions {		// Action Builder
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1) ++ " Max");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(4))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(4), 
-					item.at(2).asSpec.deepCopy.constrain(argValue)); 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(4),
+					item.at(2).asSpec.deepCopy.constrain(argValue));
 				// run action function passing it value as arg
 				item.at(5).value(argValue);
 			};
@@ -622,12 +622,12 @@ TXBuildActions {		// Action Builder
 		});
 
 	// SeqPlayRange
-		// arguments- index1/index2 are synth arg names to be updated for start step & end step, 
+		// arguments- index1/index2 are synth arg names to be updated for start step & end step,
 		// index3 is optional synth arg name to be updated for autoloop - if nil, loop checkbox not shown
-		// index4 is max no. of steps, 
+		// index4 is max no. of steps,
 		// index5 is optional text for label
 		// index6 is an optional ACTION function to be valued in views action
-		// index7 is an optional false which sets the view's rangeview .enabled to false 
+		// index7 is an optional false which sets the view's rangeview .enabled to false
 		// e.g. ["SeqPlayRange", "seqStartStep", "seqEndStep", "seqAutoLoop", 16]
 		if (item.at(0) == "SeqPlayRange", {
 			// add value action
@@ -635,9 +635,9 @@ TXBuildActions {		// Action Builder
 			holdAction.legacyType = 1;
 			holdControlSpecFunc = {ControlSpec(1, item.at(4), step: 1)};
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(1))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(1), 
-					ControlSpec(1, item.at(4), step: 1).constrain(argValue)); 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(1),
+					ControlSpec(1, item.at(4), step: 1).constrain(argValue));
 				// run action function passing it value as arg
 				item.at(6).value(argValue);
 			};
@@ -648,9 +648,9 @@ TXBuildActions {		// Action Builder
 			holdAction = TXAction.new(\valueAction, "Set Play Range " ++ " Max");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(2))};
-			holdAction.setValueFunction = {arg argValue; 
-				argModule.setSynthValue(item.at(2), 
-					ControlSpec(1, item.at(4), step: 1).constrain(argValue)); 
+			holdAction.setValueFunction = {arg argValue;
+				argModule.setSynthValue(item.at(2),
+					ControlSpec(1, item.at(4), step: 1).constrain(argValue));
 				// run action function passing it value as arg
 				item.at(6).value(argValue);
 			};
@@ -659,8 +659,8 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// MIDIChannelSelector 
-		// N.B. no arguments 
+	// MIDIChannelSelector
+		// N.B. no arguments
 		if (item.at(0) == "MIDIChannelSelector", {
 			holdAction = TXAction.new(\valueAction, "Set Midi Chan Min");
 			holdAction.legacyType = 1;
@@ -678,8 +678,8 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// MIDINoteSelector 
-		// N.B. no arguments 
+	// MIDINoteSelector
+		// N.B. no arguments
 		if (item.at(0) == "MIDINoteSelector", {
 			holdAction = TXAction.new(\valueAction, "Set MidiNote Range Min");
 			holdAction.legacyType = 1;
@@ -697,8 +697,8 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// MIDIVelSelector 
-		// N.B. no arguments 
+	// MIDIVelSelector
+		// N.B. no arguments
 		if (item.at(0) == "MIDIVelSelector", {
 			holdAction = TXAction.new(\valueAction, "Set Midi Vel Range Min");
 			holdAction.legacyType = 1;
@@ -716,8 +716,8 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// MIDIListenCheckBox 
-		// N.B. no arguments 
+	// MIDIListenCheckBox
+		// N.B. no arguments
 		if (item.at(0) == "MIDIListenCheckBox", {
 			holdAction = TXAction.new(\valueAction, "Set MIDI Listen");
 			holdAction.legacyType = 1;
@@ -727,13 +727,13 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// MIDISoloControllerSelector 
-		// N.B. no arguments 
+	// MIDISoloControllerSelector
+		// N.B. no arguments
 		if (item.at(0) == "MIDISoloControllerSelector", {
 			holdAction = TXAction.new(\valueAction, "Set Controller No");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.midiMinControlNo};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				argModule.midiMinControlNo = ControlSpec(0, 127, step: 1).constrain(argValue);
 				argModule.midiMaxControlNo = ControlSpec(0, 127, step: 1).constrain(argValue);
 			};
@@ -742,13 +742,13 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// MIDISoloChannelSelector 
-		// N.B. no arguments 
+	// MIDISoloChannelSelector
+		// N.B. no arguments
 		if (item.at(0) == "MIDISoloChannelSelector", {
 			holdAction = TXAction.new(\valueAction, "Set Midi Channel");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.midiMinChannel};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				argModule.midiMinChannel = ControlSpec(0, 16, step: 1).constrain(argValue);
 				argModule.midiMaxChannel = ControlSpec(0, 16, step: 1).constrain(argValue);
 			};
@@ -757,15 +757,15 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// MIDIOutPortSelector 
-		// N.B. no arguments 
+	// MIDIOutPortSelector
+		// N.B. no arguments
 		if (item.at(0) == "MIDIOutPortSelector", {
 			holdAction = TXAction.new(\valueAction, "Set Midi Port");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.midiOutPort};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				argModule.midiOutPort = ControlSpec(0, 8, step: 1).constrain(argValue);
-				// activate port 
+				// activate port
 				argModule.midiPortActivate;
 			};
 			holdAction.guiObjectType = \number;
@@ -773,12 +773,12 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// PolyphonySelector 
-		// N.B. no arguments 
+	// PolyphonySelector
+		// N.B. no arguments
 		if (item.at(0) == "PolyphonySelector", {
 			holdAction = TXAction.new(\valueAction, "Set Polyphony");
 			holdAction.getValueFunction = {argModule.groupPolyphony};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				argModule.groupPolyphony = ControlSpec(1, 64, step: 1).constrain(argValue);
 			};
 			holdAction.guiObjectType = \number;
@@ -787,9 +787,9 @@ TXBuildActions {		// Action Builder
 		});
 
 	// TXStaticText
-		// arguments- index1 is row label, index2 is initial value (function or value), 
-		//	index3 is optional function to be valued with view as arg 
-		//	(e.g. for storing view to variable in module), 
+		// arguments- index1 is row label, index2 is initial value (function or value),
+		//	index3 is optional function to be valued with view as arg
+		//	(e.g. for storing view to variable in module),
 		// e.g. ["TXStaticText", "Record status", {recordStatus}, {arg view; recordStatusView = view}]
 		if (item.at(0) == "TXStaticText", {
 			holdAction = TXAction.new(\valueAction, "Get " ++ item.at(1));
@@ -801,7 +801,7 @@ TXBuildActions {		// Action Builder
 			holdAction.guiObjectType = \text;
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
-		
+
 	// TextViewDisplay
 		//  for displaying text only - not editable
 		// uneditable textview with default width set to viewWidth and height to 100
@@ -817,14 +817,14 @@ TXBuildActions {		// Action Builder
 			holdAction.guiObjectType = \text;
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
-		
+
 	// TXTextBox
-		// arguments- index1 is row label, index2 is synth arg name to be updated, 
+		// arguments- index1 is row label, index2 is synth arg name to be updated,
 		if (item.at(0) == "TXTextBox", {
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1) ? "Text");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(2))};
-			holdAction.setValueFunction = {arg argString; 
+			holdAction.setValueFunction = {arg argString;
 					// store current data to synthArgSpecs
 					argModule.setSynthArgSpec(item.at(2), argString);
 			};
@@ -833,11 +833,11 @@ TXBuildActions {		// Action Builder
 		});
 
 	// ModuleInfoTxt
-		// arguments- index1 is row label, index2 is synth arg name to be updated, 
+		// arguments- index1 is row label, index2 is synth arg name to be updated,
 		if (item.at(0) == "ModuleInfoTxt", {
 			holdAction = TXAction.new(\valueAction, "Set Module Comments");
 			holdAction.getValueFunction = {argModule.moduleInfoTxt};
-			holdAction.setValueFunction = {arg argString; 
+			holdAction.setValueFunction = {arg argString;
 					argModule.moduleInfoTxt = argString;
 			};
 			holdAction.guiObjectType = \textedit;
@@ -845,11 +845,11 @@ TXBuildActions {		// Action Builder
 		});
 
 	// TXNetAddress
-		// arguments- index1 is row label, index2 is synth arg name to be updated, 
+		// arguments- index1 is row label, index2 is synth arg name to be updated,
 		if (item.at(0) == "TXNetAddress", {
 			holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1));
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(2))};
-			holdAction.setValueFunction = {arg argString; 
+			holdAction.setValueFunction = {arg argString;
 					// store current data to synthArgSpecs
 					argModule.setSynthArgSpec(item.at(2), argString);
 			};
@@ -857,13 +857,13 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// OSCString 
-		// N.B. no arguments 
+	// OSCString
+		// N.B. no arguments
 		if (item.at(0) == "OSCString", {
 			holdAction = TXAction.new(\valueAction, "Set OSC String");
 			holdAction.legacyType = 1;
 			holdAction.getValueFunction = {argModule.getSynthArgSpec("OSCString")};
-			holdAction.setValueFunction = {arg argString; 
+			holdAction.setValueFunction = {arg argString;
 					// set current value in module
 					argModule.oscString = argString;
 					// store current data to synthArgSpecs
@@ -875,7 +875,7 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// TestNoteVals 
+	// TestNoteVals
 		// N.B. no arguments
 		if (item.at(0) == "TestNoteVals", {
 			// add commandAction to play note
@@ -884,9 +884,9 @@ TXBuildActions {		// Action Builder
 				argModule.createSynthNote(val1, val2, val3);
 			};
 			holdAction = TXAction.new(\commandAction, "Play note: midi note + velocity + gate time ", holdActionFunc);
-			holdAction.arrControlSpecFuncs = 
-				[\midi.asSpec.deepCopy.default_(60), 
-				\midi.asSpec.deepCopy.default_(100), 
+			holdAction.arrControlSpecFuncs =
+				[\midi.asSpec.deepCopy.default_(60),
+				\midi.asSpec.deepCopy.default_(100),
 				ControlSpec(0.1, 20, default: 1)
 			];
 			holdAction.guiObjectType = \number;
@@ -897,9 +897,9 @@ TXBuildActions {		// Action Builder
 				argModule.createSynthNote(val1, val2, 0);
 			};
 			holdAction = TXAction.new(\commandAction, "Set note on: midi note + velocity ", holdActionFunc);
-			holdAction.arrControlSpecFuncs = 
-				[\midi.asSpec.deepCopy.default_(60), 
-				\midi.asSpec.deepCopy.default_(100), 
+			holdAction.arrControlSpecFuncs =
+				[\midi.asSpec.deepCopy.default_(60),
+				\midi.asSpec.deepCopy.default_(100),
 			];
 			holdAction.guiObjectType = \number;
 			arrActionSpecs = arrActionSpecs.add(holdAction);
@@ -909,16 +909,16 @@ TXBuildActions {		// Action Builder
 				argModule.releaseSynthGate(val1);
 			};
 			holdAction = TXAction.new(\commandAction, "Set note off: midi note ", holdActionFunc);
-			holdAction.arrControlSpecFuncs = 
-				[\midi.asSpec.deepCopy.default_(60), 
+			holdAction.arrControlSpecFuncs =
+				[\midi.asSpec.deepCopy.default_(60),
 			];
 			holdAction.guiObjectType = \number;
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
 	// for Quartz Composer =======================================================================================
-	// TXQCArgGui 
-		// arguments: 
+	// TXQCArgGui
+		// arguments:
 		// 	index1 is text
 		//	index2 is synth arg name to be updated for the number
 		//	index3 is synth arg name to be updated for the active number setting
@@ -928,7 +928,7 @@ TXBuildActions {		// Action Builder
 		// e.g. ["TXQCArgGui", "Particle Hue", "p003", "i_active003", arrQCArgData, 4, setArgValFunc],
 		if (item.at(0) == "TXQCArgGui", {
 
-			// argDataType can be: [0.notPassed, 1.float, 2.integer, 3.string, 4.booleanNum(0/1), 5.colour(HSBA)], 
+			// argDataType can be: [0.notPassed, 1.float, 2.integer, 3.string, 4.booleanNum(0/1), 5.colour(HSBA)],
 
 		//	RUN UPDATE ARG FUNCTION WHEN SENDING DATA
 
@@ -949,7 +949,7 @@ TXBuildActions {		// Action Builder
 				holdNum = argModule.getSynthArgSpec(item.at(2));
 				ControlSpec(holdMin, holdMax).map(holdNum);
 			};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				var holdMin, holdMax, holdStep, holdControlSpec;
 				var holdArgDataTypeVal, holdNum;
 				holdArgDataTypeVal = item.at(4).at(item.at(5)).at(0);
@@ -960,9 +960,9 @@ TXBuildActions {		// Action Builder
 					holdControlSpec = ControlSpec(holdMin, holdMax);
 					item.at(4).at(item.at(5)).put(8, argValue);
 					argModule.setSynthValue(
-						item.at(2), 
+						item.at(2),
 						holdControlSpec.unmap(holdControlSpec.constrain(argValue))
-					); 
+					);
 				});
 			};
 			holdAction.arrControlSpecFuncs = [holdControlSpecFunc];
@@ -972,7 +972,7 @@ TXBuildActions {		// Action Builder
 			// add unmapped value action
 			holdAction = TXAction.new(\valueAction, "Set number " ++ item.at(1) ++ " unmapped");
 			holdAction.getValueFunction = {argModule.getSynthArgSpec(item.at(2))};
-			holdAction.setValueFunction = {arg argValue; 
+			holdAction.setValueFunction = {arg argValue;
 				var holdMin, holdMax, holdControlSpec;
 				var holdArgDataTypeVal;
 				holdArgDataTypeVal = item.at(4).at(item.at(5)).at(0);
@@ -1025,7 +1025,7 @@ TXBuildActions {		// Action Builder
 					//  update with new value
 					holdCurVal = holdOldVal + val1;
 					item.at(4).at(item.at(5)).put(8, holdCurVal);
-					argModule.setSynthValue(item.at(2), holdControlSpec.unmap(holdControlSpec.constrain(holdCurVal))); 
+					argModule.setSynthValue(item.at(2), holdControlSpec.unmap(holdControlSpec.constrain(holdCurVal)));
 				});
 			};
 			holdAction = TXAction.new(\commandAction, "Add to number " ++ item.at(1), holdActionFunc);
@@ -1049,7 +1049,7 @@ TXBuildActions {		// Action Builder
 					//  update with new value
 					holdCurVal = holdOldVal - val1;
 					item.at(4).at(item.at(5)).put(8, holdCurVal);
-					argModule.setSynthValue(item.at(2), holdControlSpec.unmap(holdControlSpec.constrain(holdCurVal))); 
+					argModule.setSynthValue(item.at(2), holdControlSpec.unmap(holdControlSpec.constrain(holdCurVal)));
 				});
 			};
 			holdAction = TXAction.new(\commandAction, "Subtract from number " ++ item.at(1), holdActionFunc);
@@ -1057,10 +1057,10 @@ TXBuildActions {		// Action Builder
 			holdAction.guiObjectType = \number;
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 
-			// add valueAction to set String 
+			// add valueAction to set String
 			holdAction = TXAction.new(\valueAction, "Set string " ++ item.at(1));
 			holdAction.getValueFunction = {item.at(4).at(item.at(5)).at(1)};
-			holdAction.setValueFunction = {arg argString; 
+			holdAction.setValueFunction = {arg argString;
 				var holdArgDataTypeVal;
 				holdArgDataTypeVal = item.at(4).at(item.at(5)).at(0);
 				// if correct arg data type
@@ -1090,10 +1090,10 @@ TXBuildActions {		// Action Builder
 			holdAction.guiObjectType = \number;
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
-		
+
 	//=========================================================================================================
-	
-	// RunPauseButton 
+
+	// RunPauseButton
 		if (item.at(0) == "RunPauseButton", {
 			// add commandAction to pause module
 			holdActionFunc = {
@@ -1119,7 +1119,7 @@ TXBuildActions {		// Action Builder
 			holdAction = TXAction.new(\commandAction, "Toggle Pause-Unpause module", holdActionFunc);
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
-		
+
 	// RebuildModuleButton
 		if (item.at(0) == "RebuildModuleButton", {
 			// add commandAction to rebuild module
@@ -1129,7 +1129,7 @@ TXBuildActions {		// Action Builder
 			holdAction = TXAction.new(\commandAction, "Rebuild module", holdActionFunc);
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
-		
+
 	// Add a final dummy commandAction that acts as a line separator in action popups
 		if (arrActionSpecs.size > actionCounter, {
 			holdActionFunc = {};
@@ -1137,10 +1137,10 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 		// set variable
-		actionCounter = arrActionSpecs.size; 
+		actionCounter = arrActionSpecs.size;
 
 	}); // end of argArray.do
-	
+
 	// return built array
 	^arrActionSpecs;
 }
