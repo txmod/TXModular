@@ -4,4 +4,7 @@
 // See the help file:   Adding_TX_Classes_To_SC3.rtf
 
 // To start the TX Modular system:
-TXSystem1.start; 
+TXSystem1.start;
+
+// To start the TX Modular system with default audio options:
+TXSystem1.start(showAudioOptions: false);

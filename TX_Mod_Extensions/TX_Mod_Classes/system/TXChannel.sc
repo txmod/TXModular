@@ -609,7 +609,7 @@ TXChannel : TXModuleBase { //  Channel module
 		newChanSourcePopup = PopUpMenu(column, guiWidth @ guiRowHeight)
 		.stringColor_(TXColor.white).background_(chanColour);
 		if (channelRate ==  "audio", {
-			newChanSourcePopup.items = ["change source to ..."] ++ arrAudioSourceBusNames;
+			newChanSourcePopup.items = ["... change source to..."] ++ arrAudioSourceBusNames;
 			newChanSourcePopup.action = { |view|
 				this.channelHighlight;
 				if (view.value > 0, {
@@ -622,7 +622,7 @@ TXChannel : TXModuleBase { //  Channel module
 				});
 			};
 			}, {
-				newChanSourcePopup.items = ["change source to ..."] ++ arrControlSourceBusNames;
+				newChanSourcePopup.items = ["... change source to..."] ++ arrControlSourceBusNames;
 				newChanSourcePopup.action = { |view|
 					this.channelHighlight;
 					if (view.value > 0, {
