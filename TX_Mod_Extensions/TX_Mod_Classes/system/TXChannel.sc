@@ -356,16 +356,18 @@ TXChannel : TXModuleBase { //  Channel module
 		holdColumn =  CompositeView(argParent,Rect(0,0, 74, 595));
 		holdColumn.background = TXColour.sysChannelAudio;
 		holdColumn.decorator = FlowLayout(holdColumn.bounds);
+		holdColumn.decorator.gap.y = 3;
 		[	 ["Channel", 4],
-			["Name", 1],
-			["Source", 1],
-			["Source Bus", 4],
-			["Insert 1", 4],
-			["Insert 2", 4],
-			["Insert 3", 4],
-			["Insert 4", 4],
-			["Insert 5", 4],
-			["Destination", 4],
+			["Name", 2],
+			["Source", 2],
+			[" ", 2],
+			["Source Bus", 3],
+			["Insert 1", 3],
+			["Insert 2", 3],
+			["Insert 3", 3],
+			["Insert 4", 3],
+			["Insert 5", 3],
+			["Destination", 3],
 			["Dest. Bus", 8],
 			["FX Send 1", 0],
 			["FX Send 2", 0],
@@ -522,6 +524,8 @@ TXChannel : TXModuleBase { //  Channel module
 				});
 		});
 		column.decorator = FlowLayout(column.bounds);
+		column.decorator.gap.y = 3;
+
 		// clear arrControls
 		arrControls = [];
 
@@ -592,19 +596,20 @@ TXChannel : TXModuleBase { //  Channel module
 
 		// go to next line
 		column.decorator.nextLine;
-		// set channel source width
-		channelSourceWidth = guiWidth-16;
 		// view - source
 		sourceName = sourceModule.instName;
-		viewSource = Button(column, channelSourceWidth @ guiRowHeight)
+		viewSource = Button(column, guiWidth@ guiRowHeight)
 		.states_([[sourceName, this.moduleStringColour(sourceModule), chanColour]])
 		.action_({this.channelHighlight;
 			if (sourceModule.notNil, { this.openModuleGui(sourceModule); });
 		});
-		newChanSourcePopup = PopUpMenu(column, 11 @ guiRowHeight)
+		// go to next line
+		column.decorator.nextLine;
+		// change source
+		newChanSourcePopup = PopUpMenu(column, guiWidth @ guiRowHeight)
 		.stringColor_(TXColor.white).background_(chanColour);
 		if (channelRate ==  "audio", {
-			newChanSourcePopup.items = ["Change channel source to..."] ++ arrAudioSourceBusNames;
+			newChanSourcePopup.items = ["change source to ..."] ++ arrAudioSourceBusNames;
 			newChanSourcePopup.action = { |view|
 				this.channelHighlight;
 				if (view.value > 0, {
@@ -617,7 +622,7 @@ TXChannel : TXModuleBase { //  Channel module
 				});
 			};
 			}, {
-				newChanSourcePopup.items = ["Change channel source to..."] ++ arrControlSourceBusNames;
+				newChanSourcePopup.items = ["change source to ..."] ++ arrControlSourceBusNames;
 				newChanSourcePopup.action = { |view|
 					this.channelHighlight;
 					if (view.value > 0, {
@@ -1153,7 +1158,7 @@ TXChannel : TXModuleBase { //  Channel module
 			});
 
 			column.decorator.nextLine;
-			column.decorator.shift(0, 10);
+			column.decorator.shift(0, 17);
 			// add volume buttons
 			[90, 70, 50, 30, 10].do({ arg item, i;
 				Button(column, 20 @ guiRowHeight)

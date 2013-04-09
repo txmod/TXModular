@@ -713,13 +713,13 @@ classvar showDelButtons;
 /* NEW CODE FOR CHANNEL SCROLLING */
 	channelsScrollView = ScrollView(parent, Rect(0, 0, 4 + (maxChannels * 151), 612))
 		.hasBorder_(false);
-	channelsScrollView.background = TXColor.sysModuleWindow;
+	channelsScrollView.background = TXColor.sysMainWindow;
 	if (GUI.current.asSymbol == \cocoa, {
 		channelsScrollView.autoScrolls_(false);
 	});
 	channelsScrollView.action = {arg view; channelsVisibleOrigin = view.visibleOrigin; };
 	channelBox = CompositeView(channelsScrollView, Rect(0, 0, 4 + ((this.arrShowChannels.size+3) * 151), 595));
-	channelBox.background = TXColor.sysModuleWindow;
+	channelBox.background = TXColor.sysMainWindow;
 	channelBox.decorator = FlowLayout(channelBox.bounds);
 	channelBox.decorator.margin.x = 0;
 	channelBox.decorator.margin.y = 0;
