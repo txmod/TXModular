@@ -13,7 +13,7 @@ TXChannelRouting {	// Channel Routing
 	classvar <>displayChannel; 		// shows current channel to be highlighted
 	classvar <>showModuleBox;		// whether module box is shown
 	classvar <>showChannelType = "all";
-	classvar popNewModuleInd;
+	classvar popNewModuleInd = 0;
 	classvar newModuleCopies;
 	classvar popNewChannelInd;
 	classvar newChannelCopies;
@@ -304,12 +304,13 @@ TXChannelRouting {	// Channel Routing
 	////////////////////////////////////////////////////////////////////////////////////
 
 	*makeGui{ arg parent;
-		var popNewModule, btnAddModule, chkAutoOpen;
+		var popNewModule, popNewModuleCats, btnAddModule, chkAutoOpen;
 		var popNewChannel, btnAddChannel, popDisplayMod;
 		var popNewModuleCopies, popNewChannelCopies;
-		var popWidthOption, popDisplayOption, popSortOption, btnSortChannels, popMultiWindow, btnHideModule;
+		var popWidthOption, popDisplayOption, popSortOption, btnSortChannels;
+		var blankView, popMultiWindow, btnHideModule;
 		var maxChannels, totalChannels, arrSelectedChannels;
-		var arrAllPossSourceActClasses, arrAllPossSourceActNames, arrAllSourceModules, arrAllSourceModNames;
+		var arrAllPossSourceActClasses, arrAllPossSourceActNames, arrAllPossSourceCats, arrAllSourceModules, arrAllSourceModNames;
 		var arrAllSourceModsBusses, arrAllSourceModBusNames;
 		var channelsScrollView;
 		var arrAllSourceActionModules, arrAllSourceActionModNames;
@@ -317,51 +318,17 @@ TXChannelRouting {	// Channel Routing
 		var modListBoxWidth, plusMinusString, plusMinusActionFunc, holdView;
 		var modulesScrollView, modulesBox, btnDelete;
 		var numStartChannel, channelBox, colourBox1, colourBox2;
+		var holdSet, holdText, holdIndex;
 
 		//	initialise variables
 		arrControls = [];
 		startChannel = startChannel.min(this.arrShowChannels.size-1).max(0);
 
-		/* // OLDER CODE:
 		// create array of names of all possible source modules.
-		arrAllPossSourceActClasses = system.arrAllPossModules
-		.select({ arg item, i;
-		(item.moduleType == "source")
-		or: (item.moduleType == "groupsource")
-		or: (item.moduleType == "groupaction")
-		or: (item.moduleType == "action");
-		});  // only show source, groupsource, groupaction or action modules
-		arrAllPossSourceActNames = arrAllPossSourceActClasses.collect({ arg item, i;
-		var holdType;
-		if (item.moduleType == "action", {
-		holdType = "action";
-		},{
-		if (item.moduleType == "groupaction", {
-		holdType = "action";
-		},{
-		holdType = item.moduleRate;
-		});
-		});
-		item.defaultName + " ["++ holdType ++ "]";
-		});
-		*/
-		// create array of names of all possible source modules.
-		arrAllPossSourceActClasses =
-		system.dataBank.arrSourceModulesByCategory.collect({arg item; item[1]});
-		arrAllPossSourceActNames =  system.dataBank.arrSourceModulesByCategory.collect({
-			arg item;
-			var holdType;
-			if (item[1].notNil, {
-				if (item[1].moduleType == "action", {
-					holdType = " [action]";
-					},{
-						holdType = " [" ++ item[1].moduleRate ++ "]";
-				});
-				},{
-					holdType ="";
-			});
-			item[0] ++ holdType;
-		});
+		arrAllPossSourceActClasses = system.dataBank.arrSourceModulesByCategory.collect({arg item; item[2]});
+		arrAllPossSourceActNames = system.dataBank.arrSourceModulesByCategory.collect({arg item; item[1]});
+		holdSet = system.dataBank.arrSourceModulesByCategory.collect({arg item; item[0]}).asSet;
+		arrAllPossSourceCats = SortedList[].addAll(holdSet).asArray;
 
 		// create array of names of all system's source modules.
 		arrAllSourceModules = 	system.arrSystemModules
@@ -401,21 +368,46 @@ TXChannelRouting {	// Channel Routing
 		);
 		arrAllSourceModBusNames = arrAllSourceModsBusses.collect({arg item, i;  item.instName; });
 
-		//	// spacing
-		//	parent.decorator.shift(0, 5);
-
 		// create colourBox1 to display selected window
-		colourBox1 = CompositeView(parent, 436 @ 32).background_(TXColor.sysLabelBackground);
+		colourBox1 = CompositeView(parent, 560 @ 30).background_(TXColor.sysLabelBackground);
 		colourBox1.decorator = FlowLayout(colourBox1.bounds);
+
+		// popup - new module categories
+		popNewModuleCats = PopUpMenu(colourBox1, 170 @ 24).background_(TXColor.white)
+		.stringColor_(TXColor.sysGuiCol1);
+		popNewModuleCats.items = ["Select category ..."] ++ arrAllPossSourceCats;
+		popNewModuleCats.action = {|view|
+			if (view.value > 0, {
+				holdText = arrAllPossSourceCats[view.value-1];
+				popNewModuleInd = holdIndex = -1;
+				while({popNewModuleInd == -1}, {
+					holdIndex = holdIndex + 1;
+					if (system.dataBank.arrSourceModulesByCategory[holdIndex][0] == holdText, {
+						popNewModuleInd = holdIndex + 1;
+					});
+				});
+				if (popNewModuleInd == -1, {popNewModuleInd = 0});
+				// store current data
+				popNewModule.value = popNewModuleInd;
+			});
+		};
+		holdText = system.dataBank.arrSourceModulesByCategory[popNewModuleInd];
+		popNewModuleCats.value =  arrAllPossSourceCats.indexOfEqual(holdText) ? 0;
+		arrControls = arrControls.add(popNewModuleCats);
+
 		// popup - new module
-		popNewModule = PopUpMenu(colourBox1, 190 @ 24).background_(TXColor.white)
+		popNewModule = PopUpMenu(colourBox1, 140 @ 24).background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
 		popNewModule.items = ["Select module ..."] ++ arrAllPossSourceActNames;
 		popNewModule.action = {|view|
 			// store current data
 			popNewModuleInd = view.value;
+			if (popNewModuleInd > 0, {
+				holdText = system.dataBank.arrSourceModulesByCategory[popNewModuleInd-1][0];
+				popNewModuleCats.value = 1 + arrAllPossSourceCats.indexOfEqual(holdText) ? 0;
+			});
 		};
-		popNewModule.value = popNewModuleInd ? 0;
+		popNewModule.value = popNewModuleInd;
 		arrControls = arrControls.add(popNewModule);
 
 		// popup - new module copies
@@ -494,22 +486,22 @@ TXChannelRouting {	// Channel Routing
 		/*  REMOVED FOR NOW
 		// button - hide module box
 		if (showModuleBox == true, {
-			btnHideModule = Button(parent, 134 @ 32);
-			btnHideModule.states = [["Hide module box", TXColor.white, TXColor.sysGuiCol2]];
-			btnHideModule.action = {
-				if ( showModuleBox == true, {
-					// reset variables
-					showModuleBox = false;
-					displayModule = nil;
-					system.addHistoryEvent;
-					// update view
-					system.showView;
-				});
-			};
-			arrControls = arrControls.add(btnHideModule);
-			}, {
-				// spacer
-				StaticText(parent, 134 @ 24);
+		btnHideModule = Button(parent, 134 @ 32);
+		btnHideModule.states = [["Hide module box", TXColor.white, TXColor.sysGuiCol2]];
+		btnHideModule.action = {
+		if ( showModuleBox == true, {
+		// reset variables
+		showModuleBox = false;
+		displayModule = nil;
+		system.addHistoryEvent;
+		// update view
+		system.showView;
+		});
+		};
+		arrControls = arrControls.add(btnHideModule);
+		}, {
+		// spacer
+		StaticText(parent, 134 @ 24);
 		});
 		*/
 
@@ -696,13 +688,21 @@ TXChannelRouting {	// Channel Routing
 		parent.decorator.shift(10, 0);
 
 		// display module gui
+		if (system.arrSystemModules.size == 0, {showModuleBox = false});
 		if ( (multiWindow == false) and: (showModuleBox == true), {
 			if ( displayModule.notNil, {
 				// display module
 				displayModule.openGui(parent);
-				},{
-					TextView(parent,Rect(0,0, 500, 595))
+			},{
+				blankView = CompositeView(parent,Rect(0,0, 500, 595))
 					.background_(TXColor.sysModuleWindow);
+					Button(blankView, Rect(4, 4, 140, 20))
+				.states_([
+					["Hide Module Box", TXColor.white, TXColor.sysGuiCol1]
+				])
+				.action_({|view|
+					TXChannelRouting.hideModuleBox;
+				})
 			});
 			// decorator shift
 			parent.decorator.shift(10, 0);

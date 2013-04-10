@@ -1,8 +1,8 @@
 // Copyright (C) 2010  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
-		
+
 TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots for saving curves
 	var <>labelView, <>multiSliderView, <>displaySlider, <>action, <value, <arrSlotData, linearArray, userView;
-	
+
 	*new { arg window, dimensions, label, action, initVal, initAction=false, labelWidth=80, initSlotVals, numSlots, arrSlotFreqs;
 		^super.new.init(window, dimensions, label, action, initVal, initAction, labelWidth, initSlotVals, numSlots, arrSlotFreqs);
 	}
@@ -10,27 +10,27 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 		var curveWidth;
 
 		linearArray = Array.fill(numSlots, 0.5);
-		
+
 		labelView = StaticText(window, labelWidth @ 20);
 		labelView.string = label;
 		labelView.align = \right;
-		
+
 		initVal = initVal ? linearArray;
 		initSlotVals = initSlotVals ? linearArray.dup(5);
 		arrSlotData = initSlotVals;
 		action = argAction;
 		curveWidth = (numSlots * 9);
-		
+
 		// create grid
 		userView = UserView(window, curveWidth @ 200);
 //		userView.background_(TXColor.sysModuleWindow);
-		userView.drawFunc = {	
+		userView.drawFunc = {
 			if (arrSlotFreqs.notNil, {
-				arrSlotFreqs.do({arg item, i; 
+				arrSlotFreqs.do({arg item, i;
 					var fromLeft;
 					Pen.strokeColor = Color.white;
 					Pen.fillColor = Color.white;
-			Ê Ê		Pen.font = Font( "Helvetica", 10 );
+					Pen.font = Font( "Helvetica", 10 );
 					if ( (i % 4) == 0, {
 						fromLeft = (i * 9) + 5;
 						Pen.line(fromLeft @ 0, fromLeft @ 200);
@@ -40,7 +40,7 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 				});
 			});
 		};
-		// decorator shift 
+		// decorator shift
 		if (window.class == Window, {
 			window.view.decorator.shift(0-curveWidth-4, 0);
 		}, {
@@ -53,6 +53,7 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 		multiSliderView.indexThumbSize_(8);
 		multiSliderView.drawLines_(true);
 		multiSliderView.drawRects_(true);
+		multiSliderView.isFilled_(true);
 		multiSliderView.action = {
 			value = multiSliderView.value;
 			action.value(this);
@@ -64,7 +65,7 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 		.action_({
 			this.reset;
 		});
-		// decorator shift 
+		// decorator shift
 		if (window.class == Window, {
 			window.view.decorator.shift(-54,50);
 		}, {
@@ -82,14 +83,14 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 			.action_({
 				this.storeSlot(i);
 			});
-			// decorator shift 
+			// decorator shift
 			if (window.class == Window, {
 				window.view.decorator.shift(-108,30);
 			}, {
 				window.decorator.shift(-108,30);
 			});
 		});
-		// decorator shift 
+		// decorator shift
 		if (window.class == Window, {
 			window.view.decorator.shift(0,-305);
 			window.view.decorator.nextLine;
@@ -97,11 +98,11 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 			window.decorator.shift(0,-305);
 			window.decorator.nextLine;
 		});
-		
-		// middle line 
+
+		// middle line
 		StaticText(window, 80 @ 2).background_(TXColor.sysGuiCol1);
 
-		// decorator shift 
+		// decorator shift
 		if (window.class == Window, {
 			window.view.decorator.nextLine;
 			window.view.decorator.shift(0,100);
@@ -109,12 +110,12 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 			window.decorator.nextLine;
 			window.decorator.shift(0,100);
 		});
-		
+
 		// display freq slider
 		if (arrSlotFreqs.notNil, {
-			displaySlider = EZSlider(window, (curveWidth + labelWidth + 4 + 64 ) @ 20, 
-				"Display Freq", \freq.asSpec.minval_(arrSlotFreqs.sort.first).maxval_(arrSlotFreqs.sort.last), 
-				{displaySlider.value = displaySlider.value.nearestInList(arrSlotFreqs)}, 
+			displaySlider = EZSlider(window, (curveWidth + labelWidth + 4 + 64 ) @ 20,
+				"Display Freq", \freq.asSpec.minval_(arrSlotFreqs.sort.first).maxval_(arrSlotFreqs.sort.last),
+				{displaySlider.value = displaySlider.value.nearestInList(arrSlotFreqs)},
 				0, false, labelWidth, 60
 			);
 			displaySlider.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey6);
@@ -130,12 +131,12 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 			multiSliderView.value = value;
 		});
 	}
-	value_ { arg argValue; 
-		multiSliderView.value = argValue; 
+	value_ { arg argValue;
+		multiSliderView.value = argValue;
 		value = multiSliderView.value;
 	}
-	valueAction_ { arg argValue; 
-		multiSliderView.value = argValue; 
+	valueAction_ { arg argValue;
+		multiSliderView.value = argValue;
 		value = multiSliderView.value;
 		action.value(this);
 	}
@@ -153,10 +154,10 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 			multiSliderView.value = value;
 		};
 	}
-	storeSlot { arg num; 
+	storeSlot { arg num;
 		arrSlotData.put(num, this.value);
 	}
-	loadSlot { arg num; 
+	loadSlot { arg num;
 		this.value = arrSlotData.at(num);
 	}
 }
