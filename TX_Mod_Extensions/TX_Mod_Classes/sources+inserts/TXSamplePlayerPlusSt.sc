@@ -4,18 +4,18 @@ TXSamplePlayerPlusSt : TXModuleBase {
 
 // Note: TXSamplePlayerPlusSt is different to TXSamplePlayerPlus because it is does not have extra loop type "Single-Waveform"
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<arrBufferSpecs;
 	classvar	<guiWidth=500;
-	
+
 	var	timeSpec;
 	var	arrFreqRangePresets;
 	var	arrMMSourceNames, arrMMDestNames, arrMMScaleNames;
@@ -34,12 +34,12 @@ TXSamplePlayerPlusSt : TXModuleBase {
 	var <>testMIDITime = 1;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "Sample Player+ St";
 	moduleRate = "audio";
 	moduleType = "groupsource";
-	arrCtlSCInBusSpecs = [ 		
+	arrCtlSCInBusSpecs = [
 		["Sample Start", 1, "modStart", 0],
 		["Sample End", 1, "modEnd", 0],
 		["Sample Reverse", 1, "modReverse", 0],
@@ -65,28 +65,28 @@ TXSamplePlayerPlusSt : TXModuleBase {
 		["LFO 2 Fade-in", 1, "modFadeInLFO2", 0],
  		["Slider 1", 1, "modSlider1", 0],
  		["Slider 2", 1, "modSlider2", 0],
-	];	
+	];
 	noOutChannels = 2;
-	arrOutBusSpecs = [ 
-		["Out L + R", [0,1]], 
-		["Out L only", [0]], 
-		["Out R only", [1]] 
-	];	
+	arrOutBusSpecs = [
+		["Out L + R", [0,1]],
+		["Out L only", [0]],
+		["Out R only", [1]]
+	];
 	arrBufferSpecs = [ ["bufnumSampleStereo", 2048, 2],  ["bufnumSampleMono", 2048, 1] ];
 } // end of method initClass
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 init {arg argInstName;
 	//	set  class specific instance variables
 	displayOption = "showSample";
 	timeSpec = ControlSpec(0.001, 20);
 	arrFreqRangePresets = TXFilter.arrFreqRanges;
-	arrMMSourceNames = ["Set Source...", "Note", "Velocity", "Amp Env", "Env 2", "LFO 1", 
+	arrMMSourceNames = ["Set Source...", "Note", "Velocity", "Amp Env", "Env 2", "LFO 1",
 		"LFO 2", "Random val 1", "Random val 2", "Offset val", "Slider 1", "Slider 2"];
-	arrMMDestNames = ["Set Dest...", "Sample start", "Sample end", "Pitchbend", "Level", 
+	arrMMDestNames = ["Set Dest...", "Sample start", "Sample end", "Pitchbend", "Level",
 		"Filter Freq", "Filter Res", "Filter Sat"];
 	arrMMScaleNames = ["...", "Note", "Velocity", "Slider 1", "Slider 2"];
 	arrSynthArgSpecs = [
@@ -236,17 +236,17 @@ init {arg argInstName;
 		["modFadeInLFO2", 0, defLagTime],
  		["modSlider1", 0, defLagTime],
  		["modSlider2", 0, defLagTime],
-  	]; 
+  	];
   	// create options
 	arrOptions = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 	arrOptionData = [
-		[	["Single shot", 
-				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end; 
+		[	["Single shot",
+				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end;
 					var output;
 					if (this.getSynthArgSpec("sampleIsStereo") == 1, {
-						output = BufRd.ar(2, bufnumSampleStereo, 
+						output = BufRd.ar(2, bufnumSampleStereo,
 							(Sweep.ar(1, outRate * BufSampleRate.kr(bufnumSampleStereo))
-								+ (((start * outRate.sign.max(0)) + (end * outRate.sign.neg.max(0))) 
+								+ (((start * outRate.sign.max(0)) + (end * outRate.sign.neg.max(0)))
 									* BufFrames.kr(bufnumSampleStereo))
 							)
 							.min(end * BufFrames.kr(bufnumSampleStereo))
@@ -254,9 +254,9 @@ init {arg argInstName;
 							,0
 						);
 					}, {
-						output = BufRd.ar(1, bufnumSampleMono, 
+						output = BufRd.ar(1, bufnumSampleMono,
 							(Sweep.ar(1, outRate * BufSampleRate.kr(bufnumSampleMono))
-								+ (((start * outRate.sign.max(0)) + (end * outRate.sign.neg.max(0))) 
+								+ (((start * outRate.sign.max(0)) + (end * outRate.sign.neg.max(0)))
 									* BufFrames.kr(bufnumSampleMono))
 							)
 							.min(end * BufFrames.kr(bufnumSampleMono))
@@ -267,20 +267,20 @@ init {arg argInstName;
 					output;
 				}
 			],
-			["Looped", 
-				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end; 
+			["Looped",
+				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end;
 					var output;
 					if (this.getSynthArgSpec("sampleIsStereo") == 1, {
-						output = BufRd.ar(2, bufnumSampleStereo, 
-							Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleStereo), 
-								start * BufFrames.kr(bufnumSampleStereo), 
+						output = BufRd.ar(2, bufnumSampleStereo,
+							Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleStereo),
+								start * BufFrames.kr(bufnumSampleStereo),
 								end * BufFrames.kr(bufnumSampleStereo)
 							)
 						);
 					}, {
-						output = BufRd.ar(1, bufnumSampleMono, 
-							Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleMono), 
-								start * BufFrames.kr(bufnumSampleMono), 
+						output = BufRd.ar(1, bufnumSampleMono,
+							Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleMono),
+								start * BufFrames.kr(bufnumSampleMono),
 								end * BufFrames.kr(bufnumSampleMono)
 							)
 						).dup;
@@ -288,8 +288,8 @@ init {arg argInstName;
 					output;
 				}
 			],
-			["X-Fade Looped", 
-				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end; 
+			["X-Fade Looped",
+				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end;
 					var startFrame, endFrame, offset, bufdur, output;
 					if (this.getSynthArgSpec("sampleIsStereo") == 1, {
 						startFrame = start * BufFrames.kr(bufnumSampleStereo);
@@ -297,7 +297,7 @@ init {arg argInstName;
 						offset = (endFrame - startFrame) * 0.5;
 						bufdur = abs(end-start) * BufDur.kr(bufnumSampleStereo);
 						output = Mix.new(
-							BufRd.ar(2, bufnumSampleStereo, 
+							BufRd.ar(2, bufnumSampleStereo,
 								(Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleStereo), startFrame, endFrame)
 									+ [0, offset]
 								).wrap(startFrame, endFrame);
@@ -309,7 +309,7 @@ init {arg argInstName;
 						offset = (endFrame - startFrame) * 0.5;
 						bufdur = abs(end-start) * BufDur.kr(bufnumSampleMono);
 						output = Mix.new(
-							BufRd.ar(1, bufnumSampleMono, 
+							BufRd.ar(1, bufnumSampleMono,
 								(Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleMono), startFrame, endFrame)
 									+ [0, offset]
 								).wrap(startFrame, endFrame);
@@ -346,74 +346,74 @@ init {arg argInstName;
 		TXLFO.arrLFOOutputRanges,
 		[
 			["Off", { 0; }],
-			["On", {arg envFunction, del, att, dec, sus, sustime, rel, envCurve, gate;  
+			["On", {arg envFunction, del, att, dec, sus, sustime, rel, envCurve, gate;
 				EnvGen.ar(
 					envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
-					gate, 
+					gate,
 					doneAction: 0
 				);
 			}],
 		],
 		TXLevelControl.arrOptionData,
 	];
-	synthDefFunc = { 
-		arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax, 
-			bufnumSampleStereo, bufnumSampleMono, sampleIsStereo, 
-			bankNo, sampleNo, sampleFreq, start, end, reverse, level, 
-			envtime=0, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain, 
+	synthDefFunc = {
+		arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			bufnumSampleStereo, bufnumSampleMono, sampleIsStereo,
+			bankNo, sampleNo, sampleFreq, start, end, reverse, level,
+			envtime=0, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain,
 			sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax,
-			envtime2=0, delay2, attack2, attackMin2, attackMax2, decay2, decayMin2, decayMax2, sustain2, 
-			sustainTime2, sustainTimeMin2, sustainTimeMax2, release2, releaseMin2, releaseMax2, 
-			intKey, 
-			filterFreq, filterFreqMin, filterFreqMax, filterRes, filterResMin, filterResMax, 
+			envtime2=0, delay2, attack2, attackMin2, attackMax2, decay2, decayMin2, decayMax2, sustain2,
+			sustainTime2, sustainTimeMin2, sustainTimeMax2, release2, releaseMin2, releaseMax2,
+			intKey,
+			filterFreq, filterFreqMin, filterFreqMax, filterRes, filterResMin, filterResMax,
 			filterSat, filterSatMin, filterSatMax, wetDryMix,
 			freqLFO1, freqLFO1Min, freqLFO1Max, lfo1FadeIn, lfo1FadeInMin, lfo1FadeInMax,
 			freqLFO2, freqLFO2Min, freqLFO2Max,  lfo2FadeIn, lfo2FadeInMin, lfo2FadeInMax,
 			velModMin, velModMax,noteModMin, noteModMax, slider1, slider2,
-			i_Source0, i_Dest0, mmValue0, i_Scale0, i_Source1, i_Dest1, mmValue1, i_Scale1, 
-			i_Source2, i_Dest2, mmValue2, i_Scale2, 
-			i_Source3, i_Dest3, mmValue3, i_Scale3, i_Source4, i_Dest4, mmValue4, i_Scale4, 
-			i_Source5, i_Dest5, mmValue5, i_Scale5, 
-			i_Source6, i_Dest6, mmValue6, i_Scale6, i_Source7, i_Dest7, mmValue7, i_Scale7, 
-			i_Source8, i_Dest8, mmValue8, i_Scale8, i_Source9, i_Dest9, mmValue9, i_Scale9, 
-			modStart, modEnd, modReverse, modPitchbend, modDelay, modAttack, modDecay, 
+			i_Source0, i_Dest0, mmValue0, i_Scale0, i_Source1, i_Dest1, mmValue1, i_Scale1,
+			i_Source2, i_Dest2, mmValue2, i_Scale2,
+			i_Source3, i_Dest3, mmValue3, i_Scale3, i_Source4, i_Dest4, mmValue4, i_Scale4,
+			i_Source5, i_Dest5, mmValue5, i_Scale5,
+			i_Source6, i_Dest6, mmValue6, i_Scale6, i_Source7, i_Dest7, mmValue7, i_Scale7,
+			i_Source8, i_Dest8, mmValue8, i_Scale8, i_Source9, i_Dest9, mmValue9, i_Scale9,
+			modStart, modEnd, modReverse, modPitchbend, modDelay, modAttack, modDecay,
 			modSustain, modSustainTime, modRelease,
-			modDelay2, modAttack2, modDecay2, modSustain2, modSustainTime2, modRelease2, 
+			modDelay2, modAttack2, modDecay2, modSustain2, modSustainTime2, modRelease2,
 			modFilterFreq, modFilterRes, modFilterSat, modWetDryMix,
 			modFreqLFO1, modFadeInLFO1, modFreqLFO2, modFadeInLFO2, modSlider1, modSlider2;
-		var 	outEnv, outEnv2, envFunction, envFunction2, envCurve, envCurve2, envGenFunction2, 
-			outFreq, intonationFunc, pbend, outRate, outFunction, outSample, 
-			sStart, sEnd, rev, del, att, dec, sus, sustime, rel, 
-			del2, att2, dec2, sus2, sustime2, rel2, 
-			filterProcessFunction, filterFunction, outFilter, levelControlFunc, 
-			lfo1Function, outLFO1, lfo2Function, outLFO2, lfo1FadeInTime, lfo1FadeInCurve, 
-			lfo2FadeInTime, lfo2FadeInCurve, randomValue1, randomValue2, 
-			timeControlSpec, sumVelocity, sourceIndexArray, destIndexArray, scaleIndexArray, 
-			sourceArray, destArray, mmValueArray, 
+		var 	outEnv, outEnv2, envFunction, envFunction2, envCurve, envCurve2, envGenFunction2,
+			outFreq, intonationFunc, pbend, outRate, outFunction, outSample,
+			sStart, sEnd, rev, del, att, dec, sus, sustime, rel,
+			del2, att2, dec2, sus2, sustime2, rel2,
+			filterProcessFunction, filterFunction, outFilter, levelControlFunc,
+			lfo1Function, outLFO1, lfo2Function, outLFO2, lfo1FadeInTime, lfo1FadeInCurve,
+			lfo2FadeInTime, lfo2FadeInCurve, randomValue1, randomValue2,
+			timeControlSpec, sumVelocity, sourceIndexArray, destIndexArray, scaleIndexArray,
+			sourceArray, destArray, mmValueArray,
 			scaleArray, sumSlider1, sumSlider2,
-			dummyVal, mmPbend = 0, mmLevel = 0, mmFilterFreq = 0, mmFilterRes = 0, mmFilterSat = 0, 
+			dummyVal, mmPbend = 0, mmLevel = 0, mmFilterFreq = 0, mmFilterRes = 0, mmFilterSat = 0,
 			mmSampleStart = 0, mmSampleEnd = 0, arrAllDestModulations, noteModulation, velModulation;
-		
+
 		rev = (reverse + modReverse).max(0).min(1);
 		del = (delay + modDelay).max(0).min(1);
 		att = (attackMin + ((attackMax - attackMin) * (attack + modAttack))).max(0.001).min(20);
 		dec = (decayMin + ((decayMax - decayMin) * (decay + modDecay))).max(0.001).min(20);
 		sus = (sustain + modSustain).max(0).min(1);
-		sustime = (sustainTimeMin + 
+		sustime = (sustainTimeMin +
 			((sustainTimeMax - sustainTimeMin) * (sustainTime + modSustainTime))).max(0.001).min(20);
 		rel = (releaseMin + ((releaseMax - releaseMin) * (release + modRelease))).max(0.001).min(20);
 		envCurve = this.getSynthOption(2);
 		envFunction = this.getSynthOption(3);
 		outEnv = EnvGen.ar(
 			envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
-			gate, 
+			gate,
 			doneAction: 2
 		);
 		del2 = (delay2 + modDelay2).max(0).min(1);
 		att2 = (attackMin2 + ((attackMax2 - attackMin2) * (attack2 + modAttack2))).max(0.001).min(20);
 		dec2 = (decayMin2 + ((decayMax2 - decayMin2) * (decay2 + modDecay2))).max(0.001).min(20);
 		sus2 = (sustain2 + modSustain2).max(0).min(1);
-		sustime2 = (sustainTimeMin2 + 
+		sustime2 = (sustainTimeMin2 +
 			((sustainTimeMax2 - sustainTimeMin2) * (sustainTime2 + modSustainTime2))).max(0.001).min(20);
 		rel2 = (releaseMin2 + ((releaseMax2 - releaseMin2) * (release2 + modRelease2))).max(0.001).min(20);
 		envCurve2 = this.getSynthOption(4);
@@ -421,42 +421,42 @@ init {arg argInstName;
 		envGenFunction2 = this.getSynthOption(14);
 		outEnv2 = envGenFunction2.value(envFunction2, del2, att2, dec2, sus2, sustime2, rel2, envCurve2, gate);
 
-		lfo1FadeInTime = (lfo1FadeInMin + 
+		lfo1FadeInTime = (lfo1FadeInMin +
 			((lfo1FadeInMax - lfo1FadeInMin) * (lfo1FadeIn + modFadeInLFO1))).max(0.001).min(20);
-		lfo1FadeInCurve = XLine.kr(0.01, 1, lfo1FadeInTime); 
+		lfo1FadeInCurve = XLine.kr(0.01, 1, lfo1FadeInTime);
 		lfo1Function =  this.getSynthOption(8);
-		outLFO1 = lfo1FadeInCurve * 
-			lfo1Function.value(this.getSynthOption(9), this.getSynthOption(10), 
+		outLFO1 = lfo1FadeInCurve *
+			lfo1Function.value(this.getSynthOption(9), this.getSynthOption(10),
 				freqLFO1, freqLFO1Min, freqLFO1Max, modFreqLFO1);
 
-		lfo2FadeInTime = (lfo2FadeInMin + 
+		lfo2FadeInTime = (lfo2FadeInMin +
 			((lfo2FadeInMax - lfo2FadeInMin) * (lfo2FadeIn + modFadeInLFO2))).max(0.001).min(20);
 		lfo2FadeInCurve = XLine.kr(0.01, 1, lfo2FadeInTime);
 		lfo2Function =  this.getSynthOption(11);
-		outLFO2 = lfo2FadeInCurve * 
-			lfo2Function.value(this.getSynthOption(12), this.getSynthOption(13), 
+		outLFO2 = lfo2FadeInCurve *
+			lfo2Function.value(this.getSynthOption(12), this.getSynthOption(13),
 				freqLFO2, freqLFO2Min, freqLFO2Max, modFreqLFO2);
-		
+
 		sumSlider1 = (slider1 + modSlider1).max(0).min(1);
 		sumSlider2 = (slider2 + modSlider2).max(0).min(1);
 
 		randomValue1 = Rand(0, 1);
 		randomValue2 = Rand(0, 1);
-		
+
 		noteModulation = note.max(noteModMin).min(noteModMax) -  noteModMin / (noteModMax - noteModMin);
 		velModulation = velocity.max(velModMin).min(velModMax) - velModMin / (velModMax - velModMin);
 
-		sourceArray = [0, noteModulation, velModulation, outEnv, outEnv2, outLFO1, outLFO2, 
+		sourceArray = [0, noteModulation, velModulation, outEnv, outEnv2, outLFO1, outLFO2,
 			randomValue1, randomValue2, 1, sumSlider1, sumSlider2];
 		destArray = [dummyVal, mmSampleStart, mmSampleEnd, mmPbend, mmLevel, mmFilterFreq, mmFilterRes, mmFilterSat];
 		scaleArray = [1, noteModulation, velModulation, sumSlider1, sumSlider2];
 		sourceIndexArray = ["i_Source0", "i_Source1", "i_Source2", "i_Source3", "i_Source4", "i_Source5",
 			"i_Source6", "i_Source7", "i_Source8", "i_Source9"]
 			.collect({arg item, i; this.getSynthArgSpec(item);});
-		destIndexArray = ["i_Dest0", "i_Dest1", "i_Dest2", "i_Dest3", "i_Dest4", "i_Dest5", "i_Dest6", "i_Dest7", 
+		destIndexArray = ["i_Dest0", "i_Dest1", "i_Dest2", "i_Dest3", "i_Dest4", "i_Dest5", "i_Dest6", "i_Dest7",
 			"i_Dest8", "i_Dest9"]
 			.collect({arg item, i; this.getSynthArgSpec(item);});
-		mmValueArray = [mmValue0, mmValue1, mmValue2, mmValue3, mmValue4, mmValue5, mmValue6, mmValue7, 
+		mmValueArray = [mmValue0, mmValue1, mmValue2, mmValue3, mmValue4, mmValue5, mmValue6, mmValue7,
 			mmValue8, mmValue9];
 		scaleIndexArray = ["i_Scale0", "i_Scale1", "i_Scale2", "i_Scale3", "i_Scale4", "i_Scale5",
 			"i_Scale6", "i_Scale7", "i_Scale8", "i_Scale9"]
@@ -466,13 +466,13 @@ init {arg argInstName;
 		arrAllDestModulations = destArray.collect ({arg item, i;
 				var arrModulations;
 				arrModulations = [];
-				sourceIndexArray.do({arg itemSourceInd, j; 
+				sourceIndexArray.do({arg itemSourceInd, j;
 					if (destIndexArray[j] == i, {
 						arrModulations = arrModulations.add(sourceArray[itemSourceInd] * (mmValueArray[j] / 100)
-							 * scaleArray[scaleIndexArray[j].asInteger]  
+							 * scaleArray[scaleIndexArray[j].asInteger]
 					)});
 				});
-				(arrModulations ?  [0]).sum ;   
+				(arrModulations ?  [0]).sum ;
 			});
 
 		dummyVal = arrAllDestModulations[0];
@@ -487,17 +487,17 @@ init {arg argInstName;
 		sStart = (start + modStart + mmSampleStart).max(0).min(1);
 		sEnd = (end + modEnd + mmSampleEnd).max(0).min(1);
 		intonationFunc = this.getSynthOption(1);
-		outFreq = (intonationFunc.value((note + transpose), intKey) * keytrack) + ((sampleFreq.cpsmidi 
+		outFreq = (intonationFunc.value((note + transpose), intKey) * keytrack) + ((sampleFreq.cpsmidi
 			+ transpose).midicps * (1-keytrack));
-		pbend = pitchbendMin + ((pitchbendMax - pitchbendMin) 
+		pbend = pitchbendMin + ((pitchbendMax - pitchbendMin)
 				* (pitchbend + modPitchbend + mmPbend).max(0).min(1));
 		outRate = ((outFreq *  (2 ** (pbend /12))) / sampleFreq) * (rev-0.5).neg.sign;
 		outFunction = this.getSynthOption(0);
 		outSample = outFunction.value(outRate, bufnumSampleStereo, bufnumSampleMono, sStart, sEnd) * level * 2;
 		filterProcessFunction =  this.getSynthOption(6);
 		filterFunction =  this.getSynthOption(7);
-		outFilter = filterFunction.value(outSample, filterProcessFunction, filterFreq, filterFreqMin, filterFreqMax, 
-			filterRes, filterResMin, filterResMax, filterSat, filterSatMin, filterSatMax, wetDryMix, 
+		outFilter = filterFunction.value(outSample, filterProcessFunction, filterFreq, filterFreqMin, filterFreqMax,
+			filterRes, filterResMin, filterResMax, filterSat, filterSatMin, filterSatMax, wetDryMix,
 			modFilterFreq + mmFilterFreq, modFilterRes + mmFilterRes, modFilterSat + mmFilterSat, modWetDryMix);
 		levelControlFunc = this.getSynthOption(15);
 		sumVelocity = ((velocity * 0.007874) + mmLevel).max(0).min(1);
@@ -506,92 +506,92 @@ init {arg argInstName;
 	};
 	this.buildGuiSpecArray;
 	arrActionSpecs = this.buildActionSpecs([
-		["TestNoteVals"], 
+		["TestNoteVals"],
 		["commandAction", "Plot envelope", {this.envPlot;}],
 		["TXPopupActionPlusMinus", "Sample bank", {system.arrSampleBankNames},
-			"bankNo", 
-			{ arg view; this.bankNo = view.value; this.sampleNo = 0; this.loadSample(0); 
+			"bankNo",
+			{ arg view; this.bankNo = view.value; this.sampleNo = 0; this.loadSample(0);
 				this.setSynthArgSpec("sampleNo", 0); system.showView;}
-		], 
+		],
 		// array of sample filenames - beginning with blank sample  - mono & stereo files
 		["TXPopupActionPlusMinus", "Sample", {["No Sample"]++system.sampleFileNames(bankNo, true)},
 			"sampleNo", { arg view; this.sampleNo = view.value; this.loadSample(view.value); }
-		], 
-		["TXRangeSlider", "Play Range", ControlSpec(0, 1), "start", "end"], 
-		["SynthOptionPopup", "Loop type", arrOptionData, 0, 210], 
-		["TXCheckBox", "Reverse", "reverse"], 
-		["EZslider", "Level", ControlSpec(0, 1), "level"], 
-		["MIDIListenCheckBox"], 
-		["MIDIChannelSelector"], 
-		["MIDINoteSelector"], 
-		["MIDIVelSelector"], 
-		["TXCheckBox", "Keyboard tracking", "keytrack"], 
-		["Transpose"], 
-		["TXMinMaxSliderSplit", "Pitch bend", 
-			ControlSpec(-48, 48), "pitchbend", "pitchbendMin", "pitchbendMax"], 
+		],
+		["TXRangeSlider", "Play Range", ControlSpec(0, 1), "start", "end"],
+		["SynthOptionPopup", "Loop type", arrOptionData, 0, 210],
+		["TXCheckBox", "Reverse", "reverse"],
+		["EZslider", "Level", ControlSpec(0, 1), "level"],
+		["MIDIListenCheckBox"],
+		["MIDIChannelSelector"],
+		["MIDINoteSelector"],
+		["MIDIVelSelector"],
+		["TXCheckBox", "Keyboard tracking", "keytrack"],
+		["Transpose"],
+		["TXMinMaxSliderSplit", "Pitch bend",
+			ControlSpec(-48, 48), "pitchbend", "pitchbendMin", "pitchbendMax"],
 		["PolyphonySelector"],
-		["SynthOptionPopup", "Intonation", arrOptionData, 1, nil, 
-			{arg view; this.updateIntString(view.value)}], 
-		["TXStaticText", "Note ratios", 
-			{TXIntonation.arrScalesText.at(arrOptions.at(1));}, 
+		["SynthOptionPopup", "Intonation", arrOptionData, 1, nil,
+			{arg view; this.updateIntString(view.value)}],
+		["TXStaticText", "Note ratios",
+			{TXIntonation.arrScalesText.at(arrOptions.at(1));},
 				{arg view; ratioView = view}],
-		["TXPopupActionPlusMinus", "Key / root", ["C", "C#", "D", "D#", "E","F", 
-			"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 140], 
+		["TXPopupActionPlusMinus", "Key / root", ["C", "C#", "D", "D#", "E","F",
+			"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 140],
 		["TXEnvDisplay", {this.envViewValues;}, {arg view; envView = view;}],
-		["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}], 
+		["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",
-			{{this.updateEnvView;}.defer;}], 
+			{{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",
-			{{this.updateEnvView;}.defer;}], 
-		["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}], 
-		["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin", 
-			"sustainTimeMax",{{this.updateEnvView;}.defer;}], 
+			{{this.updateEnvView;}.defer;}],
+		["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}],
+		["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin",
+			"sustainTimeMax",{{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",
-			{{this.updateEnvView;}.defer;}], 
-		["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}], 
-		["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200], 
+			{{this.updateEnvView;}.defer;}],
+		["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}],
+		["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200],
 		["commandAction", "Plot amp envelope", {this.envPlot;}],
 
-		["SynthOptionCheckBox", "Envelope 2", arrOptionData, 14, 250], 
-		["EZslider", "Pre-Delay 2", ControlSpec(0,1), "delay2", {{this.updateEnvView2;}.defer;}], 
+		["SynthOptionCheckBox", "Envelope 2", arrOptionData, 14, 250],
+		["EZslider", "Pre-Delay 2", ControlSpec(0,1), "delay2", {{this.updateEnvView2;}.defer;}],
 		["TXMinMaxSliderSplit", "Attack 2", timeSpec, "attack2", "attackMin2", "attackMax2",
-			{{this.updateEnvView2;}.defer;}], 
+			{{this.updateEnvView2;}.defer;}],
 		["TXMinMaxSliderSplit", "Decay 2", timeSpec, "decay2", "decayMin2", "decayMax2",
-			{{this.updateEnvView2;}.defer;}], 
-		["EZslider", "Sustain level 2", ControlSpec(0, 1), "sustain2", {{this.updateEnvView2;}.defer;}], 
-		["TXMinMaxSliderSplit", "Sustain time 2", timeSpec, "sustainTime2", "sustainTimeMin2", 
-			"sustainTimeMax2",{{this.updateEnvView2;}.defer;}], 
+			{{this.updateEnvView2;}.defer;}],
+		["EZslider", "Sustain level 2", ControlSpec(0, 1), "sustain2", {{this.updateEnvView2;}.defer;}],
+		["TXMinMaxSliderSplit", "Sustain time 2", timeSpec, "sustainTime2", "sustainTimeMin2",
+			"sustainTimeMax2",{{this.updateEnvView2;}.defer;}],
 		["TXMinMaxSliderSplit", "Release 2", timeSpec, "release2", "releaseMin2", "releaseMax2",
-			{{this.updateEnvView2;}.defer;}], 
-		["SynthOptionPopup", "Curve 2", arrOptionData, 4, 150, {system.showView;}], 
-		["SynthOptionPopup", "Env. Type 2", arrOptionData, 5, 180], 
+			{{this.updateEnvView2;}.defer;}],
+		["SynthOptionPopup", "Curve 2", arrOptionData, 4, 180, {system.showView;}],
+		["SynthOptionPopup", "Env. Type 2", arrOptionData, 5, 180],
 		["commandAction", "Plot envelope 2", {this.envPlot2;}],
 
-		["SynthOptionCheckBox", "Filter", arrOptionData, 7, 250], 
-		["SynthOptionPopupPlusMinus", "Type", arrOptionData, 6], 
-		["TXMinMaxSliderSplit", "Filter Frequency", ControlSpec(0.midicps, 20000, \exponential), 
-			"filterFreq", "filterFreqMin", "filterFreqMax", nil, arrFreqRangePresets], 
-		["TXMinMaxSliderSplit", "Filter Resonance", ControlSpec(0, 1), "filterRes", "filterResMin", 
-			"filterResMax"], 
-		["TXMinMaxSliderSplit", "Filter Saturation", ControlSpec(0, 1), "filterSat", "filterSatMin", 
-			"filterSatMax"], 
-		["SynthOptionPopupPlusMinus", "Filter Level control", arrOptionData, 15], 
-		["WetDryMixSlider"], 
+		["SynthOptionCheckBox", "Filter", arrOptionData, 7, 250],
+		["SynthOptionPopupPlusMinus", "Type", arrOptionData, 6],
+		["TXMinMaxSliderSplit", "Filter Frequency", ControlSpec(0.midicps, 20000, \exponential),
+			"filterFreq", "filterFreqMin", "filterFreqMax", nil, arrFreqRangePresets],
+		["TXMinMaxSliderSplit", "Filter Resonance", ControlSpec(0, 1), "filterRes", "filterResMin",
+			"filterResMax"],
+		["TXMinMaxSliderSplit", "Filter Saturation", ControlSpec(0, 1), "filterSat", "filterSatMin",
+			"filterSatMax"],
+		["SynthOptionPopupPlusMinus", "Filter Level control", arrOptionData, 15],
+		["WetDryMixSlider"],
 
-		["SynthOptionCheckBox", "LFO 1", arrOptionData, 8, 250], 
-		["TXMinMaxSliderSplit", "LFO 1 Freq", ControlSpec(0.01, 100, \exp, 0, 1, units: " Hz"), 
-			"freqLFO1", "freqLFO1Min", "freqLFO1Max", nil, TXLFO.arrLFOFreqRanges], 
-		["SynthOptionPopupPlusMinus", "LFO 1 Waveform", arrOptionData, 9], 
-		["SynthOptionPopupPlusMinus", "LFO 1 Output range", arrOptionData, 10], 
+		["SynthOptionCheckBox", "LFO 1", arrOptionData, 8, 250],
+		["TXMinMaxSliderSplit", "LFO 1 Freq", ControlSpec(0.01, 100, \exp, 0, 1, units: " Hz"),
+			"freqLFO1", "freqLFO1Min", "freqLFO1Max", nil, TXLFO.arrLFOFreqRanges],
+		["SynthOptionPopupPlusMinus", "LFO 1 Waveform", arrOptionData, 9],
+		["SynthOptionPopupPlusMinus", "LFO 1 Output range", arrOptionData, 10],
 
-		["SynthOptionCheckBox", "LFO 2", arrOptionData, 11, 250], 
-		["NextLine"], 
-		["TXMinMaxSliderSplit", "LFO 2 Freq", ControlSpec(0.01, 100, \exp, 0, 1, units: " Hz"), 
-			"freqLFO2", "freqLFO2Min", "freqLFO2Max", nil, TXLFO.arrLFOFreqRanges], 
-		["SynthOptionPopupPlusMinus", "LFO 2 Waveform", arrOptionData, 12], 
-		["SynthOptionPopupPlusMinus", "LFO 2 Output range", arrOptionData, 13], 
-	]);	
-	//	use base class initialise 
+		["SynthOptionCheckBox", "LFO 2", arrOptionData, 11, 250],
+		["NextLine"],
+		["TXMinMaxSliderSplit", "LFO 2 Freq", ControlSpec(0.01, 100, \exp, 0, 1, units: " Hz"),
+			"freqLFO2", "freqLFO2Min", "freqLFO2Max", nil, TXLFO.arrLFOFreqRanges],
+		["SynthOptionPopupPlusMinus", "LFO 2 Waveform", arrOptionData, 12],
+		["SynthOptionPopupPlusMinus", "LFO 2 Output range", arrOptionData, 13],
+	]);
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 	this.midiNoteInit;
 	//	make buffers, load the synthdef and create the Group for synths to belong to
@@ -600,194 +600,193 @@ init {arg argInstName;
 
 buildGuiSpecArray {
 	guiSpecArray = [
-		["ActionButton", "Sample", {displayOption = "showSample"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
+		["ActionButton", "Sample", {displayOption = "showSample";
+			this.buildGuiSpecArray; system.showView;}, 130,
 			TXColor.white, this.getButtonColour(displayOption == "showSample")],
-		["Spacer", 3], 
-		["ActionButton", "MIDI/ Note", {displayOption = "showMIDI"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showMIDI")], 
-		["Spacer", 3], 
-		["ActionButton", "Filter", {displayOption = "showFilter"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showFilter")], 
-		["Spacer", 3], 
-		["ActionButton", "Amp Envelope", {displayOption = "showEnv"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showEnv")], 
-		["Spacer", 3], 
-		["ActionButton", "Envelope 2", {displayOption = "showEnv2"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showEnv2")], 
-		["Spacer", 3], 
-		["ActionButton", "LFO 1/2", {displayOption = "showLFO"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showLFO")], 
-		["Spacer", 3], 
-		["ActionButton", "Mod Matrix", {displayOption = "showModMatrix"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showModMatrix")], 
-		["DividingLine"], 
-		["SpacerLine", 6], 
+		["Spacer", 3],
+		["ActionButton", "MIDI/ Note", {displayOption = "showMIDI";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showMIDI")],
+		["Spacer", 3],
+		["ActionButton", "Filter", {displayOption = "showFilter";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showFilter")],
+		["Spacer", 3],
+		["ActionButton", "Amp Envelope", {displayOption = "showEnv";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showEnv")],
+		["Spacer", 3],
+		["ActionButton", "Envelope 2", {displayOption = "showEnv2";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showEnv2")],
+		["Spacer", 3],
+		["ActionButton", "LFO 1/2", {displayOption = "showLFO";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showLFO")],
+		["Spacer", 3],
+		["ActionButton", "Mod Matrix", {displayOption = "showModMatrix";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showModMatrix")],
+		["DividingLine"],
+		["SpacerLine", 6],
 	];
 	if (displayOption == "showSample", {
 		guiSpecArray = guiSpecArray ++[
 			["TXPopupActionPlusMinus", "Sample bank", {system.arrSampleBankNames},
-				"bankNo", 
-				{ arg view; this.bankNo = view.value; this.sampleNo = 0; this.loadSample(0); 
+				"bankNo",
+				{ arg view; this.bankNo = view.value; this.sampleNo = 0; this.loadSample(0);
 					this.setSynthArgSpec("sampleNo", 0); system.showView;}
-			], 
+			],
 			// array of sample filenames - beginning with blank sample - show mono and stereo files
 			["TXPopupActionPlusMinus", "Sample", {["No Sample"]++system.sampleFileNames(bankNo, true)},
-				"sampleNo", { arg view; 
-					this.sampleNo = view.value; 
-					this.loadSample(view.value); 
-					{system.showView;}.defer(0.2);   //  refresh view 
+				"sampleNo", { arg view;
+					this.sampleNo = view.value;
+					this.loadSample(view.value);
+					{system.showView;}.defer(0.2);   //  refresh view
 				}
-			], 
-			["SpacerLine", 4], 
-			["Spacer", 80], 
-			["ActionButton", "Add Samples to Sample Bank", {TXBankBuilder2.addSampleDialog("Sample", bankNo)}, 200], 
-			["ActionButton", "Show", {showWaveform = 1; system.showView; {showWaveform = 0}.defer(0.5);}, 
-				80, TXColor.white, TXColor.sysGuiCol2], 
-			["ActionButton", "Hide", {showWaveform = 0; system.showView;  this.sampleData_(nil);}, 
-				80, TXColor.white, TXColor.sysDeleteCol], 
-			["NextLine"], 
-			["TXSoundFileViewRange", {sampleFileName}, "start", "end", nil, {showWaveform}, nil, {this.sampleData}, 
-				{arg argData; this.sampleData_(argData);}], 
-			["SpacerLine", 4], 
-			["SynthOptionPopup", "Loop type", arrOptionData, 0, 210], 
-			["SpacerLine", 4], 
-			["TXCheckBox", "Reverse", "reverse"], 
-			["SpacerLine", 4], 
-			["EZslider", "Level", ControlSpec(0, 1), "level"], 
+			],
+			["SpacerLine", 4],
+			["Spacer", 80],
+			["ActionButton", "Add Samples to Sample Bank", {TXBankBuilder2.addSampleDialog("Sample", bankNo)}, 200],
+			["ActionButton", "Show", {showWaveform = 1; system.showView; {showWaveform = 0}.defer(0.5);},
+				80, TXColor.white, TXColor.sysGuiCol2],
+			["ActionButton", "Hide", {showWaveform = 0; system.showView;  this.sampleData_(nil);},
+				80, TXColor.white, TXColor.sysDeleteCol],
+			["NextLine"],
+			["TXSoundFileViewRange", {sampleFileName}, "start", "end", nil, {showWaveform}, nil, {this.sampleData},
+				{arg argData; this.sampleData_(argData);}],
+			["SpacerLine", 4],
+			["SynthOptionPopup", "Loop type", arrOptionData, 0, 210],
+			["SpacerLine", 4],
+			["TXCheckBox", "Reverse", "reverse"],
+			["SpacerLine", 4],
+			["EZslider", "Level", ControlSpec(0, 1), "level"],
 		];
 	});
 	if (displayOption == "showEnv", {
 		guiSpecArray = guiSpecArray ++[
-			["TXPresetPopup", "Env presets", 
-				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(0)}), 
+			["TXPresetPopup", "Env presets",
+				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(0)}),
 				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(1)})
 			],
 			["TXEnvDisplay", {this.envViewValues;}, {arg view; envView = view;}],
-			["NextLine"], 
-			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}], 
+			["NextLine"],
+			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}],
 			["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",
-				{{this.updateEnvView;}.defer;}], 
+				{{this.updateEnvView;}.defer;}],
 			["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",
-				{{this.updateEnvView;}.defer;}], 
-			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}], 
-			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin", 
-				"sustainTimeMax",{{this.updateEnvView;}.defer;}], 
+				{{this.updateEnvView;}.defer;}],
+			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}],
+			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin",
+				"sustainTimeMax",{{this.updateEnvView;}.defer;}],
 			["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",
-				{{this.updateEnvView;}.defer;}], 
-			["NextLine"], 
-			["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}], 
-			["NextLine"], 
-			["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200], 
-			["Spacer", 4], 
+				{{this.updateEnvView;}.defer;}],
+			["NextLine"],
+			["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}],
+			["NextLine"],
+			["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200],
+			["Spacer", 4],
 			["ActionButton", "Plot", {this.envPlot;}],
 		];
 	});
 	if (displayOption == "showMIDI", {
 		guiSpecArray = guiSpecArray ++[
-			["MIDIListenCheckBox"], 
-			["NextLine"], 
-			["MIDIChannelSelector"], 
-			["NextLine"], 
-			["MIDINoteSelector"], 
-			["NextLine"], 
-			["MIDIVelSelector"], 
-			["DividingLine"], 
-			["TXCheckBox", "Keyboard tracking", "keytrack"], 
-			["DividingLine"], 
-			["Transpose"], 
-			["DividingLine"], 
-			["TXMinMaxSliderSplit", "Pitch bend", ControlSpec(-48, 48), "pitchbend", 
-				"pitchbendMin", "pitchbendMax", nil, 
-				[	["Presets: ", [-2, 2]], ["Range -1 to 1", [-1, 1]], ["Range -2 to 2", [-2, 2]],
+			["MIDIListenCheckBox"],
+			["NextLine"],
+			["MIDIChannelSelector"],
+			["NextLine"],
+			["MIDINoteSelector"],
+			["NextLine"],
+			["MIDIVelSelector"],
+			["DividingLine"],
+			["TXCheckBox", "Keyboard tracking", "keytrack"],
+			["DividingLine"],
+			["Transpose"],
+			["DividingLine"],
+			["TXMinMaxSliderSplit", "Pitch bend", ControlSpec(-48, 48), "pitchbend",
+				"pitchbendMin", "pitchbendMax", nil,
+				[	["Bend Range Presets: ", [-2, 2]], ["Range -1 to 1", [-1, 1]], ["Range -2 to 2", [-2, 2]],
 					["Range -7 to 7", [-7, 7]], ["Range -12 to 12", [-12, 12]],
-					["Range -24 to 24", [-24, 24]], ["Range -48 to 48", [-48, 48]] ] ], 
-			["DividingLine"], 
-			["PolyphonySelector"], 
-			["DividingLine"], 
-			["SynthOptionPopupPlusMinus", "Intonation", arrOptionData, 1, 300, 
-				{arg view; this.updateIntString(view.value)}], 
-			["Spacer", 10], 
-			["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F", 
-				"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 120], 
-			["NextLine"], 
-			["TXStaticText", "Note ratios", 
-				{TXIntonation.arrScalesText.at(arrOptions.at(1));}, 
+					["Range -24 to 24", [-24, 24]], ["Range -48 to 48", [-48, 48]] ] ],
+			["DividingLine"],
+			["PolyphonySelector"],
+			["DividingLine"],
+			["SynthOptionPopupPlusMinus", "Intonation", arrOptionData, 1, 300,
+				{arg view; this.updateIntString(view.value)}],
+			["Spacer", 10],
+			["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F",
+				"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 130],
+			["NextLine"],
+			["TXStaticText", "Note ratios",
+				{TXIntonation.arrScalesText.at(arrOptions.at(1));},
 				{arg view; ratioView = view}],
-			["DividingLine"], 
-			["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);}, 
-				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}], 
+			["DividingLine"],
+			["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);},
+				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}],
 		];
 	});
 	if (displayOption == "showEnv2", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionCheckBox", "Envelope 2", arrOptionData, 14, 250], 
-			["NextLine"], 
-			["TXPresetPopup", "Env presets", 
-				TXEnvPresets.arrEnvPresets2(this, 4, 5).collect({arg item, i; item.at(0)}), 
+			["SynthOptionCheckBox", "Envelope 2", arrOptionData, 14, 250],
+			["NextLine"],
+			["TXPresetPopup", "Env presets",
+				TXEnvPresets.arrEnvPresets2(this, 4, 5).collect({arg item, i; item.at(0)}),
 				TXEnvPresets.arrEnvPresets2(this, 4, 5).collect({arg item, i; item.at(1)})
 			],
 			["TXEnvDisplay", {this.envViewValues2;}, {arg view; envView2 = view;}],
-			["NextLine"], 
-			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay2", {{this.updateEnvView2;}.defer;}], 
-			["TXMinMaxSliderSplit", "Attack", timeSpec, "attack2", "attackMin2", "attackMax2",{{this.updateEnvView2;}.defer;}], 
-			["TXMinMaxSliderSplit", "Decay", timeSpec, "decay2", "decayMin2", "decayMax2",{{this.updateEnvView2;}.defer;}], 
-			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain2", {{this.updateEnvView2;}.defer;}], 
-			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime2", "sustainTimeMin2", 
-				"sustainTimeMax2",{{this.updateEnvView2;}.defer;}], 
-			["TXMinMaxSliderSplit", "Release", timeSpec, "release2", "releaseMin2", "releaseMax2",{{this.updateEnvView2;}.defer;}], 
-			["NextLine"], 
-			["SynthOptionPopup", "Curve", arrOptionData, 4, 150, {system.showView;}], 
-			["SynthOptionPopup", "Env. Type", arrOptionData, 5, 180], 
-			["Spacer", 4], 
+			["NextLine"],
+			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay2", {{this.updateEnvView2;}.defer;}],
+			["TXMinMaxSliderSplit", "Attack", timeSpec, "attack2", "attackMin2", "attackMax2",{{this.updateEnvView2;}.defer;}],
+			["TXMinMaxSliderSplit", "Decay", timeSpec, "decay2", "decayMin2", "decayMax2",{{this.updateEnvView2;}.defer;}],
+			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain2", {{this.updateEnvView2;}.defer;}],
+			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime2", "sustainTimeMin2",
+				"sustainTimeMax2",{{this.updateEnvView2;}.defer;}],
+			["TXMinMaxSliderSplit", "Release", timeSpec, "release2", "releaseMin2", "releaseMax2",{{this.updateEnvView2;}.defer;}],
+			["NextLine"],
+			["SynthOptionPopup", "Curve", arrOptionData, 4, 180, {system.showView;}],
+			["SynthOptionPopup", "Env. Type", arrOptionData, 5, 180],
 			["ActionButton", "Plot", {this.envPlot2;}],
 		];
 	});
 	if (displayOption == "showFilter", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionCheckBox", "Filter", arrOptionData, 7, 250], 
+			["SynthOptionCheckBox", "Filter", arrOptionData, 7, 250],
 			["SpacerLine", 4],
-			["SynthOptionPopupPlusMinus", "Type", arrOptionData, 6], 
-			["SpacerLine", 4], 
-			["TXMinMaxSliderSplit", "Frequency", ControlSpec(0.midicps, 20000, \exponential), 
-				"filterFreq", "filterFreqMin", "filterFreqMax", nil, arrFreqRangePresets], 
+			["SynthOptionPopupPlusMinus", "Type", arrOptionData, 6],
 			["SpacerLine", 4],
-			["TXMinMaxSliderSplit", "Resonance", ControlSpec(0, 1), "filterRes", "filterResMin", "filterResMax"], 
+			["TXMinMaxSliderSplit", "Frequency", ControlSpec(0.midicps, 20000, \exponential),
+				"filterFreq", "filterFreqMin", "filterFreqMax", nil, arrFreqRangePresets],
 			["SpacerLine", 4],
-			["TXMinMaxSliderSplit", "Saturation", ControlSpec(0, 1), "filterSat", "filterSatMin", "filterSatMax"], 
+			["TXMinMaxSliderSplit", "Resonance", ControlSpec(0, 1), "filterRes", "filterResMin", "filterResMax"],
 			["SpacerLine", 4],
-			["SynthOptionPopupPlusMinus", "Level control", arrOptionData, 15], 
-			["SpacerLine", 4], 
-			["WetDryMixSlider"], 
+			["TXMinMaxSliderSplit", "Saturation", ControlSpec(0, 1), "filterSat", "filterSatMin", "filterSatMax"],
+			["SpacerLine", 4],
+			["SynthOptionPopupPlusMinus", "Level control", arrOptionData, 15],
+			["SpacerLine", 4],
+			["WetDryMixSlider"],
 		];
 	});
 	if (displayOption == "showLFO", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionCheckBox", "LFO 1", arrOptionData, 8, 250], 
-			["NextLine"], 
-			["TXMinMaxSliderSplit", "Fade-in time", ControlSpec(0.01, 20, \exp), 
-				"lfo1FadeIn", "lfo1FadeInMin", "lfo1FadeInMax"], 
-			["TXMinMaxSliderSplit", "Frequency", ControlSpec(0.01, 100, \exp, 0, 1, units: " Hz"), 
-				"freqLFO1", "freqLFO1Min", "freqLFO1Max", nil, TXLFO.arrLFOFreqRanges], 
-			["SynthOptionPopupPlusMinus", "Waveform", arrOptionData, 9], 
-			["SynthOptionPopupPlusMinus", "Output range", arrOptionData, 10], 
-			["SpacerLine", 4], 
-			["DividingLine"], 
-			["SpacerLine", 4], 
-			["SynthOptionCheckBox", "LFO 2", arrOptionData, 11, 250], 
-			["NextLine"], 
-			["TXMinMaxSliderSplit", "Fade-in time", ControlSpec(0.01, 20, \exp), 
-				"lfo2FadeIn", "lfo2FadeInMin", "lfo2FadeInMax"], 
-			["TXMinMaxSliderSplit", "Frequency", ControlSpec(0.01, 100, \exp, 0, 1, units: " Hz"), 
-				"freqLFO2", "freqLFO2Min", "freqLFO2Max", nil, TXLFO.arrLFOFreqRanges], 
-			["SynthOptionPopupPlusMinus", "Waveform", arrOptionData, 12], 
-			["SynthOptionPopupPlusMinus", "Output range", arrOptionData, 13], 
+			["SynthOptionCheckBox", "LFO 1", arrOptionData, 8, 250],
+			["NextLine"],
+			["TXMinMaxSliderSplit", "Fade-in time", ControlSpec(0.01, 20, \exp),
+				"lfo1FadeIn", "lfo1FadeInMin", "lfo1FadeInMax"],
+			["TXMinMaxSliderSplit", "Frequency", ControlSpec(0.01, 100, \exp, 0, 1, units: " Hz"),
+				"freqLFO1", "freqLFO1Min", "freqLFO1Max", nil, TXLFO.arrLFOFreqRanges],
+			["SynthOptionPopupPlusMinus", "Waveform", arrOptionData, 9],
+			["SynthOptionPopupPlusMinus", "Output range", arrOptionData, 10],
+			["SpacerLine", 4],
+			["DividingLine"],
+			["SpacerLine", 4],
+			["SynthOptionCheckBox", "LFO 2", arrOptionData, 11, 250],
+			["NextLine"],
+			["TXMinMaxSliderSplit", "Fade-in time", ControlSpec(0.01, 20, \exp),
+				"lfo2FadeIn", "lfo2FadeInMin", "lfo2FadeInMax"],
+			["TXMinMaxSliderSplit", "Frequency", ControlSpec(0.01, 100, \exp, 0, 1, units: " Hz"),
+				"freqLFO2", "freqLFO2Min", "freqLFO2Max", nil, TXLFO.arrLFOFreqRanges],
+			["SynthOptionPopupPlusMinus", "Waveform", arrOptionData, 12],
+			["SynthOptionPopupPlusMinus", "Output range", arrOptionData, 13],
 		];
 	});
 	if (displayOption == "showModMatrix", {
@@ -795,17 +794,17 @@ buildGuiSpecArray {
 			["NoteRangeSelector", "Note range", "noteModMin", "noteModMax"],
 			["TXRangeSlider", "Vel range", ControlSpec(0, 127, step: 1), "velModMin", "velModMax"],
 			["DividingLine"],
-			["SpacerLine", 2], 
-			["EZslider", "Slider 1", ControlSpec(0,1), "slider1"], 
-			["EZslider", "Slider 2", ControlSpec(0,1), "slider2"], 
+			["SpacerLine", 2],
+			["EZslider", "Slider 1", ControlSpec(0,1), "slider1"],
+			["EZslider", "Slider 2", ControlSpec(0,1), "slider2"],
 			["DividingLine"],
-			["SpacerLine", 2], 
+			["SpacerLine", 2],
 			["TextBarLeft", "  Source", 100],
 			["TextBarLeft", "  Destination", 100],
 			["TextBarLeft", "  Modulation amount", 154],
 			["TextBarLeft", "  Scale", 80],
 			["SpacerLine", 4],
-			["ModMatrixRowScale", arrMMSourceNames, arrMMDestNames, "i_Source0", "i_Dest0", "mmValue0", arrMMScaleNames, "i_Scale0"], 
+			["ModMatrixRowScale", arrMMSourceNames, arrMMDestNames, "i_Source0", "i_Dest0", "mmValue0", arrMMScaleNames, "i_Scale0"],
 			["ModMatrixRowScale", arrMMSourceNames, arrMMDestNames, "i_Source1", "i_Dest1", "mmValue1", arrMMScaleNames, "i_Scale1"],
 			["ModMatrixRowScale", arrMMSourceNames, arrMMDestNames, "i_Source2", "i_Dest2", "mmValue2", arrMMScaleNames, "i_Scale2"],
 			["ModMatrixRowScale", arrMMSourceNames, arrMMDestNames, "i_Source3", "i_Dest3", "mmValue3", arrMMScaleNames, "i_Scale3"],
@@ -868,7 +867,7 @@ loadSample { arg argIndex; // method to load samples into buffer
 			// store Freq to synthArgSpecs
 			this.setSynthArgSpec("sampleFreq", sampleFreq);
 			this.setSynthArgSpec("sampleIsStereo", 1);
-			//	rebuild synth to update stereo/mono 
+			//	rebuild synth to update stereo/mono
 			this.rebuildSynth;
 		},{
 			// otherwise,  try to load sample.  if it fails, display error message and clear
@@ -885,8 +884,8 @@ loadSample { arg argIndex; // method to load samples into buffer
 			holdPath = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
 			// Convert path
 			holdPath = TXPath.convert(holdPath);
-			holdBuffer = Buffer.read(system.server, holdPath, 
-				action: { arg argBuffer; 
+			holdBuffer = Buffer.read(system.server, holdPath,
+				action: { arg argBuffer;
 					{
 					//	if file loaded ok
 						if (argBuffer.notNil, {
@@ -904,10 +903,10 @@ loadSample { arg argIndex; // method to load samples into buffer
 							sampleFreq = 440;
 							// store Freq to synthArgSpecs
 							this.setSynthArgSpec("sampleFreq", sampleFreq);
-							TXInfoScreen.new("Invalid Sample File" 
+							TXInfoScreen.new("Invalid Sample File"
 							  ++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
 						});
-						//	rebuild synth to update stereo/mono 
+						//	rebuild synth to update stereo/mono
 						this.rebuildSynth;
 					}.defer;	// defer because gui process
 				},
@@ -925,7 +924,7 @@ resetPlayRange {
 	this.setSynthArgSpec("end", 1);
 }
 
-updateIntString{arg argIndex; 
+updateIntString{arg argIndex;
 	if (ratioView.notNil, {
 		if (ratioView.notClosed, {
 			ratioView.string = TXIntonation.arrScalesText.at(argIndex);
@@ -1022,7 +1021,7 @@ envViewValues2 {
 }
 
 updateEnvView {
-	if (envView.class == EnvelopeView, {
+	if (envView.respondsTo('notClosed'), {
 		if (envView.notClosed, {
 			6.do({arg i;
 				envView.setEditable(i, true);
@@ -1036,7 +1035,7 @@ updateEnvView {
 }
 
 updateEnvView2 {
-	if (envView2.class == EnvelopeView, {
+	if (envView2.respondsTo('notClosed'), {
 		if (envView2.notClosed, {
 			6.do({arg i;
 				envView2.setEditable(i, true);

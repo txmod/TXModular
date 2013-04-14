@@ -163,7 +163,7 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 				{this.getSynthArgSpec("bpm");},
 				{this.getSynthArgSpec("beatsPerBar");},
 				{this.getNextStepID;},
-				{arg view; if (holdVisibleOrigin.notNil, {view.visibleOrigin = holdVisibleOrigin});},
+				{arg view; if (holdVisibleOrigin.notNil, {{view.visibleOrigin = holdVisibleOrigin}.defer(0.2);});},
 				{arg view; holdVisibleOrigin = view.visibleOrigin; },
 				{currentStepID;},
 				{arg stepID;  currentStepID = stepID;}

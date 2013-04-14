@@ -104,6 +104,7 @@ TXOSCTrigActions {
 			// add ScrollView
 			scrollView = ScrollView(argParent, Rect(0, 0, dimensions.x, dimensions.y))
 				.hasBorder_(false);
+			scrollView.background_(TXColor.sysModuleWindow);
 			scrollView.action = scrollViewAction;
 			if (GUI.current.asSymbol == \cocoa, {
 				scrollView.autoScrolls_(false);
@@ -242,17 +243,30 @@ TXOSCTrigActions {
 				};
 			chkboxUseArgs.value = holdOSCTrigAction[11];
 
-			// popup - first arg
-			popupFirstArg = PopUpMenu(holdParent, Rect(0, 0, 30, 20))
-				.background_(TXColor.white).stringColor_(TXColor.black)
-				.items_(16.collect({ arg item, i; (item+1).asString; }))
-				.action_({arg view;
-					var holdAction;
-					this.setCurrentStepID(holdOSCTrigAction.at(6));
-					arrOSCTrigActions.at(i).put(12, view.value);
-					// update view
-					system.showView;
-				});
+			// // popup - first arg
+			// popupFirstArg = PopUpMenu(holdParent, Rect(0, 0, 30, 20))
+			// .background_(TXColor.white).stringColor_(TXColor.black)
+			// .items_(16.collect({ arg item, i; (item+1).asString; }))
+			// .action_({arg view;
+			// 	var holdAction;
+			// 	this.setCurrentStepID(holdOSCTrigAction.at(6));
+			// 	arrOSCTrigActions.at(i).put(12, view.value);
+			// 	// update view
+			// 	system.showView;
+			// });
+			// popupFirstArg.value =  holdOSCTrigAction[12];
+
+			// NumberBox - first arg
+			popupFirstArg = NumberBox(holdParent, Rect(0, 0, 30, 20))
+			.background_(TXColor.white).stringColor_(TXColor.black)
+			.clipLo_(1).clipHi_(16)
+			.action_({arg view;
+				var holdAction;
+				this.setCurrentStepID(holdOSCTrigAction.at(6));
+				arrOSCTrigActions.at(i).put(12, view.value-1);
+				// update view
+				system.showView;
+			});
 			popupFirstArg.value =  holdOSCTrigAction[12];
 
 			// popup - module
@@ -341,7 +355,7 @@ TXOSCTrigActions {
 			// not for slider - since screen  update causes loss of slider control
 					arrOSCTrigActions.at(i)
 						.put(2, holdControlSpec1.value.map(view.value));
-					if (val1NumberBox.class == TXScrollNumBox,
+					if (val1NumberBox.class.respondsTo('value'),
 						{val1NumberBox.value = holdControlSpec1.value.map(view.value);})
 				});
 				if (holdControlSpec1.value.step != 0, {
@@ -357,7 +371,7 @@ TXOSCTrigActions {
 				if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 0, {
 					holdControlSpec1 =
 						 holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
-					val1NumberBox = TXScrollNumBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec1)
+					val1NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec1)
 					.maxDecimals_(4)
 					.action_({arg view;
 						this.setCurrentStepID(holdOSCTrigAction.at(6));
@@ -412,7 +426,7 @@ TXOSCTrigActions {
 			// numberbox - value 2
 				holdControlSpec2 =
 					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(1);
-				val2NumberBox = TXScrollNumBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec2)
+				val2NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec2)
 				.maxDecimals_(4)
 				.action_({arg view;
 					this.setCurrentStepID(holdOSCTrigAction.at(6));
@@ -433,7 +447,7 @@ TXOSCTrigActions {
 			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 2, {
 				holdControlSpec3 =
 					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(2);
-				val3NumberBox = TXScrollNumBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec3)
+				val3NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec3)
 				.maxDecimals_(4)
 				.action_({arg view;
 					this.setCurrentStepID(holdOSCTrigAction.at(6));
@@ -454,7 +468,7 @@ TXOSCTrigActions {
 			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 3, {
 				holdControlSpec4 =
 					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(3);
-				val4NumberBox = TXScrollNumBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec4)
+				val4NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec4)
 				.maxDecimals_(4)
 				.action_({arg view;
 					this.setCurrentStepID(holdOSCTrigAction.at(6));

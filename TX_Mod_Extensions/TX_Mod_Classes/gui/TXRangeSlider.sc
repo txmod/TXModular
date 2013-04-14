@@ -11,17 +11,12 @@ TXRangeSlider {
 	}
 	init { arg window, dimensions, label, argControlSpec, argAction, initMinVal, initMaxVal,
 			initAction, labelWidth, numberWidth, arrPresets, boolScroll;
-		var height, spacingX, presetWidth;
+		var height, spacingX;
 
 		if (window.class == Window, {
 			spacingX = window.view.decorator.gap.x;
 		}, {
 			spacingX = window.decorator.gap.x;
-		});
-		if (arrPresets.notNil, {
-			presetWidth = 16 + spacingX;
-		}, {
-			presetWidth = 0;
 		});
 
 		height = dimensions.y;
@@ -45,7 +40,7 @@ TXRangeSlider {
 			action.value(this);
 		};
 
-		minNumberView = TXScrollNumBox(window, ((numberWidth - presetWidth - spacingX)/2).asInteger @ height, controlSpec).maxDecimals_(4);
+		minNumberView = TXScrollNumBox(window, ((numberWidth - spacingX)/2).asInteger @ height, controlSpec).maxDecimals_(4);
 		if (boolScroll==false, {minNumberView.scroll = false});
 		minNumberView.action = {
 			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
@@ -54,7 +49,7 @@ TXRangeSlider {
 			action.value(this);
 		};
 
-		maxNumberView = TXScrollNumBox(window, ((numberWidth - presetWidth - spacingX)/2).asInteger @ height, controlSpec).maxDecimals_(4);
+		maxNumberView = TXScrollNumBox(window, ((numberWidth - spacingX)/2).asInteger @ height, controlSpec).maxDecimals_(4);
 		if (boolScroll==false, {maxNumberView.scroll = false});
 		maxNumberView.action = {
 			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
@@ -68,7 +63,17 @@ TXRangeSlider {
 		};
 
 		if (arrPresets.notNil, {
-			presetPopupView = PopUpMenu(window, 16 @ height)
+
+			// decorator next line & shift
+			if (window.class == Window, {
+				window.view.decorator.nextLine;
+				window.view.decorator.shift(labelWidth + spacingX, 0);
+			}, {
+				window.decorator.nextLine;
+				window.decorator.shift(labelWidth + spacingX, 0);
+			});
+
+			presetPopupView = PopUpMenu(window, (dimensions.x - labelWidth - spacingX) @ (height * 0.8))
 						.background_(Color.white)
 						.items_(arrPresets.collect({arg item, i; item.at(0);}))
 						.action_({ arg view;

@@ -2,44 +2,44 @@
 
 TXEnv16Stage : TXModuleBase {
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<guiWidth=900;
 	classvar arrLevelSynthArgs, arrTimeSynthArgs;
-	
+
 	var holdNoStages;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "Env 16 stage";
 	moduleRate = "control";
 	moduleType = "groupsource";
-	arrCtlSCInBusSpecs = [ 		
-	];	
+	arrCtlSCInBusSpecs = [
+	];
 	noOutChannels = 1;
-	arrOutBusSpecs = [ 
+	arrOutBusSpecs = [
 		["Out", [0]]
-	];	
-} 
+	];
+}
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 init {arg argInstName;
 	var arrStageNums;
 	//	set  class specific instance variables
-	arrLevelSynthArgs = 	["level0", "level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", 
+	arrLevelSynthArgs = 	["level0", "level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8",
 		"level9", "level10", "level11", "level12", "level13", "level14", "level15", "level16"];
-	arrTimeSynthArgs = ["time0", "time1", "time2", "time3", "time4", "time5", "time6", "time7", "time8", 
+	arrTimeSynthArgs = ["time0", "time1", "time2", "time3", "time4", "time5", "time6", "time7", "time8",
 		"time9", "time10", "time11", "time12", "time13", "time14", "time15", "time16"];
 	arrSynthArgSpecs = [
 		["out", 0, 0],
@@ -82,10 +82,10 @@ init {arg argInstName;
 		["time15", 0.0, \ir],
 		["time16", 0.0, \ir],
 		["velocityScaling", 1, \ir],
-  	]; 
+  	];
 	// synth options are: env. curve type, env. loop type, no. of env. stages, loop start stage, loop end stage
 	arrOptions = [0, 0, 1, 1, 2];
-	arrStageNums = [	
+	arrStageNums = [
 		["1", 1],
 		["2", 2],
 		["3", 3],
@@ -104,7 +104,7 @@ init {arg argInstName;
 		["16", 16],
 	];
 	arrOptionData = [
-		[	
+		[
 			["linear", 'linear'],
 			["exponential", 'exponential'],
 			["sine", 'sine'],
@@ -131,9 +131,9 @@ init {arg argInstName;
 			["slope -9 ", -9],
 			["slope -10 ", -10]
 		],
-		[	
-			["Sustain Looped", 
-				{arg arrLevels, arrTimes, curve, startLoop, release; 
+		[
+			["Sustain Looped",
+				{arg arrLevels, arrTimes, curve, startLoop, release;
 					if (startLoop == release, {
 						Env.new(arrLevels, arrTimes, curve, release, nil);
 					},{
@@ -141,13 +141,13 @@ init {arg argInstName;
 					});
 				}
 			],
-			["Sustain Unlooped", 
-				{arg arrLevels, arrTimes, curve, startLoop, release; 
+			["Sustain Unlooped",
+				{arg arrLevels, arrTimes, curve, startLoop, release;
 					Env.new(arrLevels, arrTimes, curve, release, nil);
 				}
 			],
-			["Fixed Length", 
-				{arg arrLevels, arrTimes, curve, startLoop, release; 
+			["Fixed Length",
+				{arg arrLevels, arrTimes, curve, startLoop, release;
 					Env.new(arrLevels, arrTimes, curve, nil, nil);
 				}
 			]
@@ -156,25 +156,25 @@ init {arg argInstName;
 		arrStageNums,
 		arrStageNums,
 	];
-	synthDefFunc = { 
-		arg out, gate, note, velocity, envTotalTime,  
-			level0, level1, level2, level3, level4, level5, level6, level7, level8, 
-			level9, level10, level11, level12, level13, level14, level15, level16, 
-			time0, time1, time2, time3, time4, time5, time6, time7, time8, time9, time10, 
+	synthDefFunc = {
+		arg out, gate, note, velocity, envTotalTime,
+			level0, level1, level2, level3, level4, level5, level6, level7, level8,
+			level9, level10, level11, level12, level13, level14, level15, level16,
+			time0, time1, time2, time3, time4, time5, time6, time7, time8, time9, time10,
 			time11, time12, time13, time14, time15, time16, velocityScaling;
 		var arrLevels, arrTimes, envCurve, envFunction, outEnv;
 		envCurve = this.getSynthOption(0);
-		arrLevels = [level0, level1, level2, level3, level4, level5, level6, level7, level8, 
+		arrLevels = [level0, level1, level2, level3, level4, level5, level6, level7, level8,
 				level9, level10, level11, level12, level13, level14, level15, level16]
 				.copyRange(0, this.getSynthOption(2) -1);
 		if (envCurve == 'exponential', {arrLevels = arrLevels.max(0.001);});
-		arrTimes = [time1, time2, time3, time4, time5, time6, time7, time8, time9, time10, 
+		arrTimes = [time1, time2, time3, time4, time5, time6, time7, time8, time9, time10,
 				time11, time12, time13, time14, time15, time16]
 				.copyRange(0, this.getSynthOption(2) -2);
 		envFunction = this.getSynthOption(1);
 		outEnv = EnvGen.kr(
 			envFunction.value(arrLevels, arrTimes, envCurve, this.getSynthOption(3)-1, this.getSynthOption(4)-1),
-			gate, 
+			gate,
 			doneAction: 2
 		);
 		// amplitude is vel *  0.007874 approx. == 1 / 127
@@ -183,47 +183,47 @@ init {arg argInstName;
 	guiSpecArray = [
 		["SynthOptionPopup", "No. Stages", arrOptionData, 2, 150, {
 			this.spreadStageTimes;
-			this.loopStageConform; 
+			this.loopStageConform;
 			this.resetHoldNoStages;
-			system.showViewIfModDisplay(this);}], 
-		["Spacer", 4], 
+			system.showViewIfModDisplay(this);}],
+		["Spacer", 4],
 		["SynthOptionPopup", "Loop stage", arrOptionData, 3, 150, {
-			this.loopStageConform; 
-			system.showViewIfModDisplay(this);}], 
-		["Spacer", 4], 
+			this.loopStageConform;
+			system.showViewIfModDisplay(this);}],
+		["Spacer", 4],
 		["SynthOptionPopup", "Release stage", arrOptionData, 4, 150, {
-			this.loopStageConform; 
-			system.showViewIfModDisplay(this);}], 
-		["Spacer", 4], 
-		["ActionButton", "Trigger Envelope", {this.createSynthNote(60, 100, 1);}, 
+			this.loopStageConform;
+			system.showViewIfModDisplay(this);}],
+		["Spacer", 4],
+		["ActionButton", "Trigger Envelope", {this.createSynthNote(60, 100, 1);},
 			150, TXColor.white, TXColor.sysGuiCol2],
-		["DividingLine"], 
-		["SynthOptionPopup", "Curve", arrOptionData, 0, 200, {system.showView;}], 
-		["Spacer", 4], 
-		["SynthOptionPopup", "Env. Type", arrOptionData, 1, 200], 
-		["Spacer", 4], 
+		["DividingLine"],
+		["SynthOptionPopup", "Curve", arrOptionData, 0, 200, {system.showView;}],
+		["Spacer", 4],
+		["SynthOptionPopup", "Env. Type", arrOptionData, 1, 220],
+		["Spacer", 4],
 		["ActionButton", "Plot", {this.envPlot;}],
-		["NextLine"], 
+		["NextLine"],
 		["TXEnvGui", arrLevelSynthArgs, arrTimeSynthArgs, "envTotalTime", {this.getSynthOption(2);},
 			{system.showView;}, 200, 30],
-		["NextLine"], 
+		["NextLine"],
 		["EZNumber", "Total Time", ControlSpec(0.01, 1600, \exp), "envTotalTime",
-			{this.recalcStageTimes; 
-			this.rebuildSynth; 
+			{this.recalcStageTimes;
+			this.rebuildSynth;
 			system.showView;}],
-		["DividingLine"], 
-		["MIDIListenCheckBox"], 
-		["NextLine"], 
-		["MIDIChannelSelector"], 
-		["NextLine"], 
-		["MIDINoteSelector"], 
-		["NextLine"], 
-		["MIDIVelSelector"], 
-		["DividingLine"], 
-		["TXCheckBox", "Scale level to velocity", "velocityScaling"], 
-		["Spacer", 4], 
-		["PolyphonySelector"], 
-		["DividingLine"], 
+		["DividingLine"],
+		["MIDIListenCheckBox"],
+		["NextLine"],
+		["MIDIChannelSelector"],
+		["NextLine"],
+		["MIDINoteSelector"],
+		["NextLine"],
+		["MIDIVelSelector"],
+		["DividingLine"],
+		["TXCheckBox", "Scale level to velocity", "velocityScaling"],
+		["Spacer", 4],
+		["PolyphonySelector"],
+		["DividingLine"],
 	];
 	arrActionSpecs = this.buildActionSpecs([
 		["commandAction", "Trigger envelope", {this.createSynthNote(60, 100, 1);}],
@@ -234,30 +234,30 @@ init {arg argInstName;
 			{system.showView;}],
 		["SynthOptionPopup", "No. Stages", arrOptionData, 2, 150, {
 			this.spreadStageTimes;
-			this.loopStageConform; 
+			this.loopStageConform;
 			this.resetHoldNoStages;
-			system.showViewIfModDisplay(this);}], 
-		["SynthOptionPopup", "Loop stage", arrOptionData, 3, 150, {
-			this.loopStageConform; 
-			system.showViewIfModDisplay(this);}], 
-		["SynthOptionPopup", "Release stage", arrOptionData, 4, 150, {
-			this.loopStageConform; 
-			system.showViewIfModDisplay(this);}], 
-		["SynthOptionPopup", "Curve", arrOptionData, 0, 200, {system.showView;}], 
-		["SynthOptionPopup", "Env. Type", arrOptionData, 1, 200], 
-		["EZNumber", "Total Time", ControlSpec(0.01, 1600, \exp), "envTotalTime",{
-			this.recalcStageTimes; 
-			this.rebuildSynth; 
 			system.showViewIfModDisplay(this);}],
-		["MIDIListenCheckBox"], 
-		["MIDIChannelSelector"], 
-		["MIDINoteSelector"], 
-		["MIDIVelSelector"], 
-		["TXCheckBox", "Scale level to velocity", "velocityScaling"], 
-		["PolyphonySelector"], 
-	]);	
+		["SynthOptionPopup", "Loop stage", arrOptionData, 3, 150, {
+			this.loopStageConform;
+			system.showViewIfModDisplay(this);}],
+		["SynthOptionPopup", "Release stage", arrOptionData, 4, 150, {
+			this.loopStageConform;
+			system.showViewIfModDisplay(this);}],
+		["SynthOptionPopup", "Curve", arrOptionData, 0, 200, {system.showView;}],
+		["SynthOptionPopup", "Env. Type", arrOptionData, 1, 200],
+		["EZNumber", "Total Time", ControlSpec(0.01, 1600, \exp), "envTotalTime",{
+			this.recalcStageTimes;
+			this.rebuildSynth;
+			system.showViewIfModDisplay(this);}],
+		["MIDIListenCheckBox"],
+		["MIDIChannelSelector"],
+		["MIDINoteSelector"],
+		["MIDIVelSelector"],
+		["TXCheckBox", "Scale level to velocity", "velocityScaling"],
+		["PolyphonySelector"],
+	]);
 
-	//	use base class initialise 
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 	this.setMonophonic;	// monophonic by default
 	this.resetHoldNoStages;	// initialise
@@ -311,11 +311,11 @@ spreadStageTimes{
 envPlot {
 	var envCurve, arrLevels, arrTimes;
 	envCurve = this.getSynthOption(0);
-	arrLevels = arrLevelSynthArgs 
+	arrLevels = arrLevelSynthArgs
 		.copyRange(0, this.getSynthOption(2) -1)
 		.collect({ arg item, i; this.getSynthArgSpec(item); });
 	if (envCurve == 'exponential', {arrLevels = arrLevels.max(0.001);});
-	arrTimes = arrTimeSynthArgs 
+	arrTimes = arrTimeSynthArgs
 		.copyRange(1, this.getSynthOption(2) -1)
 		.collect({ arg item, i; this.getSynthArgSpec(item); });
 	Env.new(arrLevels, arrTimes, envCurve).plot;

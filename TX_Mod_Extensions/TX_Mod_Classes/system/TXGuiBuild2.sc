@@ -1707,7 +1707,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(6) ? 80
 		);
 		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		if (item.at(6) != 0, {
+			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		});
 		holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
@@ -1777,7 +1779,6 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 					// run action function passing it view as arg
 					item.at(5).value(view);
 				});
-				view.value = 0;
 				// recreate view
 				system.showView;
 			},

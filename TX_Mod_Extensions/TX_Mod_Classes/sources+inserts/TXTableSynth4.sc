@@ -2,14 +2,14 @@
 
 TXTableSynth4 : TXModuleBase {
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<arrBufferSpecs;
 	classvar	<guiWidth=500;
@@ -25,15 +25,15 @@ TXTableSynth4 : TXModuleBase {
 	var <>testMIDITime = 1;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "Table Synth";
 	moduleRate = "audio";
 	moduleType = "groupsource";
-	arrAudSCInBusSpecs = [ 
+	arrAudSCInBusSpecs = [
 		 ["FM input", 1, "inmodulator"]
-	];	
-	arrCtlSCInBusSpecs = [ 		
+	];
+	arrCtlSCInBusSpecs = [
 		["Table position", 1, "modTablePosition", 0],
 		["Pitch bend", 1, "modPitchbend", 0],
 		["Vol env delay", 1, "modDelay", 0],
@@ -49,18 +49,18 @@ TXTableSynth4 : TXModuleBase {
 		["Table env sustain level", 1, "modSustain2", 0],
 		["Table env sustain time", 1, "modSustainTime2", 0],
 		["Table env release", 1, "modRelease2", 0],
-	];	
+	];
 	noOutChannels = 1;
-	arrOutBusSpecs = [ 
+	arrOutBusSpecs = [
 		["Out", [0]]
-	];	
+	];
 	arrBufferSpecs = [ ["bufnumFirstTable", 1024, 1, 8] ]; // allocate 8 consecutive mono buffers
 	timeSpec = ControlSpec(0.001, 20);
-} 
+}
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 init {arg argInstName;
 	//	set  class specific instance variables
@@ -131,10 +131,10 @@ init {arg argInstName;
 		["modSustain2", 0, \ir],
 		["modSustainTime2", 0, \ir],
 		["modRelease2", 0, \ir],
-  	]; 
+  	];
 	arrOptions = [0,0,0,0,0,0,0,0];
 	arrOptionData = [
-		[	
+		[
 			["None", {arg val; val;}],
 			["Step size 0.2", {arg val; Lag.kr(val.round(0.2), 0.03);}],
 			["Step size 0.25", {arg val; Lag.kr(val.round(0.25), 0.03);}],
@@ -145,14 +145,14 @@ init {arg argInstName;
 		TXIntonation.arrOptionData,
 		TXEnvLookup.arrSlopeOptionData,
 		TXEnvLookup.arrSustainOptionData,
-		[	
-			["No Frequency Modulation", 
-				{arg inmodulator; 
+		[
+			["No Frequency Modulation",
+				{arg inmodulator;
 					0;
 				}
 			],
-			["Frequency Modulation using FM input", 
-				{arg inmodulator; 
+			["Frequency Modulation using FM input",
+				{arg inmodulator;
 					InFeedback.ar(inmodulator,1);
 				}
 			]
@@ -161,52 +161,52 @@ init {arg argInstName;
 		TXEnvLookup.arrSlopeOptionData,
 		TXEnvLookup.arrSustainOptionData,
 		[	["Off", { 0; }],
-			["On", {arg envFunction, del, att, dec, sus, sustime, rel, envCurve, gate;  
+			["On", {arg envFunction, del, att, dec, sus, sustime, rel, envCurve, gate;
 				EnvGen.kr(
 					envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
-					gate, 
+					gate,
 					doneAction: 0
 				);
 			}],
 		],
 	];
-	synthDefFunc = { 
+	synthDefFunc = {
 		arg inmodulator, out, gate, note, velocity, keytrack, transpose, maxHarmonicsInd, harmonicGap, scaling,
-			pitchbend, pitchbendMin, pitchbendMax, 
-			bufnumFirstTable, tablePosition, tablePositionMin, tablePositionMax, level, 
-			envtime=0, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain, 
-			sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax, 
-			env2Amount, envtime2=0, delay2, attack2, attackMin2, attackMax2, decay2, decayMin2, decayMax2, sustain2, 
-			sustainTime2, sustainTimeMin2, sustainTimeMax2, release2, releaseMin2, releaseMax2, 
-			intKey, modPitchbend, modTablePosition, 
-			modDelay, modAttack, modDecay, modSustain, modSustainTime, modRelease, 
+			pitchbend, pitchbendMin, pitchbendMax,
+			bufnumFirstTable, tablePosition, tablePositionMin, tablePositionMax, level,
+			envtime=0, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain,
+			sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax,
+			env2Amount, envtime2=0, delay2, attack2, attackMin2, attackMax2, decay2, decayMin2, decayMax2, sustain2,
+			sustainTime2, sustainTimeMin2, sustainTimeMax2, release2, releaseMin2, releaseMax2,
+			intKey, modPitchbend, modTablePosition,
+			modDelay, modAttack, modDecay, modSustain, modSustainTime, modRelease,
 			modEnv2Amount, modDelay2, modAttack2, modDecay2, modSustain2, modSustainTime2, modRelease2;
 		var	outEnv, outEnv2, envFunction, envFunction2, envCurve, envCurve2, envGenFunction2,
 			del, att, dec, sus, sustime, rel, del2, att2, dec2, sus2, sustime2, rel2, holdEnv2Amount,
 			stepFunc, intonationFunc, freqModFunc, outFreq, pbend, outWave, tablePos;
-			
+
 		del = (delay + modDelay).max(0).min(1);
 		att = (attackMin + ((attackMax - attackMin) * (attack + modAttack))).max(0.001).min(20);
 		dec = (decayMin + ((decayMax - decayMin) * (decay + modDecay))).max(0.001).min(20);
 		sus = (sustain + modSustain).max(0).min(1);
-		sustime = (sustainTimeMin + 
+		sustime = (sustainTimeMin +
 			((sustainTimeMax - sustainTimeMin) * (sustainTime + modSustainTime))).max(0.001).min(20);
 		rel = (releaseMin + ((releaseMax - releaseMin) * (release + modRelease))).max(0.001).min(20);
 		envCurve = this.getSynthOption(2);
 		envFunction = this.getSynthOption(3);
 		outEnv = EnvGen.ar(
 			envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
-			gate, 
+			gate,
 			doneAction: 2
 		);
 
-		
+
 		holdEnv2Amount = (env2Amount + modEnv2Amount).max(-1).min(1);
 		del2 = (delay2 + modDelay2).max(0).min(1);
 		att2 = (attackMin2 + ((attackMax2 - attackMin2) * (attack2 + modAttack2))).max(0.001).min(20);
 		dec2 = (decayMin2 + ((decayMax2 - decayMin2) * (decay2 + modDecay2))).max(0.001).min(20);
 		sus2 = (sustain2 + modSustain2).max(0).min(1);
-		sustime2 = (sustainTimeMin2 + 
+		sustime2 = (sustainTimeMin2 +
 			((sustainTimeMax2 - sustainTimeMin2) * (sustainTime2 + modSustainTime2))).max(0.001).min(20);
 		rel2 = (releaseMin2 + ((releaseMax2 - releaseMin2) * (release2 + modRelease2))).max(0.001).min(20);
 		envCurve2 = this.getSynthOption(5);
@@ -214,7 +214,7 @@ init {arg argInstName;
 		envGenFunction2 = this.getSynthOption(7);
 		outEnv2 = holdEnv2Amount * envGenFunction2.value(envFunction2, del2, att2, dec2, sus2, sustime2, rel2, envCurve2, gate);
 
-		tablePos = tablePositionMin + ((tablePositionMax - tablePositionMin) 
+		tablePos = tablePositionMin + ((tablePositionMax - tablePositionMin)
 			* (tablePosition + modTablePosition + outEnv2).max(0).min(1));
 		pbend = pitchbendMin + ((pitchbendMax - pitchbendMin) * (pitchbend + modPitchbend).max(0).min(1));
 
@@ -223,7 +223,7 @@ init {arg argInstName;
 		freqModFunc = this.getSynthOption(4);
 		outFreq = (intonationFunc.value((note + transpose), intKey) * keytrack) + ((48 + transpose).midicps * (1-keytrack));
 		outWave = VOsc.ar(
-			bufnumFirstTable + (stepFunc.value(tablePos) - 1).max(0.0001).min(6.999), 
+			bufnumFirstTable + (stepFunc.value(tablePos) - 1).max(0.0001).min(6.999),
 			outFreq * (2 ** (pbend /12)),
 			freqModFunc.value(inmodulator) * 2pi
 		);
@@ -233,68 +233,68 @@ init {arg argInstName;
 	};
 	this.buildGuiSpecArray;
 	arrActionSpecs = this.buildActionSpecs([
-		["TestNoteVals"], 
+		["TestNoteVals"],
 		["commandAction", "Plot envelope", {this.envPlot;}],
-		["TXMinMaxSliderSplit", "Table position", ControlSpec(1, 8), 
-			"tablePosition", "tablePositionMin", "tablePositionMax"], 
-		["SynthOptionPopup", "Stepping", arrOptionData, 0, 200], 
-		["TXWaveTableSpecs", "Wavetables", {arrWaveSpecs}, 
-			{arg view; arrWaveSpecs = view.value; 
-				arrSlotData = view.arrSlotData; this.updateBuffers(view.value);}, 
-			{arrSlotData}], 
-		["EZslider", "Level", ControlSpec(0, 1), "level"], 
-		["MIDIListenCheckBox"], 
-		["MIDIChannelSelector"], 
-		["MIDINoteSelector"], 
-		["MIDIVelSelector"], 
-		["TXCheckBox", "Keyboard tracking", "keytrack"], 
-		["Transpose"], 
-		["TXMinMaxSliderSplit", "Pitch bend", 
-			ControlSpec(-48, 48), "pitchbend", "pitchbendMin", "pitchbendMax"], 
+		["TXMinMaxSliderSplit", "Table position", ControlSpec(1, 8),
+			"tablePosition", "tablePositionMin", "tablePositionMax"],
+		["SynthOptionPopup", "Stepping", arrOptionData, 0, 200],
+		["TXWaveTableSpecs", "Wavetables", {arrWaveSpecs},
+			{arg view; arrWaveSpecs = view.value;
+				arrSlotData = view.arrSlotData; this.updateBuffers(view.value);},
+			{arrSlotData}],
+		["EZslider", "Level", ControlSpec(0, 1), "level"],
+		["MIDIListenCheckBox"],
+		["MIDIChannelSelector"],
+		["MIDINoteSelector"],
+		["MIDIVelSelector"],
+		["TXCheckBox", "Keyboard tracking", "keytrack"],
+		["Transpose"],
+		["TXMinMaxSliderSplit", "Pitch bend",
+			ControlSpec(-48, 48), "pitchbend", "pitchbendMin", "pitchbendMax"],
 		["PolyphonySelector"],
 		["TXEnvDisplay", {this.envViewValues;}, {arg view; envView = view;}],
-		["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView2}.defer;}], 
-		["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",{{this.updateEnvView2}.defer;}], 
-		["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",{{this.updateEnvView2}.defer;}], 
-		["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView2}.defer;}], 
-		["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin", 
-			"sustainTimeMax",{{this.updateEnvView2}.defer;}], 
-		["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",{{this.updateEnvView2}.defer;}], 
-		["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}], 
-		["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200], 
-		["SynthOptionCheckBox", "Table Env", arrOptionData, 7, 120], 
-		["EZslider", "Env amount", ControlSpec(-1, 1), "env2Amount", nil, 260], 
+		["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView2}.defer;}],
+		["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",{{this.updateEnvView2}.defer;}],
+		["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",{{this.updateEnvView2}.defer;}],
+		["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView2}.defer;}],
+		["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin",
+			"sustainTimeMax",{{this.updateEnvView2}.defer;}],
+		["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",{{this.updateEnvView2}.defer;}],
+		["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}],
+		["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200],
+		["SynthOptionCheckBox", "Table Env", arrOptionData, 7, 120],
+		["EZslider", "Env amount", ControlSpec(-1, 1), "env2Amount", nil, 260],
 		["TXEnvDisplay", {this.envViewValues2;}, {arg view; envView2 = view;}],
-		["EZslider", "Pre-Delay2", ControlSpec(0,1), "delay2", {{this.updateEnvView2}.defer;}], 
-		["TXMinMaxSliderSplit", "Attack2", timeSpec, "attack2", "attackMin2", "attackMax2",{this.updateEnvView2;}], 
-		["TXMinMaxSliderSplit", "Decay2", timeSpec, "decay2", "decayMin2", "decayMax2",{this.updateEnvView2;}], 
-		["EZslider", "Sustain level2", ControlSpec(0, 1), "sustain2", {this.updateEnvView2;}], 
-		["TXMinMaxSliderSplit", "Sustain time2", timeSpec, "sustainTime2", "sustainTimeMin2", 
-			"sustainTimeMax2",{this.updateEnvView2;}], 
-		["TXMinMaxSliderSplit", "Release2", timeSpec, "release2", "releaseMin2", "releaseMax2",{this.updateEnvView2;}], 
-		["SynthOptionPopup", "Curve2", arrOptionData, 5, 150, {system.showView;}], 
-		["SynthOptionPopup", "Env. Type2", arrOptionData, 6, 180], 
-		["SynthOptionPopup", "Intonation", arrOptionData, 1, nil, 
-			{arg view; this.updateIntString(view.value)}], 
-		["TXStaticText", "Note ratios", 
-			{TXIntonation.arrScalesText.at(arrOptions.at(1));}, 
+		["EZslider", "Pre-Delay2", ControlSpec(0,1), "delay2", {{this.updateEnvView2}.defer;}],
+		["TXMinMaxSliderSplit", "Attack2", timeSpec, "attack2", "attackMin2", "attackMax2",{this.updateEnvView2;}],
+		["TXMinMaxSliderSplit", "Decay2", timeSpec, "decay2", "decayMin2", "decayMax2",{this.updateEnvView2;}],
+		["EZslider", "Sustain level2", ControlSpec(0, 1), "sustain2", {this.updateEnvView2;}],
+		["TXMinMaxSliderSplit", "Sustain time2", timeSpec, "sustainTime2", "sustainTimeMin2",
+			"sustainTimeMax2",{this.updateEnvView2;}],
+		["TXMinMaxSliderSplit", "Release2", timeSpec, "release2", "releaseMin2", "releaseMax2",{this.updateEnvView2;}],
+		["SynthOptionPopup", "Curve2", arrOptionData, 5, 180, {system.showView;}],
+		["SynthOptionPopup", "Env. Type2", arrOptionData, 6, 180],
+		["SynthOptionPopup", "Intonation", arrOptionData, 1, nil,
+			{arg view; this.updateIntString(view.value)}],
+		["TXStaticText", "Note ratios",
+			{TXIntonation.arrScalesText.at(arrOptions.at(1));},
 				{arg view; ratioView = view}],
-		["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F", 
-			"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 140], 
-	]);	
-	//	use base class initialise 
+		["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F",
+			"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 140],
+	]);
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 	this.midiNoteInit;
 	//	make buffers, load the synthdef and create the Group for synths to belong to
 	this.makeBuffersAndGroup(arrBufferSpecs);
-	//	initialise buffers 
+	//	initialise buffers
 	8.do({arg item, i;
 		arrWaveSpecs = arrWaveSpecs.add(
-			(	(Harmonics(32).decay .copyRange(0, i * 3)  
+			(	(Harmonics(32).decay .copyRange(0, i * 3)
 					++ Array.newClear(32).fill(0)
-				).copyRange(0, 31) 
+				).copyRange(0, 31)
 			).max(0).min(1)
-		); 
+		);
 	});
 	Routine.run {
 		var holdModCondition;
@@ -308,167 +308,166 @@ init {arg argInstName;
 		// remove condition from load queue
 		system.holdLoadQueue.removeCondition(holdModCondition);
 	};
-	//	initialise slots 
+	//	initialise slots
 	arrSlotData = arrWaveSpecs.dup(5);
-	//	overwrite default preset 
-	this.overwritePreset(this, "Default Settings", 0); 
+	//	overwrite default preset
+	this.overwritePreset(this, "Default Settings", 0);
 }
 
 buildGuiSpecArray {
 	guiSpecArray = [
-		["ActionButton", "Wavetables", {displayOption = "showWavetables"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showWavetables")], 
-		["Spacer", 3], 
-		["ActionButton", "Processes", {displayOption = "showProcesses"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showProcesses")], 
-		["Spacer", 3], 
-		["ActionButton", "MIDI/ Note", {displayOption = "showMIDI"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showMIDI")], 
-		["Spacer", 3], 
-		["ActionButton", "Vol Env", {displayOption = "showEnv"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showEnv")], 
-		["Spacer", 3], 
-		["ActionButton", "Table Env", {displayOption = "showEnv2"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showEnv2")], 
-		["Spacer", 3], 
-		["ActionButton", "Frequency Mod", {displayOption = "showModOptions"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showModOptions")], 
-		["DividingLine"], 
-		["SpacerLine", 6], 
+		["ActionButton", "Wavetables", {displayOption = "showWavetables";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showWavetables")],
+		["Spacer", 3],
+		["ActionButton", "Processes", {displayOption = "showProcesses";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showProcesses")],
+		["Spacer", 3],
+		["ActionButton", "MIDI/ Note", {displayOption = "showMIDI";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showMIDI")],
+		["Spacer", 3],
+		["ActionButton", "Vol Env", {displayOption = "showEnv";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showEnv")],
+		["Spacer", 3],
+		["ActionButton", "Table Env", {displayOption = "showEnv2";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showEnv2")],
+		["Spacer", 3],
+		["ActionButton", "Frequency Mod", {displayOption = "showModOptions";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showModOptions")],
+		["DividingLine"],
+		["SpacerLine", 6],
 	];
 	if (displayOption == "showWavetables", {
 		guiSpecArray = guiSpecArray ++[
-			["TXMinMaxSliderSplit", "Table position", ControlSpec(1, 8), 
-				"tablePosition", "tablePositionMin", "tablePositionMax"], 
-			["SynthOptionPopup", "Stepping", arrOptionData, 0, 320], 
-			["SpacerLine", 4], 
-			["EZNumber", "Harmonic gap", ControlSpec(0, 3), "harmonicGap", 
+			["TXMinMaxSliderSplit", "Table position", ControlSpec(1, 8),
+				"tablePosition", "tablePositionMin", "tablePositionMax"],
+			["SynthOptionPopup", "Stepping", arrOptionData, 0, 320],
+			["SpacerLine", 4],
+			["EZNumber", "Harmonic gap", ControlSpec(0, 3), "harmonicGap",
 				{this.updateBuffers(arrWaveSpecs);}, nil, 76, 0.01],
-			["Spacer", 10], 
-			["ActionButton", "Set to 1 (default)", 
+			["Spacer", 10],
+			["ActionButton", "Set to 1 (default)",
 				{this.setSynthArgSpec("harmonicGap", 1); system.flagGuiIfModDisplay(this)}, 100],
-			["SpacerLine", 4], 
-			["EZNumber", "Scaling", ControlSpec(1, 5), "scaling", 
+			["SpacerLine", 4],
+			["EZNumber", "Scaling", ControlSpec(1, 5), "scaling",
 				{this.updateBuffers(arrWaveSpecs);}, nil, 76, 0.1],
-			["Spacer", 10], 
-			["ActionButton", "Set to 1 (default)", 
+			["Spacer", 10],
+			["ActionButton", "Set to 1 (default)",
 				{this.setSynthArgSpec("scaling", 1); system.flagGuiIfModDisplay(this)}, 100],
-			["SpacerLine", 4], 
-			["TXPopupAction", "No. harmonics", ["8", "16", "24", "32"], "maxHarmonicsInd", 
+			["SpacerLine", 4],
+			["TXPopupAction", "No. harmonics", ["8", "16", "24", "32"], "maxHarmonicsInd",
 				{this.updateBuffers(arrWaveSpecs); system.showView;}, 160],
-			["NextLine"], 
-			["SpacerLine", 2], 
-			["TXWaveTableSpecs", "Wavetables", {arrWaveSpecs}, 
-				{arg view; arrWaveSpecs = view.value; 
-					arrSlotData = view.arrSlotData; this.updateBuffers(view.value);}, 
-				{arrSlotData}, {[8, 16, 24, 32].at(this.getSynthArgSpec("maxHarmonicsInd"))}, 0], 
-			["SpacerLine", 4], 
-			["EZslider", "Level", ControlSpec(0, 1), "level"], 
+			["NextLine"],
+			["SpacerLine", 2],
+			["TXWaveTableSpecs", "Wavetables", {arrWaveSpecs},
+				{arg view; arrWaveSpecs = view.value;
+					arrSlotData = view.arrSlotData; this.updateBuffers(view.value);},
+				{arrSlotData}, {[8, 16, 24, 32].at(this.getSynthArgSpec("maxHarmonicsInd"))}, 0],
+			["SpacerLine", 4],
+			["EZslider", "Level", ControlSpec(0, 1), "level"],
 		];
 	});
 	if (displayOption == "showProcesses", {
 		guiSpecArray = guiSpecArray ++[
-			["TXWaveTableSpecs", "Wavetables", {arrWaveSpecs}, 
-				{arg view; arrWaveSpecs = view.value; 
-					arrSlotData = view.arrSlotData; this.updateBuffers(view.value);}, 
-				{arrSlotData}, {[8, 16, 24, 32].at(this.getSynthArgSpec("maxHarmonicsInd"))}, 1], 
+			["TXWaveTableSpecs", "Wavetables", {arrWaveSpecs},
+				{arg view; arrWaveSpecs = view.value;
+					arrSlotData = view.arrSlotData; this.updateBuffers(view.value);},
+				{arrSlotData}, {[8, 16, 24, 32].at(this.getSynthArgSpec("maxHarmonicsInd"))}, 1],
 		];
 	});
 	if (displayOption == "showMIDI", {
 		guiSpecArray = guiSpecArray ++[
-			["MIDIListenCheckBox"], 
-			["NextLine"], 
-			["MIDIChannelSelector"], 
-			["NextLine"], 
-			["MIDINoteSelector"], 
-			["NextLine"], 
-			["MIDIVelSelector"], 
-			["DividingLine"], 
-			["TXCheckBox", "Keyboard tracking", "keytrack"], 
-			["DividingLine"], 
-			["Transpose"], 
-			["DividingLine"], 
-			["TXMinMaxSliderSplit", "Pitch bend", ControlSpec(-48, 48), "pitchbend", 
-				"pitchbendMin", "pitchbendMax", nil, 
-				[	["Presets: ", [-2, 2]], ["Range -1 to 1", [-1, 1]], ["Range -2 to 2", [-2, 2]],
+			["MIDIListenCheckBox"],
+			["NextLine"],
+			["MIDIChannelSelector"],
+			["NextLine"],
+			["MIDINoteSelector"],
+			["NextLine"],
+			["MIDIVelSelector"],
+			["DividingLine"],
+			["TXCheckBox", "Keyboard tracking", "keytrack"],
+			["DividingLine"],
+			["Transpose"],
+			["DividingLine"],
+			["TXMinMaxSliderSplit", "Pitch bend", ControlSpec(-48, 48), "pitchbend",
+				"pitchbendMin", "pitchbendMax", nil,
+				[	["Bend Range Presets: ", [-2, 2]], ["Range -1 to 1", [-1, 1]], ["Range -2 to 2", [-2, 2]],
 					["Range -7 to 7", [-7, 7]], ["Range -12 to 12", [-12, 12]],
-					["Range -24 to 24", [-24, 24]], ["Range -48 to 48", [-48, 48]] ] ], 
-			["DividingLine"], 
-			["PolyphonySelector"], 
-			["DividingLine"], 
-//			["TestNoteVals"], 
-			["SynthOptionPopupPlusMinus", "Intonation", arrOptionData, 1, 300, 
-				{arg view; this.updateIntString(view.value)}], 
-			["Spacer", 10], 
-			["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F", 
-				"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 120], 
-			["NextLine"], 
-			["TXStaticText", "Note ratios", 
-				{TXIntonation.arrScalesText.at(arrOptions.at(1));}, 
+					["Range -24 to 24", [-24, 24]], ["Range -48 to 48", [-48, 48]] ] ],
+			["DividingLine"],
+			["PolyphonySelector"],
+			["DividingLine"],
+//			["TestNoteVals"],
+			["SynthOptionPopupPlusMinus", "Intonation", arrOptionData, 1, 300,
+				{arg view; this.updateIntString(view.value)}],
+			["Spacer", 10],
+			["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F",
+				"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 140],
+			["NextLine"],
+			["TXStaticText", "Note ratios",
+				{TXIntonation.arrScalesText.at(arrOptions.at(1));},
 				{arg view; ratioView = view}],
-			["DividingLine"], 
-			["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);}, 
-				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}], 
+			["DividingLine"],
+			["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);},
+				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}],
 		];
 	});
 	if (displayOption == "showEnv", {
 		guiSpecArray = guiSpecArray ++[
-			["TXPresetPopup", "Env presets", 
-				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(0)}), 
+			["TXPresetPopup", "Env presets",
+				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(0)}),
 				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(1)})
 			],
 			["TXEnvDisplay", {this.envViewValues;}, {arg view; envView = view;}],
-			["NextLine"], 
-			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView}.defer;}], 
-			["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",{{this.updateEnvView}.defer;}], 
-			["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",{{this.updateEnvView}.defer;}], 
-			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView}.defer;}], 
-			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin", 
-				"sustainTimeMax",{{this.updateEnvView}.defer;}], 
-			["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",{{this.updateEnvView}.defer;}], 
-			["NextLine"], 
-			["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}], 
-			["NextLine"], 
-			["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200], 
-			["Spacer", 4], 
+			["NextLine"],
+			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView}.defer;}],
+			["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",{{this.updateEnvView}.defer;}],
+			["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",{{this.updateEnvView}.defer;}],
+			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView}.defer;}],
+			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin",
+				"sustainTimeMax",{{this.updateEnvView}.defer;}],
+			["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",{{this.updateEnvView}.defer;}],
+			["NextLine"],
+			["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}],
+			["NextLine"],
+			["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200],
+			["Spacer", 4],
 			["ActionButton", "Plot", {this.envPlot;}],
 		];
 	});
 	if (displayOption == "showEnv2", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionCheckBox", "Table Env", arrOptionData, 7, 120], 
-			["NextLine"], 
-			["EZslider", "Env amount", ControlSpec(-1, 1), "env2Amount", nil, 260], 
-			["NextLine"], 
-			["TXPresetPopup", "Env presets", 
-				TXEnvPresets.arrEnvPresets2(this, 5, 6).collect({arg item, i; item.at(0)}), 
+			["SynthOptionCheckBox", "Table Env", arrOptionData, 7, 120],
+			["NextLine"],
+			["EZslider", "Env amount", ControlSpec(-1, 1), "env2Amount", nil, 260],
+			["NextLine"],
+			["TXPresetPopup", "Env presets",
+				TXEnvPresets.arrEnvPresets2(this, 5, 6).collect({arg item, i; item.at(0)}),
 				TXEnvPresets.arrEnvPresets2(this, 5, 6).collect({arg item, i; item.at(1)})
 			],
 			["TXEnvDisplay", {this.envViewValues2;}, {arg view; envView2 = view;}],
-			["NextLine"], 
-			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay2", {this.updateEnvView2;}], 
-			["TXMinMaxSliderSplit", "Attack", timeSpec, "attack2", "attackMin2", "attackMax2",{this.updateEnvView2;}], 
-			["TXMinMaxSliderSplit", "Decay", timeSpec, "decay2", "decayMin2", "decayMax2",{this.updateEnvView2;}], 
-			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain2", {this.updateEnvView2;}], 
-			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime2", "sustainTimeMin2", 
-				"sustainTimeMax2",{this.updateEnvView2;}], 
-			["TXMinMaxSliderSplit", "Release", timeSpec, "release2", "releaseMin2", "releaseMax2",{this.updateEnvView2;}], 
-			["NextLine"], 
-			["SynthOptionPopup", "Curve", arrOptionData, 5, 150, {system.showView;}], 
-			["SynthOptionPopup", "Env. Type", arrOptionData, 6, 180], 
-			["Spacer", 4], 
+			["NextLine"],
+			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay2", {this.updateEnvView2;}],
+			["TXMinMaxSliderSplit", "Attack", timeSpec, "attack2", "attackMin2", "attackMax2",{this.updateEnvView2;}],
+			["TXMinMaxSliderSplit", "Decay", timeSpec, "decay2", "decayMin2", "decayMax2",{this.updateEnvView2;}],
+			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain2", {this.updateEnvView2;}],
+			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime2", "sustainTimeMin2",
+				"sustainTimeMax2",{this.updateEnvView2;}],
+			["TXMinMaxSliderSplit", "Release", timeSpec, "release2", "releaseMin2", "releaseMax2",{this.updateEnvView2;}],
+			["NextLine"],
+			["SynthOptionPopup", "Curve", arrOptionData, 5, 180, {system.showView;}],
+			["SynthOptionPopup", "Env. Type", arrOptionData, 6, 180],
 			["ActionButton", "Plot", {this.envPlot2;}],
 		];
 	});
 	if (displayOption == "showModOptions", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopup", "FM option", arrOptionData, 4], 
+			["SynthOptionPopup", "FM option", arrOptionData, 4],
 		];
 	});
 
@@ -494,7 +493,7 @@ updateBuffers { arg arrSpecs;
 			var holdSpec, holdFreqs;
 			holdSpec = ((arrSpecs.at(i).keep(holdNoHarmonics.asInteger) ++ (0!32)).keep(32))
 				// first harmonic is > 0 as all zero's would crash method
-				.max(([0.0001] ++  (0!32)).keep(32));  
+				.max(([0.0001] ++  (0!32)).keep(32));
 			// apply scaling
 			holdSpec = holdSpec ** holdScaling;
 			// generate wavetables
@@ -527,7 +526,7 @@ loadExtraData {arg argData;  // override default method
 	testMIDIVel = argData.at(3);
 	testMIDITime = argData.at(4);
 }
-updateIntString{arg argIndex; 
+updateIntString{arg argIndex;
 	if (ratioView.notNil, {
 		if (ratioView.notClosed, {
 			ratioView.string = TXIntonation.arrScalesText.at(argIndex);
@@ -624,7 +623,7 @@ envViewValues2 {
 }
 
 updateEnvView {
-	if (envView.class == EnvelopeView, {
+	if (envView.respondsTo('notClosed'), {
 		if (envView.notClosed, {
 			6.do({arg i;
 				envView.setEditable(i, true);
@@ -638,7 +637,7 @@ updateEnvView {
 }
 
 updateEnvView2 {
-	if (envView2.class == EnvelopeView, {
+	if (envView2.respondsTo('notClosed'), {
 		if (envView2.notClosed, {
 			6.do({arg i;
 				envView2.setEditable(i, true);

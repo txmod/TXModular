@@ -7,25 +7,20 @@ TXMinMaxFreqNoteSldr {
 	// controlSpec2 is only used internally and it's min & max are decided by minNumberView & maxNumberView
 
 	*new { arg window, dimensions, label, controlSpec, action, initVal,
-			initAction=false, labelWidth=80, numberWidth = 120, arrRangePresets;
+		initAction=false, labelWidth=80, numberWidth = 120, arrRangePresets;
 		^super.new.init(window, dimensions, label, controlSpec, action, initVal,
 			initAction, labelWidth, numberWidth, arrRangePresets);
 	}
 	init { arg window, dimensions, label, argControlSpec, argAction, initVal,
-			initAction, labelWidth, numberWidth, arrRangePresets;
-		var height, spacingX, spacingY, presetWidth;
+		initAction, labelWidth, numberWidth, arrRangePresets;
+		var height, spacingX, spacingY;
 
 		if (window.class == Window, {
 			spacingX = window.view.decorator.gap.x;
 			spacingY = window.view.decorator.gap.y;
-		}, {
-			spacingX = window.decorator.gap.x;
-			spacingY = window.decorator.gap.y;
-		});
-		if (arrRangePresets.notNil, {
-			presetWidth = 16 + spacingX;
-		}, {
-			presetWidth = 0;
+			}, {
+				spacingX = window.decorator.gap.x;
+				spacingY = window.decorator.gap.y;
 		});
 		height = ( (dimensions.y - spacingY) / 2).asInteger;
 
@@ -70,9 +65,9 @@ TXMinMaxFreqNoteSldr {
 		};
 
 		notePopup = PopUpMenu(window, ((numberWidth - spacingX)/2).asInteger @ height)
-			.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		notePopup.items = ["notes"]
-			++ 103.collect({arg item; TXGetMidiNoteString(item + 24);});
+		++ 103.collect({arg item; TXGetMidiNoteString(item + 24);});
 		notePopup.action = {
 			if (notePopup.value > 0, {
 				minNumberView.valueAction = 0.midicps;
@@ -81,12 +76,12 @@ TXMinMaxFreqNoteSldr {
 			});
 		};
 
-		// decorator next line & shift
-			if (window.class == Window, {
-				window.view.decorator.nextLine;
-			}, {
-				window.decorator.nextLine;
-			});
+		// decorator next line
+		if (window.class == Window, {
+			window.view.decorator.nextLine;
+		}, {
+			window.decorator.nextLine;
+		});
 
 		labelView2 = StaticText(window, labelWidth @ height);
 		labelView2.string = "Min - Max";
@@ -107,7 +102,7 @@ TXMinMaxFreqNoteSldr {
 		rangeView.lo = controlSpec.minval;
 		rangeView.hi = controlSpec.maxval;
 
-		minNumberView = TXScrollNumBox(window, ((numberWidth - presetWidth - spacingX)/2).asInteger @ (height * 0.8),
+		minNumberView = TXScrollNumBox(window, ((numberWidth - spacingX)/2).asInteger @ (height * 0.8),
 			controlSpec);
 		minNumberView.action = {
 			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
@@ -121,7 +116,7 @@ TXMinMaxFreqNoteSldr {
 		};
 		minNumberView.value = controlSpec.minval;
 
-		maxNumberView = TXScrollNumBox(window, ((numberWidth - presetWidth - spacingX)/2).asInteger @ (height * 0.8),
+		maxNumberView = TXScrollNumBox(window, ((numberWidth - spacingX)/2).asInteger @ (height * 0.8),
 			controlSpec);
 		maxNumberView.action = {
 			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
@@ -136,15 +131,26 @@ TXMinMaxFreqNoteSldr {
 		maxNumberView.value = controlSpec.maxval;
 
 		if (arrRangePresets.notNil, {
-			presetPopupView = PopUpMenu(window, 16 @ (height * 0.8))
-						.background_(Color.white)
-						.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
-						.action_({ arg view;
-							var arrMinMax;
-							arrMinMax = arrRangePresets.at(view.value).at(1);
-							this.valueSplitAction = [this.valueSplit.at(0), arrMinMax.at(0), arrMinMax.at(1)];
-							view.value = 0;
-						});
+
+			// decorator next line & shift
+			if (window.class == Window, {
+				window.view.decorator.nextLine;
+				window.view.decorator.shift(labelWidth + spacingX, 0);
+			}, {
+				window.decorator.nextLine;
+				window.decorator.shift(labelWidth + spacingX, 0);
+			});
+
+			presetPopupView = PopUpMenu(window, (dimensions.x - labelWidth - spacingX) @ (height * 0.8))
+			.background_(TXColor.paleBlue2)
+			.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
+			.action_({ arg view;
+				var arrMinMax;
+				arrMinMax = arrRangePresets.at(view.value).at(1);
+				this.valueSplitAction = [this.valueSplit.at(0), arrMinMax.at(0),
+					arrMinMax.at(1)];
+				view.value = 0;
+			});
 		});
 
 		if (initAction) {

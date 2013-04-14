@@ -2,17 +2,17 @@
 
 TXOSCRemote : TXModuleBase {
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <moduleType;
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<guiWidth=1200;
-	
+
 	var	arrOSCResponders;
 	var 	holdVisibleOrigin;
 	var 	currentStepID;
@@ -20,20 +20,21 @@ TXOSCRemote : TXModuleBase {
 	var arrIgnoreOSCStrings;
 	var currentDataDict;
 	var moduleRunning = true;
+	var oscFunction;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "OSC Remote";
 	moduleRate = "control";
 	moduleType = "action";
 	noInChannels = 0;
 	noOutChannels = 0;
-} 
+}
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 *syncAllModules{
 	arrInstances.do({ arg item, i;
@@ -55,11 +56,11 @@ init {arg argInstName;
 	// oscTrigAction.at(6) is stepID
 	// oscTrigAction.at(7) is Action Text
 	// oscTrigAction.at(8) is OSC String
-	// oscTrigAction.at(9) is Active 
+	// oscTrigAction.at(9) is Active
 	// oscTrigAction.at(10) is Triggering Type
 	// oscTrigAction.at(11) is Use Args
 	// oscTrigAction.at(12) is First Arg
-	arrIgnoreOSCStrings = [ '/status.reply', '/tr', '/done', '/synced', '/n_on', '/n_off', 
+	arrIgnoreOSCStrings = [ '/status.reply', '/tr', '/done', '/synced', '/n_on', '/n_off',
 		'/n_move', '/n_end', '/n_go', '/ping', '/b_info', '/b_setn'];
 	arrSynthArgSpecs = [
 		["address1", "0.0.0.0"],
@@ -70,38 +71,38 @@ init {arg argInstName;
 		["arrOSCTrigActions", [] ],
 		["holdNextStepID", 1001],
 
-	]; 
+	];
 	guiSpecArray = [
 		["EZNumber", "Remote Port", ControlSpec(0, 99999, 'lin', 1), "port1"],
-		["Spacer", 40], 
-		["TXNetAddress","IP Address", "address1", nil, 380, 400],
-		["Spacer", 48], 
+		["Spacer", 30],
+		["TXNetAddress","IP Address", "address1", nil, 380, 600],
+		["Spacer", 20],
 		["TXCheckBox", "OSC Learn - automatically detect IP Address",
-			"detectIPAddress", 
-			{arg view; if (view.value == 1, {this.ipAddressDetectActivate; system.flagGuiUpd;}, 
+			"detectIPAddress",
+			{arg view; if (view.value == 1, {this.ipAddressDetectActivate; system.flagGuiUpd;},
 				{this.ipAddressDetectDeactivate;}); }, 300],
-		["Spacer", 40], 
-//		["ActionButton", "reset port", {this.setSynthArgSpec("port1", 0); system.flagGuiUpd;}, 
-//			100, TXColor.white, TXColor.sysGuiCol2], 
+		["Spacer", 40],
+//		["ActionButton", "reset port", {this.setSynthArgSpec("port1", 0); system.flagGuiUpd;},
+//			100, TXColor.white, TXColor.sysGuiCol2],
 
-		["SpacerLine",2], 
-		["DividingLine", 1180], 
-		["SpacerLine",2], 
-		["TextBar", "Remote OSC strings & actions:", 200], 
-		["Spacer", 62], 
-		["ActionButton", "Sync Now - send stored values for active OSC strings", 
+		["SpacerLine",2],
+		["DividingLine", 1180],
+		["SpacerLine",2],
+		["TextBar", "Remote OSC strings & actions:", 200],
+		["Spacer", 62],
+		["ActionButton", "Sync Now - send stored values for active OSC strings",
 			{this.syncViaOSC}, 308],
-		["Spacer", 62], 
+		["Spacer", 62],
 		["TXCheckBox", "OSC Learn - automatically detect OSC strings",
-			"detectOSCString", 
-			{arg view; if (view.value == 1, {this.oscStringDetectActivate; system.flagGuiIfModDisplay(this);}, 
+			"detectOSCString",
+			{arg view; if (view.value == 1, {this.oscStringDetectActivate; system.flagGuiIfModDisplay(this);},
 				{this.oscStringDetectDeactivate;}); }, 300],
-		["SpacerLine",2], 
+		["SpacerLine",2],
 
 		["TXOSCTrigActions",
-			{this.getSynthArgSpec("arrOSCTrigActions");}, 
+			{this.getSynthArgSpec("arrOSCTrigActions");},
 			{arg argArrOSCTrigActions;  this.setSynthArgSpec("arrOSCTrigActions", argArrOSCTrigActions);},
-			{this.getNextStepID;}, 
+			{this.getNextStepID;},
 			{arg view; if (holdVisibleOrigin.notNil, {view.visibleOrigin = holdVisibleOrigin});},
 			{arg view; holdVisibleOrigin = view.visibleOrigin; },
 			{currentStepID;},
@@ -115,11 +116,11 @@ init {arg argInstName;
 		["EZNumber", "Port", ControlSpec(0, 99999, 'lin', 1), "port1"],
 		["commandAction", "Sync - send stored values", {this.syncViaOSC}],
 		["TXCheckBox", "OSC Learn - automatically detect IP Address",
-			"detectIPAddress", 
-			{arg view; if (view.value == 1, {this.ipAddressDetectActivate; system.flagGuiUpd;}, 
+			"detectIPAddress",
+			{arg view; if (view.value == 1, {this.ipAddressDetectActivate; system.flagGuiUpd;},
 				{this.ipAddressDetectDeactivate;}); }, 300],
-	]);	
-	//	use base class initialise 
+	]);
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 }
 
@@ -127,7 +128,7 @@ runAction {moduleRunning = true;}   //	override base class
 
 pauseAction {moduleRunning = false;}   //	override base class
 
-extraSaveData {	
+extraSaveData {
 	^[currentDataDict.getPairs];
 }
 
@@ -151,17 +152,17 @@ addResponder { arg argOSCTrigAction;
 	// stop any previous responders
 	this.removeResponder(argOSCTrigAction);
 	// create responder
-	holdOSCResponder = OSCresponderNode(nil, argOSCTrigAction[8], { arg time, responder, msg, addr;
+	holdOSCResponder = OSCFunc({ arg msg, time, addr, recvPort;
 //		For testing  - post details
 //		"addResponder : ".postln;
 //		[time, responder, msg, addr].postln;
-		// if module running 
-		if (moduleRunning == true, { 
+		// if module running
+		if (moduleRunning == true, {
 			// store current data
 			this.storeCurrentData(msg, argOSCTrigAction);
 			//	check triggerChoice before running actions
 			holdTriggerChoice = argOSCTrigAction[10];
-			if (holdTriggerChoice == 0 
+			if (holdTriggerChoice == 0
 				or: (holdTriggerChoice == 1 and: msg[1] == 1)
 				or: (holdTriggerChoice == 2 and: msg[1] == 0),
 			{
@@ -169,7 +170,7 @@ addResponder { arg argOSCTrigAction;
 				this.performActions(msg, argOSCTrigAction);
 			});
 		});
-	}).add;
+	}, argOSCTrigAction[8]);
 	// store responder
 	arrOSCResponders[holdStepID] = holdOSCResponder;
 }
@@ -179,13 +180,13 @@ removeResponder { arg argOSCTrigAction;
 	holdStepID = argOSCTrigAction[6];
 	holdOSCResponder = arrOSCResponders[holdStepID];
 	if (holdOSCResponder.notNil, {
-		holdOSCResponder.remove;
+		holdOSCResponder.free;
 		arrOSCResponders[holdStepID] = nil;
 	});
  }
 
 rebuildResponders {
-	this.getSynthArgSpec("arrOSCTrigActions").do({arg argOSCTrigAction, i; 
+	this.getSynthArgSpec("arrOSCTrigActions").do({arg argOSCTrigAction, i;
 		// if active then rebuild
 		if (argOSCTrigAction[9] == 1, {
 			this.addResponder(argOSCTrigAction);
@@ -193,15 +194,15 @@ rebuildResponders {
 	});
 }
 
-oscStringDetectActivate { 
+oscStringDetectActivate {
 	var arrCurrentOSCStrings;
-	//	stop any previous action 
+	//	stop any previous action
 	this.oscStringDetectDeactivate;
-	thisProcess.recvOSCfunc = { |time, addr, msg| 
+	oscFunction = { |msg, time, addr, recvPort|
 		if (arrIgnoreOSCStrings.indexOfEqual(msg[0]).isNil) {
 //			For testing  - post details
 //			"TXOSCController stringDetect: ".postln;
-//			"time: % sender: %\nmessage: %\n".postf(time, addr, msg); 
+//			"time: % sender: %\nmessage: %\n".postf(time, addr, msg);
 
 			// if string not already added create new trig action
 			arrCurrentOSCStrings  = this.getSynthArgSpec("arrOSCTrigActions").collect({arg item, i; item[8]});
@@ -209,38 +210,44 @@ oscStringDetectActivate {
 				this.createOSCTrigAction(msg[0].asString);
 				system.flagGuiIfModDisplay(this);
 			});
-		}  
-	}
+		}
+	};
+	thisProcess.addOSCRecvFunc(oscFunction);
 }
 
-oscStringDetectDeactivate { 
-	thisProcess.recvOSCfunc = nil;
+oscStringDetectDeactivate {
+		if (oscFunction.notNil, {
+			thisProcess.removeOSCRecvFunc(oscFunction);
+		});
 	this.setSynthArgSpec("detectIPAddress", 0);
  }
 
-ipAddressDetectActivate { 
-	//	stop any previous action 
+ipAddressDetectActivate {
+	//	stop any previous action
 	this.ipAddressDetectDeactivate;
-	thisProcess.recvOSCfunc = { |time, addr, msg| 
+	oscFunction = { |msg, time, addr, recvPort|
 		if (arrIgnoreOSCStrings.indexOfEqual(msg[0]).isNil) {
 //			For testing  - post details
 //			"TXOSCController stringDetect: ".postln;
-//			"time: % sender: %\nmessage: %\n".postf(time, addr, msg); 
+//			"time: % sender: %\nmessage: %\n".postf(time, addr, msg);
 			//	assign vars
 			this.setSynthArgSpec("address1", addr.ip);
 			this.ipAddressDetectDeactivate;
 			this.setSynthArgSpec("detectIPAddress", 0);
 			system.flagGuiIfModDisplay(this);
-		}  
-	}
+		}
+	};
+	thisProcess.addOSCRecvFunc(oscFunction);
 }
 
-ipAddressDetectDeactivate { 
-	thisProcess.recvOSCfunc = nil;
+ipAddressDetectDeactivate {
+		if (oscFunction.notNil, {
+			thisProcess.removeOSCRecvFunc(oscFunction);
+		});
 	this.setSynthArgSpec("detectOSCString", 0);
  }
 
-deleteModuleExtraActions {     
+deleteModuleExtraActions {
 	arrOSCResponders.do({arg item, i; item.remove;});
 	this.oscStringDetectDeactivate;
 	this.ipAddressDetectDeactivate;
@@ -267,7 +274,7 @@ createOSCTrigAction {arg oscString, holdArrOSCTrigActions;
 	system.showViewIfModDisplay(this);
 }
 
-rebuildSynth { 
+rebuildSynth {
 	// override base class method
 }
 
@@ -286,7 +293,7 @@ syncViaOSC {
 		// oscTrigAction.at(6) is stepID
 		// oscTrigAction.at(7) is Action Text
 		// oscTrigAction.at(8) is OSC String
-		// oscTrigAction.at(9) is Active 
+		// oscTrigAction.at(9) is Active
 		// oscTrigAction.at(10) is Triggering Type
 		// oscTrigAction.at(11) is Use Args
 		// oscTrigAction.at(12) is First Arg
@@ -294,7 +301,7 @@ syncViaOSC {
 	outNetAddr = NetAddr(this.getSynthArgSpec("address1"), this.getSynthArgSpec("port1"));
 	arrActions = this.getSynthArgSpec("arrOSCTrigActions")
 		// select active ones which Use OSC Args
-		.select({ arg item, i; (item.at(9) == 1) and: (item.at(11) == 1); }); 
+		.select({ arg item, i; (item.at(9) == 1) and: (item.at(11) == 1); });
 	arrActions.do({ arg item, i;
 			var holdMsg, holdVal;
 			var holdModuleID, holdModule, holdActionSpec;
@@ -324,8 +331,8 @@ syncViaOSC {
 }
 
 performActions { arg oscMsg, oscTrigAction;
-	var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText, 
-		holdAction, holdVal1, holdVal2, holdVal3, holdVal4, 
+	var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText,
+		holdAction, holdVal1, holdVal2, holdVal3, holdVal4,
 		actionArg1, actionArg2, actionArg3, actionArg4,
 		oscArg1, oscArg2, oscArg3, oscArg4, holdIndex, holdItems, holdOffset,
 		useArgs, firstArgNum;
@@ -339,7 +346,7 @@ performActions { arg oscMsg, oscTrigAction;
 	// oscTrigAction.at(6) is stepID
 	// oscTrigAction.at(7) is Action Text
 	// oscTrigAction.at(8) is OSC String
-	// oscTrigAction.at(9) is Active 
+	// oscTrigAction.at(9) is Active
 	// oscTrigAction.at(10) is Triggering Type
 	// oscTrigAction.at(11) is Use Args
 	// oscTrigAction.at(12) is First Arg
@@ -374,7 +381,7 @@ performActions { arg oscMsg, oscTrigAction;
 		oscArg2 = oscMsg.at(2 + holdOffset);
 		oscArg3 = oscMsg.at(3 + holdOffset);
 		oscArg4 = oscMsg.at(4 + holdOffset);
-		
+
 		// if using OSC arguments
 		if (useArgs == 1, {
 			// if object type is number

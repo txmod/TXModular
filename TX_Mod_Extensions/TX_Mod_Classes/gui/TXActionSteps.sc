@@ -51,10 +51,10 @@ TXActionSteps {
 		setCurrentStepIDAction = argSetCurrentStepIDAction;
 
 		// text label
-		StaticText(argParent, Rect(0, 0, 118, 20))
+		StaticText(argParent, Rect(0, 0, 132, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\centre)
-		.string_("add del   step     ID   ");
+		.string_("add del   step        ID   ");
 
 		// text label
 		StaticText(argParent, Rect(0, 0, 150, 20))
@@ -63,10 +63,10 @@ TXActionSteps {
 		.string_("mins   secs   bars   beats");
 
 		// text label
-		StaticText(argParent, Rect(0, 0, 147, 20))
+		StaticText(argParent, Rect(0, 0, 128, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\centre)
-		.string_(" on   prob        upd cpy pste");
+		.string_(" on   prob  upd cpy pste");
 
 		// text label
 		StaticText(argParent, Rect(0, 0, 130, 20))
@@ -81,7 +81,7 @@ TXActionSteps {
 		.string_("action");
 
 		// text label
-		StaticText(argParent, Rect(0, 0, 240, 20))
+		StaticText(argParent, Rect(0, 0, 245, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\centre)
 		.string_("value settings");
@@ -98,6 +98,7 @@ TXActionSteps {
 			if (GUI.current.asSymbol == \cocoa, {
 				scrollView.autoScrolls_(false);
 			});
+			scrollView.background_(TXColor.sysModuleWindow);
 			scrollView.action = scrollViewAction;
 			scrollView.hasHorizontalScroller = false;
 			scrollView.hasVerticalScroller = true;
@@ -177,11 +178,11 @@ TXActionSteps {
 			//				.align_(\center);
 
 			// popup - step
-			popupStep = PopUpMenu(holdParent, 36 @ 20)
+			popupStep = PopUpMenu(holdParent, 51 @ 20)
 			.background_(TXColor.paleVioletRed).stringColor_(TXColor.black)
 			.items_(
 				[holdActionStep.at(12).asString]
-				++ (1 .. arrActionSteps.size).collect({ arg item, i; " move to " ++ item.asString;});
+				++ (1 .. arrActionSteps.size).collect({ arg item, i; ">" ++ item.asString;});
 			)
 			.action_({arg view;
 				var oldStepNo, newStepNo, newTime;
@@ -206,7 +207,7 @@ TXActionSteps {
 			.string_((holdActionStep.at(13) ? " ").asString);
 
 			// number box - minutes
-			numboxMins = TXScrollNumBox(holdParent, 35 @ 20)
+			numboxMins = NumberBox(holdParent, 35 @ 20)
 			.maxDecimals_(4)
 			.background_(TXColor.paleTurquoise)
 			.action_ {|view|
@@ -221,7 +222,7 @@ TXActionSteps {
 			arrNumboxMins = arrNumboxMins.add(numboxMins);
 
 			// number box - seconds
-			numboxSecs = TXScrollNumBox(holdParent, 35 @ 20)
+			numboxSecs = NumberBox(holdParent, 35 @ 20)
 			.maxDecimals_(4)
 			.background_(TXColor.paleTurquoise)
 			.action_ {|view|
@@ -236,7 +237,7 @@ TXActionSteps {
 			arrNumboxSecs = arrNumboxSecs.add(numboxSecs);
 
 			// number box - bars
-			numboxBars = TXScrollNumBox(holdParent, 35 @ 20)
+			numboxBars = NumberBox(holdParent, 35 @ 20)
 			.maxDecimals_(4)
 			.background_(TXColor.paleGreen)
 			.action_ {|view|
@@ -248,7 +249,7 @@ TXActionSteps {
 				system.showView;
 			};
 			// number box - beats
-			numboxBeats = TXScrollNumBox(holdParent, 35 @ 20)
+			numboxBeats = NumberBox(holdParent, 35 @ 20)
 			.maxDecimals_(4)
 			.background_(TXColor.paleGreen)
 			.action_ {|view|
@@ -273,7 +274,7 @@ TXActionSteps {
 			};
 
 			// number box - probability
-			numboxProb = TXScrollNumBox(holdParent, 25 @ 20, [0, 100].asSpec)
+			numboxProb = NumberBox(holdParent, 25 @ 20, [0, 100].asSpec)
 			.value_ (holdActionStep.at(11))
 			.action_ {|view|
 				this.setCurrentStepID(holdActionStep.at(13));
@@ -288,22 +289,22 @@ TXActionSteps {
 			if (holdActionStep.at(11) == 100, {numboxProb.background_(TXColor.paleYellow2)},
 				{numboxProb.background_(TXColor.paleYellow)});
 
-			// popup - probability
-			popupProb = PopUpMenu(holdParent, 15 @ 20)
-			.background_(TXColor.paleYellow).stringColor_(TXColor.black)
-			.items_(
-				["select ..."] ++
-				[100, 90, 80, 75, 70, 66.6, 60, 50, 40, 33.3, 30, 25, 20, 10]
-				.collect({arg item, i; item.asString;});
-			)
-			.action_({arg view;
-				this.setCurrentStepID(holdActionStep.at(13));
-				if (view.value > 0, {
-					numboxProb.valueAction =
-					[100, 90, 80, 75, 70, 66.6, 60, 50, 40, 33.3, 30, 25, 20, 10]
-					.at(view.value - 1);
-				});
-			});
+			// // popup - probability
+			// popupProb = PopUpMenu(holdParent, 15 @ 20)
+			// .background_(TXColor.paleYellow).stringColor_(TXColor.black)
+			// .items_(
+			// 	["select ..."] ++
+			// 	[100, 90, 80, 75, 70, 66.6, 60, 50, 40, 33.3, 30, 25, 20, 10]
+			// 	.collect({arg item, i; item.asString;});
+			// )
+			// .action_({arg view;
+			// 	this.setCurrentStepID(holdActionStep.at(13));
+			// 	if (view.value > 0, {
+			// 		numboxProb.valueAction =
+			// 		[100, 90, 80, 75, 70, 66.6, 60, 50, 40, 33.3, 30, 25, 20, 10]
+			// 		.at(view.value - 1);
+			// 	});
+			// });
 
 			// checkbox - update
 			chkboxUpd = TXCheckBox(holdParent, 23 @ 20, "", TXColor.sysGuiCol1, TXColour.white,
@@ -428,7 +429,7 @@ TXActionSteps {
 					// not for slider - since screen  update causes loss of slider control
 					holdArrActions.at(i)
 					.put(2, holdControlSpec1.value.map(view.value));
-					if (val1NumberBox.class == TXScrollNumBox,
+					if (val1NumberBox.class.respondsTo('value'),
 						{val1NumberBox.value = holdControlSpec1.value.map(view.value);})
 				});
 				if (holdControlSpec1.value.step != 0, {
@@ -444,7 +445,7 @@ TXActionSteps {
 				if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 0, {
 					holdControlSpec1 =
 					holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
-					val1NumberBox = TXScrollNumBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec1)
+					val1NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec1)
 					.maxDecimals_(4)
 					.action_({arg view;
 						this.setCurrentStepID(holdActionStep.at(13));
@@ -499,7 +500,7 @@ TXActionSteps {
 				// numberbox - value 2
 				holdControlSpec2 =
 				holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(1);
-				val2NumberBox = TXScrollNumBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec2)
+				val2NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec2)
 				.maxDecimals_(4)
 				.action_({arg view;
 					this.setCurrentStepID(holdActionStep.at(13));
@@ -520,7 +521,7 @@ TXActionSteps {
 			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 2, {
 				holdControlSpec3 =
 				holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(2);
-				val3NumberBox = TXScrollNumBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec3)
+				val3NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec3)
 				.maxDecimals_(4)
 				.action_({arg view;
 					this.setCurrentStepID(holdActionStep.at(13));
@@ -541,7 +542,7 @@ TXActionSteps {
 			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 3, {
 				holdControlSpec4 =
 				holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(3);
-				val4NumberBox = TXScrollNumBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec4)
+				val4NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec4)
 				.maxDecimals_(4)
 				.action_({arg view;
 					this.setCurrentStepID(holdActionStep.at(13));

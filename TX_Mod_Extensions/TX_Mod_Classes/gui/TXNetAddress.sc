@@ -6,31 +6,31 @@ TXNetAddress {
 	var <>labelView, <>numberView1, <>numberView2, <>numberView3, <>numberView4;
 	var arrPresets, <>presetPopupView;
 	var <>action, <string, controlSpec;
-	
-	*new { arg window, dimensions, label, action, initVal, 
+
+	*new { arg window, dimensions, label, action, initVal,
 			initAction=false, labelWidth=80, textWidth = 250, showPresets = true, displayOnly = false;
-		^super.new.init(window, dimensions, label, action, initVal, 
+		^super.new.init(window, dimensions, label, action, initVal,
 			initAction, labelWidth, textWidth, showPresets, displayOnly);
 	}
-	init { arg window, dimensions, label, argAction, initVal, 
+	init { arg window, dimensions, label, argAction, initVal,
 			initAction, labelWidth, textWidth, showPresets, displayOnly;
 		var holdBox, numWidth;
 		dimensions = dimensions.asRect;
 		holdBox = CompositeView (window, dimensions);
 		holdBox.decorator = FlowLayout(dimensions).margin_(0@0);
-		numWidth = ((dimensions.width - labelWidth - 58 - (showPresets.binaryValue * 70)) 
+		numWidth = ((dimensions.width - labelWidth - 258 - (showPresets.binaryValue * 70))
 			/ 4).max(25);
 
 		labelView = StaticText(holdBox, labelWidth @ dimensions.height);
 		labelView.string = label;
 		labelView.align = \right;
-		
+
 		if (initVal == "", {initVal = "0.0.0.0"});
 		if (initVal == " ", {initVal = "0.0.0.0"});
 		if (initVal.isNil, {initVal = "0.0.0.0"});
 		action = argAction;
 		controlSpec = ControlSpec(0, 255, step:1);
-		
+
 		if (displayOnly == true, {
 			numberView1 = TXDisplayNumBox(holdBox, numWidth @ dimensions.height);
 			StaticText(holdBox, 10 @ dimensions.height).string_(" .");
@@ -76,22 +76,22 @@ TXNetAddress {
 				["Reset address: 0.0.0.0 ", {this.string_("0.0.0.0");}],
 				["Loopback address to this computer: 127.0.0.1 ", {this.string_("127.0.0.1");}],
 				["Copy to IP address clipboard 1", {ipAddressClipboard = string;}],
-				["Paste from IP address clipboard 1", 
+				["Paste from IP address clipboard 1",
 					{if (ipAddressClipboard.notNil, {this.string_(ipAddressClipboard); }); }],
 				["Copy to IP address clipboard 2", {ipAddressClipboard2 = string;}],
-				["Paste from IP address clipboard 2", 
+				["Paste from IP address clipboard 2",
 					{if (ipAddressClipboard.notNil, {this.string_(ipAddressClipboard2); }); }],
 				["Copy to IP address clipboard 3", {ipAddressClipboard3 = string;}],
-				["Paste from IP address clipboard 3", 
+				["Paste from IP address clipboard 3",
 					{if (ipAddressClipboard.notNil, {this.string_(ipAddressClipboard3); }); }],
 				["Copy to IP address clipboard 4", {ipAddressClipboard4 = string;}],
-				["Paste from IP address clipboard 4", 
+				["Paste from IP address clipboard 4",
 					{if (ipAddressClipboard.notNil, {this.string_(ipAddressClipboard4); }); }],
 				["Copy to IP address clipboard 5", {ipAddressClipboard5 = string;}],
-				["Paste from IP address clipboard 5", 
+				["Paste from IP address clipboard 5",
 					{if (ipAddressClipboard.notNil, {this.string_(ipAddressClipboard5); }); }],
 			];
-			presetPopupView = PopUpMenu(holdBox, 42 @ dimensions.height)
+			presetPopupView = PopUpMenu(holdBox, 242 @ dimensions.height)
 				.background_(Color.white)
 				.items_(arrPresets.collect({arg item, i; item.at(0);}))
 				.action_({ arg view;
@@ -107,23 +107,23 @@ TXNetAddress {
 		};
 		this.setNumberViews;
 	}
-	
-	string_ { arg argString; 
+
+	string_ { arg argString;
 		string = argString.asString;
 		this.setNumberViews;
 		action.value(this);
 	}
-	
-	stringNoAction_ { arg argString; 
+
+	stringNoAction_ { arg argString;
 		string = argString.asString;
 		this.setNumberViews;
 	}
-	
+
 	makeString{
-		string = numberView1.value.asString ++ "." ++ numberView2.value.asString 
+		string = numberView1.value.asString ++ "." ++ numberView2.value.asString
 			++ "." ++ numberView3.value.asString ++ "." ++ numberView4.value.asString;
 	}
-	
+
 	setNumberViews{
 		var arrNumbers;
 		arrNumbers = string.split($.);

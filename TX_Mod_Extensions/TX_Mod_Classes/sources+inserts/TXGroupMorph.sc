@@ -2,24 +2,24 @@
 
 TXGroupMorph : TXModuleBase {
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<guiWidth=500;
-	
+
 	var	midiControlRoutine;
 	var	displayOption;
 	var arrSnapshots, arrSnapshotNames;
 	var arrLoadSnapshotItems, arrStoreSnapshotItems;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "Group Morph";
 	moduleRate = "control";
@@ -27,9 +27,9 @@ TXGroupMorph : TXModuleBase {
 	arrCtlSCInBusSpecs = [
 		["X Value", 1, "modSliderXVal", 0],
 		["Y Value", 1, "modSliderYVal", 0],
-	];	
+	];
 	noOutChannels = 15;
-	arrOutBusSpecs = [ 
+	arrOutBusSpecs = [
 		["Out 1", [0]],
 		["Out 2", [1]],
 		["Out 3", [2]],
@@ -45,12 +45,12 @@ TXGroupMorph : TXModuleBase {
 		["Out 13", [12]],
 		["Out 14", [13]],
 		["Out 15", [14]],
-	];	
-} 
+	];
+}
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 init {arg argInstName;
 	//	set  class specific instance variables
@@ -60,29 +60,29 @@ init {arg argInstName;
 	arrOptions = [0,0];
 	arrOptionData = [
 		[
-			["Group Morph", 
+			["Group Morph",
 				{arg groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal, morphFunction;
 					morphFunction.value(groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal);
 				}
 			],
-			["Solo Group A ", 
+			["Solo Group A ",
 				{arg groupA, groupB, groupC, groupD, groupE; groupA; }
 			],
-			["Solo Group B ", 
+			["Solo Group B ",
 				{arg groupA, groupB, groupC, groupD, groupE; groupB; }
 			],
-			["Solo Group C ", 
+			["Solo Group C ",
 				{arg groupA, groupB, groupC, groupD, groupE; groupC; }
 			],
-			["Solo Group D ", 
+			["Solo Group D ",
 				{arg groupA, groupB, groupC, groupD, groupE; groupD; }
 			],
-			["Solo Group E ", 
+			["Solo Group E ",
 				{arg groupA, groupB, groupC, groupD, groupE; groupE; }
 			],
-		], 
+		],
 		[
-			["2-D Morph - 4 Groups A - D", 
+			["2-D Morph - 4 Groups A - D",
 				{arg groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal;
 					var groupLeft, groupRight, groupOut;
 			//		---Groups A-D on X/Y area:---
@@ -95,7 +95,7 @@ init {arg argInstName;
 					groupOut = (groupLeft * (1-sliderXTotal)) + (groupRight * sliderXTotal);
 				}
 			],
-			["2-D Morph - 5 Groups A - E", 
+			["2-D Morph - 5 Groups A - E",
 				{arg groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal;
 			//		---Groups A-E on X/Y area:---
 			//		GroupA = top left / x=0,y=0
@@ -111,55 +111,55 @@ init {arg argInstName;
 					(groupsAtoD * (1 - middleBias) ) + (groupE * middleBias );
 				}
 			],
-			["Linear Morph - 2 Groups A - B", 
+			["Linear Morph - 2 Groups A - B",
 				{arg groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal;
 					var total, holdScalar;
 					total = 2;
 					holdScalar = (total-1).reciprocal;
-					[groupA, groupB].collect({arg item, i; 
-						item  * 
-						(1 - ((sliderXTotal .min((i+1) * holdScalar) .max((i-1) * holdScalar) 
+					[groupA, groupB].collect({arg item, i;
+						item  *
+						(1 - ((sliderXTotal .min((i+1) * holdScalar) .max((i-1) * holdScalar)
 							- (i * holdScalar) ).abs * (total-1)) )
 					}).sum;
 				}
 			],
-			["Linear Morph - 3 Groups A - C", 
+			["Linear Morph - 3 Groups A - C",
 				{arg groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal;
 					var total, holdScalar;
 					total = 3;
 					holdScalar = (total-1).reciprocal;
-					[groupA, groupB, groupC].collect({arg item, i; 
-						item  * 
-						(1 - ((sliderXTotal .min((i+1) * holdScalar) .max((i-1) * holdScalar) 
+					[groupA, groupB, groupC].collect({arg item, i;
+						item  *
+						(1 - ((sliderXTotal .min((i+1) * holdScalar) .max((i-1) * holdScalar)
 							- (i * holdScalar) ).abs * (total-1)) )
 					}).sum;
 				}
 			],
-			["Linear Morph - 4 Groups A - D", 
+			["Linear Morph - 4 Groups A - D",
 				{arg groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal;
 					var total, holdScalar;
 					total = 4;
 					holdScalar = (total-1).reciprocal;
-					[groupA, groupB, groupC, groupD].collect({arg item, i; 
-						item  * 
-						(1 - ((sliderXTotal .min((i+1) * holdScalar) .max((i-1) * holdScalar) 
+					[groupA, groupB, groupC, groupD].collect({arg item, i;
+						item  *
+						(1 - ((sliderXTotal .min((i+1) * holdScalar) .max((i-1) * holdScalar)
 							- (i * holdScalar) ).abs * (total-1)) )
 					}).sum;
 				}
 			],
-			["Linear Morph - 5 Groups A - E", 
+			["Linear Morph - 5 Groups A - E",
 				{arg groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal;
 					var total, holdScalar;
 					total = 5;
 					holdScalar = (total-1).reciprocal;
-					[groupA, groupB, groupC, groupD, groupE].collect({arg item, i; 
-						item  * 
-						(1 - ((sliderXTotal .min((i+1) * holdScalar) .max((i-1) * holdScalar) 
+					[groupA, groupB, groupC, groupD, groupE].collect({arg item, i;
+						item  *
+						(1 - ((sliderXTotal .min((i+1) * holdScalar) .max((i-1) * holdScalar)
 							- (i * holdScalar) ).abs * (total-1)) )
 					}).sum;
 				}
 			],
-		], 
+		],
 	];
 	arrSynthArgSpecs = [
 		["out", 0, 0],
@@ -259,151 +259,151 @@ init {arg argInstName;
 		["name13", ""],
 		["name14", ""],
 		["name15", ""],
-	]; 
-	synthDefFunc = { 
-		arg out, valA1, valA2, valA3, valA4, valA5, valA6, valA7, valA8, valA9, valA10, valA11, valA12, valA13, valA14, valA15, 
+	];
+	synthDefFunc = {
+		arg out, valA1, valA2, valA3, valA4, valA5, valA6, valA7, valA8, valA9, valA10, valA11, valA12, valA13, valA14, valA15,
 			valB1, valB2, valB3, valB4, valB5, valB6, valB7, valB8, valB9, valB10, valB11, valB12, valB13, valB14, valB15,
 			valC1, valC2, valC3, valC4, valC5, valC6, valC7, valC8, valC9, valC10, valC11, valC12, valC13, valC14, valC15,
 			valD1, valD2, valD3, valD4, valD5, valD6, valD7, valD8, valD9, valD10, valD11, valD12, valD13, valD14, valD15,
 			valE1, valE2, valE3, valE4, valE5, valE6, valE7, valE8, valE9, valE10, valE11, valE12, valE13, valE14, valE15,
 			sliderXVal, sliderYVal, modSliderXVal, modSliderYVal;
-		var groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal, outFunction, morphFunction; 
-		
+		var groupA, groupB, groupC, groupD, groupE, sliderXTotal, sliderYTotal, outFunction, morphFunction;
+
 		groupA = [valA1, valA2, valA3, valA4, valA5, valA6, valA7, valA8, valA9, valA10, valA11, valA12, valA13, valA14, valA15];
-		groupB = [valB1, valB2, valB3, valB4, valB5, valB6, valB7, valB8, valB9, valB10, valB11, valB12, valB13, valB14, valB15]; 
+		groupB = [valB1, valB2, valB3, valB4, valB5, valB6, valB7, valB8, valB9, valB10, valB11, valB12, valB13, valB14, valB15];
 		groupC = [valC1, valC2, valC3, valC4, valC5, valC6, valC7, valC8, valC9, valC10, valC11, valC12, valC13, valC14, valC15];
 		groupD = [valD1, valD2, valD3, valD4, valD5, valD6, valD7, valD8, valD9, valD10, valD11, valD12, valD13, valD14, valD15];
 		groupE = [valE1, valE2, valE3, valE4, valE5, valE6, valE7, valE8, valE9, valE10, valE11, valE12, valE13, valE14, valE15];
-		
+
 		sliderXTotal = (sliderXVal + modSliderXVal).max(0).min(1);
 		sliderYTotal = (sliderYVal + modSliderYVal).max(0).min(1);
-				
+
 		outFunction = arrOptionData.at(0).at(arrOptions.at(0)).at(1);
 		morphFunction = arrOptionData.at(1).at(arrOptions.at(1)).at(1);
 
-		Out.kr(out, 
-			outFunction.value(groupA, groupB, groupC, groupD, groupE, 
+		Out.kr(out,
+			outFunction.value(groupA, groupB, groupC, groupD, groupE,
 				sliderXTotal, sliderYTotal, morphFunction));
 	};
 	this.buildGuiSpecArray;
 	arrActionSpecs = this.buildActionSpecs([
-		["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0], 
-		["SynthOptionPopupPlusMinus", "Morph Type", arrOptionData, 1], 
-//		["commandAction", "Load Group A Snapshot : value", 
-//			{arg argVal; this.loadSnapshot("valA", argVal-1); }, 
+		["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0],
+		["SynthOptionPopupPlusMinus", "Morph Type", arrOptionData, 1],
+//		["commandAction", "Load Group A Snapshot : value",
+//			{arg argVal; this.loadSnapshot("valA", argVal-1); },
 //			[ControlSpec(1, 30, step: 1)],],
-//		["commandAction", "Load Group B Snapshot : value", 
-//			{arg argVal; this.loadSnapshot("valB", argVal-1); }, 
+//		["commandAction", "Load Group B Snapshot : value",
+//			{arg argVal; this.loadSnapshot("valB", argVal-1); },
 //			[ControlSpec(1, 30, step: 1)],],
-//		["commandAction", "Load Group C Snapshot : value", 
-//			{arg argVal; this.loadSnapshot("valC", argVal-1); }, 
+//		["commandAction", "Load Group C Snapshot : value",
+//			{arg argVal; this.loadSnapshot("valC", argVal-1); },
 //			[ControlSpec(1, 30, step: 1)],],
-//		["commandAction", "Load Group D Snapshot : value", 
-//			{arg argVal; this.loadSnapshot("valD", argVal-1); }, 
+//		["commandAction", "Load Group D Snapshot : value",
+//			{arg argVal; this.loadSnapshot("valD", argVal-1); },
 //			[ControlSpec(1, 30, step: 1)],],
 
-		["TXPopupAction", "Load Group A Snapshot :", 
-			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })}, 
-			"dummyName", 
+		["TXPopupAction", "Load Group A Snapshot :",
+			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })},
+			"dummyName",
 			{ arg view; if (view.value > 0, {this.loadSnapshot("valA", view.value-1); }); }],
-		["TXPopupAction", "Load Group B Snapshot :", 
-			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })}, 
-			"dummyName", 
+		["TXPopupAction", "Load Group B Snapshot :",
+			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })},
+			"dummyName",
 			{ arg view; if (view.value > 0, {this.loadSnapshot("valB", view.value-1); }); }],
-		["TXPopupAction", "Load Group C Snapshot :", 
-			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })}, 
-			"dummyName", 
+		["TXPopupAction", "Load Group C Snapshot :",
+			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })},
+			"dummyName",
 			{ arg view; if (view.value > 0, {this.loadSnapshot("valC", view.value-1); }); }],
-		["TXPopupAction", "Load Group D Snapshot :", 
-			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })}, 
-			"dummyName", 
+		["TXPopupAction", "Load Group D Snapshot :",
+			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })},
+			"dummyName",
 			{ arg view; if (view.value > 0, {this.loadSnapshot("valD", view.value-1); }); }],
-		["TXPopupAction", "Load Group E Snapshot :", 
-			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })}, 
-			"dummyName", 
+		["TXPopupAction", "Load Group E Snapshot :",
+			{["Load Snapshot..."]++ 30.collect ({ arg item, i; (item+1).asString +"-"+ arrSnapshotNames[item]; })},
+			"dummyName",
 			{ arg view; if (view.value > 0, {this.loadSnapshot("valE", view.value-1); }); }],
 
-		["EZslider", "Value X", ControlSpec(0, 1), "sliderXVal"], 
-		["EZslider", "Value Y", ControlSpec(0, 1), "sliderYVal"], 
-		["EZslider", "A 1", ControlSpec(0, 1), "valA1"], 
-		["EZslider", "A 2", ControlSpec(0, 1), "valA2"], 
-		["EZslider", "A 3", ControlSpec(0, 1), "valA3"], 
-		["EZslider", "A 4", ControlSpec(0, 1), "valA4"], 
-		["EZslider", "A 5", ControlSpec(0, 1), "valA5"], 
-		["EZslider", "A 6", ControlSpec(0, 1), "valA6"], 
-		["EZslider", "A 7", ControlSpec(0, 1), "valA7"], 
-		["EZslider", "A 8", ControlSpec(0, 1), "valA8"], 
-		["EZslider", "A 9", ControlSpec(0, 1), "valA9"], 
-		["EZslider", "A 10", ControlSpec(0, 1), "valA10"], 
-		["EZslider", "A 11", ControlSpec(0, 1), "valA11"], 
-		["EZslider", "A 12", ControlSpec(0, 1), "valA12"], 
-		["EZslider", "A 13", ControlSpec(0, 1), "valA13"], 
-		["EZslider", "A 14", ControlSpec(0, 1), "valA14"], 
-		["EZslider", "A 15", ControlSpec(0, 1), "valA15"], 
-		["EZslider", "B 1", ControlSpec(0, 1), "valB1"], 
-		["EZslider", "B 2", ControlSpec(0, 1), "valB2"], 
-		["EZslider", "B 3", ControlSpec(0, 1), "valB3"], 
-		["EZslider", "B 4", ControlSpec(0, 1), "valB4"], 
-		["EZslider", "B 5", ControlSpec(0, 1), "valB5"], 
-		["EZslider", "B 6", ControlSpec(0, 1), "valB6"], 
-		["EZslider", "B 7", ControlSpec(0, 1), "valB7"], 
-		["EZslider", "B 8", ControlSpec(0, 1), "valB8"], 
-		["EZslider", "B 9", ControlSpec(0, 1), "valB9"], 
-		["EZslider", "B 10", ControlSpec(0, 1), "valB10"], 
-		["EZslider", "B 11", ControlSpec(0, 1), "valB11"], 
-		["EZslider", "B 12", ControlSpec(0, 1), "valB12"], 
-		["EZslider", "B 13", ControlSpec(0, 1), "valB13"], 
-		["EZslider", "B 14", ControlSpec(0, 1), "valB14"], 
-		["EZslider", "B 15", ControlSpec(0, 1), "valB15"], 
- 		["EZslider", "C 1", ControlSpec(0, 1), "valC1"], 
-		["EZslider", "C 2", ControlSpec(0, 1), "valC2"], 
-		["EZslider", "C 3", ControlSpec(0, 1), "valC3"], 
-		["EZslider", "C 4", ControlSpec(0, 1), "valC4"], 
-		["EZslider", "C 5", ControlSpec(0, 1), "valC5"], 
-		["EZslider", "C 6", ControlSpec(0, 1), "valC6"], 
-		["EZslider", "C 7", ControlSpec(0, 1), "valC7"], 
-		["EZslider", "C 8", ControlSpec(0, 1), "valC8"], 
-		["EZslider", "C 9", ControlSpec(0, 1), "valC9"], 
-		["EZslider", "C 10", ControlSpec(0, 1), "valC10"], 
-		["EZslider", "C 11", ControlSpec(0, 1), "valC11"], 
-		["EZslider", "C 12", ControlSpec(0, 1), "valC12"], 
-		["EZslider", "C 13", ControlSpec(0, 1), "valC13"], 
-		["EZslider", "C 14", ControlSpec(0, 1), "valC14"], 
-		["EZslider", "C 15", ControlSpec(0, 1), "valC15"], 
-		["EZslider", "D 1", ControlSpec(0, 1), "valD1"], 
-		["EZslider", "D 2", ControlSpec(0, 1), "valD2"], 
-		["EZslider", "D 3", ControlSpec(0, 1), "valD3"], 
-		["EZslider", "D 4", ControlSpec(0, 1), "valD4"], 
-		["EZslider", "D 5", ControlSpec(0, 1), "valD5"], 
-		["EZslider", "D 6", ControlSpec(0, 1), "valD6"], 
-		["EZslider", "D 7", ControlSpec(0, 1), "valD7"], 
-		["EZslider", "D 8", ControlSpec(0, 1), "valD8"], 
-		["EZslider", "D 9", ControlSpec(0, 1), "valD9"], 
-		["EZslider", "D 10", ControlSpec(0, 1), "valD10"], 
-		["EZslider", "D 11", ControlSpec(0, 1), "valD11"], 
-		["EZslider", "D 12", ControlSpec(0, 1), "valD12"], 
-		["EZslider", "D 13", ControlSpec(0, 1), "valD13"], 
-		["EZslider", "D 14", ControlSpec(0, 1), "valD14"], 
-		["EZslider", "D 15", ControlSpec(0, 1), "valD15"], 
-		["EZslider", "E 1", ControlSpec(0, 1), "valE1"], 
-		["EZslider", "E 2", ControlSpec(0, 1), "valE2"], 
-		["EZslider", "E 3", ControlSpec(0, 1), "valE3"], 
-		["EZslider", "E 4", ControlSpec(0, 1), "valE4"], 
-		["EZslider", "E 5", ControlSpec(0, 1), "valE5"], 
-		["EZslider", "E 6", ControlSpec(0, 1), "valE6"], 
-		["EZslider", "E 7", ControlSpec(0, 1), "valE7"], 
-		["EZslider", "E 8", ControlSpec(0, 1), "valE8"], 
-		["EZslider", "E 9", ControlSpec(0, 1), "valE9"], 
-		["EZslider", "E 10", ControlSpec(0, 1), "valE10"], 
-		["EZslider", "E 11", ControlSpec(0, 1), "valE11"], 
-		["EZslider", "E 12", ControlSpec(0, 1), "valE12"], 
-		["EZslider", "E 13", ControlSpec(0, 1), "valE13"], 
-		["EZslider", "E 14", ControlSpec(0, 1), "valE14"], 
-		["EZslider", "E 15", ControlSpec(0, 1), "valE15"], 
- 
- 
+		["EZslider", "Value X", ControlSpec(0, 1), "sliderXVal"],
+		["EZslider", "Value Y", ControlSpec(0, 1), "sliderYVal"],
+		["EZslider", "A 1", ControlSpec(0, 1), "valA1"],
+		["EZslider", "A 2", ControlSpec(0, 1), "valA2"],
+		["EZslider", "A 3", ControlSpec(0, 1), "valA3"],
+		["EZslider", "A 4", ControlSpec(0, 1), "valA4"],
+		["EZslider", "A 5", ControlSpec(0, 1), "valA5"],
+		["EZslider", "A 6", ControlSpec(0, 1), "valA6"],
+		["EZslider", "A 7", ControlSpec(0, 1), "valA7"],
+		["EZslider", "A 8", ControlSpec(0, 1), "valA8"],
+		["EZslider", "A 9", ControlSpec(0, 1), "valA9"],
+		["EZslider", "A 10", ControlSpec(0, 1), "valA10"],
+		["EZslider", "A 11", ControlSpec(0, 1), "valA11"],
+		["EZslider", "A 12", ControlSpec(0, 1), "valA12"],
+		["EZslider", "A 13", ControlSpec(0, 1), "valA13"],
+		["EZslider", "A 14", ControlSpec(0, 1), "valA14"],
+		["EZslider", "A 15", ControlSpec(0, 1), "valA15"],
+		["EZslider", "B 1", ControlSpec(0, 1), "valB1"],
+		["EZslider", "B 2", ControlSpec(0, 1), "valB2"],
+		["EZslider", "B 3", ControlSpec(0, 1), "valB3"],
+		["EZslider", "B 4", ControlSpec(0, 1), "valB4"],
+		["EZslider", "B 5", ControlSpec(0, 1), "valB5"],
+		["EZslider", "B 6", ControlSpec(0, 1), "valB6"],
+		["EZslider", "B 7", ControlSpec(0, 1), "valB7"],
+		["EZslider", "B 8", ControlSpec(0, 1), "valB8"],
+		["EZslider", "B 9", ControlSpec(0, 1), "valB9"],
+		["EZslider", "B 10", ControlSpec(0, 1), "valB10"],
+		["EZslider", "B 11", ControlSpec(0, 1), "valB11"],
+		["EZslider", "B 12", ControlSpec(0, 1), "valB12"],
+		["EZslider", "B 13", ControlSpec(0, 1), "valB13"],
+		["EZslider", "B 14", ControlSpec(0, 1), "valB14"],
+		["EZslider", "B 15", ControlSpec(0, 1), "valB15"],
+ 		["EZslider", "C 1", ControlSpec(0, 1), "valC1"],
+		["EZslider", "C 2", ControlSpec(0, 1), "valC2"],
+		["EZslider", "C 3", ControlSpec(0, 1), "valC3"],
+		["EZslider", "C 4", ControlSpec(0, 1), "valC4"],
+		["EZslider", "C 5", ControlSpec(0, 1), "valC5"],
+		["EZslider", "C 6", ControlSpec(0, 1), "valC6"],
+		["EZslider", "C 7", ControlSpec(0, 1), "valC7"],
+		["EZslider", "C 8", ControlSpec(0, 1), "valC8"],
+		["EZslider", "C 9", ControlSpec(0, 1), "valC9"],
+		["EZslider", "C 10", ControlSpec(0, 1), "valC10"],
+		["EZslider", "C 11", ControlSpec(0, 1), "valC11"],
+		["EZslider", "C 12", ControlSpec(0, 1), "valC12"],
+		["EZslider", "C 13", ControlSpec(0, 1), "valC13"],
+		["EZslider", "C 14", ControlSpec(0, 1), "valC14"],
+		["EZslider", "C 15", ControlSpec(0, 1), "valC15"],
+		["EZslider", "D 1", ControlSpec(0, 1), "valD1"],
+		["EZslider", "D 2", ControlSpec(0, 1), "valD2"],
+		["EZslider", "D 3", ControlSpec(0, 1), "valD3"],
+		["EZslider", "D 4", ControlSpec(0, 1), "valD4"],
+		["EZslider", "D 5", ControlSpec(0, 1), "valD5"],
+		["EZslider", "D 6", ControlSpec(0, 1), "valD6"],
+		["EZslider", "D 7", ControlSpec(0, 1), "valD7"],
+		["EZslider", "D 8", ControlSpec(0, 1), "valD8"],
+		["EZslider", "D 9", ControlSpec(0, 1), "valD9"],
+		["EZslider", "D 10", ControlSpec(0, 1), "valD10"],
+		["EZslider", "D 11", ControlSpec(0, 1), "valD11"],
+		["EZslider", "D 12", ControlSpec(0, 1), "valD12"],
+		["EZslider", "D 13", ControlSpec(0, 1), "valD13"],
+		["EZslider", "D 14", ControlSpec(0, 1), "valD14"],
+		["EZslider", "D 15", ControlSpec(0, 1), "valD15"],
+		["EZslider", "E 1", ControlSpec(0, 1), "valE1"],
+		["EZslider", "E 2", ControlSpec(0, 1), "valE2"],
+		["EZslider", "E 3", ControlSpec(0, 1), "valE3"],
+		["EZslider", "E 4", ControlSpec(0, 1), "valE4"],
+		["EZslider", "E 5", ControlSpec(0, 1), "valE5"],
+		["EZslider", "E 6", ControlSpec(0, 1), "valE6"],
+		["EZslider", "E 7", ControlSpec(0, 1), "valE7"],
+		["EZslider", "E 8", ControlSpec(0, 1), "valE8"],
+		["EZslider", "E 9", ControlSpec(0, 1), "valE9"],
+		["EZslider", "E 10", ControlSpec(0, 1), "valE10"],
+		["EZslider", "E 11", ControlSpec(0, 1), "valE11"],
+		["EZslider", "E 12", ControlSpec(0, 1), "valE12"],
+		["EZslider", "E 13", ControlSpec(0, 1), "valE13"],
+		["EZslider", "E 14", ControlSpec(0, 1), "valE14"],
+		["EZslider", "E 15", ControlSpec(0, 1), "valE15"],
+
+
 	]);
-	//	use base class initialise 
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 	//	load the synthdef and create the synth
 	this.loadAndMakeSynth;
@@ -413,93 +413,93 @@ buildGuiSpecArray {
 	guiSpecArray = [
 		["ActionButton", "Group Morph", {displayOption = "showGroupMorph";
 			arrOptions[0] = 0; this.rebuildSynth;
-			this.buildGuiSpecArray; system.showView;}, 90, 
-			TXColor.white, this.getButtonColour(displayOption == "showGroupMorph")], 
+			this.buildGuiSpecArray; system.showView;}, 90,
+			TXColor.white, this.getButtonColour(displayOption == "showGroupMorph")],
 		["ActionButton", "Group A", {displayOption = "showGroupA";
 			arrOptions[0] = 1; this.rebuildSynth;
-			this.buildGuiSpecArray; system.showView;}, 70, 
-			TXColor.white, this.getButtonColour(displayOption == "showGroupA")], 
-		["ActionButton", "Group B", {displayOption = "showGroupB"; 
+			this.buildGuiSpecArray; system.showView;}, 70,
+			TXColor.white, this.getButtonColour(displayOption == "showGroupA")],
+		["ActionButton", "Group B", {displayOption = "showGroupB";
 			arrOptions[0] = 2; this.rebuildSynth;
-			this.buildGuiSpecArray; system.showView;}, 70, 
-			TXColor.white, this.getButtonColour(displayOption == "showGroupB")], 
-		["ActionButton", "Group C", {displayOption = "showGroupC"; 
+			this.buildGuiSpecArray; system.showView;}, 70,
+			TXColor.white, this.getButtonColour(displayOption == "showGroupB")],
+		["ActionButton", "Group C", {displayOption = "showGroupC";
 			arrOptions[0] = 3; this.rebuildSynth;
-			this.buildGuiSpecArray; system.showView;}, 70, 
-			TXColor.white, this.getButtonColour(displayOption == "showGroupC")], 
-		["ActionButton", "Group D", {displayOption = "showGroupD"; 
+			this.buildGuiSpecArray; system.showView;}, 70,
+			TXColor.white, this.getButtonColour(displayOption == "showGroupC")],
+		["ActionButton", "Group D", {displayOption = "showGroupD";
 			arrOptions[0] = 4; this.rebuildSynth;
-			this.buildGuiSpecArray; system.showView;}, 70, 
-			TXColor.white, this.getButtonColour(displayOption == "showGroupD")], 
-		["ActionButton", "Group E", {displayOption = "showGroupE"; 
+			this.buildGuiSpecArray; system.showView;}, 70,
+			TXColor.white, this.getButtonColour(displayOption == "showGroupD")],
+		["ActionButton", "Group E", {displayOption = "showGroupE";
 			arrOptions[0] = 5; this.rebuildSynth;
-			this.buildGuiSpecArray; system.showView;}, 70, 
-			TXColor.white, this.getButtonColour(displayOption == "showGroupE")], 
-		["DividingLine"], 
-		["SpacerLine", 6], 
+			this.buildGuiSpecArray; system.showView;}, 70,
+			TXColor.white, this.getButtonColour(displayOption == "showGroupE")],
+		["DividingLine"],
+		["SpacerLine", 6],
 	];
-	
-	arrLoadSnapshotItems = ["Load Snapshot..."] 
+
+	arrLoadSnapshotItems = ["Load Snapshot..."]
 		++ 30.collect ({ arg item, i; "Load Snapshot " ++ (item+1).asString +"-"+ arrSnapshotNames[item]; });
 	arrStoreSnapshotItems = ["Store Snapshot..."] ++ 30.collect ({ arg item, i; "Store Snapshot " ++ (item+1).asString; });
 
 	if (displayOption == "showGroupMorph", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0], 
-			["SpacerLine", 6], 
-			["SynthOptionPopupPlusMinus", "Morph Type", arrOptionData, 1, nil, 
-				{this.buildGuiSpecArray; system.showView;}], 
-			["SpacerLine", 10], 
+			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0],
+			["SpacerLine", 6],
+			["SynthOptionPopupPlusMinus", "Morph Type", arrOptionData, 1, nil,
+				{this.buildGuiSpecArray; system.showView;}],
+			["SpacerLine", 10],
 		];
 		if (arrOptions[1] < 2, {
 			guiSpecArray = guiSpecArray ++[
 				["TextBarLeft", "Group C", 80, 20, TXColor.grey7],
-				["Spacer", 250], 
+				["Spacer", 250],
 				["TextBarLeft", "Group D", 80, 20, TXColor.grey7],
-				["SpacerLine", 2], 
-				["TX2DSlider", "Morph X-Y", ControlSpec(0, 1), 
+				["SpacerLine", 2],
+				["TX2DSlider", "Morph X-Y", ControlSpec(0, 1),
 					"sliderXVal", "sliderYVal", nil, 250, 334],
-				["SpacerLine", 2], 
+				["SpacerLine", 2],
 				["TextBarLeft", "Group A", 80, 20, TXColor.grey7],
-				["Spacer", 250], 
+				["Spacer", 250],
 				["TextBarLeft", "Group B", 80, 20, TXColor.grey7],
 			];
 		});
 		if (arrOptions[1] == 1, {
 			guiSpecArray = guiSpecArray ++[
-				["Spacer", 105], 
-				["TextBarLeft", "Group E is in the centre of the box", 200, 
+				["Spacer", 105],
+				["TextBarLeft", "Group E is in the centre of the box", 200,
 					20, TXColor.grey7]
 			];
 		});
 		if (arrOptions[1] > 1, {
 			guiSpecArray = guiSpecArray ++[
-				["SpacerLine", 6], 
-				["Spacer", 80], 
+				["SpacerLine", 6],
+				["Spacer", 80],
 				["TextBarLeft", "Group A", 69, 20, TXColor.grey7],
 			];
 		});
 		if (arrOptions[1] == 2, {
 			guiSpecArray = guiSpecArray ++[
-				["Spacer", 212], 
+				["Spacer", 212],
 				["TextBarLeft", "Group B", 69, 20, TXColor.grey7],
 			];
 		});
 		if (arrOptions[1] == 3, {
 			guiSpecArray = guiSpecArray ++[
-				["Spacer", 69], 
+				["Spacer", 69],
 				["TextBarLeft", "Group B", 69, 20, TXColor.grey7],
-				["Spacer", 69], 
+				["Spacer", 69],
 				["TextBarLeft", "Group C", 69, 20, TXColor.grey7],
 			];
 		});
 		if (arrOptions[1] == 4, {
 			guiSpecArray = guiSpecArray ++[
-				["Spacer", 21], 
+				["Spacer", 21],
 				["TextBarLeft", "Group B", 69, 20, TXColor.grey7],
-				["Spacer", 21], 
+				["Spacer", 21],
 				["TextBarLeft", "Group C", 69, 20, TXColor.grey7],
-				["Spacer", 21], 
+				["Spacer", 21],
 				["TextBarLeft", "Group D", 69, 20, TXColor.grey7],
 			];
 		});
@@ -513,18 +513,18 @@ buildGuiSpecArray {
 		});
 		if (arrOptions[1] > 1, {
 			guiSpecArray = guiSpecArray ++[
-				["NextLine"], 
+				["NextLine"],
 				["EZslider", "Morph X", ControlSpec(0, 1), "sliderXVal", nil, 450],
 			];
 		});
 	});
 	if (displayOption == "showGroupA", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260], 
-			["Spacer", 20], 
-			["ActionButton", "Randomise", {this.randomiseGroupA;}, 80, 
-				TXColor.white, TXColor.sysDeleteCol], 
-			["SpacerLine", 2], 
+			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260],
+			["Spacer", 20],
+			["ActionButton", "Randomise", {this.randomiseGroupA;}, 80,
+				TXColor.white, TXColor.sysDeleteCol],
+			["SpacerLine", 2],
 			["TXTextBox", "Name", "name1",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "A1", ControlSpec(0, 1), "valA1", nil, 300, 30],
 			["TXTextBox", "Name", "name2",nil, 100, 40], ["Spacer", 10],
@@ -555,26 +555,26 @@ buildGuiSpecArray {
 			["EZslider", "A14", ControlSpec(0, 1), "valA14", nil, 300, 30],
 			["TXTextBox", "Name", "name15",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "A15", ControlSpec(0, 1), "valA15", nil, 300, 30],
-			["SpacerLine", 2], 
-			["ActionPopup", arrStoreSnapshotItems, 
+			["SpacerLine", 6],
+			["ActionPopup", arrStoreSnapshotItems,
 				{arg holdView; if (holdView.value>0,{
-					this.storeSnapshot("valA", holdView.value-1, this.getSynthArgSpec("holdString");); 
-					this.setSynthArgSpec("holdString", " "); 
-					system.flagGuiUpd;})}, 
-				120, TXColor.white, TXColor.sysGuiCol2],
+					this.storeSnapshot("valA", holdView.value-1, this.getSynthArgSpec("holdString"););
+					this.setSynthArgSpec("holdString", " ");
+					system.flagGuiUpd;})},
+				158, TXColor.white, TXColor.sysGuiCol2],
 			["TXTextBox", "Name", "holdString",nil, 210, 60],
-			["ActionPopup", arrLoadSnapshotItems, 
-				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valA", holdView.value-1); }); }, 
-				400, TXColor.white, TXColor.sysGuiCol1],
+			["ActionPopup", arrLoadSnapshotItems,
+				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valA", holdView.value-1); }); },
+				438, TXColor.white, TXColor.sysGuiCol1],
 		];
 	});
 	if (displayOption == "showGroupB", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260], 
-			["Spacer", 20], 
-			["ActionButton", "Randomise", {this.randomiseGroupB;}, 80, 
-				TXColor.white, TXColor.sysDeleteCol], 
-			["SpacerLine", 2], 
+			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260],
+			["Spacer", 20],
+			["ActionButton", "Randomise", {this.randomiseGroupB;}, 80,
+				TXColor.white, TXColor.sysDeleteCol],
+			["SpacerLine", 2],
 			["TXTextBox", "Name", "name1",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "B1", ControlSpec(0, 1), "valB1", nil, 300, 30],
 			["TXTextBox", "Name", "name2",nil, 100, 40], ["Spacer", 10],
@@ -605,26 +605,26 @@ buildGuiSpecArray {
 			["EZslider", "B14", ControlSpec(0, 1), "valB14", nil, 300, 30],
 			["TXTextBox", "Name", "name15",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "B15", ControlSpec(0, 1), "valB15", nil, 300, 30],
-			["SpacerLine", 2], 
-			["ActionPopup", arrStoreSnapshotItems, 
+			["SpacerLine", 2],
+			["ActionPopup", arrStoreSnapshotItems,
 				{arg holdView; if (holdView.value>0,{
-					this.storeSnapshot("valB", holdView.value-1, this.getSynthArgSpec("holdString");); 
-					this.setSynthArgSpec("holdString", " "); 
-					system.flagGuiUpd;})}, 
+					this.storeSnapshot("valB", holdView.value-1, this.getSynthArgSpec("holdString"););
+					this.setSynthArgSpec("holdString", " ");
+					system.flagGuiUpd;})},
 				120, TXColor.white, TXColor.sysGuiCol2],
 			["TXTextBox", "Name", "holdString",nil, 210, 60],
-			["ActionPopup", arrLoadSnapshotItems, 
-				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valB", holdView.value-1); }); }, 
+			["ActionPopup", arrLoadSnapshotItems,
+				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valB", holdView.value-1); }); },
 				400, TXColor.white, TXColor.sysGuiCol1],
 		];
 	});
 	if (displayOption == "showGroupC", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260], 
-			["Spacer", 20], 
-			["ActionButton", "Randomise", {this.randomiseGroupC;}, 80, 
-				TXColor.white, TXColor.sysDeleteCol], 
-			["SpacerLine", 2], 
+			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260],
+			["Spacer", 20],
+			["ActionButton", "Randomise", {this.randomiseGroupC;}, 80,
+				TXColor.white, TXColor.sysDeleteCol],
+			["SpacerLine", 2],
 			["TXTextBox", "Name", "name1",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "C1", ControlSpec(0, 1), "valC1", nil, 300, 30],
 			["TXTextBox", "Name", "name2",nil, 100, 40], ["Spacer", 10],
@@ -655,26 +655,26 @@ buildGuiSpecArray {
 			["EZslider", "C14", ControlSpec(0, 1), "valC14", nil, 300, 30],
 			["TXTextBox", "Name", "name15",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "C15", ControlSpec(0, 1), "valC15", nil, 300, 30],
-			["SpacerLine", 2], 
-			["ActionPopup", arrStoreSnapshotItems, 
+			["SpacerLine", 2],
+			["ActionPopup", arrStoreSnapshotItems,
 				{arg holdView; if (holdView.value>0,{
-					this.storeSnapshot("valC", holdView.value-1, this.getSynthArgSpec("holdString");); 
-					this.setSynthArgSpec("holdString", " "); 
-					system.flagGuiUpd;})}, 
+					this.storeSnapshot("valC", holdView.value-1, this.getSynthArgSpec("holdString"););
+					this.setSynthArgSpec("holdString", " ");
+					system.flagGuiUpd;})},
 				120, TXColor.white, TXColor.sysGuiCol2],
 			["TXTextBox", "Name", "holdString",nil, 210, 60],
-			["ActionPopup", arrLoadSnapshotItems, 
-				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valC", holdView.value-1); }); }, 
+			["ActionPopup", arrLoadSnapshotItems,
+				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valC", holdView.value-1); }); },
 				400, TXColor.white, TXColor.sysGuiCol1],
 		];
 	});
 	if (displayOption == "showGroupD", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260], 
-			["Spacer", 20], 
-			["ActionButton", "Randomise", {this.randomiseGroupD;}, 80, 
-				TXColor.white, TXColor.sysDeleteCol], 
-			["SpacerLine", 2], 
+			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260],
+			["Spacer", 20],
+			["ActionButton", "Randomise", {this.randomiseGroupD;}, 80,
+				TXColor.white, TXColor.sysDeleteCol],
+			["SpacerLine", 2],
 			["TXTextBox", "Name", "name1",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "D1", ControlSpec(0, 1), "valD1", nil, 300, 30],
 			["TXTextBox", "Name", "name2",nil, 100, 40], ["Spacer", 10],
@@ -705,26 +705,26 @@ buildGuiSpecArray {
 			["EZslider", "D14", ControlSpec(0, 1), "valD14", nil, 300, 30],
 			["TXTextBox", "Name", "name15",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "D15", ControlSpec(0, 1), "valD15", nil, 300, 30],
-			["SpacerLine", 2], 
-			["ActionPopup", arrStoreSnapshotItems, 
+			["SpacerLine", 2],
+			["ActionPopup", arrStoreSnapshotItems,
 				{arg holdView; if (holdView.value>0,{
-					this.storeSnapshot("valD", holdView.value-1, this.getSynthArgSpec("holdString");); 
-					this.setSynthArgSpec("holdString", " "); 
-					system.flagGuiUpd;})}, 
+					this.storeSnapshot("valD", holdView.value-1, this.getSynthArgSpec("holdString"););
+					this.setSynthArgSpec("holdString", " ");
+					system.flagGuiUpd;})},
 				120, TXColor.white, TXColor.sysGuiCol2],
 			["TXTextBox", "Name", "holdString",nil, 210, 60],
-			["ActionPopup", arrLoadSnapshotItems, 
-				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valD", holdView.value-1); }); }, 
+			["ActionPopup", arrLoadSnapshotItems,
+				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valD", holdView.value-1); }); },
 				400, TXColor.white, TXColor.sysGuiCol1],
 		];
 	});
 	if (displayOption == "showGroupE", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260], 
-			["Spacer", 20], 
-			["ActionButton", "Randomise", {this.randomiseGroupE;}, 80, 
-				TXColor.white, TXColor.sysDeleteCol], 
-			["SpacerLine", 2], 
+			["SynthOptionPopupPlusMinus", "Output", arrOptionData, 0, 260],
+			["Spacer", 20],
+			["ActionButton", "Randomise", {this.randomiseGroupE;}, 80,
+				TXColor.white, TXColor.sysDeleteCol],
+			["SpacerLine", 2],
 			["TXTextBox", "Name", "name1",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "E1", ControlSpec(0, 1), "valE1", nil, 300, 30],
 			["TXTextBox", "Name", "name2",nil, 100, 40], ["Spacer", 10],
@@ -755,16 +755,16 @@ buildGuiSpecArray {
 			["EZslider", "E14", ControlSpec(0, 1), "valE14", nil, 300, 30],
 			["TXTextBox", "Name", "name15",nil, 100, 40], ["Spacer", 10],
 			["EZslider", "E15", ControlSpec(0, 1), "valE15", nil, 300, 30],
-			["SpacerLine", 2], 
-			["ActionPopup", arrStoreSnapshotItems, 
+			["SpacerLine", 2],
+			["ActionPopup", arrStoreSnapshotItems,
 				{arg holdView; if (holdView.value>0,{
-					this.storeSnapshot("valE", holdView.value-1, this.getSynthArgSpec("holdString");); 
-					this.setSynthArgSpec("holdString", " "); 
-					system.flagGuiUpd;})}, 
+					this.storeSnapshot("valE", holdView.value-1, this.getSynthArgSpec("holdString"););
+					this.setSynthArgSpec("holdString", " ");
+					system.flagGuiUpd;})},
 				120, TXColor.white, TXColor.sysGuiCol2],
 			["TXTextBox", "Name", "holdString",nil, 210, 60],
-			["ActionPopup", arrLoadSnapshotItems, 
-				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valE", holdView.value-1); }); }, 
+			["ActionPopup", arrLoadSnapshotItems,
+				{arg holdView; if (holdView.value>0,{this.loadSnapshot("valE", holdView.value-1); }); },
 				400, TXColor.white, TXColor.sysGuiCol1],
 		];
 	});
@@ -778,13 +778,13 @@ getButtonColour { arg colour2Boolean;
 	});
 }
 
-extraSaveData {	
+extraSaveData {
 	^[arrSnapshots, arrSnapshotNames];
 }
 loadExtraData {arg argData;
 	arrSnapshots = argData[0];
 	arrSnapshotNames = argData[1] ?? (" "!30);
-	this.buildGuiSpecArray; 
+	this.buildGuiSpecArray;
 }
 
 loadSnapshot { arg groupString, snapshotNum;
@@ -809,96 +809,96 @@ storeSnapshot { arg groupString, snapshotNum, nameString;
 
 randomiseGroupA {
 	this.setSynthValue("valA1", 1.0.rand);
-	this.setSynthValue("valA2", 1.0.rand); 
-	this.setSynthValue("valA3", 1.0.rand); 
-	this.setSynthValue("valA4", 1.0.rand); 
-	this.setSynthValue("valA5", 1.0.rand); 
-	this.setSynthValue("valA6", 1.0.rand); 
-	this.setSynthValue("valA7", 1.0.rand); 
-	this.setSynthValue("valA8", 1.0.rand); 
-	this.setSynthValue("valA9", 1.0.rand); 
-	this.setSynthValue("valA10", 1.0.rand); 
-	this.setSynthValue("valA11", 1.0.rand); 
-	this.setSynthValue("valA12", 1.0.rand); 
-	this.setSynthValue("valA13", 1.0.rand); 
-	this.setSynthValue("valA14", 1.0.rand); 
-	this.setSynthValue("valA15", 1.0.rand); 
+	this.setSynthValue("valA2", 1.0.rand);
+	this.setSynthValue("valA3", 1.0.rand);
+	this.setSynthValue("valA4", 1.0.rand);
+	this.setSynthValue("valA5", 1.0.rand);
+	this.setSynthValue("valA6", 1.0.rand);
+	this.setSynthValue("valA7", 1.0.rand);
+	this.setSynthValue("valA8", 1.0.rand);
+	this.setSynthValue("valA9", 1.0.rand);
+	this.setSynthValue("valA10", 1.0.rand);
+	this.setSynthValue("valA11", 1.0.rand);
+	this.setSynthValue("valA12", 1.0.rand);
+	this.setSynthValue("valA13", 1.0.rand);
+	this.setSynthValue("valA14", 1.0.rand);
+	this.setSynthValue("valA15", 1.0.rand);
 	system.flagGuiUpd;
 }
 
 randomiseGroupB {
 	this.setSynthValue("valB1", 1.0.rand);
-	this.setSynthValue("valB2", 1.0.rand); 
-	this.setSynthValue("valB3", 1.0.rand); 
-	this.setSynthValue("valB4", 1.0.rand); 
-	this.setSynthValue("valB5", 1.0.rand); 
-	this.setSynthValue("valB6", 1.0.rand); 
-	this.setSynthValue("valB7", 1.0.rand); 
-	this.setSynthValue("valB8", 1.0.rand); 
-	this.setSynthValue("valB9", 1.0.rand); 
-	this.setSynthValue("valB10", 1.0.rand); 
-	this.setSynthValue("valB11", 1.0.rand); 
-	this.setSynthValue("valB12", 1.0.rand); 
-	this.setSynthValue("valB13", 1.0.rand); 
-	this.setSynthValue("valB14", 1.0.rand); 
-	this.setSynthValue("valB15", 1.0.rand); 
+	this.setSynthValue("valB2", 1.0.rand);
+	this.setSynthValue("valB3", 1.0.rand);
+	this.setSynthValue("valB4", 1.0.rand);
+	this.setSynthValue("valB5", 1.0.rand);
+	this.setSynthValue("valB6", 1.0.rand);
+	this.setSynthValue("valB7", 1.0.rand);
+	this.setSynthValue("valB8", 1.0.rand);
+	this.setSynthValue("valB9", 1.0.rand);
+	this.setSynthValue("valB10", 1.0.rand);
+	this.setSynthValue("valB11", 1.0.rand);
+	this.setSynthValue("valB12", 1.0.rand);
+	this.setSynthValue("valB13", 1.0.rand);
+	this.setSynthValue("valB14", 1.0.rand);
+	this.setSynthValue("valB15", 1.0.rand);
 	system.flagGuiUpd;
 }
 
 randomiseGroupC {
 	this.setSynthValue("valC1", 1.0.rand);
-	this.setSynthValue("valC2", 1.0.rand); 
-	this.setSynthValue("valC3", 1.0.rand); 
-	this.setSynthValue("valC4", 1.0.rand); 
-	this.setSynthValue("valC5", 1.0.rand); 
-	this.setSynthValue("valC6", 1.0.rand); 
-	this.setSynthValue("valC7", 1.0.rand); 
-	this.setSynthValue("valC8", 1.0.rand); 
-	this.setSynthValue("valC9", 1.0.rand); 
-	this.setSynthValue("valC10", 1.0.rand); 
-	this.setSynthValue("valC11", 1.0.rand); 
-	this.setSynthValue("valC12", 1.0.rand); 
-	this.setSynthValue("valC13", 1.0.rand); 
-	this.setSynthValue("valC14", 1.0.rand); 
-	this.setSynthValue("valC15", 1.0.rand); 
+	this.setSynthValue("valC2", 1.0.rand);
+	this.setSynthValue("valC3", 1.0.rand);
+	this.setSynthValue("valC4", 1.0.rand);
+	this.setSynthValue("valC5", 1.0.rand);
+	this.setSynthValue("valC6", 1.0.rand);
+	this.setSynthValue("valC7", 1.0.rand);
+	this.setSynthValue("valC8", 1.0.rand);
+	this.setSynthValue("valC9", 1.0.rand);
+	this.setSynthValue("valC10", 1.0.rand);
+	this.setSynthValue("valC11", 1.0.rand);
+	this.setSynthValue("valC12", 1.0.rand);
+	this.setSynthValue("valC13", 1.0.rand);
+	this.setSynthValue("valC14", 1.0.rand);
+	this.setSynthValue("valC15", 1.0.rand);
 	system.flagGuiUpd;
 }
 
 randomiseGroupD {
 	this.setSynthValue("valD1", 1.0.rand);
-	this.setSynthValue("valD2", 1.0.rand); 
-	this.setSynthValue("valD3", 1.0.rand); 
-	this.setSynthValue("valD4", 1.0.rand); 
-	this.setSynthValue("valD5", 1.0.rand); 
-	this.setSynthValue("valD6", 1.0.rand); 
-	this.setSynthValue("valD7", 1.0.rand); 
-	this.setSynthValue("valD8", 1.0.rand); 
-	this.setSynthValue("valD9", 1.0.rand); 
-	this.setSynthValue("valD10", 1.0.rand); 
-	this.setSynthValue("valD11", 1.0.rand); 
-	this.setSynthValue("valD12", 1.0.rand); 
-	this.setSynthValue("valD13", 1.0.rand); 
-	this.setSynthValue("valD14", 1.0.rand); 
-	this.setSynthValue("valD15", 1.0.rand); 
+	this.setSynthValue("valD2", 1.0.rand);
+	this.setSynthValue("valD3", 1.0.rand);
+	this.setSynthValue("valD4", 1.0.rand);
+	this.setSynthValue("valD5", 1.0.rand);
+	this.setSynthValue("valD6", 1.0.rand);
+	this.setSynthValue("valD7", 1.0.rand);
+	this.setSynthValue("valD8", 1.0.rand);
+	this.setSynthValue("valD9", 1.0.rand);
+	this.setSynthValue("valD10", 1.0.rand);
+	this.setSynthValue("valD11", 1.0.rand);
+	this.setSynthValue("valD12", 1.0.rand);
+	this.setSynthValue("valD13", 1.0.rand);
+	this.setSynthValue("valD14", 1.0.rand);
+	this.setSynthValue("valD15", 1.0.rand);
 	system.flagGuiUpd;
 }
 
 randomiseGroupE {
 	this.setSynthValue("valE1", 1.0.rand);
-	this.setSynthValue("valE2", 1.0.rand); 
-	this.setSynthValue("valE3", 1.0.rand); 
-	this.setSynthValue("valE4", 1.0.rand); 
-	this.setSynthValue("valE5", 1.0.rand); 
-	this.setSynthValue("valE6", 1.0.rand); 
-	this.setSynthValue("valE7", 1.0.rand); 
-	this.setSynthValue("valE8", 1.0.rand); 
-	this.setSynthValue("valE9", 1.0.rand); 
-	this.setSynthValue("valE10", 1.0.rand); 
-	this.setSynthValue("valE11", 1.0.rand); 
-	this.setSynthValue("valE12", 1.0.rand); 
-	this.setSynthValue("valE13", 1.0.rand); 
-	this.setSynthValue("valE14", 1.0.rand); 
-	this.setSynthValue("valE15", 1.0.rand); 
+	this.setSynthValue("valE2", 1.0.rand);
+	this.setSynthValue("valE3", 1.0.rand);
+	this.setSynthValue("valE4", 1.0.rand);
+	this.setSynthValue("valE5", 1.0.rand);
+	this.setSynthValue("valE6", 1.0.rand);
+	this.setSynthValue("valE7", 1.0.rand);
+	this.setSynthValue("valE8", 1.0.rand);
+	this.setSynthValue("valE9", 1.0.rand);
+	this.setSynthValue("valE10", 1.0.rand);
+	this.setSynthValue("valE11", 1.0.rand);
+	this.setSynthValue("valE12", 1.0.rand);
+	this.setSynthValue("valE13", 1.0.rand);
+	this.setSynthValue("valE14", 1.0.rand);
+	this.setSynthValue("valE15", 1.0.rand);
 	system.flagGuiUpd;
 }
 

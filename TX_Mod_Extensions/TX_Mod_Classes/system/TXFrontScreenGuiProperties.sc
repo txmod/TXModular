@@ -1,6 +1,6 @@
 // Copyright (C) 2011  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXFrontScreenGuiProperties {	// Front Screen gui  
+TXFrontScreenGuiProperties {	// Front Screen gui
 
 classvar window;
 
@@ -9,7 +9,7 @@ classvar window;
 	var fromTop, fromLeft, layoutView, arrLayoutXvals, arrLayoutYvals;
 	var layerBar, layerPopupView, layerNameText;
 	var replaceLayerActions, replaceLayerPopupView;
-	var currWidgetProperties, propertiesBox, actionCount; 
+	var currWidgetProperties, propertiesBox, actionCount;
 	var screenColourPopup, screenColourRed, screenColourGreen, screenColourBlue;
 	var screenColourAlpha, screenColourBox;
 	var notesView, updateButton, colourPickerButton, boxColourBox;
@@ -27,7 +27,7 @@ classvar window;
 	var midiChannelMinPopup, midiChannelMaxPopup, keyListenCheckbox, keyTextField;
 	var copyPropertiesButton, pastePropertiesButton, selectActionsButton;
 	var classData, arrSizes, screenWidth, screenHeight, totalHighlighted, holdCurrentWidget;
-	
+
 	classData = TXFrontScreen.classData;
 	arrSizes = TXFrontScreen.classData.arrSizes;
 	screenWidth = classData.screenWidths[classData.layerNo];
@@ -46,9 +46,9 @@ classvar window;
 		window.alpha = 0.9;
 		window.alwaysOnTop_(true);
 		window.onClose_({
-			window = nil; 
+			window = nil;
 			if (system.showFrontScreen == true and: (system.showWindow == "Design Interface"), {
-				classData.showGuiProperties = false; 
+				classData.showGuiProperties = false;
 			});
 			system.showView;
 		});
@@ -61,9 +61,9 @@ classvar window;
 	fromTop = 65;
 	fromLeft = 7;
 
-	// set variables  
+	// set variables
 	if (TXFrontScreen.arrWidgets.at(TXFrontScreen.currWidgetInd).class == TXWActionButton
-		or: (TXFrontScreen.arrWidgets.at(TXFrontScreen.currWidgetInd).class == TXW2DTablet 
+		or: (TXFrontScreen.arrWidgets.at(TXFrontScreen.currWidgetInd).class == TXW2DTablet
 			and: {TXFrontScreen.arrWidgets.at(TXFrontScreen.currWidgetInd).showActionIndex > 4})
 	, {
 		holdActionType = "commandAction";
@@ -75,32 +75,32 @@ classvar window;
 	// show widget properties for editing
 	currWidgetProperties = TXFrontScreen.arrWidgets.at(TXFrontScreen.currWidgetInd).properties;
 
-	// make box to display	
+	// make box to display
 	propertiesBox = CompositeView(window,Rect(4, 4, 800, 820))
 		.background_(TXColor.clear);
 	propertiesBox.decorator = FlowLayout(propertiesBox.bounds);
-	
+
 	// set visibleOrigin
 	if (classData.visibleOrigin.notNil, {window.view.visibleOrigin = classData.visibleOrigin; });
 
-	// line  
+	// line
 	StaticText(propertiesBox, Rect(0, 0, 580, 2))
 		.background_(TXColor.white);
 
 	// spacer & go to next line
 	propertiesBox.decorator.shift(0, 4).nextLine;
-	
-	// text label  
+
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleYellow2)
 		.align_(\left)
 		.string_("Current screen");
 
-	// popup - current layer  
+	// popup - current layer
 	layerPopupView = PopUpMenu(propertiesBox, Rect(0, 0, 80, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_((1 .. 20).collect({arg item, i; "Screen " ++ item.asString}))
-		.action_({arg view; 
+		.action_({arg view;
 			TXFrontScreen.storeCurrLoadNewLayer(view.value);
 			// update variables
 			this.setCurrentWidget(0);
@@ -109,22 +109,22 @@ classvar window;
 			system.showView;
 		});
 	layerPopupView.value = classData.layerNo;
-	
+
 	// add spacer
 	propertiesBox.decorator.shift(10, 0);
 
-	// label -  name 
+	// label -  name
 	StaticText(propertiesBox, Rect(0, 0, 50, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\right)
 		.string_("Name: " );
-	
-	// text - current layer name 
+
+	// text - current layer name
 	layerNameText = TextField(propertiesBox, Rect(0, 0, 250, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\left)
-		.action_({arg view; 
-			classData.layerName = view.string; 
+		.action_({arg view;
+			classData.layerName = view.string;
 			TXFrontScreen.storeCurrentLayer;
 		});
 	layerNameText.string = classData.layerName ;
@@ -132,19 +132,19 @@ classvar window;
 	// spacer & go to next line
 	propertiesBox.decorator.nextLine.shift(0, 10);
 
-	// popup - replace layer  
-	replaceLayerActions = 
+	// popup - replace layer
+	replaceLayerActions =
 		[ ["Copy or load another screen ... ", {}] ]
-		++ (1 .. 20).collect({arg item, i; 
-				["Copy Screen " ++ item.asString, {TXFrontScreen.overwriteCurrFromLayer(item-1);}]; 
+		++ (1 .. 20).collect({arg item, i;
+				["Copy Screen " ++ item.asString, {TXFrontScreen.overwriteCurrFromLayer(item-1);}];
 			})
-		++ [	["Load screen template from disk", {TXFrontScreen.loadScreenTemplate; }], 
+		++ [	["Load screen template from disk", {TXFrontScreen.loadScreenTemplate; }],
 			["Save screen template to disk", {TXFrontScreen.saveScreenTemplate}]
 		];
 	replaceLayerPopupView = PopUpMenu(propertiesBox, Rect(0, 0, 200, 20))
 		.background_(TXColor.sysGuiCol2).stringColor_(TXColor.white)
 		.items_(replaceLayerActions.collect({arg item, i; item.at(0)}))
-		.action_({arg view; 
+		.action_({arg view;
 			replaceLayerActions.at(view.value).at(1).value;
 			// update variables
 			this.setCurrentWidget(0);
@@ -156,16 +156,16 @@ classvar window;
 	// spacer & go to next line
 	propertiesBox.decorator.nextLine.shift(0, 10);
 
-	// text  
+	// text
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Screen width");
-		
+
 	// numberbox - screen width
 	screenWidthBox = NumberBox(propertiesBox, Rect(0, 0, 35, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			TXFrontScreen.setScreenWidth(view.value);
 			TXFrontScreen.fitAllWidgetsToGrid;
 			// update view
@@ -177,20 +177,20 @@ classvar window;
 	PopUpMenu(propertiesBox, Rect(0, 0, 14, 20))
 		.items_(classData.arrScreenSizes.collect({arg item, i; item.asString});)
 		.background_(TXColor.white)
-		.action_({arg view; 
+		.action_({arg view;
 			if (view.value > 0, {screenWidthBox.valueAction = classData.arrScreenSizes.at(view.value);});
 		});
 
-	// text  
+	// text
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Screen height");
-		
+
 	// numberbox - screen height
 	screenHeightBox = NumberBox(propertiesBox, Rect(0, 0, 35, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			TXFrontScreen.setScreenHeight(view.value);
 			TXFrontScreen.fitAllWidgetsToGrid;
 			// update view
@@ -202,7 +202,7 @@ classvar window;
 	PopUpMenu(propertiesBox, Rect(0, 0, 14, 20))
 		.items_(classData.arrScreenSizes.collect({arg item, i; item.asString});)
 		.background_(TXColor.white)
-		.action_({arg view; 
+		.action_({arg view;
 			if (view.value > 0, {
 				screenHeightBox.valueAction = classData.arrScreenSizes.at(view.value);
 			});
@@ -210,13 +210,16 @@ classvar window;
 
 	// spacer & go to next line
 	propertiesBox.decorator.shift(0, 10).nextLine;
-	
-	// label - background image 
+
+	/*
+		REMOVED UNTIL QT IMAGE CLASS DONE
+
+	// label - background image
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Screen image");
-	// text - image file name 
+	// text - image file name
 	imageNameText = StaticText(propertiesBox, Rect(0, 0, 300, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\left);
@@ -249,7 +252,7 @@ classvar window;
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Image mode");
-	//display mode 
+	//display mode
 	displayModeItems = [
 		"0 - off - image not shown, screen colour is used",
 		"1 - fix left, fix top - default",
@@ -269,11 +272,11 @@ classvar window;
 		"15 - fix right, center vertically",
 		"16 - center horizontally, center vertically - no scale",
 	];
-	// popup - display mode 
+	// popup - display mode
 	displayModePopupView = PopUpMenu(propertiesBox, Rect(0, 0, 340, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_(displayModeItems)
-		.action_({arg view; 
+		.action_({arg view;
 			classData.displayModeIndices[classData.layerNo] = view.value;
 			// update view
 			system.showView;
@@ -283,13 +286,15 @@ classvar window;
 	// spacer & go to next line
 	propertiesBox.decorator.nextLine.shift(0, 10);
 
-	// text label  
+	*/
+
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Screen colour");
 
-	// screenColourbox 
+	// screenColourbox
 	screenColourBox = DragBoth.new(propertiesBox, Rect(0, 0, 35, 20));
 	screenColourBox.background_(classData.screenColour);
 	screenColourBox.beginDragAction_({ arg view, x, y;
@@ -307,7 +312,7 @@ classvar window;
 		system.showView;
 	};
 
-	// colourPickerButton			
+	// colourPickerButton
 	colourPickerButton = Button(propertiesBox, 45 @ 20)
 	.states_([["Picker", TXColor.white, TXColor.sysGuiCol1]])
 	.action_({
@@ -317,48 +322,48 @@ classvar window;
 	screenColourPopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_(["Presets"] ++ TXColour.colourNames)
-		.action_({arg view; 
+		.action_({arg view;
 			if (view.value > 0, {
-				classData.screenColour = 
+				classData.screenColour =
 					TXColour.perform(TXColour.colourNames.at(view.value - 1).asSymbol).copy;
 				// update view
 				system.showView;
 			});
 		});
 
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 20, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.pink4)
 		.align_(\centre)
 		.string_("R");
-		
+
 	// numberbox - screenColour red
 	screenColourRed = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0).min(255);
 			classData.screenColour.red = view.value /255;
 			// update view
 			system.showView;
 		});
 	screenColourRed.value = (classData.screenColour.red * 255).round;
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 20, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleGreen)
 		.align_(\centre)
 		.string_("G");
-		
+
 	// numberbox - screenColour green
 	screenColourGreen = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0).min(255);
 			classData.screenColour.green = view.value /255;
 			// update view
 			system.showView;
 		});
 	screenColourGreen.value = (classData.screenColour.green * 255).round;
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 20, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue)
 		.align_(\centre)
@@ -366,14 +371,14 @@ classvar window;
 	// numberbox - screenColour blue
 	screenColourBlue = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0).min(255);
 			classData.screenColour.blue = view.value /255;
 			// update view
 			system.showView;
 		});
 	screenColourBlue.value = (classData.screenColour.blue * 255).round;
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 35, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
@@ -381,18 +386,18 @@ classvar window;
 	// numberbox - screenColour alpha
 	screenColourAlpha = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0).min(255);
 			classData.screenColour.alpha = view.value /255;
 			// update view
 			system.showView;
 		});
 	screenColourAlpha.value = (classData.screenColour.alpha * 255).round;
-	
+
 	// spacer & go to next line
 	propertiesBox.decorator.shift(0, 4).nextLine;
-	
-	// line  
+
+	// line
 	StaticText(propertiesBox, Rect(0, 0, 700, 2))
 		.background_(TXColor.white);
 
@@ -404,17 +409,17 @@ totalHighlighted = TXFrontScreen.arrWidgets.select({arg item, i; item.highlight 
 
 if (totalHighlighted == 1, {
 	holdCurrentWidget = TXFrontScreen.arrWidgets.at(TXFrontScreen.currWidgetInd);
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleYellow2)
 		.align_(\left)
 		.string_("Current widget");
-	// popup - current widget id  
+	// popup - current widget id
 	currWidgetIDPopupView = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
 		.background_(TXColor.white).stringColor_(TXColor.black)
 		.items_(TXFrontScreen.arrWidgets.collect({arg item, i; "W " ++ item.widgetID.asString}))
-		.action_({arg view; 
-			this.setCurrentWidget(view.value); 
+		.action_({arg view;
+			this.setCurrentWidget(view.value);
 			currWidgetNameText.string = TXFrontScreen.arrWidgets.at(view.value).class.widgetName;
 			// update view
 			system.showView;
@@ -424,18 +429,18 @@ if (totalHighlighted == 1, {
 	// add spacer
 	propertiesBox.decorator.shift(10, 0);
 
-	// label -  Type 
+	// label -  Type
 	StaticText(propertiesBox, Rect(0, 0, 50, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.align_(\right)
 		.string_("Type: " );
-	// text - current module name 
+	// text - current module name
 	currWidgetNameText = StaticText(propertiesBox, Rect(0, 0, 160, 20))
 		.stringColor_(TXColour.black).background_(TXColor.white)
 		.align_(\left);
 	currWidgetNameText.string = holdCurrentWidget.class.widgetName;
 
-	// button - Delete widget	  
+	// button - Delete widget
 	Button(propertiesBox, Rect(0, 0, 120, 20))
 		.states_([["Delete widget", TXColor.white, TXColor.sysDeleteCol]])
 		.action_({
@@ -451,25 +456,25 @@ if (totalHighlighted == 1, {
 	propertiesBox.decorator.nextLine.shift(0, 10);
 	// copy properties button
 	copyPropertiesButton = Button(propertiesBox, Rect(0, 0, 180, 20))
-		.states_([["Copy all widget properties", 
+		.states_([["Copy all widget properties",
 			TXColor.white, TXColor.bluegreen]]);
-	copyPropertiesButton.action = {arg view; 
-		classData.holdWidgetClass = 
+	copyPropertiesButton.action = {arg view;
+		classData.holdWidgetClass =
 			holdCurrentWidget.class.asSymbol;
-		classData.holdWidgetPropertyList = 
+		classData.holdWidgetPropertyList =
 			holdCurrentWidget.getPropertyList;
 	};
 	// paste properties button
 	pastePropertiesButton = Button(propertiesBox, Rect(0, 0, 180, 20))
-		.states_([["Paste all widget properties", 
+		.states_([["Paste all widget properties",
 			TXColor.white, TXColor.bluegreen]]);
-	pastePropertiesButton.action = {arg view; 
+	pastePropertiesButton.action = {arg view;
 		var selectedPropertyList;
 		// only paste relevent properties
 		if (classData.holdWidgetClass.notNil, {
 			// if classes match, copy all properties, else only display properties
-			if (classData.holdWidgetClass == 
-				holdCurrentWidget.class.asSymbol, 
+			if (classData.holdWidgetClass ==
+				holdCurrentWidget.class.asSymbol,
 			{
 				selectedPropertyList = classData.holdWidgetPropertyList.select({arg item, i;
 					TXFrontScreen.copyAllProperties.includes(item.at(0));
@@ -489,23 +494,23 @@ if (totalHighlighted == 1, {
 
 	// spacer & go to next line
 	propertiesBox.decorator.nextLine.shift(0, 10);
-	
-	// text label  
+
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Widget size");
-		
-	// text label  
+
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 50, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Width");
-		
+
 	// numberbox - current module width
 	currWidgetWidth = NumberBox(propertiesBox, Rect(0, 0, 35, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value
 				.max(holdCurrentWidget.widthMin)
 				.min(holdCurrentWidget.widthMax);
@@ -520,20 +525,20 @@ if (totalHighlighted == 1, {
 	PopUpMenu(propertiesBox, Rect(0, 0, 15, 20))
 		.items_(arrSizes.collect({arg item, i; item.asString});)
 		.background_(TXColor.white)
-		.action_({arg view; 
+		.action_({arg view;
 			if (view.value > 0, {currWidgetWidth.valueAction = arrSizes.at(view.value);});
 		});
 
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 50, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Height");
-		
+
 	// numberbox - current module height
 	currWidgetHeight = NumberBox(propertiesBox, Rect(0, 0, 35, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value
 				.max(holdCurrentWidget.heightMin)
 				.min(holdCurrentWidget.heightMax);
@@ -548,15 +553,15 @@ if (totalHighlighted == 1, {
 	PopUpMenu(propertiesBox, Rect(0, 0, 15, 20))
 		.items_(arrSizes.collect({arg item, i; item.asString});)
 		.background_(TXColor.white)
-		.action_({arg view; 
+		.action_({arg view;
 			if (view.value > 0, {currWidgetHeight.valueAction = arrSizes.at(view.value);});
 		});
 
 	// button swap width and height
 	rotateButton = Button(propertiesBox, Rect(0, 0, 160, 20))
-		.states_([["Swap width and height", 
+		.states_([["Swap width and height",
 			TXColor.white, TXColor.blue]]);
-	rotateButton.action = {arg view; 
+	rotateButton.action = {arg view;
 		var holdHeight, holdWidth;
 		holdHeight = holdCurrentWidget.width;
 		holdWidth = holdCurrentWidget.height;
@@ -569,65 +574,65 @@ if (totalHighlighted == 1, {
 	// spacer & go to next line
 	propertiesBox.decorator.nextLine.shift(0, 10);
 
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("Widget position");
-		
-	// text label  
+
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 60, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("From left");
-		
+
 	// numberbox - current module from left
 	currWidgetFromLeft = NumberBox(propertiesBox, Rect(0, 0, 35, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0)
 				.min(screenWidth - holdCurrentWidget.width);
 			holdCurrentWidget.fromLeft_(view.value, screenWidth);
 			// update view
 			system.showView;
 		});
-	currWidgetFromLeft.value = 
+	currWidgetFromLeft.value =
 		holdCurrentWidget.fromLeft(screenWidth).asInteger;
 
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 60, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_("From top");
-		
+
 	// numberbox - current module from top
 	currWidgetFromTop = NumberBox(propertiesBox, Rect(0, 0, 35, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0)
 				.min(screenHeight - holdCurrentWidget.height);
 			holdCurrentWidget.fromTop_(view.value, screenHeight);
 			// update view
 			system.showView;
 		});
-	currWidgetFromTop.value = 
+	currWidgetFromTop.value =
 		holdCurrentWidget.fromTop(screenHeight).asInteger;
 
 	// spacer & go to next line
 	propertiesBox.decorator.nextLine.shift(0, 10);
 
-	// set label text  
+	// set label text
 	if ((holdCurrentWidget.class == TXWKnob), {
 		backgroundName = "Level colour"
 	},{
 		backgroundName = "Box colour"
 	});
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 100, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
 		.string_(backgroundName);
-	// boxColourBox 
+	// boxColourBox
 	boxColourBox = DragBoth.new(propertiesBox, Rect(0, 0, 40, 20));
 	boxColourBox.background_(holdCurrentWidget.background);
 	boxColourBox.beginDragAction_({ arg view, x, y;
@@ -649,62 +654,62 @@ if (totalHighlighted == 1, {
 		system.showView;
 	};
 
-	// colourPickerButton			
+	// colourPickerButton
 	colourPickerButton = Button(propertiesBox, 45 @ 20)
 	.states_([["Picker", TXColor.white, TXColor.sysGuiCol1]])
 	.action_({
 		TXColour.showPicker;
 	});
-		
+
 	// popup - background presets
 	backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_(["Presets"] ++ TXColour.colourNames)
-		.action_({arg view; 
+		.action_({arg view;
 			if (view.value > 0, {
-				holdCurrentWidget.background = 
+				holdCurrentWidget.background =
 					TXColour.perform(TXColour.colourNames.at(view.value - 1).asSymbol).copy;
 				// update view
 				system.showView;
 			});
 		});
 
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 20, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.pink4)
 		.align_(\centre)
 		.string_("R");
-		
+
 	// numberbox - background red
 	backgroundRed = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0).min(255);
-			holdCurrentWidget.background.red = 
+			holdCurrentWidget.background.red =
 				view.value /255;
 			// update view
 			system.showView;
 		});
-	backgroundRed.value = 
+	backgroundRed.value =
 		(holdCurrentWidget.background.red * 255).round;
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 20, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleGreen)
 		.align_(\centre)
 		.string_("G");
-		
+
 	// numberbox - background green
 	backgroundGreen = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0).min(255);
 			holdCurrentWidget.background.green = view.value /255;
 			// update view
 			system.showView;
 		});
-	backgroundGreen.value = 
+	backgroundGreen.value =
 		(holdCurrentWidget.background.green * 255).round;
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 20, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue)
 		.align_(\centre)
@@ -712,15 +717,15 @@ if (totalHighlighted == 1, {
 	// numberbox - background blue
 	backgroundBlue = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0).min(255);
 			holdCurrentWidget.background.blue = view.value /255;
 			// update view
 			system.showView;
 		});
-	backgroundBlue.value = 
+	backgroundBlue.value =
 		(holdCurrentWidget.background.blue * 255).round;
-	// text label  
+	// text label
 	StaticText(propertiesBox, Rect(0, 0, 35, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 		.align_(\left)
@@ -728,17 +733,17 @@ if (totalHighlighted == 1, {
 	// numberbox - background alpha
 	backgroundAlpha = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 		.scroll_(false)
-		.action_({arg view; 
+		.action_({arg view;
 			view.value = view.value.max(0).min(255);
 			holdCurrentWidget.background.alpha = view.value /255;
 			// update view
 			system.showView;
 		});
-	backgroundAlpha.value = 
+	backgroundAlpha.value =
 		(holdCurrentWidget.background.alpha * 255).round;
-	
+
 	// ==========================================================================================
-	
+
 	// check properties
 	if ((holdCurrentWidget.class == TXWSlider)
 		or: (holdCurrentWidget.class == TXWSliderV)
@@ -752,12 +757,12 @@ if (totalHighlighted == 1, {
 		// spacer & next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
 
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 100, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Knob colour");
-		// knobColourBox 
+		// knobColourBox
 		knobColourBox = DragBoth.new(propertiesBox, Rect(0, 0, 40, 20));
 		knobColourBox.background_(holdCurrentWidget.knobColour);
 		knobColourBox.beginDragAction_({ arg view, x, y;
@@ -779,61 +784,61 @@ if (totalHighlighted == 1, {
 			system.showView;
 		};
 
-		// colourPickerButton			
+		// colourPickerButton
 		colourPickerButton = Button(propertiesBox, 45 @ 20)
 		.states_([["Picker", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({
 			TXColour.showPicker;
 		});
-			
+
 		// popup - background presets
 		backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 			.items_(["Presets"] ++ TXColour.colourNames)
-			.action_({arg view; 
+			.action_({arg view;
 				if (view.value > 0, {
-					holdCurrentWidget.knobColour = 
+					holdCurrentWidget.knobColour =
 						TXColour.perform(TXColour.colourNames.at(view.value - 1).asSymbol).copy;
 					// update view
 					system.showView;
 				});
 			});
 
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 20, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.pink4)
 			.align_(\centre)
 			.string_("R");
-			
+
 		// numberbox - knobColour red
 		knobColourRed = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(255);
 				holdCurrentWidget.knobColour.red = view.value /255;
 				// update view
 				system.showView;
 			});
-		knobColourRed.value = 
+		knobColourRed.value =
 			(holdCurrentWidget.knobColour.red * 255).round;
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 20, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleGreen)
 			.align_(\centre)
 			.string_("G");
-			
+
 		// numberbox - knobColour green
 		knobColourGreen = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(255);
 				holdCurrentWidget.knobColour.green = view.value /255;
 				// update view
 				system.showView;
 			});
-		knobColourGreen.value = 
+		knobColourGreen.value =
 			(holdCurrentWidget.knobColour.green * 255).round;
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 20, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue)
 			.align_(\centre)
@@ -841,15 +846,15 @@ if (totalHighlighted == 1, {
 		// numberbox - knobColour blue
 		knobColourBlue = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(255);
 				holdCurrentWidget.knobColour.blue = view.value /255;
 				// update view
 				system.showView;
 			});
-		knobColourBlue.value = 
+		knobColourBlue.value =
 			(holdCurrentWidget.knobColour.blue * 255).round;
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 35, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
@@ -857,23 +862,23 @@ if (totalHighlighted == 1, {
 		// numberbox - knobColour alpha
 		knobColourAlpha = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(255);
 				holdCurrentWidget.knobColour.alpha = view.value /255;
 				// update view
 				system.showView;
 			});
-		knobColourAlpha.value = 
+		knobColourAlpha.value =
 			(holdCurrentWidget.knobColour.alpha * 255).round;
-		
+
 		// go to next line
 		propertiesBox.decorator.nextLine;
 
 		// colour swap button
 		colourSwapButton = Button(propertiesBox, Rect(0, 0, 240, 20))
-			.states_([["Swap knob colour and box colour", 
+			.states_([["Swap knob colour and box colour",
 				TXColor.white, TXColor.blue]]);
-		colourSwapButton.action = {arg view; 
+		colourSwapButton.action = {arg view;
 			var holdKnobColor2, holdBackground2;
 			holdKnobColor2 = holdCurrentWidget.background;
 			holdBackground2 = holdCurrentWidget.knobColour;
@@ -886,17 +891,17 @@ if (totalHighlighted == 1, {
 		if ((holdCurrentWidget.class != TXWKnob), {
 			// spacer & go to next line
 			propertiesBox.decorator.nextLine.shift(0, 10);
-	
-			// text label  
+
+			// text label
 			StaticText(propertiesBox, Rect(0, 0, 100, 20))
 				.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 				.align_(\left)
 				.string_("Knob size");
-				
+
 			// numberbox - knob width
 			knobWidthBox = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 				.scroll_(false)
-				.action_({arg view; 
+				.action_({arg view;
 					view.value = view.value.max(0).min(600);
 					holdCurrentWidget.thumbSize = view.value;
 					// update view
@@ -910,19 +915,19 @@ if (totalHighlighted == 1, {
 			or: (holdCurrentWidget.class == TXWSliderNoV)
 			, {
 
-			// spacer 
+			// spacer
 			propertiesBox.decorator.shift(10, 0);
 
-			// text label  
+			// text label
 			StaticText(propertiesBox, Rect(0, 0, 70, 20))
 				.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 				.align_(\left)
 				.string_("Number size");
-				
+
 			// numberbox - number size
 			numberSizeBox = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 				.scroll_(false)
-				.action_({arg view; 
+				.action_({arg view;
 					view.value = view.value.max(0).min(600);
 					holdCurrentWidget.numberSize = view.value;
 					// update view
@@ -934,21 +939,21 @@ if (totalHighlighted == 1, {
 	});
 
 	// ==========================================================================================
-	
+
 	// check properties
-	if (holdCurrentWidget.properties.includes(\string) and: 
+	if (holdCurrentWidget.properties.includes(\string) and:
 		(holdCurrentWidget.class != TXWNotesBox), {
-	
+
 		// spacer & go to next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 120, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Text to be displayed");
 		// text box
 		labelText = TextField(propertiesBox, Rect(0, 0, 240, 20))
-			.action_({arg view; 
+			.action_({arg view;
 				holdCurrentWidget.string = view.string;
 				// update view
 				system.showView;
@@ -957,28 +962,28 @@ if (totalHighlighted == 1, {
 		labelText.string = holdCurrentWidget.string;
 		// clear text button
 		clearTextButton = Button(propertiesBox, Rect(0, 0, 60, 20))
-			.states_([["Clear text", 
+			.states_([["Clear text",
 				TXColor.white, TXColor.sysDeleteCol]])
-			.action = {arg view; 
+			.action = {arg view;
 				holdCurrentWidget.string = "";
 				// update view
 				system.showView;
 			};
 	});
-	
+
 	// ==========================================================================================
-	
+
 	// check properties
 	if (holdCurrentWidget.properties.includes(\stringColorAsArgs), {
-	
+
 		// spacer & go to next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 100, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Text colour");
-		// stringColorBox 
+		// stringColorBox
 		stringColorBox = DragBoth.new(propertiesBox, Rect(0, 0, 40, 20));
 		stringColorBox.background_(holdCurrentWidget.stringColor);
 		stringColorBox.beginDragAction_({ arg view, x, y;
@@ -997,61 +1002,61 @@ if (totalHighlighted == 1, {
 			system.showView;
 		};
 
-		// colourPickerButton			
+		// colourPickerButton
 		colourPickerButton = Button(propertiesBox, 45 @ 20)
 		.states_([["Picker", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({
 			TXColour.showPicker;
 		});
-			
+
 		// popup - background presets
 		backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 			.items_(["Presets"] ++ TXColour.colourNames)
-			.action_({arg view; 
+			.action_({arg view;
 				if (view.value > 0, {
-					holdCurrentWidget.stringColor = 
+					holdCurrentWidget.stringColor =
 						TXColour.perform(TXColour.colourNames.at(view.value - 1).asSymbol).copy;
 					// update view
 					system.showView;
 				});
 			});
 
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 20, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.pink4)
 			.align_(\centre)
 			.string_("R");
-			
+
 		// numberbox - stringColor red
 		stringColorRed = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(255);
 				holdCurrentWidget.stringColor.red = view.value /255;
 				// update view
 				system.showView;
 			});
-		stringColorRed.value = 
+		stringColorRed.value =
 			(holdCurrentWidget.stringColor.red * 255).round;
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 20, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleGreen)
 			.align_(\centre)
 			.string_("G");
-			
+
 		// numberbox - stringColor green
 		stringColorGreen = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(255);
 				holdCurrentWidget.stringColor.green = view.value /255;
 				// update view
 				system.showView;
 			});
-		stringColorGreen.value = 
+		stringColorGreen.value =
 			(holdCurrentWidget.stringColor.green * 255).round;
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 20, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue)
 			.align_(\centre)
@@ -1059,15 +1064,15 @@ if (totalHighlighted == 1, {
 		// numberbox - stringColor blue
 		stringColorBlue = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(255);
 				holdCurrentWidget.stringColor.blue = view.value /255;
 				// update view
 				system.showView;
 			});
-		stringColorBlue.value = 
+		stringColorBlue.value =
 			(holdCurrentWidget.stringColor.blue * 255).round;
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 35, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
@@ -1075,7 +1080,7 @@ if (totalHighlighted == 1, {
 		// numberbox - stringColor alpha
 		stringColorAlpha = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(255);
 				holdCurrentWidget.stringColor.alpha = view.value /255;
 				// update view
@@ -1083,15 +1088,15 @@ if (totalHighlighted == 1, {
 			});
 		stringColorAlpha.value = (TXFrontScreen.arrWidgets
 			.at(TXFrontScreen.currWidgetInd).stringColor.alpha * 255).round;
-		
+
 		// go to next line
 		propertiesBox.decorator.nextLine;
 
 		// colour swap button
 		colourSwapButton = Button(propertiesBox, Rect(0, 0, 240, 20))
-			.states_([["Swap text colour and box colour", 
+			.states_([["Swap text colour and box colour",
 				TXColor.white, TXColor.blue]]);
-		colourSwapButton.action = {arg view; 
+		colourSwapButton.action = {arg view;
 			var holdStringColor2, holdBackground2;
 			holdStringColor2 = holdCurrentWidget.background;
 			holdBackground2 = holdCurrentWidget.stringColor;
@@ -1100,47 +1105,49 @@ if (totalHighlighted == 1, {
 			// update view
 			system.showView;
 		};
-	
+
 		if (holdCurrentWidget.class == TXWCheckBox, {
 			// checkbox reverse colours
 			colourRevCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 240, 20),
-				"Reverse colours when switched on", 
-				TXColour.blue, TXColor.white, 
+				"Reverse colours when switched on",
+				TXColour.blue, TXColor.white,
 				TXColour.white, TXColor.blue);
-			colourRevCheckbox.action = {arg view; 
+			colourRevCheckbox.action = {arg view;
 				holdCurrentWidget.colourReverse = view.value;
 			};
-			colourRevCheckbox.value = 
+			colourRevCheckbox.value =
 				holdCurrentWidget.colourReverse ? 0;
-			
+
 		});
 
 		// spacer & go to next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
 
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 100, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Font");
-			
+
 		// popup - font
 		fontPopup = PopUpMenu(propertiesBox, Rect(105, 30, 140, 20))
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 			.items_(classData.arrFonts)
-			.action_({arg view; 
+			.action_({arg view;
 				if (view.value > 0, {
-					holdCurrentWidget.font = 
-						classData.arrFonts.at(view.value);
+					holdCurrentWidget.font =
+					classData.arrFonts.at(view.value);
+					// update view
+					system.showView;
 				});
 			});
-		fontPopup.value = 
+		fontPopup.value =
 			classData.arrFonts.indexOf(holdCurrentWidget.font) ? 0;
 
 		// numberbox - font size
 		fontSizeBox = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(2).min(200);
 				holdCurrentWidget.fontSize = view.value;
 				// update view
@@ -1151,38 +1158,38 @@ if (totalHighlighted == 1, {
 	});
 
 	// ==========================================================================================
-	
+
 	if (holdCurrentWidget.class == TXWActionButton, {
 
 		// midi note trigger
 
 		// spacer & go to next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 100, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Midi Trigger");
-			
+
 		// checkbox midi Listen
 		midiListenCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 40, 20),
-			" ", TXColour.black, TXColor.white, 
+			" ", TXColour.black, TXColor.white,
 			TXColour.black, TXColor.yellow, 4);
-		midiListenCheckbox.action = {arg view; 
+		midiListenCheckbox.action = {arg view;
 			holdCurrentWidget.midiListen = view.value;
 		};
 		midiListenCheckbox.value = holdCurrentWidget.midiListen ? 0;
-		
-		// text label  
+
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 30, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Note");
-			
+
 		// numberbox - midi Note
 		midiNoteBox = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 			.scroll_(false)
-			.action_({arg view; 
+			.action_({arg view;
 				view.value = view.value.max(0).min(127);
 				holdCurrentWidget.midiNote = view.value;
 				midiNotePopup.value = view.value;
@@ -1195,54 +1202,54 @@ if (totalHighlighted == 1, {
 		midiNotePopup = PopUpMenu(propertiesBox, Rect(0, 0, 50, 20))
 			.items_((0 .. 127).collect({arg item, i; TXGetMidiNoteString.new(item)});)
 			.background_(TXColor.white)
-			.action_({arg view; 
+			.action_({arg view;
 				midiNoteBox.valueAction = view.value;
 			});
 		midiNotePopup.value = holdCurrentWidget.midiNote ? 0;
 
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 60, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Channels");
-			
+
 		// numberbox - midi channel min
 		midiChannelMinPopup = PopUpMenu(propertiesBox, Rect(0, 0, 40, 20))
 			.items_((1..16).collect({arg item, i; item.asString}))
 			.background_(TXColor.white)
-			.action_({arg view; 
+			.action_({arg view;
 				holdCurrentWidget.midiMinChannel = view.value + 1;
 				// update view
 				system.showView;
 			});
-		midiChannelMinPopup.value = 
+		midiChannelMinPopup.value =
 			(holdCurrentWidget.midiMinChannel ? 1) - 1;
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 20, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 			.align_(\centre)
 			.string_("to");
-			
+
 		// numberbox - midi channel max
 		midiChannelMaxPopup = PopUpMenu(propertiesBox, Rect(0, 0, 40, 20))
 			.items_((1..16).collect({arg item, i; item.asString}))
 			.background_(TXColor.white)
-			.action_({arg view; 
+			.action_({arg view;
 				holdCurrentWidget.midiMaxChannel = view.value + 1;
 				// update view
 				system.showView;
 			});
-		midiChannelMaxPopup.value = 
+		midiChannelMaxPopup.value =
 			(holdCurrentWidget.midiMaxChannel ? 1) - 1;
-		
-		// spacer 
+
+		// spacer
 		propertiesBox.decorator.shift(10, 0);
 
 		// checkbox Midi Note Learn
 		midiLearnCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 120, 20),
-			"MIDI Learn", TXColour.blue, TXColor.white, 
+			"MIDI Learn", TXColour.blue, TXColor.white,
 			TXColour.white, TXColor.blue, 0);
-		midiLearnCheckbox.action = {arg view; 
+		midiLearnCheckbox.action = {arg view;
 			var midiNoteResponder;
 			if (view.value == 1, {
 				TXFrontScreen.midiDeActivate;
@@ -1271,30 +1278,30 @@ if (totalHighlighted == 1, {
 
 		// spacer & go to next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 100, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Key Trigger");
-			
+
 		// checkbox key Listen
 		keyListenCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 40, 20),
-			" ", TXColour.black, TXColor.white, 
+			" ", TXColour.black, TXColor.white,
 			TXColour.black, TXColor.yellow, 4);
-		keyListenCheckbox.action = {arg view; 
+		keyListenCheckbox.action = {arg view;
 			holdCurrentWidget.keyListen = view.value;
 		};
 		keyListenCheckbox.value = holdCurrentWidget.keyListen ? 0;
-		
-		// text label  
+
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 30, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Key");
-			
+
 		// text field - key
 		keyTextField = TextField(propertiesBox, Rect(0, 0, 28, 20))
-			.action_({arg view; 
+			.action_({arg view;
 				if (view.string.size == 0, {view.string = "";});
 				view.string = view.string.at(0);
 				holdCurrentWidget.keyChar = view.string;
@@ -1306,7 +1313,7 @@ if (totalHighlighted == 1, {
 	});
 
 	// ==========================================================================================
-	
+
 	// check properties
 	if ((holdCurrentWidget.class == TXWSlider)
 		or: (holdCurrentWidget.class == TXWKnob)
@@ -1318,33 +1325,33 @@ if (totalHighlighted == 1, {
 	,{
 		// spacer & go to next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 100, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Midi listen");
-			
+
 		// checkbox midi Listen
 		midiListenCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 35, 20),
-			" ", TXColour.black, TXColor.white, 
+			" ", TXColour.black, TXColor.white,
 			TXColour.black, TXColor.yellow, 4);
-		midiListenCheckbox.action = {arg view; 
+		midiListenCheckbox.action = {arg view;
 			holdCurrentWidget.midiListen = view.value;
 		};
 		midiListenCheckbox.value = holdCurrentWidget.midiListen ? 0;
-		
-		if (holdCurrentWidget.class == TXW2DSlider 
+
+		if (holdCurrentWidget.class == TXW2DSlider
 				or: (holdCurrentWidget.class == TXW2DTablet) ,{
-			// text label  
+			// text label
 			StaticText(propertiesBox, Rect(0, 0, 80, 20))
 				.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 				.align_(\left)
 				.string_("Controller nos");
-				
+
 			// numberbox - midi controller no
 			midiCCNoBox = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 				.scroll_(false)
-				.action_({arg view; 
+				.action_({arg view;
 					view.value = view.value.max(0).min(127);
 					holdCurrentWidget.midiCCNo = view.value;
 					// update view
@@ -1354,7 +1361,7 @@ if (totalHighlighted == 1, {
 			// numberbox - midi controller no 2
 			midiCCNoBox2 = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 				.scroll_(false)
-				.action_({arg view; 
+				.action_({arg view;
 					view.value = view.value.max(0).min(127);
 					holdCurrentWidget.midiCCNo2 = view.value;
 					// update view
@@ -1362,16 +1369,16 @@ if (totalHighlighted == 1, {
 				});
 			midiCCNoBox2.value = holdCurrentWidget.midiCCNo2 ? 0;
 		},{
-			// text label  
+			// text label
 			StaticText(propertiesBox, Rect(0, 0, 80, 20))
 				.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 				.align_(\left)
 				.string_("Controller no");
-				
+
 			// numberbox - midi controller no
 			midiCCNoBox = NumberBox(propertiesBox, Rect(0, 0, 28, 20))
 				.scroll_(false)
-				.action_({arg view; 
+				.action_({arg view;
 					view.value = view.value.max(0).min(127);
 					holdCurrentWidget.midiCCNo = view.value;
 					// update view
@@ -1379,56 +1386,56 @@ if (totalHighlighted == 1, {
 				});
 			midiCCNoBox.value = holdCurrentWidget.midiCCNo ? 0;
 		});
-		
-		// text label  
+
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 60, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Channels");
-			
+
 		// numberbox - midi channel min
 		midiChannelMinPopup = PopUpMenu(propertiesBox, Rect(0, 0, 40, 20))
 			.items_((1..16).collect({arg item, i; item.asString}))
 			.background_(TXColor.white)
-			.action_({arg view; 
+			.action_({arg view;
 				holdCurrentWidget.midiMinChannel = view.value + 1;
 				// update view
 				system.showView;
 			});
-		midiChannelMinPopup.value = 
+		midiChannelMinPopup.value =
 			(holdCurrentWidget.midiMinChannel ? 1) - 1;
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 20, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 			.align_(\centre)
 			.string_("to");
-			
+
 		// numberbox - midi channel max
 		midiChannelMaxPopup = PopUpMenu(propertiesBox, Rect(0, 0, 40, 20))
 			.items_((1..16).collect({arg item, i; item.asString}))
 			.background_(TXColor.white)
-			.action_({arg view; 
+			.action_({arg view;
 				holdCurrentWidget.midiMaxChannel = view.value + 1;
 				// update view
 				system.showView;
 			});
-		midiChannelMaxPopup.value = 
+		midiChannelMaxPopup.value =
 			(holdCurrentWidget.midiMaxChannel ? 16) - 1;
-		
-		// spacer 
+
+		// spacer
 		propertiesBox.decorator.shift(10, 0);
 
 		// checkbox Midi CC Learn
 		midiLearnCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 120, 20),
-			"MIDI Learn", TXColour.blue, TXColor.white, 
+			"MIDI Learn", TXColour.blue, TXColor.white,
 			TXColour.white, TXColor.blue, 0);
-		midiLearnCheckbox.action = {arg view; 
+		midiLearnCheckbox.action = {arg view;
 			var midiCCNoResponder;
 			if (view.value == 1, {
 				TXFrontScreen.midiDeActivate;
 				classData.midiLearnHoldVal = nil;
 				// If 2D, then allow for learning 2 controllers
-				if (holdCurrentWidget.class == TXW2DSlider 
+				if (holdCurrentWidget.class == TXW2DSlider
 						or: (holdCurrentWidget.class == TXW2DTablet) ,{
 					midiCCNoResponder = CCResponder({ |src, chan, num, val|
 						if (classData.midiLearnHoldVal.isNil, {
@@ -1472,14 +1479,14 @@ if (totalHighlighted == 1, {
 	});
 
 	// ==========================================================================================
-	
+
 	// check properties
 	if (holdCurrentWidget.class == TXWNotesBox, {
-	
+
 		// spacer & go to next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
-	
-		// text label  
+
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 400, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\centre)
@@ -1488,7 +1495,7 @@ if (totalHighlighted == 1, {
 		// update button
 		updateButton = Button(propertiesBox, Rect(0, 0, 100, 20))
 			.states_([ ["Store Notes", TXColor.white, TXColor.sysEditCol] ]);
-		updateButton.action = {arg view; 
+		updateButton.action = {arg view;
 			holdCurrentWidget.string = notesView.string;
 			// update view
 			system.showView;
@@ -1506,49 +1513,49 @@ if (totalHighlighted == 1, {
 			;
 	});
 	// ==========================================================================================
-	
+
 	if (holdCurrentWidget.properties.includes(\arrActions), {
-	
+
 		// spacer & go to next line
 		propertiesBox.decorator.nextLine.shift(0, 10);
 
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 100, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\left)
 			.string_("Widget Actions:");
 
-		// spacer 
+		// spacer
 		propertiesBox.decorator.shift(10, 0);
 
 		if (holdCurrentWidget.class == TXW2DSlider, {
 			// x-y axis button
 				selectActionsButton = PopUpMenu(propertiesBox, Rect(0, 0, 140, 20))
 					.stringColor_(TXColour.white).background_(TXColor.sysGuiCol1)
-					.items_(["x-axis", "y-axis", 
+					.items_(["x-axis", "y-axis",
 					]);
-			selectActionsButton.action = {arg view; 
+			selectActionsButton.action = {arg view;
 				holdCurrentWidget.showYAxis = view.value;
 				// update view
 				system.showView;
 			};
-			selectActionsButton.value = 
+			selectActionsButton.value =
 				holdCurrentWidget.showYAxis ? 0;
-		},{	
+		},{
 			if (holdCurrentWidget.class == TXW2DTablet, {
 				// x-y axis button
 				selectActionsButton = PopUpMenu(propertiesBox, Rect(0, 0, 140, 20))
 					.stringColor_(TXColour.white).background_(TXColor.sysGuiCol1)
-					.items_(["x-axis", "y-axis", "pressure", "tilt x", "tilt y", "mouse-down", 
-						"mouse-drag", "mouse-up", "double-click", 
+					.items_(["x-axis", "y-axis", "pressure", "tilt x", "tilt y", "mouse-down",
+						"mouse-drag", "mouse-up", "double-click",
 					]);
-				selectActionsButton.action = {arg view; 
-					holdCurrentWidget.showActionIndex = 
+				selectActionsButton.action = {arg view;
+					holdCurrentWidget.showActionIndex =
 						view.value;
 					// update view
 					system.showView;
 				};
-				selectActionsButton.value = 
+				selectActionsButton.value =
 					holdCurrentWidget.showActionIndex ? 0;
 			});
 		});
@@ -1556,12 +1563,12 @@ if (totalHighlighted == 1, {
 		// next line
 		propertiesBox.decorator.nextLine;
 
-		// text label  
+		// text label
 		StaticText(propertiesBox, Rect(0, 0, 150, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\centre)
 			.string_("Module");
-		// text label  
+		// text label
 		holdView = StaticText(propertiesBox, Rect(0, 0, 300, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\centre);
@@ -1571,7 +1578,7 @@ if (totalHighlighted == 1, {
 			holdView.string_("Parameter to update");
 		});
 
-		// text label  
+		// text label
 		holdView = StaticText(propertiesBox, Rect(0, 0, 250, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleBlue2)
 			.align_(\centre);
@@ -1581,7 +1588,7 @@ if (totalHighlighted == 1, {
 			holdView.string_("Extra parameter settings");
 		});
 
-		// up to 10 actions can be defined  
+		// up to 10 actions can be defined
 		if (holdCurrentWidget.class == TXWTextDisplayBox, {
 			actionCount = 1;
 		},{
@@ -1590,22 +1597,22 @@ if (totalHighlighted == 1, {
 			},{
 				actionCount = 5;
 			});
-		});		
+		});
 		actionCount.do({ arg item, i;
 			var arrModules, modulePopup, arrActionItems, arrLegacyActionItems, actionPopup;
 			var holdModuleID, holdModule;
 			var holdControlSpec1, holdControlSpec2, holdControlSpec3, holdControlSpec4, holdArrActionSpecs;
-			var val1NumberBox, val1Slider, val2NumberBox, val3NumberBox, val4NumberBox, valPopup; 
+			var val1NumberBox, val1Slider, val2NumberBox, val3NumberBox, val4NumberBox, valPopup;
 			var valCheckbox, valTextbox, valipaddress, holdArrActions;
 
 			if (holdCurrentWidget.class == TXWActionButton, {
-				holdArrActions = 
+				holdArrActions =
 				holdArrActions = holdCurrentWidget.arrActions
 					++ holdCurrentWidget.arrActions2;
 			},{
 				holdArrActions = holdCurrentWidget.arrActions;
 			});
-			
+
 			if (holdCurrentWidget.class == TXW2DSlider, {
 				if (holdCurrentWidget.showYAxis == 1, {
 					holdArrActions = holdCurrentWidget.arrActions2;
@@ -1613,35 +1620,35 @@ if (totalHighlighted == 1, {
 			});
 			if (holdCurrentWidget.class == TXW2DTablet, {
 				if (holdCurrentWidget.showActionIndex == 1, {
-					holdArrActions = 
+					holdArrActions =
 						holdCurrentWidget.arrActions2;
 				});
 				if (holdCurrentWidget.showActionIndex == 2, {
-					holdArrActions = 
+					holdArrActions =
 						holdCurrentWidget.pressureActions;
 				});
 				if (holdCurrentWidget.showActionIndex == 3, {
-					holdArrActions = 
+					holdArrActions =
 						holdCurrentWidget.tiltXActions;
 				});
 				if (holdCurrentWidget.showActionIndex == 4, {
-					holdArrActions = 
+					holdArrActions =
 						holdCurrentWidget.tiltYActions;
 				});
 				if (holdCurrentWidget.showActionIndex == 5, {
-					holdArrActions = 
+					holdArrActions =
 						holdCurrentWidget.mouseDownActions;
 				});
 				if (holdCurrentWidget.showActionIndex == 6, {
-					holdArrActions = 
+					holdArrActions =
 						holdCurrentWidget.mouseDragActions;
 				});
 				if (holdCurrentWidget.showActionIndex == 7, {
-					holdArrActions = 
+					holdArrActions =
 						holdCurrentWidget.mouseUpActions;
 				});
 				if (holdCurrentWidget.showActionIndex == 8, {
-					holdArrActions = 
+					holdArrActions =
 						holdCurrentWidget
 							.mouseDoubleClickActions;
 				});
@@ -1669,16 +1676,16 @@ if (totalHighlighted == 1, {
 			},{
 				holdArrActionSpecs = holdModule.arrActionSpecs
 					.select({arg action, i;
-					 (action.actionType == \valueAction) 
-						and: (action.guiObjectType == 
+					 (action.actionType == \valueAction)
+						and: (action.guiObjectType ==
 							holdCurrentWidget.guiObjectType);});
-				arrActionItems = 
+				arrActionItems =
 					holdArrActionSpecs.collect({arg item, i; item.actionName;});
-				arrLegacyActionItems = 
+				arrLegacyActionItems =
 					holdModule.arrActionSpecs .select({arg item, i; item.legacyType == 1})
 					.select({arg action, i;
-						(action.actionType == \valueAction) and: 
-							(action.guiObjectType == 
+						(action.actionType == \valueAction) and:
+							(action.guiObjectType ==
 								holdCurrentWidget.guiObjectType);
 					})
 					.collect({arg item, i; item.actionName;});
@@ -1688,7 +1695,7 @@ if (totalHighlighted == 1, {
 			modulePopup = PopUpMenu(propertiesBox, Rect(0, 0, 150, 20))
 				.background_(TXColor.white).stringColor_(TXColor.black)
 				.items_(arrModules.collect({arg item, i; item.instName;}))
-				.action_({arg view; 
+				.action_({arg view;
 					var holdAction;
 					holdArrActions.at(i).put(0, arrModules.at(view.value).moduleID);
 					// reset action index and text
@@ -1704,12 +1711,12 @@ if (totalHighlighted == 1, {
 					system.showView;
 				});
 			modulePopup.value = arrModules.indexOf(holdModule) ? 0;
-			
+
 			// popup - action
 			actionPopup = PopUpMenu(propertiesBox, Rect(0, 0, 300, 20))
 				.background_(TXColor.white).stringColor_(TXColor.black)
 				.items_(arrActionItems)
-				.action_({arg view; 
+				.action_({arg view;
 					var holdAction;
 					// popup value and text are stored
 					holdArrActions.at(i).put(1, view.value);
@@ -1722,17 +1729,17 @@ if (totalHighlighted == 1, {
 					// default argument values are stored
 					// arg 1
 					if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 0, {
-						holdArrActions.at(i).put(2, 
+						holdArrActions.at(i).put(2,
 							holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0).value.default);
 					});
 					// arg 2
 					if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 1, {
-						holdArrActions.at(i).put(3, 
+						holdArrActions.at(i).put(3,
 							holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(1).value.default);
 					});
 					// arg 3
 					if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 2, {
-						holdArrActions.at(i).put(4, 
+						holdArrActions.at(i).put(4,
 							holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(2).value.default);
 					});
 					// update view
@@ -1747,26 +1754,26 @@ if (totalHighlighted == 1, {
 			});
 
 			// check for no actions
-			if (holdArrActionSpecs.size > 0, {		
+			if (holdArrActionSpecs.size > 0, {
 				// action widget, show value settings
 				if (holdCurrentWidget.class == TXWActionButton
-						or: (holdCurrentWidget.class == TXW2DTablet 
+						or: (holdCurrentWidget.class == TXW2DTablet
 							and: {holdCurrentWidget.showActionIndex > 4})
 				, {
-					// if only 1 controlspec is given, then create slider 
+					// if only 1 controlspec is given, then create slider
 					if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size == 1, {
 					// slider - value 1
-						holdControlSpec1 = 
+						holdControlSpec1 =
 							holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
 						val1Slider = Slider(propertiesBox, Rect(0, 0, 175, 20))
-						.action_({arg view; 
+						.action_({arg view;
 							holdArrActions.at(i)
 								.put(2, holdControlSpec1.value.map(view.value));
-							if (val1NumberBox.class == NumberBox.redirectClass, 
+							if (val1NumberBox.class == NumberBox.redirectClass,
 								{val1NumberBox.value = holdControlSpec1.value.map(view.value);})
 						});
 						if (holdControlSpec1.value.step != 0, {
-							val1Slider.step = (holdControlSpec1.value.step 
+							val1Slider.step = (holdControlSpec1.value.step
 								/ (holdControlSpec1.value.maxval - holdControlSpec1.value.minval));
 						});
 						val1Slider.value = holdControlSpec1.value.unmap(
@@ -1780,55 +1787,55 @@ if (totalHighlighted == 1, {
 								 holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
 							val1NumberBox = NumberBox(propertiesBox, Rect(0, 0, 60, 20))
 							.scroll_(false)
-							.action_({arg view; 
+							.action_({arg view;
 								view.value = holdControlSpec1.value.constrain(view.value);
 								holdArrActions.at(i).put(2, view.value);
-								if (val1Slider.class == Slider.redirectClass, 
+								if (val1Slider.class == Slider.redirectClass,
 									{val1Slider.value = holdControlSpec1.value.unmap(view.value);})
 							});
 							val1NumberBox.value = holdControlSpec1.value.constrain(
 								holdArrActions.at(i).at(2) ? holdControlSpec1.value.default);
 						});
 					});
-					// popup 
+					// popup
 					if (holdModule.arrActionSpecs.at(actionPopup.value).guiObjectType == \popup, {
 						valPopup = PopUpMenu(propertiesBox, Rect(0, 0, 250, 20))
 							.stringColor_(TXColour.black).background_(TXColor.white);
-						valPopup.items = 
+						valPopup.items =
 							holdModule.arrActionSpecs.at(actionPopup.value).getItemsFunction.value;
-						valPopup.action = {arg view; 
+						valPopup.action = {arg view;
 							holdArrActions.at(i).put(2, view.value);
 						};
 						valPopup.value = holdArrActions.at(i).at(2) ? 0;
 					});
 
-					// checkbox 
+					// checkbox
 					if (holdModule.arrActionSpecs.at(actionPopup.value).guiObjectType == \checkbox, {
 						valCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 60, 20),
-							" ", TXColour.black, TXColor.white, 
+							" ", TXColour.black, TXColor.white,
 							TXColour.black, TXColor.white, 7);
-						valCheckbox.action = {arg view; 
+						valCheckbox.action = {arg view;
 							holdArrActions.at(i).put(2, view.value);
 						};
 						valCheckbox.value = holdArrActions.at(i).at(2) ? 0;
 					});
 
-					// textbox 
+					// textbox
 					if (holdModule.arrActionSpecs.at(actionPopup.value).guiObjectType == \textedit, {
 						valTextbox = TextField(propertiesBox, Rect(0, 0, 250, 20),
-							" ", TXColour.black, TXColor.white, 
+							" ", TXColour.black, TXColor.white,
 							TXColour.black, TXColor.white, 4);
-						valTextbox.action = {arg view; 
+						valTextbox.action = {arg view;
 							holdArrActions.at(i).put(2, view.string);
 						};
 						valTextbox.string = holdArrActions.at(i).at(2) ? " ";
 					});
-					
-					// ipaddress 
+
+					// ipaddress
 					if (holdModule.arrActionSpecs.at(actionPopup.value).guiObjectType == \ipaddress, {
 						valipaddress = TXNetAddress(propertiesBox, Rect(0, 0, 250, 20),
 						labelWidth: 0, showPresets: false);
-						valipaddress.action = {arg view; 
+						valipaddress.action = {arg view;
 							holdArrActions.at(i).put(2, view.string);
 						};
 						valipaddress.string = holdArrActions.at(i).at(2) ? "0.0.0.0";
@@ -1838,11 +1845,11 @@ if (totalHighlighted == 1, {
 				// if more than 1 control spec given, then create extra numberbox
 				if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 1, {
 				// numberbox - value 2
-					holdControlSpec2 = 
+					holdControlSpec2 =
 						holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(1);
 					val2NumberBox = NumberBox(propertiesBox, Rect(0, 0, 60, 20))
 					.scroll_(false)
-					.action_({arg view; 
+					.action_({arg view;
 						view.value = holdControlSpec2.value.constrain(view.value);
 						holdArrActions.at(i).put(3, view.value);
 					});
@@ -1860,11 +1867,11 @@ if (totalHighlighted == 1, {
 				// numberbox - value 3
 				// if more than 2 controlspecs given, then create extra numberbox
 				if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 2, {
-					holdControlSpec3 = 
+					holdControlSpec3 =
 						holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(2);
 					val3NumberBox = NumberBox(propertiesBox, Rect(0, 0, 60, 20))
 					.scroll_(false)
-					.action_({arg view; 
+					.action_({arg view;
 						view.value = holdControlSpec3.value.constrain(view.value);
 						holdArrActions.at(i).put(4, view.value);
 					});
@@ -1880,11 +1887,11 @@ if (totalHighlighted == 1, {
 				// numberbox - value 4
 				// if more than 3 controlspecs given, then create extra numberbox
 				if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 3, {
-					holdControlSpec4 = 
+					holdControlSpec4 =
 						holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(3);
 					val4NumberBox = NumberBox(propertiesBox, Rect(0, 0, 60, 20))
 					.scroll_(false)
-					.action_({arg view; 
+					.action_({arg view;
 						view.value = holdControlSpec4.value.constrain(view.value);
 						holdArrActions.at(i).put(5, view.value);
 					});
@@ -1902,11 +1909,11 @@ if (totalHighlighted == 1, {
 		}); // end of actionCount.do
 	});  //end of if ...\arrActions
 	// ==========================================================================================
-	
+
 	// spacer & go to next line
 	propertiesBox.decorator.shift(0, 4).nextLine;
-	
-	// line  
+
+	// line
 	StaticText(propertiesBox, Rect(0, 0, 700, 2))
 		.background_(TXColor.white);
 

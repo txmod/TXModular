@@ -1,7 +1,7 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXMidiNoteRange {
-	var <>labelView, <>rangeView, <>minNumberView, <>maxNumberView, <>minNoteView, <>maxNoteView;
+	var <>labelView, <>rangeView, <>minNoteView, <>maxNoteView;
 	var <>controlSpec, <>action, <lo, <hi, <>round = 0.0001;
 
 	*new { arg window, dimensions, label, controlSpec, action, initMinVal, initMaxVal,
@@ -32,49 +32,28 @@ TXMidiNoteRange {
 
 		rangeView = RangeSlider(window, (dimensions.x - labelWidth - numberWidth - spacingX - 4) @ height );
 		rangeView.action = {
-			minNumberView.value = controlSpec.map(rangeView.lo);
-			minNoteView.value = minNumberView.value;
-			maxNumberView.value = controlSpec.map(rangeView.hi);
-			maxNoteView.value = maxNumberView.value;
-			lo = minNumberView.value;
-			hi = maxNumberView.value;
-			action.value(this);
-		};
-		minNumberView = TXScrollNumBox(window, ((numberWidth/4) - spacingX).asInteger @ height);
-		minNumberView.action = {
-			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
-			minNoteView.value = minNumberView.value;
-			lo = minNumberView.value;
-			rangeView.lo = controlSpec.unmap(minNumberView.value);
+			minNoteView.value = controlSpec.map(rangeView.lo);
+			maxNoteView.value = controlSpec.map(rangeView.hi);
+			lo = minNoteView.value;
+			hi = maxNoteView.value;
 			action.value(this);
 		};
 
-		minNoteView = PopUpMenu(window, (40 @ height))
+		minNoteView = PopUpMenu(window, (numberWidth * 0.6 @ height))
 				.background_(Color.white)
-				.items_(TXGetMidiNoteString.arrAllNoteNames)
+				.items_(TXGetMidiNoteString.arrAllNoteNumberNames)
 				.action_({
-					minNumberView.value = minNoteView.value;
-					lo = minNumberView.value;
-					rangeView.lo = controlSpec.unmap(minNumberView.value);
+					lo = minNoteView.value;
+					rangeView.lo = controlSpec.unmap(minNoteView.value);
 					action.value(this);
 				});
 
-		maxNumberView = TXScrollNumBox(window, ((numberWidth/4) - spacingX).asInteger @ height);
-		maxNumberView.action = {
-			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
-			maxNoteView.value = maxNumberView.value;
-			rangeView.hi = controlSpec.unmap(maxNumberView.value);
-			hi = maxNumberView.value;
-			action.value(this);
-		};
-
-		maxNoteView = PopUpMenu(window, (40 @ height))
+		maxNoteView = PopUpMenu(window, (numberWidth * 0.6 @ height))
 				.background_(Color.white)
-				.items_(TXGetMidiNoteString.arrAllNoteNames)
+				.items_(TXGetMidiNoteString.arrAllNoteNumberNames)
 				.action_({
-					maxNumberView.value = maxNoteView.value;
-					hi = maxNumberView.value;
-					rangeView.hi = controlSpec.unmap(maxNumberView.value);
+					hi = maxNoteView.value;
+					rangeView.hi = controlSpec.unmap(maxNoteView.value);
 					action.value(this);
 				});
 
@@ -133,12 +112,10 @@ TXMidiNoteRange {
 				.action_(arrButtonActions.at(i))
 
 			});
-			if (window.class == Window, {
-				window.view.decorator.shift(6,0);
-			}, {
-				window.decorator.shift(6,0);
-			});
-			PopUpMenu(window, (60 @ height))
+			window.asView.decorator.nextLine;
+			window.asView.decorator.shift(labelWidth + spacingX, 0);
+
+			PopUpMenu(window, ((dimensions.x - labelWidth - spacingX) @ height))
 				.background_(Color.white)
 				.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
 				.action_({ arg view;
@@ -147,14 +124,12 @@ TXMidiNoteRange {
 				});
 		});
 
-		minNumberView.value = controlSpec.constrain(initMinVal).round(round);
-		minNoteView.value = minNumberView.value;
+		minNoteView.value = controlSpec.constrain(initMinVal).round(round);
 		rangeView.lo = controlSpec.unmap(initMinVal);
-		maxNumberView.value = controlSpec.constrain(initMaxVal).round(round);
-		maxNoteView.value = maxNumberView.value;
+		maxNoteView.value = controlSpec.constrain(initMaxVal).round(round);
 		rangeView.hi = controlSpec.unmap(initMaxVal);
-		lo = minNumberView.value;
-		hi = maxNumberView.value;
+		lo = minNoteView.value;
+		hi = maxNoteView.value;
 		if (initAction) {
 			action.value(this);
 		};
@@ -174,36 +149,36 @@ TXMidiNoteRange {
 
 	value_ { arg value;
 		lo = controlSpec.constrain(value);
-		minNumberView.valueAction = lo.round(round);
+		minNoteView.valueAction = lo.round(round);
 	}
 
 	valueBoth_ { arg valueArray;
 		lo = controlSpec.constrain(valueArray.at(0));
-		minNumberView.valueAction = lo.round(round);
+		minNoteView.valueAction = lo.round(round);
 		hi = controlSpec.constrain(valueArray.at(1));
-		maxNumberView.valueAction = hi.round(round);
+		maxNoteView.valueAction = hi.round(round);
 	}
 
 	valueBothNoAction_  { arg valueArray;
-			minNumberView.value = controlSpec.map(valueArray.at(0));
-			maxNumberView.value = controlSpec.map(valueArray.at(1));
-			lo = minNumberView.value;
-			hi = maxNumberView.value;
+			minNoteView.value = controlSpec.map(valueArray.at(0));
+			maxNoteView.value = controlSpec.map(valueArray.at(1));
+			lo = minNoteView.value;
+			hi = maxNoteView.value;
 	}
 
 	lo_ {arg value;
 		lo = controlSpec.constrain(value);
-		minNumberView.valueAction = lo.round(round);
+		minNoteView.valueAction = lo.round(round);
 	}
 
 	hi_ {  arg value;
 		hi = controlSpec.constrain(value);
-		maxNumberView.valueAction = hi.round(round);
+		maxNoteView.valueAction = hi.round(round);
 	}
 
 	range_ {arg value;
 		hi = controlSpec.constrain(lo + value.abs);
-		maxNumberView.valueAction = hi.round(round);
+		maxNoteView.valueAction = hi.round(round);
 	}
 	set { arg label, spec, argAction, initMinVal, initMaxVal, initAction=false;
 		labelView.string = label;
@@ -213,9 +188,9 @@ TXMidiNoteRange {
 
 		action = argAction;
 
-		minNumberView.value = controlSpec.constrain(initMinVal).round(round);
+		minNoteView.value = controlSpec.constrain(initMinVal).round(round);
 		rangeView.lo = controlSpec.unmap(initMinVal);
-		maxNumberView.value = controlSpec.constrain(initMaxVal).round(round);
+		maxNoteView.value = controlSpec.constrain(initMaxVal).round(round);
 		rangeView.hi = controlSpec.unmap(initMaxVal);
 		if (initAction) {
 			action.value(this);

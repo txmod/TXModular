@@ -136,7 +136,7 @@ TXActionView {	// self-building module popup, action popup, and value fields
 				.action_({arg view;
 					holdArrActions.at(i)
 						.put(2, holdControlSpec1.value.map(view.value));
-					if (val1NumberBox.class == TXScrollNumBox,
+					if (val1NumberBox.class.respondsTo('value'),
 						{val1NumberBox.value = holdControlSpec1.value.map(view.value);})
 				});
 				if (holdControlSpec1.value.step != 0, {

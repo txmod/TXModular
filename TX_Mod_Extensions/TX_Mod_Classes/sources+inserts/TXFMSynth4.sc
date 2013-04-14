@@ -2,14 +2,14 @@
 
 TXFMSynth4 : TXModuleBase {
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<guiWidth=500;
 	classvar	timeSpec;
@@ -25,12 +25,12 @@ TXFMSynth4 : TXModuleBase {
 	var	arrEnvPresetNames, arrEnvPresetActions;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "FM Synth";
 	moduleRate = "audio";
 	moduleType = "groupsource";
-	arrCtlSCInBusSpecs = [ 		
+	arrCtlSCInBusSpecs = [
 		["Pitch bend", 1, "modPitchbend", 0],
 		["Op1 Freq Ratio", 1, "mmOp1FreqRatio", 0],
 		["Op1 Phase",1, "mmOp1Phase", 0],
@@ -107,18 +107,18 @@ TXFMSynth4 : TXModuleBase {
 		["Op 2 Env Sustain time", 1, "modSustainTimeOp2", 0],
 		["Op 2 Env Release", 1, "modReleaseOp2", 0],
 
-	];	
+	];
 	noOutChannels = 1;
-	arrOutBusSpecs = [ 
+	arrOutBusSpecs = [
 		["Out", [0]]
-	];	
+	];
 	timeSpec = ControlSpec(0.001, 20);
 
-} 
+}
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 init {arg argInstName;
 	//	set  class specific instance variables
@@ -198,7 +198,7 @@ init {arg argInstName;
 		["outLevelOp4", 0, defLagTime],
 		["outLevelOp5", 0, defLagTime],
 		["outLevelOp6", 0, defLagTime],
-		
+
 		["envtime", 0, \ir],
 		["delay", 0, \ir],
 		["attack", 0.005, \ir],
@@ -327,7 +327,7 @@ init {arg argInstName;
 		["mmModFM_64", 0, defLagTime],
 		["mmModFM_65", 0, defLagTime],
 		["mmModFM_66", 0, defLagTime],
-	]; 
+	];
 	arrOptions = 0 ! 15;
 	arrOptionData = [
 		TXIntonation.arrOptionData,
@@ -350,10 +350,10 @@ init {arg argInstName;
 		TXEnvLookup.arrSlopeOptionData,
 		TXEnvLookup.arrSustainOptionData,
 		[	["Off", { 0; }],
-			["On", {arg envFunction, del, att, dec, sus, sustime, rel, envCurve, gate;  
+			["On", {arg envFunction, del, att, dec, sus, sustime, rel, envCurve, gate;
 				EnvGen.ar(
 					envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
-					gate, 
+					gate,
 					doneAction: 0
 				);
 			}],
@@ -362,87 +362,87 @@ init {arg argInstName;
 		TXEnvLookup.arrSlopeOptionData,
 		TXEnvLookup.arrSustainOptionData,
 		[	["Off", { 0; }],
-			["On", {arg envFunction, del, att, dec, sus, sustime, rel, envCurve, gate;  
+			["On", {arg envFunction, del, att, dec, sus, sustime, rel, envCurve, gate;
 				EnvGen.ar(
 					envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
-					gate, 
+					gate,
 					doneAction: 0
 				);
 			}],
 		],
 	];
-	synthDefFunc = { 
-		arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax, 
-			level, 
+	synthDefFunc = {
+		arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			level,
 
-			op1FreqRatio, op1Phase, op1Amp, 
-			op2FreqRatio, op2Phase, op2Amp, 
-			op3FreqRatio, op3Phase, op3Amp, 
-			op4FreqRatio, op4Phase, op4Amp, 
-			op5FreqRatio, op5Phase, op5Amp, 
-			op6FreqRatio, op6Phase, op6Amp, 
-			modFM_11, modFM_12, modFM_13, modFM_14, modFM_15, modFM_16, 
-			modFM_21, modFM_22, modFM_23, modFM_24, modFM_25, modFM_26, 
-			modFM_31, modFM_32, modFM_33, modFM_34, modFM_35, modFM_36, 
-			modFM_41, modFM_42, modFM_43, modFM_44, modFM_45, modFM_46, 
-			modFM_51, modFM_52, modFM_53, modFM_54, modFM_55, modFM_56, 
-			modFM_61, modFM_62, modFM_63, modFM_64, modFM_65, modFM_66, 
+			op1FreqRatio, op1Phase, op1Amp,
+			op2FreqRatio, op2Phase, op2Amp,
+			op3FreqRatio, op3Phase, op3Amp,
+			op4FreqRatio, op4Phase, op4Amp,
+			op5FreqRatio, op5Phase, op5Amp,
+			op6FreqRatio, op6Phase, op6Amp,
+			modFM_11, modFM_12, modFM_13, modFM_14, modFM_15, modFM_16,
+			modFM_21, modFM_22, modFM_23, modFM_24, modFM_25, modFM_26,
+			modFM_31, modFM_32, modFM_33, modFM_34, modFM_35, modFM_36,
+			modFM_41, modFM_42, modFM_43, modFM_44, modFM_45, modFM_46,
+			modFM_51, modFM_52, modFM_53, modFM_54, modFM_55, modFM_56,
+			modFM_61, modFM_62, modFM_63, modFM_64, modFM_65, modFM_66,
 			outLevelOp1, outLevelOp2, outLevelOp3, outLevelOp4, outLevelOp5, outLevelOp6,
 
-			envtime, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain, 
-			sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax, 
+			envtime, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain,
+			sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax,
 
-			envtimeOp1, envAmountOp1, delayOp1, attackOp1, attackMinOp1, attackMaxOp1, 
-			decayOp1, decayMinOp1, decayMaxOp1, sustainOp1, sustainTimeOp1, 
-			sustainTimeMinOp1, sustainTimeMaxOp1, releaseOp1, releaseMinOp1, releaseMaxOp1, 
-			envtimeOp2, envAmountOp2, delayOp2, attackOp2, attackMinOp2, attackMaxOp2, 
+			envtimeOp1, envAmountOp1, delayOp1, attackOp1, attackMinOp1, attackMaxOp1,
+			decayOp1, decayMinOp1, decayMaxOp1, sustainOp1, sustainTimeOp1,
+			sustainTimeMinOp1, sustainTimeMaxOp1, releaseOp1, releaseMinOp1, releaseMaxOp1,
+			envtimeOp2, envAmountOp2, delayOp2, attackOp2, attackMinOp2, attackMaxOp2,
 			decayOp2, decayMinOp2, decayMaxOp2, sustainOp2, sustainTimeOp2,
-			sustainTimeMinOp2, sustainTimeMaxOp2, releaseOp2, releaseMinOp2, releaseMaxOp2, 
+			sustainTimeMinOp2, sustainTimeMaxOp2, releaseOp2, releaseMinOp2, releaseMaxOp2,
 
-			intKey, 
-			
-			modPitchbend,  
-			modDelay, modAttack, modDecay, modSustain, modSustainTime, modRelease, 
-			modEnvAmountOp1, modDelayOp1, modAttackOp1, modDecayOp1, modSustainOp1, 
-			modSustainTimeOp1, modReleaseOp1, 
-			modEnvAmountOp2, modDelayOp2, modAttackOp2, modDecayOp2, modSustainOp2, 
-			modSustainTimeOp2, modReleaseOp2, 
+			intKey,
 
-			mmOp1FreqRatio, mmOp1Phase, mmOp1Amp, 
-			mmOp2FreqRatio, mmOp2Phase, mmOp2Amp, 
-			mmOp3FreqRatio, mmOp3Phase, mmOp3Amp, 
-			mmOp4FreqRatio, mmOp4Phase, mmOp4Amp, 
-			mmOp5FreqRatio, mmOp5Phase, mmOp5Amp, 
+			modPitchbend,
+			modDelay, modAttack, modDecay, modSustain, modSustainTime, modRelease,
+			modEnvAmountOp1, modDelayOp1, modAttackOp1, modDecayOp1, modSustainOp1,
+			modSustainTimeOp1, modReleaseOp1,
+			modEnvAmountOp2, modDelayOp2, modAttackOp2, modDecayOp2, modSustainOp2,
+			modSustainTimeOp2, modReleaseOp2,
+
+			mmOp1FreqRatio, mmOp1Phase, mmOp1Amp,
+			mmOp2FreqRatio, mmOp2Phase, mmOp2Amp,
+			mmOp3FreqRatio, mmOp3Phase, mmOp3Amp,
+			mmOp4FreqRatio, mmOp4Phase, mmOp4Amp,
+			mmOp5FreqRatio, mmOp5Phase, mmOp5Amp,
 			mmOp6FreqRatio, mmOp6Phase, mmOp6Amp,
-			mmModFM_11, mmModFM_12, mmModFM_13, mmModFM_14, mmModFM_15, mmModFM_16, 
-			mmModFM_21, mmModFM_22, mmModFM_23, mmModFM_24, mmModFM_25, mmModFM_26, 
-			mmModFM_31, mmModFM_32, mmModFM_33, mmModFM_34, mmModFM_35, mmModFM_36, 
-			mmModFM_41, mmModFM_42, mmModFM_43, mmModFM_44, mmModFM_45, mmModFM_46, 
-			mmModFM_51, mmModFM_52, mmModFM_53, mmModFM_54, mmModFM_55, mmModFM_56, 
+			mmModFM_11, mmModFM_12, mmModFM_13, mmModFM_14, mmModFM_15, mmModFM_16,
+			mmModFM_21, mmModFM_22, mmModFM_23, mmModFM_24, mmModFM_25, mmModFM_26,
+			mmModFM_31, mmModFM_32, mmModFM_33, mmModFM_34, mmModFM_35, mmModFM_36,
+			mmModFM_41, mmModFM_42, mmModFM_43, mmModFM_44, mmModFM_45, mmModFM_46,
+			mmModFM_51, mmModFM_52, mmModFM_53, mmModFM_54, mmModFM_55, mmModFM_56,
 			mmModFM_61, mmModFM_62, mmModFM_63, mmModFM_64, mmModFM_65, mmModFM_66;
 
-		var outEnv, envFunction, envCurve, 
+		var outEnv, envFunction, envCurve,
 			outEnvOp1, envFunctionOp1, envCurveOp1, envGenFunctionOp1,
 			outEnvOp2, envFunctionOp2, envCurveOp2, envGenFunctionOp2,
-			intonationFunc, outFreq, pbend, 
+			intonationFunc, outFreq, pbend,
 			arrFMCtls, arrFMMods, arrFMLevels, outFM,
-			del, att, dec, sus, sustime, rel, 
-			holdEnvAmountOp1, delOp1, attOp1, decOp1, susOp1, sustimeOp1, relOp1, 
-			holdEnvAmountOp2, delOp2, attOp2, decOp2, susOp2, sustimeOp2, relOp2, 
+			del, att, dec, sus, sustime, rel,
+			holdEnvAmountOp1, delOp1, attOp1, decOp1, susOp1, sustimeOp1, relOp1,
+			holdEnvAmountOp2, delOp2, attOp2, decOp2, susOp2, sustimeOp2, relOp2,
 			sumVelocity, outSound;
 
 		del = (delay + modDelay).max(0).min(1);
 		att = (attackMin + ((attackMax - attackMin) * (attack + modAttack))).max(0.001).min(20);
 		dec = (decayMin + ((decayMax - decayMin) * (decay + modDecay))).max(0.001).min(20);
 		sus = (sustain + modSustain).max(0).min(1);
-		sustime = (sustainTimeMin + 
+		sustime = (sustainTimeMin +
 			((sustainTimeMax - sustainTimeMin) * (sustainTime + modSustainTime))).max(0.001).min(20);
 		rel = (releaseMin + ((releaseMax - releaseMin) * (release + modRelease))).max(0.001).min(20);
 		envCurve = this.getSynthOption(7);
 		envFunction = this.getSynthOption(8);
 		outEnv = EnvGen.ar(
 			envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
-			gate, 
+			gate,
 			doneAction: 2
 		);
 
@@ -451,13 +451,13 @@ init {arg argInstName;
 		attOp1 = (attackMinOp1 + ((attackMaxOp1 - attackMinOp1) * (attackOp1 + modAttackOp1))).max(0.001).min(20);
 		decOp1 = (decayMinOp1 + ((decayMaxOp1 - decayMinOp1) * (decayOp1 + modDecayOp1))).max(0.001).min(20);
 		susOp1 = (sustainOp1 + modSustainOp1).max(0).min(1);
-		sustimeOp1 = (sustainTimeMinOp1 + 
+		sustimeOp1 = (sustainTimeMinOp1 +
 			((sustainTimeMaxOp1 - sustainTimeMinOp1) * (sustainTimeOp1 + modSustainTimeOp1))).max(0.001).min(20);
 		relOp1 = (releaseMinOp1 + ((releaseMaxOp1 - releaseMinOp1) * (releaseOp1 + modReleaseOp1))).max(0.001).min(20);
 		envCurveOp1 = this.getSynthOption(9);
 		envFunctionOp1 = this.getSynthOption(10);
 		envGenFunctionOp1 = this.getSynthOption(11);
-		outEnvOp1 = holdEnvAmountOp1 * envGenFunctionOp1.value(envFunctionOp1, delOp1, attOp1, decOp1, susOp1,  
+		outEnvOp1 = holdEnvAmountOp1 * envGenFunctionOp1.value(envFunctionOp1, delOp1, attOp1, decOp1, susOp1,
 			sustimeOp1, relOp1, envCurveOp1, gate);
 
 		holdEnvAmountOp2 = (envAmountOp2 + modEnvAmountOp2).max(-1).min(1);
@@ -465,59 +465,59 @@ init {arg argInstName;
 		attOp2 = (attackMinOp2 + ((attackMaxOp2 - attackMinOp2) * (attackOp2 + modAttackOp2))).max(0.001).min(20);
 		decOp2 = (decayMinOp2 + ((decayMaxOp2 - decayMinOp2) * (decayOp2 + modDecayOp2))).max(0.001).min(20);
 		susOp2 = (sustainOp2 + modSustainOp2).max(0).min(1);
-		sustimeOp2 = (sustainTimeMinOp2 + 
+		sustimeOp2 = (sustainTimeMinOp2 +
 			((sustainTimeMaxOp2 - sustainTimeMinOp2) * (sustainTimeOp2 + modSustainTimeOp2))).max(0.001).min(20);
 		relOp2 = (releaseMinOp2 + ((releaseMaxOp2 - releaseMinOp2) * (releaseOp2 + modReleaseOp2))).max(0.001).min(20);
 		envCurveOp2 = this.getSynthOption(12);
 		envFunctionOp2 = this.getSynthOption(13);
 		envGenFunctionOp2 = this.getSynthOption(14);
-		outEnvOp2 = holdEnvAmountOp2 * envGenFunctionOp2.value(envFunctionOp2, delOp2, attOp2, decOp2, susOp2, 
+		outEnvOp2 = holdEnvAmountOp2 * envGenFunctionOp2.value(envFunctionOp2, delOp2, attOp2, decOp2, susOp2,
 			sustimeOp2, relOp2, envCurveOp2, gate);
 
-		pbend = pitchbendMin + ((pitchbendMax - pitchbendMin) 
+		pbend = pitchbendMin + ((pitchbendMax - pitchbendMin)
 				* (pitchbend + modPitchbend).max(0).min(1));
 
 		intonationFunc = this.getSynthOption(0);
-		outFreq = (2 ** (pbend /12)) * ((intonationFunc.value((note + transpose), intKey) * keytrack) 
+		outFreq = (2 ** (pbend /12)) * ((intonationFunc.value((note + transpose), intKey) * keytrack)
 			+ ((48 + transpose).midicps * (1-keytrack)));
 		arrFMCtls = [
-			[ ((16 ** mmOp1FreqRatio) * op1FreqRatio) * outFreq, 
+			[ ((16 ** mmOp1FreqRatio) * op1FreqRatio) * outFreq,
 			(mmOp1Phase + op1Phase).max(0).min(1) * 2pi,(mmOp1Amp + op1Amp + outEnvOp1).max(0).min(1),],
-			[ ((16 ** mmOp2FreqRatio) * op2FreqRatio) * outFreq, 
+			[ ((16 ** mmOp2FreqRatio) * op2FreqRatio) * outFreq,
 			(mmOp2Phase + op2Phase).max(0).min(1) * 2pi,(mmOp2Amp + op2Amp + outEnvOp2).max(0).min(1),],
-			[ ((16 ** mmOp3FreqRatio) * op3FreqRatio) * outFreq, 
+			[ ((16 ** mmOp3FreqRatio) * op3FreqRatio) * outFreq,
 			(mmOp3Phase + op3Phase).max(0).min(1) * 2pi,(mmOp3Amp + op3Amp).max(0).min(1),],
-			[ ((16 ** mmOp4FreqRatio) * op4FreqRatio) * outFreq, 
+			[ ((16 ** mmOp4FreqRatio) * op4FreqRatio) * outFreq,
 			(mmOp4Phase + op4Phase).max(0).min(1) * 2pi,(mmOp4Amp + op4Amp).max(0).min(1),],
-			[ ((16 ** mmOp5FreqRatio) * op5FreqRatio) * outFreq, 
+			[ ((16 ** mmOp5FreqRatio) * op5FreqRatio) * outFreq,
 			(mmOp5Phase + op5Phase).max(0).min(1) * 2pi,(mmOp5Amp + op5Amp).max(0).min(1),],
-			[ ((16 ** mmOp6FreqRatio) * op6FreqRatio) * outFreq, 
+			[ ((16 ** mmOp6FreqRatio) * op6FreqRatio) * outFreq,
 			(mmOp6Phase + op6Phase).max(0).min(1) * 2pi,(mmOp6Amp + op6Amp).max(0).min(1),],
 		];
 		arrFMMods = [
-			[(modFM_11 + mmModFM_11).max(0).min(1), (modFM_12 + mmModFM_12).max(0).min(1), 
-				(modFM_13 + mmModFM_13).max(0).min(1), (modFM_14 + mmModFM_14).max(0).min(1), 
+			[(modFM_11 + mmModFM_11).max(0).min(1), (modFM_12 + mmModFM_12).max(0).min(1),
+				(modFM_13 + mmModFM_13).max(0).min(1), (modFM_14 + mmModFM_14).max(0).min(1),
 				(modFM_15 + mmModFM_15).max(0).min(1), (modFM_16 + mmModFM_16).max(0).min(1), ],
-			[(modFM_21 + mmModFM_21).max(0).min(1), (modFM_22 + mmModFM_22).max(0).min(1), 
-				(modFM_23 + mmModFM_23).max(0).min(1), (modFM_24 + mmModFM_24).max(0).min(1), 
+			[(modFM_21 + mmModFM_21).max(0).min(1), (modFM_22 + mmModFM_22).max(0).min(1),
+				(modFM_23 + mmModFM_23).max(0).min(1), (modFM_24 + mmModFM_24).max(0).min(1),
 				(modFM_25 + mmModFM_25).max(0).min(1), (modFM_26 + mmModFM_26).max(0).min(1), ],
-			[(modFM_31 + mmModFM_31).max(0).min(1), (modFM_32 + mmModFM_32).max(0).min(1), 
-				(modFM_33 + mmModFM_33).max(0).min(1), (modFM_34 + mmModFM_34).max(0).min(1), 
+			[(modFM_31 + mmModFM_31).max(0).min(1), (modFM_32 + mmModFM_32).max(0).min(1),
+				(modFM_33 + mmModFM_33).max(0).min(1), (modFM_34 + mmModFM_34).max(0).min(1),
 				(modFM_35 + mmModFM_35).max(0).min(1), (modFM_36 + mmModFM_36).max(0).min(1), ],
-			[(modFM_41 + mmModFM_41).max(0).min(1), (modFM_42 + mmModFM_42).max(0).min(1), 
-				(modFM_43 + mmModFM_43).max(0).min(1), (modFM_44 + mmModFM_44).max(0).min(1), 
+			[(modFM_41 + mmModFM_41).max(0).min(1), (modFM_42 + mmModFM_42).max(0).min(1),
+				(modFM_43 + mmModFM_43).max(0).min(1), (modFM_44 + mmModFM_44).max(0).min(1),
 				(modFM_45 + mmModFM_45).max(0).min(1), (modFM_46 + mmModFM_46).max(0).min(1), ],
-			[(modFM_51 + mmModFM_51).max(0).min(1), (modFM_52 + mmModFM_52).max(0).min(1), 
-				(modFM_53 + mmModFM_53).max(0).min(1), (modFM_54 + mmModFM_54).max(0).min(1), 
+			[(modFM_51 + mmModFM_51).max(0).min(1), (modFM_52 + mmModFM_52).max(0).min(1),
+				(modFM_53 + mmModFM_53).max(0).min(1), (modFM_54 + mmModFM_54).max(0).min(1),
 				(modFM_55 + mmModFM_55).max(0).min(1), (modFM_56 + mmModFM_56).max(0).min(1), ],
-			[(modFM_61 + mmModFM_61).max(0).min(1), (modFM_62 + mmModFM_62).max(0).min(1), 
-				(modFM_63 + mmModFM_63).max(0).min(1), (modFM_64 + mmModFM_64).max(0).min(1), 
+			[(modFM_61 + mmModFM_61).max(0).min(1), (modFM_62 + mmModFM_62).max(0).min(1),
+				(modFM_63 + mmModFM_63).max(0).min(1), (modFM_64 + mmModFM_64).max(0).min(1),
 				(modFM_65 + mmModFM_65).max(0).min(1), (modFM_66 + mmModFM_66).max(0).min(1), ],
 		]
 		 * 2pi;	// phase modulation is in radians so: * 2pi
 
 		arrFMLevels = [outLevelOp1, outLevelOp2, outLevelOp3, outLevelOp4, outLevelOp5, outLevelOp6];
-		
+
 		outFM = Mix.new(FM7.ar(arrFMCtls, arrFMMods) * arrFMLevels);
 
 		sumVelocity = ((velocity * 0.007874)).max(0).min(1);
@@ -527,174 +527,174 @@ init {arg argInstName;
 		Out.ar(out, TXClean.ar(outSound));
 	};
 	this.buildGuiSpecArray;
-	arrActionSpecs = this.buildActionSpecs([	
-		["TestNoteVals"], 
-		["EZslider", "Op 1 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op1FreqRatio"], 
-		["EZslider", "Op 1 Phase", ControlSpec(0,1), "op1Phase"], 
-		["EZslider", "Op 1 Amplitude", ControlSpec(0,1), "op1Amp"], 
-		["SpacerLine", 4], 
-		["EZslider", "Op 1 Mod Op 1", ControlSpec(0,1), "modFM_11"], 
-		["EZslider", "Op 1 Mod Op 2", ControlSpec(0,1), "modFM_12"], 
-		["EZslider", "Op 1 Mod Op 3", ControlSpec(0,1), "modFM_13"], 
-		["EZslider", "Op 1 Mod Op 4", ControlSpec(0,1), "modFM_14"], 
-		["EZslider", "Op 1 Mod Op 5", ControlSpec(0,1), "modFM_15"], 
-		["EZslider", "Op 1 Mod Op 6", ControlSpec(0,1), "modFM_16"], 
-		["EZslider", "Op 1 Level", ControlSpec(0,1), "outLevelOp1"], 
-		["EZslider", "Op 2 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op2FreqRatio"], 
-		["EZslider", "Op 2 Phase", ControlSpec(0,1), "op2Phase"], 
-		["EZslider", "Op 2 Amplitude", ControlSpec(0,1), "op2Amp"], 
-		["SpacerLine", 4], 
-		["EZslider", "Op 2 Mod Op 1", ControlSpec(0,1), "modFM_21"], 
-		["EZslider", "Op 2 Mod Op 2", ControlSpec(0,1), "modFM_22"], 
-		["EZslider", "Op 2 Mod Op 3", ControlSpec(0,1), "modFM_23"], 
-		["EZslider", "Op 2 Mod Op 4", ControlSpec(0,1), "modFM_24"], 
-		["EZslider", "Op 2 Mod Op 5", ControlSpec(0,1), "modFM_25"], 
-		["EZslider", "Op 2 Mod Op 6", ControlSpec(0,1), "modFM_26"], 
-		["EZslider", "Op 2 Level", ControlSpec(0,1), "outLevelOp2"], 
-		["EZslider", "Op 3 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op3FreqRatio"], 
-		["EZslider", "Op 3 Phase", ControlSpec(0,1), "op3Phase"], 
-		["EZslider", "Op 3 Amplitude", ControlSpec(0,1), "op3Amp"], 
-		["SpacerLine", 4], 
-		["EZslider", "Op 3 Mod Op 1", ControlSpec(0,1), "modFM_31"], 
-		["EZslider", "Op 3 Mod Op 2", ControlSpec(0,1), "modFM_32"], 
-		["EZslider", "Op 3 Mod Op 3", ControlSpec(0,1), "modFM_33"], 
-		["EZslider", "Op 3 Mod Op 4", ControlSpec(0,1), "modFM_34"], 
-		["EZslider", "Op 3 Mod Op 5", ControlSpec(0,1), "modFM_35"], 
-		["EZslider", "Op 3 Mod Op 6", ControlSpec(0,1), "modFM_36"], 
-		["EZslider", "Op 3 Level", ControlSpec(0,1), "outLevelOp3"], 
-		["EZslider", "Op 4 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op4FreqRatio"], 
-		["EZslider", "Op 4 Phase", ControlSpec(0,1), "op4Phase"], 
-		["EZslider", "Op 4 Amplitude", ControlSpec(0,1), "op4Amp"], 
-		["SpacerLine", 4], 
-		["EZslider", "Op 4 Mod Op 1", ControlSpec(0,1), "modFM_41"], 
-		["EZslider", "Op 4 Mod Op 2", ControlSpec(0,1), "modFM_42"], 
-		["EZslider", "Op 4 Mod Op 3", ControlSpec(0,1), "modFM_43"], 
-		["EZslider", "Op 4 Mod Op 4", ControlSpec(0,1), "modFM_44"], 
-		["EZslider", "Op 4 Mod Op 5", ControlSpec(0,1), "modFM_45"], 
-		["EZslider", "Op 4 Mod Op 6", ControlSpec(0,1), "modFM_46"], 
-		["EZslider", "Op 4 Level", ControlSpec(0,1), "outLevelOp4"], 
-		["EZslider", "Op 5 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op5FreqRatio"], 
-		["EZslider", "Op 5 Phase", ControlSpec(0,1), "op5Phase"], 
-		["EZslider", "Op 5 Amplitude", ControlSpec(0,1), "op5Amp"], 
-		["SpacerLine", 4], 
-		["EZslider", "Op 5 Mod Op 1", ControlSpec(0,1), "modFM_51"], 
-		["EZslider", "Op 5 Mod Op 2", ControlSpec(0,1), "modFM_52"], 
-		["EZslider", "Op 5 Mod Op 3", ControlSpec(0,1), "modFM_53"], 
-		["EZslider", "Op 5 Mod Op 4", ControlSpec(0,1), "modFM_54"], 
-		["EZslider", "Op 5 Mod Op 5", ControlSpec(0,1), "modFM_55"], 
-		["EZslider", "Op 5 Mod Op 6", ControlSpec(0,1), "modFM_56"], 
-		["EZslider", "Op 5 Level", ControlSpec(0,1), "outLevelOp5"], 
-		["EZslider", "Op 6 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op6FreqRatio"], 
-		["EZslider", "Op 6 Phase", ControlSpec(0,1), "op6Phase"], 
-		["EZslider", "Op 6 Amplitude", ControlSpec(0,1), "op6Amp"], 
-		["SpacerLine", 4], 
-		["EZslider", "Op 6 Mod Op 1", ControlSpec(0,1), "modFM_61"], 
-		["EZslider", "Op 6 Mod Op 2", ControlSpec(0,1), "modFM_62"], 
-		["EZslider", "Op 6 Mod Op 3", ControlSpec(0,1), "modFM_63"], 
-		["EZslider", "Op 6 Mod Op 4", ControlSpec(0,1), "modFM_64"], 
-		["EZslider", "Op 6 Mod Op 5", ControlSpec(0,1), "modFM_65"], 
-		["EZslider", "Op 6 Mod Op 6", ControlSpec(0,1), "modFM_66"], 
-		["EZslider", "Op 6 Level", ControlSpec(0,1), "outLevelOp6"], 
+	arrActionSpecs = this.buildActionSpecs([
+		["TestNoteVals"],
+		["EZslider", "Op 1 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op1FreqRatio"],
+		["EZslider", "Op 1 Phase", ControlSpec(0,1), "op1Phase"],
+		["EZslider", "Op 1 Amplitude", ControlSpec(0,1), "op1Amp"],
+		["SpacerLine", 4],
+		["EZslider", "Op 1 Mod Op 1", ControlSpec(0,1), "modFM_11"],
+		["EZslider", "Op 1 Mod Op 2", ControlSpec(0,1), "modFM_12"],
+		["EZslider", "Op 1 Mod Op 3", ControlSpec(0,1), "modFM_13"],
+		["EZslider", "Op 1 Mod Op 4", ControlSpec(0,1), "modFM_14"],
+		["EZslider", "Op 1 Mod Op 5", ControlSpec(0,1), "modFM_15"],
+		["EZslider", "Op 1 Mod Op 6", ControlSpec(0,1), "modFM_16"],
+		["EZslider", "Op 1 Level", ControlSpec(0,1), "outLevelOp1"],
+		["EZslider", "Op 2 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op2FreqRatio"],
+		["EZslider", "Op 2 Phase", ControlSpec(0,1), "op2Phase"],
+		["EZslider", "Op 2 Amplitude", ControlSpec(0,1), "op2Amp"],
+		["SpacerLine", 4],
+		["EZslider", "Op 2 Mod Op 1", ControlSpec(0,1), "modFM_21"],
+		["EZslider", "Op 2 Mod Op 2", ControlSpec(0,1), "modFM_22"],
+		["EZslider", "Op 2 Mod Op 3", ControlSpec(0,1), "modFM_23"],
+		["EZslider", "Op 2 Mod Op 4", ControlSpec(0,1), "modFM_24"],
+		["EZslider", "Op 2 Mod Op 5", ControlSpec(0,1), "modFM_25"],
+		["EZslider", "Op 2 Mod Op 6", ControlSpec(0,1), "modFM_26"],
+		["EZslider", "Op 2 Level", ControlSpec(0,1), "outLevelOp2"],
+		["EZslider", "Op 3 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op3FreqRatio"],
+		["EZslider", "Op 3 Phase", ControlSpec(0,1), "op3Phase"],
+		["EZslider", "Op 3 Amplitude", ControlSpec(0,1), "op3Amp"],
+		["SpacerLine", 4],
+		["EZslider", "Op 3 Mod Op 1", ControlSpec(0,1), "modFM_31"],
+		["EZslider", "Op 3 Mod Op 2", ControlSpec(0,1), "modFM_32"],
+		["EZslider", "Op 3 Mod Op 3", ControlSpec(0,1), "modFM_33"],
+		["EZslider", "Op 3 Mod Op 4", ControlSpec(0,1), "modFM_34"],
+		["EZslider", "Op 3 Mod Op 5", ControlSpec(0,1), "modFM_35"],
+		["EZslider", "Op 3 Mod Op 6", ControlSpec(0,1), "modFM_36"],
+		["EZslider", "Op 3 Level", ControlSpec(0,1), "outLevelOp3"],
+		["EZslider", "Op 4 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op4FreqRatio"],
+		["EZslider", "Op 4 Phase", ControlSpec(0,1), "op4Phase"],
+		["EZslider", "Op 4 Amplitude", ControlSpec(0,1), "op4Amp"],
+		["SpacerLine", 4],
+		["EZslider", "Op 4 Mod Op 1", ControlSpec(0,1), "modFM_41"],
+		["EZslider", "Op 4 Mod Op 2", ControlSpec(0,1), "modFM_42"],
+		["EZslider", "Op 4 Mod Op 3", ControlSpec(0,1), "modFM_43"],
+		["EZslider", "Op 4 Mod Op 4", ControlSpec(0,1), "modFM_44"],
+		["EZslider", "Op 4 Mod Op 5", ControlSpec(0,1), "modFM_45"],
+		["EZslider", "Op 4 Mod Op 6", ControlSpec(0,1), "modFM_46"],
+		["EZslider", "Op 4 Level", ControlSpec(0,1), "outLevelOp4"],
+		["EZslider", "Op 5 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op5FreqRatio"],
+		["EZslider", "Op 5 Phase", ControlSpec(0,1), "op5Phase"],
+		["EZslider", "Op 5 Amplitude", ControlSpec(0,1), "op5Amp"],
+		["SpacerLine", 4],
+		["EZslider", "Op 5 Mod Op 1", ControlSpec(0,1), "modFM_51"],
+		["EZslider", "Op 5 Mod Op 2", ControlSpec(0,1), "modFM_52"],
+		["EZslider", "Op 5 Mod Op 3", ControlSpec(0,1), "modFM_53"],
+		["EZslider", "Op 5 Mod Op 4", ControlSpec(0,1), "modFM_54"],
+		["EZslider", "Op 5 Mod Op 5", ControlSpec(0,1), "modFM_55"],
+		["EZslider", "Op 5 Mod Op 6", ControlSpec(0,1), "modFM_56"],
+		["EZslider", "Op 5 Level", ControlSpec(0,1), "outLevelOp5"],
+		["EZslider", "Op 6 Freq ratio", ControlSpec(0.001, 16, 'amp'), "op6FreqRatio"],
+		["EZslider", "Op 6 Phase", ControlSpec(0,1), "op6Phase"],
+		["EZslider", "Op 6 Amplitude", ControlSpec(0,1), "op6Amp"],
+		["SpacerLine", 4],
+		["EZslider", "Op 6 Mod Op 1", ControlSpec(0,1), "modFM_61"],
+		["EZslider", "Op 6 Mod Op 2", ControlSpec(0,1), "modFM_62"],
+		["EZslider", "Op 6 Mod Op 3", ControlSpec(0,1), "modFM_63"],
+		["EZslider", "Op 6 Mod Op 4", ControlSpec(0,1), "modFM_64"],
+		["EZslider", "Op 6 Mod Op 5", ControlSpec(0,1), "modFM_65"],
+		["EZslider", "Op 6 Mod Op 6", ControlSpec(0,1), "modFM_66"],
+		["EZslider", "Op 6 Level", ControlSpec(0,1), "outLevelOp6"],
 
-		["MIDIListenCheckBox"], 
-		["NextLine"], 
-		["MIDIChannelSelector"], 
-		["NextLine"], 
-		["MIDINoteSelector"], 
-		["NextLine"], 
-		["MIDIVelSelector"], 
-		["DividingLine"], 
-		["TXCheckBox", "Keyboard tracking", "keytrack"], 
-		["DividingLine"], 
-		["Transpose"], 
-		["DividingLine"], 
-		["TXMinMaxSliderSplit", "Pitch bend", 
-			ControlSpec(-48, 48), "pitchbend", "pitchbendMin", "pitchbendMax"], 
-		["DividingLine"], 
-		["PolyphonySelector"], 
-		["DividingLine"], 
-		["SynthOptionPopup", "Intonation", arrOptionData, 0, 250, 
-			{arg view; this.updateIntString(view.value)}], 
-		["Spacer", 10], 
-		["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F", 
-			"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 120], 
-		["NextLine"], 
-		["TXStaticText", "Note ratios", 
-			{TXIntonation.arrScalesText.at(arrOptions.at(1));}, 
+		["MIDIListenCheckBox"],
+		["NextLine"],
+		["MIDIChannelSelector"],
+		["NextLine"],
+		["MIDINoteSelector"],
+		["NextLine"],
+		["MIDIVelSelector"],
+		["DividingLine"],
+		["TXCheckBox", "Keyboard tracking", "keytrack"],
+		["DividingLine"],
+		["Transpose"],
+		["DividingLine"],
+		["TXMinMaxSliderSplit", "Pitch bend",
+			ControlSpec(-48, 48), "pitchbend", "pitchbendMin", "pitchbendMax"],
+		["DividingLine"],
+		["PolyphonySelector"],
+		["DividingLine"],
+		["SynthOptionPopup", "Intonation", arrOptionData, 0, 250,
+			{arg view; this.updateIntString(view.value)}],
+		["Spacer", 10],
+		["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F",
+			"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 130],
+		["NextLine"],
+		["TXStaticText", "Note ratios",
+			{TXIntonation.arrScalesText.at(arrOptions.at(1));},
 			{arg view; ratioView = view}],
-		["DividingLine"], 
-		["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);}, 
-				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}], 
+		["DividingLine"],
+		["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);},
+				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}],
 
-		["TXPresetPopup", "Vol Env presets", 
-			TXEnvPresets.arrEnvPresets(this, 7,8).collect({arg item, i; item.at(0)}), 
+		["TXPresetPopup", "Vol Env presets",
+			TXEnvPresets.arrEnvPresets(this, 7,8).collect({arg item, i; item.at(0)}),
 			TXEnvPresets.arrEnvPresets(this, 7,8).collect({arg item, i; item.at(1)})
 		],
 		["TXEnvDisplay", {this.envViewValues;}, {arg view; envView = view;}],
-		["NextLine"], 
-		["EZslider", "Vol Env Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}], 
+		["NextLine"],
+		["EZslider", "Vol Env Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Vol Env Attack", timeSpec, "attack", "attackMin", "attackMax",
-			{{this.updateEnvView;}.defer;}], 
+			{{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Vol Env Decay", timeSpec, "decay", "decayMin", "decayMax",
-			{{this.updateEnvView;}.defer;}], 
-		["EZslider", "Vol Env Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}], 
-		["TXMinMaxSliderSplit", "Vol Env Sustain time", timeSpec, "sustainTime", "sustainTimeMin", 
-			"sustainTimeMax",{{this.updateEnvView;}.defer;}], 
+			{{this.updateEnvView;}.defer;}],
+		["EZslider", "Vol Env Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}],
+		["TXMinMaxSliderSplit", "Vol Env Sustain time", timeSpec, "sustainTime", "sustainTimeMin",
+			"sustainTimeMax",{{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Vol Env Release", timeSpec, "release", "releaseMin", "releaseMax",
-			{{this.updateEnvView;}.defer;}], 
-		["NextLine"], 
-		["SynthOptionPopup", "Vol Env Curve", arrOptionData, 7, 150, {system.showView;}], 
-		["SynthOptionPopup", "Vol Env Type", arrOptionData, 8, 180], 
-		["Spacer", 4], 
+			{{this.updateEnvView;}.defer;}],
+		["NextLine"],
+		["SynthOptionPopup", "Vol Env Curve", arrOptionData, 7, 150, {system.showView;}],
+		["SynthOptionPopup", "Vol Env Type", arrOptionData, 8, 180],
+		["Spacer", 4],
 		["ActionButton", "Vol Env Plot", {this.envPlot;}],
-		["SynthOptionCheckBox", "Op 1 Env on/off", arrOptionData, 11, 250], 
-		["Spacer", 4], 
-		["EZslider", "Env amount", ControlSpec(-1, 1), "envAmountOp1", nil, 260], 
-		["NextLine"], 
-		["TXPresetPopup", "Op 1 Env presets", 
-			TXEnvPresets.arrEnvPresetsSfx(this, 9,10, "Op1").collect({arg item, i; item.at(0)}), 
+		["SynthOptionCheckBox", "Op 1 Env on/off", arrOptionData, 11, 250],
+		["Spacer", 4],
+		["EZslider", "Env amount", ControlSpec(-1, 1), "envAmountOp1", nil, 260],
+		["NextLine"],
+		["TXPresetPopup", "Op 1 Env presets",
+			TXEnvPresets.arrEnvPresetsSfx(this, 9,10, "Op1").collect({arg item, i; item.at(0)}),
 			TXEnvPresets.arrEnvPresetsSfx(this, 9,10, "Op1").collect({arg item, i; item.at(1)})
 		],
 		["TXEnvDisplay", {this.opEnvViewValues(1);}, {arg view; opEnvView1 = view;}],
-		["NextLine"], 
-		["EZslider", "Op 1 Pre-Delay", ControlSpec(0,1), "delayOp1", {{this.updateOpEnvView(1);}.defer;}], 
+		["NextLine"],
+		["EZslider", "Op 1 Pre-Delay", ControlSpec(0,1), "delayOp1", {{this.updateOpEnvView(1);}.defer;}],
 		["TXMinMaxSliderSplit", "Op 1 Attack", timeSpec, "attackOp1", "attackMinOp1", "attackMaxOp1",
-			{{this.updateOpEnvView(1);}.defer;}], 
+			{{this.updateOpEnvView(1);}.defer;}],
 		["TXMinMaxSliderSplit", "Op 1 Decay", timeSpec, "decayOp1", "decayMinOp1", "decayMaxOp1",
-			{{this.updateOpEnvView(1);}.defer;}], 
-		["EZslider", "Op 1 Sustain level", ControlSpec(0, 1), "sustainOp1", {{this.updateOpEnvView(1);}.defer;}], 
-		["TXMinMaxSliderSplit", "Op 1 Sustain time", timeSpec, "sustainTimeOp1", "sustainTimeMinOp1", 
-			"sustainTimeMaxOp1",{{this.updateOpEnvView(1);}.defer;}], 
+			{{this.updateOpEnvView(1);}.defer;}],
+		["EZslider", "Op 1 Sustain level", ControlSpec(0, 1), "sustainOp1", {{this.updateOpEnvView(1);}.defer;}],
+		["TXMinMaxSliderSplit", "Op 1 Sustain time", timeSpec, "sustainTimeOp1", "sustainTimeMinOp1",
+			"sustainTimeMaxOp1",{{this.updateOpEnvView(1);}.defer;}],
 		["TXMinMaxSliderSplit", "Op 1 Release", timeSpec, "releaseOp1", "releaseMinOp1", "releaseMaxOp1",
-			{{this.updateOpEnvView(1);}.defer;}], 
-		["NextLine"], 
-		["SynthOptionPopup", "Op 1 Curve", arrOptionData, 9, 150, {system.showView;}], 
-		["SynthOptionPopup", "Op 1 Env Type", arrOptionData, 10, 180], 
-		["SynthOptionCheckBox", "Op 2 Env on/off", arrOptionData, 14, 250], 
-		["Spacer", 4], 
-		["EZslider", "Env amount", ControlSpec(-1, 1), "envAmountOp2", nil, 260], 
-		["NextLine"], 
-		["TXPresetPopup", "Op 2 Env presets", 
-			TXEnvPresets.arrEnvPresetsSfx(this, 12,13, "Op2").collect({arg item, i; item.at(0)}), 
+			{{this.updateOpEnvView(1);}.defer;}],
+		["NextLine"],
+		["SynthOptionPopup", "Op 1 Curve", arrOptionData, 9, 150, {system.showView;}],
+		["SynthOptionPopup", "Op 1 Env Type", arrOptionData, 10, 180],
+		["SynthOptionCheckBox", "Op 2 Env on/off", arrOptionData, 14, 250],
+		["Spacer", 4],
+		["EZslider", "Env amount", ControlSpec(-1, 1), "envAmountOp2", nil, 260],
+		["NextLine"],
+		["TXPresetPopup", "Op 2 Env presets",
+			TXEnvPresets.arrEnvPresetsSfx(this, 12,13, "Op2").collect({arg item, i; item.at(0)}),
 			TXEnvPresets.arrEnvPresetsSfx(this, 12,13, "Op2").collect({arg item, i; item.at(1)})
 		],
 		["TXEnvDisplay", {this.opEnvViewValues(2);}, {arg view; opEnvView2 = view;}],
-		["NextLine"], 
-		["EZslider", "Op 2 Pre-Delay", ControlSpec(0,1), "delayOp2", {{this.updateOpEnvView(2);}.defer;}], 
+		["NextLine"],
+		["EZslider", "Op 2 Pre-Delay", ControlSpec(0,1), "delayOp2", {{this.updateOpEnvView(2);}.defer;}],
 		["TXMinMaxSliderSplit", "Op 2 Attack", timeSpec, "attackOp2", "attackMinOp2", "attackMaxOp2",
-			{{this.updateOpEnvView(2);}.defer;}], 
+			{{this.updateOpEnvView(2);}.defer;}],
 		["TXMinMaxSliderSplit", "Op 2 Decay", timeSpec, "decayOp2", "decayMinOp2", "decayMaxOp2",
-			{{this.updateOpEnvView(2);}.defer;}], 
-		["EZslider", "Op 2 Sustain level", ControlSpec(0, 1), "sustainOp2", {{this.updateOpEnvView(2);}.defer;}], 
-		["TXMinMaxSliderSplit", "Op 2 Sustain time", timeSpec, "sustainTimeOp2", "sustainTimeMinOp2", 
-			"sustainTimeMaxOp2",{{this.updateOpEnvView(2);}.defer;}], 
+			{{this.updateOpEnvView(2);}.defer;}],
+		["EZslider", "Op 2 Sustain level", ControlSpec(0, 1), "sustainOp2", {{this.updateOpEnvView(2);}.defer;}],
+		["TXMinMaxSliderSplit", "Op 2 Sustain time", timeSpec, "sustainTimeOp2", "sustainTimeMinOp2",
+			"sustainTimeMaxOp2",{{this.updateOpEnvView(2);}.defer;}],
 		["TXMinMaxSliderSplit", "Op 2 Release", timeSpec, "releaseOp2", "releaseMinOp2", "releaseMaxOp2",
-			{{this.updateOpEnvView(2);}.defer;}], 
-		["NextLine"], 
-		["SynthOptionPopup", "Op 2 Curve", arrOptionData, 12, 150, {system.showView;}], 
-		["SynthOptionPopup", "Op 2 Env Type", arrOptionData, 13, 180], 
-	]);	
-	//	use base class initialise 
+			{{this.updateOpEnvView(2);}.defer;}],
+		["NextLine"],
+		["SynthOptionPopup", "Op 2 Curve", arrOptionData, 12, 150, {system.showView;}],
+		["SynthOptionPopup", "Op 2 Env Type", arrOptionData, 13, 180],
+	]);
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 	this.midiNoteInit;
 	//	load the synthdef and create the Group for synths to belong to
@@ -703,350 +703,350 @@ init {arg argInstName;
 
 buildGuiSpecArray {
 	guiSpecArray = [
-		["ActionButton", "Operators", {displayOption = "showOperators"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showOperators")], 
-		["Spacer", 3], 
-		["ActionButton", "MIDI/ Note", {displayOption = "showMIDI"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showMIDI")], 
-		["Spacer", 3], 
-		["ActionButton", "Envelopes", {displayOption = "showEnv"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showEnv")], 
-		["DividingLine"], 
-		["SpacerLine", 6], 
+		["ActionButton", "Operators", {displayOption = "showOperators";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showOperators")],
+		["Spacer", 3],
+		["ActionButton", "MIDI/ Note", {displayOption = "showMIDI";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showMIDI")],
+		["Spacer", 3],
+		["ActionButton", "Envelopes", {displayOption = "showEnv";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showEnv")],
+		["DividingLine"],
+		["SpacerLine", 6],
 	];
-	
+
 	if (displayOption == "showOperators", {
 		guiSpecArray = guiSpecArray ++[
 
-			["EZslider", "Main level", ControlSpec(0, 1), "level"], 
-			["SpacerLine", 4], 
+			["EZslider", "Main level", ControlSpec(0, 1), "level"],
+			["SpacerLine", 4],
 
-			["ActionButton", "Op 1", {displayOperator = "showOp1"; 
-				this.buildGuiSpecArray; system.showView;}, 30, 
-				TXColor.white, this.getButtonColour(displayOperator == "showOp1")], 
-			["Spacer", 3], 
-			["ActionButton", "Op 2", {displayOperator = "showOp2"; 
-				this.buildGuiSpecArray; system.showView;}, 30, 
-				TXColor.white, this.getButtonColour(displayOperator == "showOp2")], 
-			["Spacer", 3], 
-			["ActionButton", "Op 3", {displayOperator = "showOp3"; 
-				this.buildGuiSpecArray; system.showView;}, 30, 
-				TXColor.white, this.getButtonColour(displayOperator == "showOp3")], 
-			["Spacer", 3], 
-			["ActionButton", "Op 4", {displayOperator = "showOp4"; 
-				this.buildGuiSpecArray; system.showView;}, 30, 
-				TXColor.white, this.getButtonColour(displayOperator == "showOp4")], 
-			["Spacer", 3], 
-			["ActionButton", "Op 5", {displayOperator = "showOp5"; 
-				this.buildGuiSpecArray; system.showView;}, 30, 
-				TXColor.white, this.getButtonColour(displayOperator == "showOp5")], 
-			["Spacer", 3], 
-			["ActionButton", "Op 6", {displayOperator = "showOp6"; 
-				this.buildGuiSpecArray; system.showView;}, 30, 
-				TXColor.white, this.getButtonColour(displayOperator == "showOp6")], 
-			["Spacer", 3], 
-			["ActionButton", "All Ops", {displayOperator = "showAllOps"; 
-				this.buildGuiSpecArray; system.showView;}, 50, 
-				TXColor.white, this.getButtonColour(displayOperator == "showAllOps")], 
-			["SpacerLine", 4], 
+			["ActionButton", "Op 1", {displayOperator = "showOp1";
+				this.buildGuiSpecArray; system.showView;}, 30,
+				TXColor.white, this.getButtonColour(displayOperator == "showOp1")],
+			["Spacer", 3],
+			["ActionButton", "Op 2", {displayOperator = "showOp2";
+				this.buildGuiSpecArray; system.showView;}, 30,
+				TXColor.white, this.getButtonColour(displayOperator == "showOp2")],
+			["Spacer", 3],
+			["ActionButton", "Op 3", {displayOperator = "showOp3";
+				this.buildGuiSpecArray; system.showView;}, 30,
+				TXColor.white, this.getButtonColour(displayOperator == "showOp3")],
+			["Spacer", 3],
+			["ActionButton", "Op 4", {displayOperator = "showOp4";
+				this.buildGuiSpecArray; system.showView;}, 30,
+				TXColor.white, this.getButtonColour(displayOperator == "showOp4")],
+			["Spacer", 3],
+			["ActionButton", "Op 5", {displayOperator = "showOp5";
+				this.buildGuiSpecArray; system.showView;}, 30,
+				TXColor.white, this.getButtonColour(displayOperator == "showOp5")],
+			["Spacer", 3],
+			["ActionButton", "Op 6", {displayOperator = "showOp6";
+				this.buildGuiSpecArray; system.showView;}, 30,
+				TXColor.white, this.getButtonColour(displayOperator == "showOp6")],
+			["Spacer", 3],
+			["ActionButton", "All Ops", {displayOperator = "showAllOps";
+				this.buildGuiSpecArray; system.showView;}, 50,
+				TXColor.white, this.getButtonColour(displayOperator == "showAllOps")],
+			["SpacerLine", 4],
 		];
 
 		if (displayOperator == "showOp1", {
 			guiSpecArray = guiSpecArray ++[
-				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op1FreqRatio"], 
-				["EZslider", "Phase", ControlSpec(0,1), "op1Phase"], 
-				["EZslider", "Amplitude", ControlSpec(0,1), "op1Amp"], 
-				["SpacerLine", 4], 
-				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_11"], 
-				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_12"], 
-				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_13"], 
-				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_14"], 
-				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_15"], 
-				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_16"], 
-				["SpacerLine", 4], 
-				["EZslider", "Level", ControlSpec(0,1), "outLevelOp1"], 
+				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op1FreqRatio"],
+				["EZslider", "Phase", ControlSpec(0,1), "op1Phase"],
+				["EZslider", "Amplitude", ControlSpec(0,1), "op1Amp"],
+				["SpacerLine", 4],
+				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_11"],
+				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_12"],
+				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_13"],
+				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_14"],
+				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_15"],
+				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_16"],
+				["SpacerLine", 4],
+				["EZslider", "Level", ControlSpec(0,1), "outLevelOp1"],
 			];
 		});
 		if (displayOperator == "showOp2", {
 			guiSpecArray = guiSpecArray ++[
-				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op2FreqRatio"], 
-				["EZslider", "Phase", ControlSpec(0,1), "op2Phase"], 
-				["EZslider", "Amplitude", ControlSpec(0,1), "op2Amp"], 
-				["SpacerLine", 4], 
-				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_21"], 
-				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_22"], 
-				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_23"], 
-				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_24"], 
-				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_25"], 
-				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_26"], 
-				["SpacerLine", 4], 
-				["EZslider", "Level", ControlSpec(0,1), "outLevelOp2"], 
+				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op2FreqRatio"],
+				["EZslider", "Phase", ControlSpec(0,1), "op2Phase"],
+				["EZslider", "Amplitude", ControlSpec(0,1), "op2Amp"],
+				["SpacerLine", 4],
+				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_21"],
+				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_22"],
+				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_23"],
+				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_24"],
+				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_25"],
+				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_26"],
+				["SpacerLine", 4],
+				["EZslider", "Level", ControlSpec(0,1), "outLevelOp2"],
 			];
 		});
 		if (displayOperator == "showOp3", {
 			guiSpecArray = guiSpecArray ++[
-				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op3FreqRatio"], 
-				["EZslider", "Phase", ControlSpec(0,1), "op3Phase"], 
-				["EZslider", "Amplitude", ControlSpec(0,1), "op3Amp"], 
-				["SpacerLine", 4], 
-				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_31"], 
-				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_32"], 
-				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_33"], 
-				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_34"], 
-				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_35"], 
-				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_36"], 
-				["SpacerLine", 4], 
-				["EZslider", "Level", ControlSpec(0,1), "outLevelOp3"], 
+				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op3FreqRatio"],
+				["EZslider", "Phase", ControlSpec(0,1), "op3Phase"],
+				["EZslider", "Amplitude", ControlSpec(0,1), "op3Amp"],
+				["SpacerLine", 4],
+				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_31"],
+				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_32"],
+				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_33"],
+				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_34"],
+				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_35"],
+				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_36"],
+				["SpacerLine", 4],
+				["EZslider", "Level", ControlSpec(0,1), "outLevelOp3"],
 			];
 		});
 		if (displayOperator == "showOp4", {
 			guiSpecArray = guiSpecArray ++[
-				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op4FreqRatio"], 
-				["EZslider", "Phase", ControlSpec(0,1), "op4Phase"], 
-				["EZslider", "Amplitude", ControlSpec(0,1), "op4Amp"], 
-				["SpacerLine", 4], 
-				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_41"], 
-				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_42"], 
-				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_43"], 
-				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_44"], 
-				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_45"], 
-				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_46"], 
-				["SpacerLine", 4], 
-				["EZslider", "Level", ControlSpec(0,1), "outLevelOp4"], 
+				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op4FreqRatio"],
+				["EZslider", "Phase", ControlSpec(0,1), "op4Phase"],
+				["EZslider", "Amplitude", ControlSpec(0,1), "op4Amp"],
+				["SpacerLine", 4],
+				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_41"],
+				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_42"],
+				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_43"],
+				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_44"],
+				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_45"],
+				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_46"],
+				["SpacerLine", 4],
+				["EZslider", "Level", ControlSpec(0,1), "outLevelOp4"],
 			];
 		});
 		if (displayOperator == "showOp5", {
 			guiSpecArray = guiSpecArray ++[
-				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op5FreqRatio"], 
-				["EZslider", "Phase", ControlSpec(0,1), "op5Phase"], 
-				["EZslider", "Amplitude", ControlSpec(0,1), "op5Amp"], 
-				["SpacerLine", 4], 
-				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_51"], 
-				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_52"], 
-				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_53"], 
-				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_54"], 
-				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_55"], 
-				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_56"], 
-				["SpacerLine", 4], 
-				["EZslider", "Level", ControlSpec(0,1), "outLevelOp5"], 
+				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op5FreqRatio"],
+				["EZslider", "Phase", ControlSpec(0,1), "op5Phase"],
+				["EZslider", "Amplitude", ControlSpec(0,1), "op5Amp"],
+				["SpacerLine", 4],
+				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_51"],
+				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_52"],
+				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_53"],
+				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_54"],
+				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_55"],
+				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_56"],
+				["SpacerLine", 4],
+				["EZslider", "Level", ControlSpec(0,1), "outLevelOp5"],
 			];
 		});
 		if (displayOperator == "showOp6", {
 			guiSpecArray = guiSpecArray ++[
-				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op6FreqRatio"], 
-				["EZslider", "Phase", ControlSpec(0,1), "op6Phase"], 
-				["EZslider", "Amplitude", ControlSpec(0,1), "op6Amp"], 
-				["SpacerLine", 4], 
-				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_61"], 
-				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_62"], 
-				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_63"], 
-				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_64"], 
-				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_65"], 
-				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_66"], 
-				["SpacerLine", 4], 
-				["EZslider", "Level", ControlSpec(0,1), "outLevelOp6"], 
+				["EZslider", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op6FreqRatio"],
+				["EZslider", "Phase", ControlSpec(0,1), "op6Phase"],
+				["EZslider", "Amplitude", ControlSpec(0,1), "op6Amp"],
+				["SpacerLine", 4],
+				["EZslider", "Mod Op 1", ControlSpec(0,1), "modFM_61"],
+				["EZslider", "Mod Op 2", ControlSpec(0,1), "modFM_62"],
+				["EZslider", "Mod Op 3", ControlSpec(0,1), "modFM_63"],
+				["EZslider", "Mod Op 4", ControlSpec(0,1), "modFM_64"],
+				["EZslider", "Mod Op 5", ControlSpec(0,1), "modFM_65"],
+				["EZslider", "Mod Op 6", ControlSpec(0,1), "modFM_66"],
+				["SpacerLine", 4],
+				["EZslider", "Level", ControlSpec(0,1), "outLevelOp6"],
 			];
 		});
 		if (displayOperator == "showAllOps", {
 			guiSpecArray = guiSpecArray ++[
 
-				["EZNumber", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op1FreqRatio", nil, nil, nil, 0.1], 
-				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op2FreqRatio", nil, 60, 0.1], 
-				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op3FreqRatio", nil, 60, 0.1], 
-				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op4FreqRatio", nil, 60, 0.1], 
-				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op5FreqRatio", nil, 60, 0.1], 
-				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op6FreqRatio", nil, 60, 0.1], 
-				["EZNumber", "Phase", ControlSpec(0,1), "op1Phase", nil, nil, nil, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op2Phase", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op3Phase", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op4Phase", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op5Phase", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op6Phase", nil, 60, 0.05], 
-				["EZNumber", "Amplitude", ControlSpec(0,1), "op1Amp", nil, nil, nil, 0.05],  
-				["TXScrollNumBox", ControlSpec(0,1), "op2Amp", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op3Amp", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op4Amp", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op5Amp", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "op6Amp", nil, 60, 0.05], 
-				["SpacerLine", 4], 
-				["EZNumber", "Mod Op 1", ControlSpec(0,1), "modFM_11", nil, nil, nil, 0.05],  
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_21", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_31", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_41", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_51", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_61", nil, 60, 0.05], 
-				["EZNumber", "Mod Op 2", ControlSpec(0,1), "modFM_12", nil, nil, nil, 0.05],  
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_22", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_32", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_42", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_52", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_62", nil, 60, 0.05], 
-				["EZNumber", "Mod Op 3", ControlSpec(0,1), "modFM_13", nil, nil, nil, 0.05],  
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_23", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_33", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_43", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_53", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_63", nil, 60, 0.05], 
-				["EZNumber", "Mod Op 4", ControlSpec(0,1), "modFM_14", nil, nil, nil, 0.05],  
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_24", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_34", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_44", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_54", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_64", nil, 60, 0.05], 
-				["EZNumber", "Mod Op 5", ControlSpec(0,1), "modFM_15", nil, nil, nil, 0.05],  
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_25", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_35", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_45", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_55", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_65", nil, 60, 0.05], 
-				["EZNumber", "Mod Op 6", ControlSpec(0,1), "modFM_16", nil, nil, nil, 0.05],  
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_26", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_36", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_46", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_56", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "modFM_66", nil, 60, 0.05], 
-				["SpacerLine", 4], 
-				["EZNumber", "Level", ControlSpec(0,1), "outLevelOp1", nil, nil, nil, 0.05],  
-				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp2", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp3", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp4", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp5", nil, 60, 0.05], 
-				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp6", nil, 60, 0.05], 
+				["EZNumber", "Freq ratio", ControlSpec(0.001, 16, 'amp'), "op1FreqRatio", nil, nil, nil, 0.1],
+				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op2FreqRatio", nil, 60, 0.1],
+				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op3FreqRatio", nil, 60, 0.1],
+				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op4FreqRatio", nil, 60, 0.1],
+				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op5FreqRatio", nil, 60, 0.1],
+				["TXScrollNumBox", ControlSpec(0.001, 16, 'amp'), "op6FreqRatio", nil, 60, 0.1],
+				["EZNumber", "Phase", ControlSpec(0,1), "op1Phase", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op2Phase", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op3Phase", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op4Phase", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op5Phase", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op6Phase", nil, 60, 0.05],
+				["EZNumber", "Amplitude", ControlSpec(0,1), "op1Amp", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op2Amp", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op3Amp", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op4Amp", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op5Amp", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "op6Amp", nil, 60, 0.05],
+				["SpacerLine", 4],
+				["EZNumber", "Mod Op 1", ControlSpec(0,1), "modFM_11", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_21", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_31", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_41", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_51", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_61", nil, 60, 0.05],
+				["EZNumber", "Mod Op 2", ControlSpec(0,1), "modFM_12", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_22", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_32", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_42", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_52", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_62", nil, 60, 0.05],
+				["EZNumber", "Mod Op 3", ControlSpec(0,1), "modFM_13", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_23", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_33", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_43", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_53", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_63", nil, 60, 0.05],
+				["EZNumber", "Mod Op 4", ControlSpec(0,1), "modFM_14", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_24", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_34", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_44", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_54", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_64", nil, 60, 0.05],
+				["EZNumber", "Mod Op 5", ControlSpec(0,1), "modFM_15", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_25", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_35", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_45", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_55", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_65", nil, 60, 0.05],
+				["EZNumber", "Mod Op 6", ControlSpec(0,1), "modFM_16", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_26", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_36", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_46", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_56", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "modFM_66", nil, 60, 0.05],
+				["SpacerLine", 4],
+				["EZNumber", "Level", ControlSpec(0,1), "outLevelOp1", nil, nil, nil, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp2", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp3", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp4", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp5", nil, 60, 0.05],
+				["TXScrollNumBox", ControlSpec(0,1), "outLevelOp6", nil, 60, 0.05],
 			];
 		});
 	});
 
 	if (displayOption == "showMIDI", {
 		guiSpecArray = guiSpecArray ++[
-			["MIDIListenCheckBox"], 
-			["NextLine"], 
-			["MIDIChannelSelector"], 
-			["NextLine"], 
-			["MIDINoteSelector"], 
-			["NextLine"], 
-			["MIDIVelSelector"], 
-			["DividingLine"], 
-			["TXCheckBox", "Keyboard tracking", "keytrack"], 
-			["DividingLine"], 
-			["Transpose"], 
-			["DividingLine"], 
-			["TXMinMaxSliderSplit", "Pitch bend", ControlSpec(-48, 48), "pitchbend", 
-				"pitchbendMin", "pitchbendMax", nil, 
-				[	["Presets: ", [-2, 2]], ["Range -1 to 1", [-1, 1]], ["Range -2 to 2", [-2, 2]],
+			["MIDIListenCheckBox"],
+			["NextLine"],
+			["MIDIChannelSelector"],
+			["NextLine"],
+			["MIDINoteSelector"],
+			["NextLine"],
+			["MIDIVelSelector"],
+			["DividingLine"],
+			["TXCheckBox", "Keyboard tracking", "keytrack"],
+			["DividingLine"],
+			["Transpose"],
+			["DividingLine"],
+			["TXMinMaxSliderSplit", "Pitch bend", ControlSpec(-48, 48), "pitchbend",
+				"pitchbendMin", "pitchbendMax", nil,
+				[	["Bend Range Presets: ", [-2, 2]], ["Range -1 to 1", [-1, 1]], ["Range -2 to 2", [-2, 2]],
 					["Range -7 to 7", [-7, 7]], ["Range -12 to 12", [-12, 12]],
-					["Range -24 to 24", [-24, 24]], ["Range -48 to 48", [-48, 48]] ] ], 
-			["DividingLine"], 
-			["PolyphonySelector"], 
-			["DividingLine"], 
-			["SynthOptionPopupPlusMinus", "Intonation", arrOptionData, 0, 300, 
-				{arg view; this.updateIntString(view.value)}], 
-			["Spacer", 10], 
-			["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F", 
-				"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 120], 
-			["NextLine"], 
-			["TXStaticText", "Note ratios", 
-				{TXIntonation.arrScalesText.at(arrOptions.at(0));}, 
+					["Range -24 to 24", [-24, 24]], ["Range -48 to 48", [-48, 48]] ] ],
+			["DividingLine"],
+			["PolyphonySelector"],
+			["DividingLine"],
+			["SynthOptionPopupPlusMinus", "Intonation", arrOptionData, 0, 300,
+				{arg view; this.updateIntString(view.value)}],
+			["Spacer", 10],
+			["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F",
+				"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 120],
+			["NextLine"],
+			["TXStaticText", "Note ratios",
+				{TXIntonation.arrScalesText.at(arrOptions.at(0));},
 				{arg view; ratioView = view}],
-			["DividingLine"], 
-			["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);}, 
-				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}], 
+			["DividingLine"],
+			["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);},
+				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}],
 		];
 	});
 	if (displayOption == "showEnv", {
 		guiSpecArray = guiSpecArray ++[
-			["ActionButton", "Vol Env", {displayEnv = "showVolEnv"; 
-				this.buildGuiSpecArray; system.showView;}, 60, 
-				TXColor.white, this.getButtonColour(displayEnv == "showVolEnv")], 
-			["Spacer", 3], 
-			["ActionButton", "Op 1 Env", {displayEnv = "showOp1"; 
-				this.buildGuiSpecArray; system.showView;}, 60, 
-				TXColor.white, this.getButtonColour(displayEnv == "showOp1")], 
-			["Spacer", 3], 
-			["ActionButton", "Op 2 Env", {displayEnv = "showOp2"; 
-				this.buildGuiSpecArray; system.showView;}, 60, 
-				TXColor.white, this.getButtonColour(displayEnv == "showOp2")], 
-			["SpacerLine", 3], 
+			["ActionButton", "Vol Env", {displayEnv = "showVolEnv";
+				this.buildGuiSpecArray; system.showView;}, 60,
+				TXColor.white, this.getButtonColour(displayEnv == "showVolEnv")],
+			["Spacer", 3],
+			["ActionButton", "Op 1 Env", {displayEnv = "showOp1";
+				this.buildGuiSpecArray; system.showView;}, 60,
+				TXColor.white, this.getButtonColour(displayEnv == "showOp1")],
+			["Spacer", 3],
+			["ActionButton", "Op 2 Env", {displayEnv = "showOp2";
+				this.buildGuiSpecArray; system.showView;}, 60,
+				TXColor.white, this.getButtonColour(displayEnv == "showOp2")],
+			["SpacerLine", 3],
 		];
 
 		if (displayEnv == "showOp1", {
 			guiSpecArray = guiSpecArray ++[
-				["SynthOptionCheckBox", "Op 1 Env", arrOptionData, 11, 110], 
-				["Spacer", 4], 
-				["EZslider", "Env amount", ControlSpec(-1, 1), "envAmountOp1", nil, 260], 
-				["NextLine"], 
-				["TXPresetPopup", "Env presets", 
-					TXEnvPresets.arrEnvPresetsSfx(this, 9,10, "Op1").collect({arg item, i; item.at(0)}), 
+				["SynthOptionCheckBox", "Op 1 Env", arrOptionData, 11, 110],
+				["Spacer", 4],
+				["EZslider", "Env amount", ControlSpec(-1, 1), "envAmountOp1", nil, 260],
+				["NextLine"],
+				["TXPresetPopup", "Env presets",
+					TXEnvPresets.arrEnvPresetsSfx(this, 9,10, "Op1").collect({arg item, i; item.at(0)}),
 					TXEnvPresets.arrEnvPresetsSfx(this, 9,10, "Op1").collect({arg item, i; item.at(1)})
 				],
 				["TXEnvDisplay", {this.opEnvViewValues(1);}, {arg view; opEnvView1 = view;}],
-				["NextLine"], 
-				["EZslider", "Pre-Delay", ControlSpec(0,1), "delayOp1", {{this.updateOpEnvView(1);}.defer;}], 
+				["NextLine"],
+				["EZslider", "Pre-Delay", ControlSpec(0,1), "delayOp1", {{this.updateOpEnvView(1);}.defer;}],
 				["TXMinMaxSliderSplit", "Attack", timeSpec, "attackOp1", "attackMinOp1", "attackMaxOp1",
-					{{this.updateOpEnvView(1);}.defer;}], 
+					{{this.updateOpEnvView(1);}.defer;}],
 				["TXMinMaxSliderSplit", "Decay", timeSpec, "decayOp1", "decayMinOp1", "decayMaxOp1",
-					{{this.updateOpEnvView(1);}.defer;}], 
-				["EZslider", "Sustain level", ControlSpec(0, 1), "sustainOp1", {{this.updateOpEnvView(1);}.defer;}], 
-				["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTimeOp1", "sustainTimeMinOp1", 
-					"sustainTimeMaxOp1",{{this.updateOpEnvView(1);}.defer;}], 
+					{{this.updateOpEnvView(1);}.defer;}],
+				["EZslider", "Sustain level", ControlSpec(0, 1), "sustainOp1", {{this.updateOpEnvView(1);}.defer;}],
+				["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTimeOp1", "sustainTimeMinOp1",
+					"sustainTimeMaxOp1",{{this.updateOpEnvView(1);}.defer;}],
 				["TXMinMaxSliderSplit", "Release", timeSpec, "releaseOp1", "releaseMinOp1", "releaseMaxOp1",
-					{{this.updateOpEnvView(1);}.defer;}], 
-				["NextLine"], 
-				["SynthOptionPopup", "Curve", arrOptionData, 9, 150, {system.showView;}], 
-				["SynthOptionPopup", "Env Type", arrOptionData, 10, 180], 
+					{{this.updateOpEnvView(1);}.defer;}],
+				["NextLine"],
+				["SynthOptionPopup", "Curve", arrOptionData, 9, 150, {system.showView;}],
+				["SynthOptionPopup", "Env Type", arrOptionData, 10, 180],
 			];
 		});
 		if (displayEnv == "showOp2", {
-			guiSpecArray = guiSpecArray ++[	
-				["SynthOptionCheckBox", "Op 2 Env", arrOptionData, 14, 110], 
-				["Spacer", 4], 
-				["EZslider", "Env amount", ControlSpec(-1, 1), "envAmountOp2", nil, 260], 
-				["NextLine"], 
-				["TXPresetPopup", "Env presets", 
-					TXEnvPresets.arrEnvPresetsSfx(this, 12,13, "Op2").collect({arg item, i; item.at(0)}), 
+			guiSpecArray = guiSpecArray ++[
+				["SynthOptionCheckBox", "Op 2 Env", arrOptionData, 14, 110],
+				["Spacer", 4],
+				["EZslider", "Env amount", ControlSpec(-1, 1), "envAmountOp2", nil, 260],
+				["NextLine"],
+				["TXPresetPopup", "Env presets",
+					TXEnvPresets.arrEnvPresetsSfx(this, 12,13, "Op2").collect({arg item, i; item.at(0)}),
 					TXEnvPresets.arrEnvPresetsSfx(this, 12,13, "Op2").collect({arg item, i; item.at(1)})
 				],
 				["TXEnvDisplay", {this.opEnvViewValues(2);}, {arg view; opEnvView2 = view;}],
-				["NextLine"], 
-				["EZslider", "Pre-Delay", ControlSpec(0,1), "delayOp2", {{this.updateOpEnvView(2);}.defer;}], 
+				["NextLine"],
+				["EZslider", "Pre-Delay", ControlSpec(0,1), "delayOp2", {{this.updateOpEnvView(2);}.defer;}],
 				["TXMinMaxSliderSplit", "Attack", timeSpec, "attackOp2", "attackMinOp2", "attackMaxOp2",
-					{{this.updateOpEnvView(2);}.defer;}], 
+					{{this.updateOpEnvView(2);}.defer;}],
 				["TXMinMaxSliderSplit", "Decay", timeSpec, "decayOp2", "decayMinOp2", "decayMaxOp2",
-					{{this.updateOpEnvView(2);}.defer;}], 
-				["EZslider", "Sustain level", ControlSpec(0, 1), "sustainOp2", {{this.updateOpEnvView(2);}.defer;}], 
-				["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTimeOp2", "sustainTimeMinOp2", 
-					"sustainTimeMaxOp2",{{this.updateOpEnvView(2);}.defer;}], 
+					{{this.updateOpEnvView(2);}.defer;}],
+				["EZslider", "Sustain level", ControlSpec(0, 1), "sustainOp2", {{this.updateOpEnvView(2);}.defer;}],
+				["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTimeOp2", "sustainTimeMinOp2",
+					"sustainTimeMaxOp2",{{this.updateOpEnvView(2);}.defer;}],
 				["TXMinMaxSliderSplit", "Release", timeSpec, "releaseOp2", "releaseMinOp2", "releaseMaxOp2",
-					{{this.updateOpEnvView(2);}.defer;}], 
-				["NextLine"], 
-				["SynthOptionPopup", "Curve", arrOptionData, 12, 150, {system.showView;}], 
-				["SynthOptionPopup", "Env Type", arrOptionData, 13, 180], 
+					{{this.updateOpEnvView(2);}.defer;}],
+				["NextLine"],
+				["SynthOptionPopup", "Curve", arrOptionData, 12, 150, {system.showView;}],
+				["SynthOptionPopup", "Env Type", arrOptionData, 13, 180],
 			];
 		});
 		if (displayEnv == "showVolEnv", {
 			guiSpecArray = guiSpecArray ++[
-				["TXPresetPopup", "Env presets", 
-					TXEnvPresets.arrEnvPresets(this, 7,8).collect({arg item, i; item.at(0)}), 
+				["TXPresetPopup", "Env presets",
+					TXEnvPresets.arrEnvPresets(this, 7,8).collect({arg item, i; item.at(0)}),
 					TXEnvPresets.arrEnvPresets(this, 7,8).collect({arg item, i; item.at(1)})
 				],
 				["TXEnvDisplay", {this.envViewValues;}, {arg view; envView = view;}],
-				["NextLine"], 
-				["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}], 
+				["NextLine"],
+				["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}],
 				["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",
-					{{this.updateEnvView;}.defer;}], 
+					{{this.updateEnvView;}.defer;}],
 				["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",
-					{{this.updateEnvView;}.defer;}], 
-				["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}], 
-				["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin", 
-					"sustainTimeMax",{{this.updateEnvView;}.defer;}], 
+					{{this.updateEnvView;}.defer;}],
+				["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}],
+				["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin",
+					"sustainTimeMax",{{this.updateEnvView;}.defer;}],
 				["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",
-					{{this.updateEnvView;}.defer;}], 
-				["NextLine"], 
-				["SynthOptionPopup", "Curve", arrOptionData, 7, 150, {system.showView;}], 
-				["SynthOptionPopup", "Env Type", arrOptionData, 8, 180], 
-				["Spacer", 4], 
+					{{this.updateEnvView;}.defer;}],
+				["NextLine"],
+				["SynthOptionPopup", "Curve", arrOptionData, 7, 150, {system.showView;}],
+				["SynthOptionPopup", "Env Type", arrOptionData, 8, 180],
+				["Spacer", 4],
 				["ActionButton", "Plot", {this.envPlot;}],
 			];
 		});
@@ -1071,7 +1071,7 @@ loadExtraData {arg argData;  // override default method
 	testMIDITime = argData.at(2);
 }
 
-updateIntString{arg argIndex; 
+updateIntString{arg argIndex;
 	if (ratioView.notNil, {
 		if (ratioView.notClosed, {
 			ratioView.string = TXIntonation.arrScalesText.at(argIndex);

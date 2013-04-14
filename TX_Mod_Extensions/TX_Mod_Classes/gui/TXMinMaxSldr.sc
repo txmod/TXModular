@@ -7,13 +7,13 @@ TXMinMaxSlider {
 	// controlSpec2 is only used internally and it's min & max are decided by minNumberView & maxNumberView
 
 	*new { arg window, dimensions, label, controlSpec, action, initVal,
-			initAction=false, labelWidth=80, numberWidth = 120, arrRangePresets;
+		initAction=false, labelWidth=80, numberWidth = 120, arrRangePresets;
 		^super.new.init(window, dimensions, label, controlSpec, action, initVal,
 			initAction, labelWidth, numberWidth, arrRangePresets);
 	}
 	init { arg window, dimensions, label, argControlSpec, argAction, initVal,
-			initAction, labelWidth, numberWidth, arrRangePresets;
-		var height, spacingX, spacingY, presetWidth;
+		initAction, labelWidth, numberWidth, arrRangePresets;
+		var height, spacingX, spacingY;
 
 		if (window.class == Window, {
 			spacingX = window.view.decorator.gap.x;
@@ -21,11 +21,6 @@ TXMinMaxSlider {
 		}, {
 			spacingX = window.decorator.gap.x;
 			spacingY = window.decorator.gap.y;
-		});
-		if (arrRangePresets.notNil, {
-			presetWidth = 16 + spacingX;
-		}, {
-			presetWidth = 0;
 		});
 		height = ( (dimensions.y - spacingY) / 2).asInteger;
 
@@ -71,11 +66,11 @@ TXMinMaxSlider {
 		};
 
 		// decorator next line & shift
-			if (window.class == Window, {
-				window.view.decorator.nextLine;
-			}, {
-				window.decorator.nextLine;
-			});
+		if (window.class == Window, {
+			window.view.decorator.nextLine;
+		}, {
+			window.decorator.nextLine;
+		});
 
 		labelView2 = StaticText(window, labelWidth @ height);
 		labelView2.string = "Min - Max";
@@ -98,7 +93,7 @@ TXMinMaxSlider {
 		rangeView.hi = controlSpec.maxval;
 
 		minNumberView = TXScrollNumBox(window,
-			((numberWidth - presetWidth - spacingX)/2).asInteger @ (height * 0.8),
+			((numberWidth - spacingX)/2).asInteger @ (height * 0.8),
 			controlSpec).maxDecimals_(4);
 		minNumberView.action = {
 			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
@@ -113,7 +108,7 @@ TXMinMaxSlider {
 		minNumberView.value = controlSpec.minval;
 
 		maxNumberView = TXScrollNumBox(window,
-			((numberWidth - presetWidth - spacingX)/2).asInteger @ (height * 0.8),
+			((numberWidth - spacingX)/2).asInteger @ (height * 0.8),
 			controlSpec).maxDecimals_(4);
 		maxNumberView.action = {
 			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
@@ -128,16 +123,26 @@ TXMinMaxSlider {
 		maxNumberView.value = controlSpec.maxval;
 
 		if (arrRangePresets.notNil, {
-			presetPopupView = PopUpMenu(window, 16 @ (height * 0.8))
-				.background_(Color.white)
-				.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
-				.action_({ arg view;
-					var arrMinMax;
-					arrMinMax = arrRangePresets.at(view.value).at(1);
-					this.valueSplitAction = [this.valueSplit.at(0), arrMinMax.at(0),
-						 arrMinMax.at(1)];
-					view.value = 0;
-				});
+
+			// decorator next line & shift
+			if (window.class == Window, {
+				window.view.decorator.nextLine;
+				window.view.decorator.shift(labelWidth + spacingX, 0);
+			}, {
+				window.decorator.nextLine;
+				window.decorator.shift(labelWidth + spacingX, 0);
+			});
+
+			presetPopupView = PopUpMenu(window, (dimensions.x - labelWidth - spacingX) @ (height * 0.8))
+			.background_(TXColor.paleBlue2)
+			.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
+			.action_({ arg view;
+				var arrMinMax;
+				arrMinMax = arrRangePresets.at(view.value).at(1);
+				this.valueSplitAction = [this.valueSplit.at(0), arrMinMax.at(0),
+					arrMinMax.at(1)];
+				view.value = 0;
+			});
 		});
 
 		if (initAction) {

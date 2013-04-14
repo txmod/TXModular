@@ -726,10 +726,10 @@ TXChannelRouting {	// Channel Routing
 		channelsScrollView = ScrollView(parent, Rect(0, 0, 4 + (maxChannels * 151), 612))
 		.hasBorder_(false);
 		channelsScrollView.background = TXColor.sysMainWindow;
+		channelsScrollView.action = {arg view; channelsVisibleOrigin = view.visibleOrigin;};
 		if (GUI.current.asSymbol == \cocoa, {
 			channelsScrollView.autoScrolls_(false);
 		});
-		channelsScrollView.action = {arg view; channelsVisibleOrigin = view.visibleOrigin; };
 		channelBox = CompositeView(channelsScrollView, Rect(0, 0, 4 + ((this.arrShowChannels.size+3) * 151), 595));
 		channelBox.background = TXColor.sysMainWindow;
 		channelBox.decorator = FlowLayout(channelBox.bounds);
@@ -742,8 +742,9 @@ TXChannelRouting {	// Channel Routing
 			this.arrShowChannels.at(i).makeChannelGui(channelBox);
 		});
 
-		this.setScrollToCurrentChannel(maxChannels);
-		channelsScrollView.visibleOrigin = channelsVisibleOrigin;
+		//this.setScrollToCurrentChannel(maxChannels);
+
+		{channelsScrollView.visibleOrigin = channelsVisibleOrigin;}.defer(0.2);
 	}
 
 	*setScrollToCurrentChannel { arg maxChannels;
@@ -755,7 +756,7 @@ TXChannelRouting {	// Channel Routing
 				curChannelLeft = 4 + (holdIndex * 151);
 				if ( (curChannelLeft < channelsVisibleOrigin.x) or:
 					(curChannelLeft > (channelsVisibleOrigin.x +(maxChannels * 151))) , {
-						channelsVisibleOrigin.x = curChannelLeft;
+						//channelsVisibleOrigin.x = curChannelLeft;
 						channelsVisibleOrigin = Point.new(curChannelLeft, 0);
 				});
 			});

@@ -4,18 +4,18 @@ TXSamplePlayerSt6 : TXModuleBase {
 
 // Note: TXSamplePlayerSt6 is different to TXSamplePlayer5a because it doesn't have the extra loop type "Single-Waveform"
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<arrBufferSpecs;
 	classvar	<guiWidth=500;
-	
+
 	var	timeSpec;
 	var <>sampleNo = 0;
 	var <>bankNo = 0;
@@ -32,12 +32,12 @@ TXSamplePlayerSt6 : TXModuleBase {
 	var <>testMIDITime = 1;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "Sample Player St";
 	moduleRate = "audio";
 	moduleType = "groupsource";
-	arrCtlSCInBusSpecs = [ 		
+	arrCtlSCInBusSpecs = [
 		["Sample Start", 1, "modStart", 0],
 		["Sample End", 1, "modEnd", 0],
 		["Sample Reverse", 1, "modReverse", 0],
@@ -48,19 +48,19 @@ TXSamplePlayerSt6 : TXModuleBase {
 		["Sustain level", 1, "modSustain", 0],
 		["Sustain time", 1, "modSustainTime", 0],
 		["Release", 1, "modRelease", 0],
-	];	
+	];
 	noOutChannels = 2;
-	arrOutBusSpecs = [ 
-		["Out L + R", [0,1]], 
-		["Out L only", [0]], 
-		["Out R only", [1]] 
-	];	
+	arrOutBusSpecs = [
+		["Out L + R", [0,1]],
+		["Out L only", [0]],
+		["Out R only", [1]]
+	];
 	arrBufferSpecs = [ ["bufnumSampleStereo", 2048, 2],  ["bufnumSampleMono", 2048, 1] ];
 } // end of method initClass
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 init {arg argInstName;
 	//	set  class specific instance variables
@@ -112,17 +112,17 @@ init {arg argInstName;
 		["modSustain", 0, \ir],
 		["modSustainTime", 0, \ir],
 		["modRelease", 0, \ir],
-  	]; 
+  	];
   	// create options
 	arrOptions = [0,0,0,0];
 	arrOptionData = [
-		[	["Single shot", 
-				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end; 
+		[	["Single shot",
+				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end;
 					var output;
 					if (this.getSynthArgSpec("sampleIsStereo") == 1, {
-						output = BufRd.ar(2, bufnumSampleStereo, 
+						output = BufRd.ar(2, bufnumSampleStereo,
 							(Sweep.ar(1, outRate * BufSampleRate.kr(bufnumSampleStereo))
-								+ (((start * outRate.sign.max(0)) + (end * outRate.sign.neg.max(0))) 
+								+ (((start * outRate.sign.max(0)) + (end * outRate.sign.neg.max(0)))
 									* BufFrames.kr(bufnumSampleStereo))
 							)
 							.min(end * BufFrames.kr(bufnumSampleStereo))
@@ -130,9 +130,9 @@ init {arg argInstName;
 							,0
 						);
 					}, {
-						output = BufRd.ar(1, bufnumSampleMono, 
+						output = BufRd.ar(1, bufnumSampleMono,
 							(Sweep.ar(1, outRate * BufSampleRate.kr(bufnumSampleMono))
-								+ (((start * outRate.sign.max(0)) + (end * outRate.sign.neg.max(0))) 
+								+ (((start * outRate.sign.max(0)) + (end * outRate.sign.neg.max(0)))
 									* BufFrames.kr(bufnumSampleMono))
 							)
 							.min(end * BufFrames.kr(bufnumSampleMono))
@@ -143,20 +143,20 @@ init {arg argInstName;
 					output;
 				}
 			],
-			["Looped", 
-				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end; 
+			["Looped",
+				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end;
 					var output;
 					if (this.getSynthArgSpec("sampleIsStereo") == 1, {
-						output = BufRd.ar(2, bufnumSampleStereo, 
-							Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleStereo), 
-								start * BufFrames.kr(bufnumSampleStereo), 
+						output = BufRd.ar(2, bufnumSampleStereo,
+							Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleStereo),
+								start * BufFrames.kr(bufnumSampleStereo),
 								end * BufFrames.kr(bufnumSampleStereo)
 							)
 						);
 					}, {
-						output = BufRd.ar(1, bufnumSampleMono, 
-							Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleMono), 
-								start * BufFrames.kr(bufnumSampleMono), 
+						output = BufRd.ar(1, bufnumSampleMono,
+							Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleMono),
+								start * BufFrames.kr(bufnumSampleMono),
 								end * BufFrames.kr(bufnumSampleMono)
 							)
 						).dup;
@@ -164,8 +164,8 @@ init {arg argInstName;
 					output;
 				}
 			],
-			["X-Fade Looped", 
-				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end; 
+			["X-Fade Looped",
+				{arg outRate, bufnumSampleStereo, bufnumSampleMono, start, end;
 					var startFrame, endFrame, offset, bufdur, output;
 					if (this.getSynthArgSpec("sampleIsStereo") == 1, {
 						startFrame = start * BufFrames.kr(bufnumSampleStereo);
@@ -173,7 +173,7 @@ init {arg argInstName;
 						offset = (endFrame - startFrame) * 0.5;
 						bufdur = abs(end-start) * BufDur.kr(bufnumSampleStereo);
 						output = Mix.new(
-							BufRd.ar(2, bufnumSampleStereo, 
+							BufRd.ar(2, bufnumSampleStereo,
 								(Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleStereo), startFrame, endFrame)
 									+ [0, offset]
 								).wrap(startFrame, endFrame);
@@ -185,7 +185,7 @@ init {arg argInstName;
 						offset = (endFrame - startFrame) * 0.5;
 						bufdur = abs(end-start) * BufDur.kr(bufnumSampleMono);
 						output = Mix.new(
-							BufRd.ar(1, bufnumSampleMono, 
+							BufRd.ar(1, bufnumSampleMono,
 								(Phasor.ar(0, outRate * BufRateScale.kr(bufnumSampleMono), startFrame, endFrame)
 									+ [0, offset]
 								).wrap(startFrame, endFrame);
@@ -199,7 +199,7 @@ init {arg argInstName;
 		],
 		// Intonation
 		TXIntonation.arrOptionData,
-		[	
+		[
 			["linear", 'linear'],
 //invalid		["exponential", 'exponential'],
 			["sine", 'sine'],
@@ -226,30 +226,30 @@ init {arg argInstName;
 			["slope -9 ", -9],
 			["slope -10 ", -10]
 		],
-		[	
-			["Sustain", 
-				{arg del, att, dec, sus, sustime, rel, envCurve; 
+		[
+			["Sustain",
+				{arg del, att, dec, sus, sustime, rel, envCurve;
 					Env.dadsr(del, att, dec, sus, rel, 1, envCurve);
 				}
 			],
-			["Fixed Length", 
-				{arg del, att, dec, sus, sustime, rel, envCurve; 
+			["Fixed Length",
+				{arg del, att, dec, sus, sustime, rel, envCurve;
 					Env.new([0, 0, 1, sus, sus, 0], [del, att, dec, sustime, rel], envCurve, nil);
 				}
 			]
 		],
 	];
-	synthDefFunc = { 
-		arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax, 
-			bufnumSampleStereo, bufnumSampleMono, sampleIsStereo, 
-			bankNo, sampleNo, sampleFreq, start, end, reverse, level, 
-			envtime=0, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain, 
-			sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax, intKey, 
-			modStart, modEnd, modReverse, modPitchbend, modDelay, modAttack, modDecay, 
+	synthDefFunc = {
+		arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			bufnumSampleStereo, bufnumSampleMono, sampleIsStereo,
+			bankNo, sampleNo, sampleFreq, start, end, reverse, level,
+			envtime=0, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain,
+			sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax, intKey,
+			modStart, modEnd, modReverse, modPitchbend, modDelay, modAttack, modDecay,
 			modSustain, modSustainTime, modRelease;
-		var outEnv, envFunction, outFreq, intonationFunc, pbend, outRate, outFunction, outSample, 
+		var outEnv, envFunction, outFreq, intonationFunc, pbend, outRate, outFunction, outSample,
 			envCurve, sStart, sEnd, rev, del, att, dec, sus, sustime, rel;
-		
+
 		sStart = (start + modStart).max(0).min(1);
 		sEnd = (end + modEnd).max(0).min(1);
 		rev = (reverse + modReverse).max(0).min(1);
@@ -257,18 +257,18 @@ init {arg argInstName;
 		att = (attackMin + ((attackMax - attackMin) * (attack + modAttack))).max(0.001).min(20);
 		dec = (decayMin + ((decayMax - decayMin) * (decay + modDecay))).max(0.001).min(20);
 		sus = (sustain + modSustain).max(0).min(1);
-		sustime = (sustainTimeMin + 
+		sustime = (sustainTimeMin +
 			((sustainTimeMax - sustainTimeMin) * (sustainTime + modSustainTime))).max(0.001).min(20);
 		rel = (releaseMin + ((releaseMax - releaseMin) * (release + modRelease))).max(0.001).min(20);
 		envCurve = this.getSynthOption(2);
 		envFunction = this.getSynthOption(3);
 		outEnv = EnvGen.ar(
 			envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
-			gate, 
+			gate,
 			doneAction: 2
 		);
 		intonationFunc = this.getSynthOption(1);
-		outFreq = (intonationFunc.value((note + transpose), intKey) * keytrack) + ((sampleFreq.cpsmidi 
+		outFreq = (intonationFunc.value((note + transpose), intKey) * keytrack) + ((sampleFreq.cpsmidi
 			+ transpose).midicps * (1-keytrack));
 		pbend = pitchbendMin + ((pitchbendMax - pitchbendMin) * (pitchbend + modPitchbend).max(0).min(1));
 		outRate = ((outFreq *  (2 ** (pbend /12))) / sampleFreq) * (rev-0.5).neg.sign;
@@ -280,52 +280,52 @@ init {arg argInstName;
 	};
 	this.buildGuiSpecArray;
 	arrActionSpecs = this.buildActionSpecs([
-		["TestNoteVals"], 
+		["TestNoteVals"],
 		["commandAction", "Plot envelope", {this.envPlot;}],
 		["TXPopupActionPlusMinus", "Sample bank", {system.arrSampleBankNames},
-			"bankNo", 
-			{ arg view; this.bankNo = view.value; this.sampleNo = 0; this.loadSample(0); 
+			"bankNo",
+			{ arg view; this.bankNo = view.value; this.sampleNo = 0; this.loadSample(0);
 				this.setSynthArgSpec("sampleNo", 0); system.showView;}
-		], 
+		],
 		// array of sample filenames - beginning with blank sample  - mono & stereo files
 		["TXPopupActionPlusMinus", "Sample", {["No Sample"]++system.sampleFileNames(bankNo, true)},
 			"sampleNo", { arg view; this.sampleNo = view.value; this.loadSample(view.value); }
-		], 
-		["TXRangeSlider", "Play Range", ControlSpec(0, 1), "start", "end"], 
-		["SynthOptionPopup", "Loop type", arrOptionData, 0, 210], 
-		["TXCheckBox", "Reverse", "reverse"], 
-		["EZslider", "Level", ControlSpec(0, 1), "level"], 
-		["MIDIListenCheckBox"], 
-		["MIDIChannelSelector"], 
-		["MIDINoteSelector"], 
-		["MIDIVelSelector"], 
-		["TXCheckBox", "Keyboard tracking", "keytrack"], 
-		["Transpose"], 
-		["TXMinMaxSliderSplit", "Pitch bend", 
-			ControlSpec(-48, 48), "pitchbend", "pitchbendMin", "pitchbendMax"], 
+		],
+		["TXRangeSlider", "Play Range", ControlSpec(0, 1), "start", "end"],
+		["SynthOptionPopup", "Loop type", arrOptionData, 0, 210],
+		["TXCheckBox", "Reverse", "reverse"],
+		["EZslider", "Level", ControlSpec(0, 1), "level"],
+		["MIDIListenCheckBox"],
+		["MIDIChannelSelector"],
+		["MIDINoteSelector"],
+		["MIDIVelSelector"],
+		["TXCheckBox", "Keyboard tracking", "keytrack"],
+		["Transpose"],
+		["TXMinMaxSliderSplit", "Pitch bend",
+			ControlSpec(-48, 48), "pitchbend", "pitchbendMin", "pitchbendMax"],
 		["PolyphonySelector"],
 		["TXEnvDisplay", {this.envViewValues;}, {arg view; envView = view;}],
-		["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}], 
+		["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",
-			{{this.updateEnvView;}.defer;}], 
+			{{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",
-			{{this.updateEnvView;}.defer;}], 
-		["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}], 
-		["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin", 
-			"sustainTimeMax",{{this.updateEnvView;}.defer;}], 
+			{{this.updateEnvView;}.defer;}],
+		["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}],
+		["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin",
+			"sustainTimeMax",{{this.updateEnvView;}.defer;}],
 		["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",
-			{{this.updateEnvView;}.defer;}], 
-		["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}], 
-		["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200], 
-		["SynthOptionPopup", "Intonation", arrOptionData, 1, nil, 
-			{arg view; this.updateIntString(view.value)}], 
-		["TXStaticText", "Note ratios", 
-			{TXIntonation.arrScalesText.at(arrOptions.at(1));}, 
+			{{this.updateEnvView;}.defer;}],
+		["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}],
+		["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200],
+		["SynthOptionPopup", "Intonation", arrOptionData, 1, nil,
+			{arg view; this.updateIntString(view.value)}],
+		["TXStaticText", "Note ratios",
+			{TXIntonation.arrScalesText.at(arrOptions.at(1));},
 				{arg view; ratioView = view}],
-		["TXPopupActionPlusMinus", "Key / root", ["C", "C#", "D", "D#", "E","F", 
-			"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 140], 
-	]);	
-	//	use base class initialise 
+		["TXPopupActionPlusMinus", "Key / root", ["C", "C#", "D", "D#", "E","F",
+			"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 140],
+	]);
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 	this.midiNoteInit;
 	//	make buffers, load the synthdef and create the Group for synths to belong to
@@ -334,113 +334,113 @@ init {arg argInstName;
 
 buildGuiSpecArray {
 	guiSpecArray = [
-		["ActionButton", "Sample", {displayOption = "showSample"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
+		["ActionButton", "Sample", {displayOption = "showSample";
+			this.buildGuiSpecArray; system.showView;}, 130,
 			TXColor.white, this.getButtonColour(displayOption == "showSample")],
-		["Spacer", 3], 
-		["ActionButton", "MIDI/ Note", {displayOption = "showMIDI"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showMIDI")], 
-		["Spacer", 3], 
-		["ActionButton", "Envelope", {displayOption = "showEnv"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showEnv")], 
-		["DividingLine"], 
-		["SpacerLine", 6], 
+		["Spacer", 3],
+		["ActionButton", "MIDI/ Note", {displayOption = "showMIDI";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showMIDI")],
+		["Spacer", 3],
+		["ActionButton", "Envelope", {displayOption = "showEnv";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showEnv")],
+		["DividingLine"],
+		["SpacerLine", 6],
 	];
 	if (displayOption == "showSample", {
 		guiSpecArray = guiSpecArray ++[
 			["TXPopupActionPlusMinus", "Sample bank", {system.arrSampleBankNames},
-				"bankNo", 
-				{ arg view; this.bankNo = view.value; this.sampleNo = 0; this.loadSample(0); 
+				"bankNo",
+				{ arg view; this.bankNo = view.value; this.sampleNo = 0; this.loadSample(0);
 					this.setSynthArgSpec("sampleNo", 0); system.showView;}
-			], 
+			],
 			// array of sample filenames - beginning with blank sample - show mono and stereo files
 			["TXPopupActionPlusMinus", "Sample", {["No Sample"]++system.sampleFileNames(bankNo, true)},
-				"sampleNo", { arg view; 
-					this.sampleNo = view.value; 
-					this.loadSample(view.value); 
-					{system.showView;}.defer(0.2);   //  refresh view 
+				"sampleNo", { arg view;
+					this.sampleNo = view.value;
+					this.loadSample(view.value);
+					{system.showView;}.defer(0.2);   //  refresh view
 				}
-			], 
-			["SpacerLine", 4], 
-			["Spacer", 80], 
-			["ActionButton", "Add Samples to Sample Bank", {TXBankBuilder2.addSampleDialog("Sample", bankNo)}, 200], 
-			["ActionButton", "Show", {showWaveform = 1; system.showView;}, 
-				80, TXColor.white, TXColor.sysGuiCol2], 
-			["ActionButton", "Hide", {showWaveform = 0; system.showView;  this.sampleData_(nil);}, 
-				80, TXColor.white, TXColor.sysDeleteCol], 
-			["NextLine"], 
-			["TXSoundFileViewRange", {sampleFileName}, "start", "end", nil, {showWaveform}, nil, {this.sampleData}, 
-				{arg argData; this.sampleData_(argData);}], 
-			["SpacerLine", 4], 
-			["SynthOptionPopup", "Loop type", arrOptionData, 0, 210], 
-			["SpacerLine", 4], 
-			["TXCheckBox", "Reverse", "reverse"], 
-			["SpacerLine", 4], 
-			["EZslider", "Level", ControlSpec(0, 1), "level"], 
+			],
+			["SpacerLine", 4],
+			["Spacer", 80],
+			["ActionButton", "Add Samples to Sample Bank", {TXBankBuilder2.addSampleDialog("Sample", bankNo)}, 200],
+			["ActionButton", "Show", {showWaveform = 1; system.showView;},
+				80, TXColor.white, TXColor.sysGuiCol2],
+			["ActionButton", "Hide", {showWaveform = 0; system.showView;  this.sampleData_(nil);},
+				80, TXColor.white, TXColor.sysDeleteCol],
+			["NextLine"],
+			["TXSoundFileViewRange", {sampleFileName}, "start", "end", nil, {showWaveform}, nil, {this.sampleData},
+				{arg argData; this.sampleData_(argData);}],
+			["SpacerLine", 4],
+			["SynthOptionPopup", "Loop type", arrOptionData, 0, 210],
+			["SpacerLine", 4],
+			["TXCheckBox", "Reverse", "reverse"],
+			["SpacerLine", 4],
+			["EZslider", "Level", ControlSpec(0, 1), "level"],
 		];
 	});
 	if (displayOption == "showEnv", {
 		guiSpecArray = guiSpecArray ++[
-			["TXPresetPopup", "Env presets", 
-				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(0)}), 
+			["TXPresetPopup", "Env presets",
+				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(0)}),
 				TXEnvPresets.arrEnvPresets(this, 2, 3).collect({arg item, i; item.at(1)})
 			],
 			["TXEnvDisplay", {this.envViewValues;}, {arg view; envView = view;}],
-			["NextLine"], 
-			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}], 
+			["NextLine"],
+			["EZslider", "Pre-Delay", ControlSpec(0,1), "delay", {{this.updateEnvView;}.defer;}],
 			["TXMinMaxSliderSplit", "Attack", timeSpec, "attack", "attackMin", "attackMax",
-				{{this.updateEnvView;}.defer;}], 
+				{{this.updateEnvView;}.defer;}],
 			["TXMinMaxSliderSplit", "Decay", timeSpec, "decay", "decayMin", "decayMax",
-				{{this.updateEnvView;}.defer;}], 
-			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}], 
-			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin", 
-				"sustainTimeMax",{{this.updateEnvView;}.defer;}], 
+				{{this.updateEnvView;}.defer;}],
+			["EZslider", "Sustain level", ControlSpec(0, 1), "sustain", {{this.updateEnvView;}.defer;}],
+			["TXMinMaxSliderSplit", "Sustain time", timeSpec, "sustainTime", "sustainTimeMin",
+				"sustainTimeMax",{{this.updateEnvView;}.defer;}],
 			["TXMinMaxSliderSplit", "Release", timeSpec, "release", "releaseMin", "releaseMax",
-				{{this.updateEnvView;}.defer;}], 
-			["NextLine"], 
-			["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}], 
-			["NextLine"], 
-			["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200], 
-			["Spacer", 4], 
+				{{this.updateEnvView;}.defer;}],
+			["NextLine"],
+			["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}],
+			["NextLine"],
+			["SynthOptionPopup", "Env. Type", arrOptionData, 3, 200],
+			["Spacer", 4],
 			["ActionButton", "Plot", {this.envPlot;}],
 		];
 	});
 	if (displayOption == "showMIDI", {
 		guiSpecArray = guiSpecArray ++[
-			["MIDIListenCheckBox"], 
-			["NextLine"], 
-			["MIDIChannelSelector"], 
-			["NextLine"], 
-			["MIDINoteSelector"], 
-			["NextLine"], 
-			["MIDIVelSelector"], 
-			["DividingLine"], 
-			["TXCheckBox", "Keyboard tracking", "keytrack"], 
-			["DividingLine"], 
-			["Transpose"], 
-			["DividingLine"], 
-			["TXMinMaxSliderSplit", "Pitch bend", ControlSpec(-48, 48), "pitchbend", 
-				"pitchbendMin", "pitchbendMax", nil, 
-				[	["Presets: ", [-2, 2]], ["Range -1 to 1", [-1, 1]], ["Range -2 to 2", [-2, 2]],
+			["MIDIListenCheckBox"],
+			["NextLine"],
+			["MIDIChannelSelector"],
+			["NextLine"],
+			["MIDINoteSelector"],
+			["NextLine"],
+			["MIDIVelSelector"],
+			["DividingLine"],
+			["TXCheckBox", "Keyboard tracking", "keytrack"],
+			["DividingLine"],
+			["Transpose"],
+			["DividingLine"],
+			["TXMinMaxSliderSplit", "Pitch bend", ControlSpec(-48, 48), "pitchbend",
+				"pitchbendMin", "pitchbendMax", nil,
+				[	["Bend Range Presets: ", [-2, 2]], ["Range -1 to 1", [-1, 1]], ["Range -2 to 2", [-2, 2]],
 					["Range -7 to 7", [-7, 7]], ["Range -12 to 12", [-12, 12]],
-					["Range -24 to 24", [-24, 24]], ["Range -48 to 48", [-48, 48]] ] ], 
-			["DividingLine"], 
-			["PolyphonySelector"], 
-			["DividingLine"], 
-			["SynthOptionPopupPlusMinus", "Intonation", arrOptionData, 1, 300, 
-				{arg view; this.updateIntString(view.value)}], 
-			["Spacer", 10], 
-			["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F", 
-				"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 120], 
-			["NextLine"], 
-			["TXStaticText", "Note ratios", 
-				{TXIntonation.arrScalesText.at(arrOptions.at(1));}, 
+					["Range -24 to 24", [-24, 24]], ["Range -48 to 48", [-48, 48]] ] ],
+			["DividingLine"],
+			["PolyphonySelector"],
+			["DividingLine"],
+			["SynthOptionPopupPlusMinus", "Intonation", arrOptionData, 1, 300,
+				{arg view; this.updateIntString(view.value)}],
+			["Spacer", 10],
+			["TXPopupAction", "Key / root", ["C", "C#", "D", "D#", "E","F",
+				"F#", "G", "G#", "A", "A#", "B"], "intKey", nil, 130],
+			["NextLine"],
+			["TXStaticText", "Note ratios",
+				{TXIntonation.arrScalesText.at(arrOptions.at(1));},
 				{arg view; ratioView = view}],
-			["DividingLine"], 
-			["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);}, 
-				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}], 
+			["DividingLine"],
+			["MIDIKeyboard", {arg note; this.createSynthNote(note, testMIDIVel, 0);},
+				5, 60, nil, 36, {arg note; this.releaseSynthGate(note);}],
 		];
 	});
 }
@@ -494,7 +494,7 @@ loadSample { arg argIndex; // method to load samples into buffer
 			// store Freq to synthArgSpecs
 			this.setSynthArgSpec("sampleFreq", sampleFreq);
 			this.setSynthArgSpec("sampleIsStereo", 1);
-			//	rebuild synth to update stereo/mono 
+			//	rebuild synth to update stereo/mono
 			this.rebuildSynth;
 		},{
 			// otherwise,  try to load sample.  if it fails, display error message and clear
@@ -511,8 +511,8 @@ loadSample { arg argIndex; // method to load samples into buffer
 			holdPath = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
 			// Convert path
 			holdPath = TXPath.convert(holdPath);
-			holdBuffer = Buffer.read(system.server, holdPath, 
-				action: { arg argBuffer; 
+			holdBuffer = Buffer.read(system.server, holdPath,
+				action: { arg argBuffer;
 					{
 					//	if file loaded ok
 						if (argBuffer.notNil, {
@@ -530,10 +530,10 @@ loadSample { arg argIndex; // method to load samples into buffer
 							sampleFreq = 440;
 							// store Freq to synthArgSpecs
 							this.setSynthArgSpec("sampleFreq", sampleFreq);
-							TXInfoScreen.new("Invalid Sample File" 
+							TXInfoScreen.new("Invalid Sample File"
 							  ++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
 						});
-						//	rebuild synth to update stereo/mono 
+						//	rebuild synth to update stereo/mono
 						this.rebuildSynth;
 					}.defer;	// defer because gui process
 				},
@@ -551,7 +551,7 @@ resetPlayRange {
 	this.setSynthArgSpec("end", 1);
 }
 
-updateIntString{arg argIndex; 
+updateIntString{arg argIndex;
 	if (ratioView.notNil, {
 		if (ratioView.notClosed, {
 			ratioView.string = TXIntonation.arrScalesText.at(argIndex);
@@ -604,7 +604,7 @@ envViewValues {
 }
 
 updateEnvView {
-	if (envView.class == EnvelopeView, {
+	if (envView.respondsTo('notClosed'), {
 		if (envView.notClosed, {
 			6.do({arg i;
 				envView.setEditable(i, true);

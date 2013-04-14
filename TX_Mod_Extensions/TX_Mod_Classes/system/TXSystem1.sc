@@ -353,7 +353,7 @@ TXSystem1 {		// system module 1
 		["Control: MIDI", "MIDI Out ", TXMIDIOut],
 		["Control: MIDI", "MIDI Pitchbend", TXMIDIPitchbend2],
 		["Control: MIDI", "MIDI Velocity", TXMIDIVelocity2],
-		["Control: Mixing", "TYPE Morph", TXTYPEMorph],
+		["Control: Mixing", "Group Morph", TXGroupMorph],
 		["Control: Mixing", "Matrix C 8x8", TXMatrixControl8x8],
 		["Control: Mixing", "Mix Control 8-1", TXMixControl8to1],
 		["Control: Mixing", "X-Fader 2-1 C", TXWXFader2to1C],
@@ -1975,7 +1975,7 @@ TXSystem1 {		// system module 1
 						"TX_0 TX Modular Help".openHelpFile;
 					};
 					// button - Open file
-					btnLoadSystem = Button(headerBox, 70 @ 27);
+					btnLoadSystem = Button(headerBox, 66 @ 27);
 					btnLoadSystem.states = [["Open File", TXColor.white, TXColor.sysGuiCol2]];
 					btnLoadSystem.action = {
 						var newPath, newFile, newString, newData;
@@ -1996,7 +1996,7 @@ TXSystem1 {		// system module 1
 						});
 					};
 					// button - save file
-					btnSaveSystem = Button(headerBox, 70 @ 27);
+					btnSaveSystem = Button(headerBox, 66 @ 27);
 					btnSaveSystem.states = [["Save File", TXColor.white, TXColor.sysGuiCol2]];
 					btnSaveSystem.action = {
 						var newPath, newFile, newData;
@@ -2014,7 +2014,7 @@ TXSystem1 {		// system module 1
 						});
 					};
 					// button - rebuild system
-					btnRebuildSystem = Button(headerBox, 90 @ 27);
+					btnRebuildSystem = Button(headerBox, 98 @ 27);
 					btnRebuildSystem.states = [["Rebuild System", TXColor.white, TXColor.sysDeleteCol]];
 					btnRebuildSystem.action = {
 						this.rebuildAllModules;
@@ -2097,7 +2097,7 @@ TXSystem1 {		// system module 1
 						}.play;
 					};
 					// popup - Meters
-					popMeters = PopUpMenu(headerBox, 60 @ 27)
+					popMeters = PopUpMenu(headerBox, 140 @ 27)
 					.background_(TXColor.sysGuiCol2).stringColor_(TXColor.white);
 					arrModulesForMeters = arrSystemModules
 					.select({arg item, i; item.class.noOutChannels > 0 ;})
@@ -2274,7 +2274,7 @@ TXSystem1 {		// system module 1
 					.string_(holdFileName)
 					.stringColor_(TXColor.white);
 					// spacing
-					headerBox.decorator.shift(-214, 0);
+					headerBox.decorator.shift(-154, 0);
 					// keep vals
 					holdLeftVal = headerBox.decorator.left;
 					holdTopVal = headerBox.decorator.top;
@@ -2290,7 +2290,7 @@ TXSystem1 {		// system module 1
 
 					// volume slider
 					volumeSpec = [ -90, 6, \db].asSpec;
-					sliderVol = Slider(headerBox, 118 @ 27)
+					sliderVol = Slider(headerBox, 90 @ 27)
 					.background_(TXColor.sysGuiCol2)
 					//	.align_(\right)
 					.knobColor_(TXColor.white)
