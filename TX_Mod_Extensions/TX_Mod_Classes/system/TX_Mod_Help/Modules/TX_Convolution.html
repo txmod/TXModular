@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Convolution</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Insert (mono input, mono output)</b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">"Convolution reverb is a process for digitally simulating the reverberation of a physical or virtual space. It is based on the mathematical convolution operation, and uses a pre-recorded audio sample of the impulse response of the space being modelled."<span class="Apple-converted-space">  </span>[from : <a href="http://en.wikipedia.org/wiki/Convolution_reverb">http://en.wikipedia.org/wiki/Convolution_reverb</a>]</p>
+<p class="p1">This module convolves a mono audio signal with a mono sample.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Convolution can also be used to simulate filters/EQ, microphones, speakers, amplifiers as well as to produce special effects - e.g. using a pitched vocal sample.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Samples must be less than 10 seconds long.<span class="Apple-converted-space">  </span>The longer they are, the bigger the CPU load (take care not to overload it, this can cause crashes).</p>
+<p class="p1">Many free impulse responses can be found online - see link above.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Input level</b> - sets the level of the input signal<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Pre-delay</b> - set the delay time before the convolution (useful for creating a larger sense of space with reverbs). <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the convolved signal. <span class="Apple-converted-space"> </span></p>
+<p class="p2"><b><i></i></b><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Input level</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Dry-Wet Mix</b> <span class="Apple-converted-space"> </span></p>
+<p class="p2"><b><i></i></b><br></p>
+</body>
+</html>

@@ -1637,6 +1637,7 @@ TXSystem1 {		// system module 1
 			// stop routines
 			screenUpdRoutine.stop;
 			{TXFrontScreenGuiProperties.closeWindow;}.defer;
+			{TXHelpScreen.close;}.defer;
 			// empty system
 			this.emptySystem;
 			//	NOTE - removed for now, can cause crashes
@@ -1972,7 +1973,7 @@ TXSystem1 {		// system module 1
 					btnHelp = Button(headerBox, 40 @ 27);
 					btnHelp.states = [["Help", TXColor.white, TXColor.sysHelpCol]];
 					btnHelp.action = {
-						"TX_0 TX Modular Help".openHelpFile;
+						TXHelpScreen.open;
 					};
 					// button - Open file
 					btnLoadSystem = Button(headerBox, 66 @ 27);

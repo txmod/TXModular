@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    li.li1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    span.s1 {text-decoration: underline}
+    ul.ul1 {list-style-type: disc}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Analyser</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Control Source</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module uses various different analysis tools (described below) to analyse a mono audio signal coming into it.</p>
+<p class="p1">Once an Analyser module has been created, it will appear in the list of possible destinations for audio channels. This allows you to send an audio signal to it.</p>
+<p class="p1">It sends out a control signals for the each of the analysis tools. Output busses are labelled Amplitude, Flatness, Percentile, Centroid, Onsets (see descriptions below).</p>
+<p class="p1">You can calibrate all the controls - this will automatically detect the minimum and maximum values of the various analysis processes. The output will be scaled between these minimum and maximum values.</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls 1:</i></b></p>
+<p class="p2"><b><i></i></b><br></p>
+<p class="p1"><b>Cailbrate All On</b> - This button turns on all the calibration processes which automatically detect and set the minimum and maximum values for all the kinds of analysis.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Cailbrate All Off</b> - This button turns off all the calibration processes.</p>
+<p class="p1"><b>Gate Threshold</b> - the level of audio signal which will trigger audio analysis. Set this high enough to prevent false analysis of noise floor, especially with microphone inputs. When the signal is below the threshold, all analysis outputs (except for amplitude) are held at their current value.</p>
+<p class="p1"><b>Amplitude</b> [this is always on] - This follows the amplitude - i.e. volume level - of the audio signal.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Amp Min/ Amp Max</b> - the minimum and maximum values used for the control signal that will be output.</p>
+<p class="p1"><b>Restore Defaults</b> - restores default min and max values.</p>
+<p class="p1"><b>Calibration:</b></p>
+<p class="p1"><b>Detect min &amp; max</b> <b>[on/off]</b> - to display the minimum and maximum values found in the current audio being analysed. (Note this uses more CPU power when detection is on, so only use when needed.)</p>
+<p class="p1"><b>Copy detected values to min/max</b> - this copies the values found into the analysis controls above it.</p>
+<p class="p1"><b>Reset</b> - resets the detector, so previous min/max values are ignored.</p>
+<p class="p1"><b>Automatically copy detected values to min/max</b> <b>[on/off]</b> - automatically copies the values found into the analysis controls above it.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Spectral Flatness [on/off]</b> -<span class="Apple-converted-space"> </span></p>
+<p class="p1">This gives a measure which ranges from approx 0 for a pure sine wave, to approx 1 for white noise. Technically speaking, this calculates the spectral flatness measure, defined as a power spectrum's geometric mean divided by its arithmetic mean.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Flatness Min/ Flatness Max</b> - the minimum and maximum values used for the control signal that will be output.</p>
+<p class="p1"><b>Restore Defaults</b> - restores default min and max values.</p>
+<p class="p1"><b>Calibration:</b></p>
+<p class="p1"><b>Detect min &amp; max</b> <b>[on/off]</b> - to display the minimum and maximum values found in the current audio being analysed. (Note this uses more CPU power when detection is on, so only use when needed.)</p>
+<p class="p1"><b>Copy detected values to min/max</b> - this copies the values found into the analysis controls above it.</p>
+<p class="p1"><b>Reset</b> - resets the detector, so previous min/max values are ignored.</p>
+<p class="p1"><b>Automatically copy detected values to min/max</b> <b>[on/off]</b> - automatically copies the values found into the analysis controls above it.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls 2:</i></b></p>
+<p class="p2"><b><i></i></b><br></p>
+<p class="p1"><b>Cailbrate All On</b> - This button turns on all the calibration processes which detect the minimum and maximum values for all the kinds of analysis.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Cailbrate All Off</b> - This button turns off all the calibration processes.</p>
+<p class="p1"><b>Spectral Percentile</b> <b>[on/off]</b> - This calculates the cumulative distribution of the frequency spectrum, and outputs the frequency value which corresponds to the desired percentile.</p>
+<p class="p1">For example, to find the frequency at which 90% of the spectral energy lies below that frequency, you want the 90-percentile. The 90-percentile or 95-percentile is often used as a measure of spectral roll-off.</p>
+<p class="p1"><b>Percentile</b> - see notes above.</p>
+<p class="p1"><b>Min freq/ Max freq</b> - the minimum and maximum frequencies used for the control signal that will be output.</p>
+<p class="p1"><b>Restore Defaults</b> - restores default min and max values.</p>
+<p class="p1"><b>Calibration:</b></p>
+<p class="p1"><b>Detect min &amp; max</b> <b>[on/off]</b> - to display the minimum and maximum frequecies found in the current audio being analysed. (Note this uses more CPU power when detection is on, so only use when needed.)</p>
+<p class="p1"><b>Copy detected values to min/max</b> - this copies the values found into the analysis controls above it.</p>
+<p class="p1"><b>Reset</b> - resets the detector, so previous min/max values are ignored.</p>
+<p class="p1"><b>Automatically copy detected values to min/max</b> <b>[on/off]</b> - automatically copies the values found into the analysis controls above it.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Spectral Centroid</b> <b>[on/off]</b> - This measures the spectral centroid, which is the weighted mean frequency, or the "centre of mass" of the spectrum. (DC is ignored.)<span class="Apple-converted-space"> </span></p>
+<p class="p1">This can be a useful indicator of the perceptual brightness of a signal.</p>
+<p class="p1"><b>Centroid min/ Centroid max</b> - the minimum and maximum frequencies used for the control signal that will be output.</p>
+<p class="p1"><b>Restore Defaults</b> - restores default min and max values.</p>
+<p class="p1"><b>Calibration:</b></p>
+<p class="p1"><b>Detect min &amp; max</b> <b>[on/off]</b> - to display the minimum and maximum frequecies found in the current audio being analysed. (Note this uses more CPU power when detection is on, so only use when needed.)</p>
+<p class="p1"><b>Copy detected values to min/max</b> - this copies the values found into the analysis controls above it.</p>
+<p class="p1"><b>Reset</b> - resets the detector, so previous min/max values are ignored.</p>
+<p class="p1"><b>Automatically copy detected values to min/max</b> <b>[on/off]</b> - automatically copies the values found into the analysis controls above it.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls 3:</i></b></p>
+<p class="p2"><b><i></i></b><br></p>
+<p class="p1"><b>Onset Detection</b> <b>[on/off]</b> - This detects the beginning of notes, drum beats, etc. It outputs a<span class="Apple-converted-space">  </span>trigger control signal which is 1 when an onset is detected, and 0 otherwise. Up to 5 Actions are run when an onset is detected. For more detials on Actions in the TX Modular system, see help file <span class="s1">[TX_What_Are_Actions]</span>.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Threshold</b> - the level of the audio signal which will allow a trigger to be output. Set this high enough to prevent false triggering from quiet signals.</p>
+<p class="p1"><b>Detection Type</b> - chooses which onset detection function is used. In many cases the default (rcomplex) will be fine. The following choices are available</p>
+<ul class="ul1">
+  <li class="li1"><b>power</b> - generally OK, good for percussive input, and also very efficient</li>
+  <li class="li1"><b>magsum</b> - generally OK, good for percussive input, and also very efficient</li>
+  <li class="li1"><b>complex</b> - performs generally very well, but more CPU-intensive</li>
+  <li class="li1"><b>rcomplex - <i>default</i></b> - performs generally very well, and slightly more efficient than complex detection</li>
+  <li class="li1"><b>phase</b> - generally good, especially for tonal input, medium efficiency</li>
+  <li class="li1"><b>wphase</b> - generally very good, especially for tonal input, medium efficiency</li>
+  <li class="li1"><b>mkl</b> - generally very good, medium efficiency, pretty different from the other methods</li>
+</ul>
+<p class="p1">Which of these should you choose? The differences aren't large, so it's recommended to stick with the default <b>rcomplex</b> unless you find specific problems with it. Then maybe try <b>wphase</b>. The <b>mkl</b> type is a bit different from the others so maybe try that too. They all have slightly different characteristics, and in tests perform at a similar quality level.</p>
+<p class="p1"><b>Restore Defaults</b> - restores default values to the controls.</p>
+<p class="p1"><b>Module 1</b> - selects which module will be used.</p>
+<p class="p1"><b>Reset</b> - resets the action to the default action (which does nothing).</p>
+<p class="p1"><b>Action 1</b> - selects action will be run out of all the possible actions for that module.</p>
+<p class="p1"><b>Settings 1</b> - depending on which action is run, values can be set for the action.<span class="Apple-converted-space"> </span></p>
+<p class="p1">For example, if the action selected was to set the Frequency of a Waveform module, then a slider would be displayed for setting the frequency.</p>
+<p class="p1"><b>Note:<span class="Apple-converted-space"> </span></b> the controls are the same for all other actions.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>Audio in</b> - the incoming mono audio signal for analysis.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Note: </i></b><i>Most of this help file, especially the techy bits, are copied from the SuperCollider help files for these analysis processes.</i></p>
+</body>
+</html>

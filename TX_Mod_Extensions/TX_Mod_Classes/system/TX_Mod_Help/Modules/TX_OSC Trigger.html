@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+  </style>
+</head>
+<body>
+<p class="p1"><b>OSC Trigger<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Action</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This<b> </b>module triggers up to 10 Actions when OSC messages are received as long as the OSC message begins with a string that matches the <b>OSC string</b> on the screen.<span class="Apple-converted-space">  </span>The string matching is case sensitive - upper and lower case, G versus g, are treated as different letters.</p>
+<p class="p1">The OSC message sent should consist of the <b>OSC string</b> followed by any arguments, which can be numbers or strings (e.g. 9, 4.77,<span class="Apple-converted-space">  </span>"on").<span class="Apple-converted-space"> </span></p>
+<p class="p1">OSC message arguments can be passed to the Actions.</p>
+<p class="p1">For more detials on Actions in the TX Modular system, see help file <A href="../TX_What_Are_Actions.html">What_Are_Actions<A></p><br>
+<p class="p1"><b>Note</b> - when sending <b>OSC messages</b> to the TX Modular system, the <b>port</b> usually needs to be set to <b>57120</b>.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>What is OSC?</i></b></p>
+<p class="p1">See help file: <A href="../TX_OSC_Info.html">OSC_Info<A></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>OSC String button</b></p>
+<p class="p1"><b>OSC String</b> - this string will be checked against the first item in any OSC messages received. If the string matches, the Actions will be triggered.</p>
+<p class="p1"><b>OSC Learn - to automatically detect the OSC string</b> - when switched on, this will wait for the next OSC message received and assign the string automatically.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b><i>Note:<span class="Apple-converted-space"> </span></i></b> the following OSC strings are used internally by SuperCollider and so shouldn't be used for OSC communication. They will be ignored by OSC Learn:<span class="Apple-converted-space"> </span></p>
+<p class="p1">/status.reply, /tr, /done, /synced, /n_on, /n_off, /n_move, /n_end, /n_go.</p>
+<p class="p1"><b>Triggering</b> - the following choices are given: "<i>Always trigger</i>", "<i>Trigger when next OSC argument is 1</i>", and "<i>Trigger when next OSC argument is 0</i>". The last 2 are useful with on/off button OSC messages recevied for example, from iPad software TouchOSC. These options allow you to run<span class="Apple-converted-space">  </span>actions specifically when a value is turned ON or OFF - 1 meaning<span class="Apple-converted-space">  </span>"ON", and 0 meaning "OFF".</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Actions 1-4, 5-8, 9-10<span class="Apple-converted-space">  </span>buttons</b></p>
+<p class="p1"><b>Module 1</b> - selects which module will be used.</p>
+<p class="p1"><b>Reset</b> - resets the Action to the default Action (which does nothing).</p>
+<p class="p1"><b>Action 1</b> - selects Action will be run out of all the possible Actions for that module.</p>
+<p class="p1"><b>Settings 1</b> - depending on which Action is run, values can be set for the Action.<span class="Apple-converted-space"> </span></p>
+<p class="p1">For example, if the Action selected was to set the Frequency of a Waveform module, then a slider would be displayed for setting the frequency.</p>
+<p class="p1"><b>Use OSC arguments for value settings</b> - if switched on, this means that any arguments that come with the OSC string will be put into the value settings for the Action.<span class="Apple-converted-space"> </span></p>
+<p class="p1">The arguments can either be numbers or text strings.</p>
+<p class="p1">For example, if the Action selected was to set the frequency of a filter, or the BPM of a sequencer, then a number could be passed to set the value.</p>
+<p class="p1">If the Action selected had a checkbox to change settings (such as the Reverse checkbox in a Sample Player module), the OSC argument can be: (a) a text string with "ON" or "OFF",<span class="Apple-converted-space">  </span>or (b) a number with 1 meaning<span class="Apple-converted-space">  </span>"ON", and 0 meaning "OFF".</p>
+<p class="p1">If the Action selected had a popup to change settings (such as the type of Waveform<span class="Apple-converted-space">  </span>in a Wave Synth module), the OSC argument can be: (a) a text string of the popup value,<span class="Apple-converted-space">  </span>or (b) a number representing the index of the popup. (N.B. Index numbers start from 0, so 0 would be the index of the first item in the popup, 1 would be the index of the second item, 2 would be the index of the third item, etc.)</p>
+<p class="p1"><b>First argument</b> - this refers to the first argument that will be used for value settings. By default this will be 1, meaning the first OSC argument after the OSC string. Sometimes where OSC messages contain several arguments, higher values may be needed. For example, when using 2D sliders in TouchOSC iPad software, the X and Y values are sent as arguments 1 &amp; 2.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>- See</i></b> <b><i>example files</i></b>:<span class="Apple-converted-space">  </span><b>OSCMaster </b>&amp;<b> OSCSlave</b></p>
+</body>
+</html>

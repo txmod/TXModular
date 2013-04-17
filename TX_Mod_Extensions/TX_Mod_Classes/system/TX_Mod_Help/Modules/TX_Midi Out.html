@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Midi Out</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Action</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module sends out various kinds of MIDI messages (see below).<span class="Apple-converted-space"> </span></p>
+<p class="p1">To send a midi message out, you need to run an Action which tells the module to do it. To run the action, there are various ways:</p>
+<p class="p1">1) Press the button <b>Send MIDI Message Now </b>on the <b>Midi Out</b> module itself.</p>
+<p class="p1">2) Create an Action in another module or on a front interface screen (see help file <A href="../TX_What_Are_Actions.html">What_Are_Actions<A> for more detials).</p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Port</b> - sets the MIDI port messages are sent from.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Channel</b> - sets the MIDI channel (1-16) messages are sent on.</p>
+<p class="p1"><b>MIDI Message</b> - sets the type of MIDI message to be sent. These have extra controls as follows:</p>
+<p class="p1"><b><i>. Note On</i></b> - has controls <b>Note</b> (0-127), <b>Velocity</b> (0-127).</p>
+<p class="p1"><b><i>. Note Off</i></b> - has controls <b>Note</b> (0-127), <b>Velocity</b> (0-127).</p>
+<p class="p1"><b><i>. Note On &amp; Off</i></b> - has controls <b>Note</b> (0-127), <b>Velocity</b> (0-127), <b>Gate Time</b> (0.01-20) which is the time between the Note On and Note Off messages.</p>
+<p class="p1"><b><i>. Controller</i></b> - has controls <b>Control no</b> (0-127), <b>Control val</b> (0-127) which is the value to be sent.</p>
+<p class="p1"><b><i>. Program</i></b> - has controls <b>Program no</b> (0-127).</p>
+<p class="p1"><b><i>. Pitch Bend</i></b> - has controls <b>Pitch Bend</b> (-8192 - +8192).</p>
+<p class="p1"><b><i>. All Notes Off</i></b> - has controls.</p>
+<p class="p1"><b><i>. Program</i></b> - has no extra controls <b>Program no</b> (0-127).</p>
+<p class="p1"><b><i>. Touch</i></b> - has controls <b>Touch</b> (0-127).</p>
+<p class="p1"><b><i>. Poly Touch</i></b> - has controls <b>Poly Touch</b> (0-127).</p>
+<p class="p1"><b>Send MIDI Message Now</b> - this button sends the MIDI message out.</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Control no</b> - sets the MIDI controller number (0-127).</p>
+<p class="p1"><b>Control val</b> - sets the controller value (0-127).</p>
+<p class="p2"><br></p>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Gill Sans'}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Gill Sans'; min-height: 17.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Gill Sans'; min-height: 18.0px}
+    span.Apple-tab-span {white-space:pre}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Loop Player St</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Source<span class="Apple-converted-space">  </span>(stereo output, triggered)</b></p>
+<p class="p3"><b></b><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module takes a mono <b><i>or</i></b> stereo loop from the loop bank and plays it back .<span class="Apple-converted-space"> </span></p>
+<p class="p1">It can be triggered in various ways such as by MIDI notes, other modules (e.g.<span class="Apple-converted-space">  </span><b>Step Sequencer</b>, <b>Action Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. <span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Loop button</b></p>
+<p class="p1"><b>Loop</b> - select from all the <b>mono and stereo</b> loops in the system's loop bank.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Loopbank Settings</b> - the settings for <b>original bpm</b> and <b>total beats</b> of the loop are displayed, taken from the settings in the loopbank. These can be edited in the loopbank screen.</p>
+<p class="p1"><b>Add loops to loop bank</b> - to add any audio loops stored on the hard disk.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Show/Hide</b> - buttons for the display of the loop waveform. When the waveform is displayed, you can zoom in and out using the zoom buttons. You can also select which part of the waveform is played by using the select all/ select none buttons.</p>
+<p class="p1"><b>Start/End</b> - the start and end of the loop section that will be played. These are shown as fractions (e.g. 7/8), as well as numbers between 0 and 1.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Fractions can be useful for selecting particular sections of rhythmic loops - such as 2/12 to 8/12.</p>
+<p class="p1"><b>Loop type</b> - there are two options:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><b><i>looped</i> </b>- play looped from start point to end point - this is the default setting.</p>
+<p class="p1"><span class="Apple-tab-span">	</span><b><i>single shot</i></b> - play once from start point to end point</p>
+<p class="p1"><b>Reverse</b> - if on, loop playback will be reversed.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Level</b> - the output level of the loop player.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Play BPM</b> - The BPM that the loop will be played back at.<span class="Apple-converted-space">  </span>The pitch of the loop will go up or down compared to the original loop, depending the how different the play bpm is from the original bpm. If the play bpm is lower, the pitch will also be lower.</p>
+<p class="p1"><b>Speed factor</b> - A quick way to change the playback speed.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Higher numbers will increase the speed, lower numbers will decrease the speed.</p>
+<p class="p1">A setting of 0 will be normal speed,<span class="Apple-converted-space">  </span>A setting of 1 will be double the speed,<span class="Apple-converted-space">  </span>A setting of -1 will be half the speed,<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b>MIDI/ Test button</b></p>
+<p class="p1"><b>Midi Listen</b> - this allows the module to be triggered by a midi note.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Midi Chan.</b> - set the midi channels the module will listen to.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Note range</b> - which notes will trigger the module.</p>
+<p class="p1"><b>Vel range</b> - which velocities will trigger the module.</p>
+<p class="p1"><b>Test Loop Settings:</b> - these set the velocity and play time<span class="Apple-converted-space">  </span>of the test loop that is played when the <b>Play test loop </b>button<b> </b>is pressed.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Play test loop button</b></p>
+<p class="p1">This starts the loop playing.<span class="Apple-converted-space"> </span></p>
+<p class="p1">The velocity and time of the loop that is triggered are set using the <b>MIDI/ Test button.</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Stop test loop button</b></p>
+<p class="p1">Stops the test loop playing.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Loop Start</b><span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Loop End</b></p>
+<p class="p1"><b>Loop Reverse<span class="Apple-converted-space"> </span></b></p>
+</body>
+</html>

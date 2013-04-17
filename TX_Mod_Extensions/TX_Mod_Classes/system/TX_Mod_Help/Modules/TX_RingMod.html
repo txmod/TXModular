@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+  </style>
+</head>
+<body>
+<p class="p1"><b>RingMod</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Insert (mono input, mono output)</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module ring modulates one mono audio signal (called the Modulator) onto another mono audio signal (called the Carrier). Ring modulation creates a complex signal which constists of the frequencies of the Modulator and Carrier being added together as well as subtracted from each other.</p>
+<p class="p1">This module is an audio insert module which should be added to the channel of the audio signal that is the Carrier.</p>
+<p class="p1">Then on another audio channel, the destination can be set to the RingMod module's Modulator bus (see Audio Input Busses below).</p>
+<p class="p2"><br></p>
+<p class="p1">See the example file <b>RingMod</b>.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal.<span class="Apple-converted-space">  </span>For send effects this will usually be set to 1 - i.e. 100% affected signal.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>Modulator</b> - mono audio signal which is ring modulated with the Carrier audio signal.<span class="Apple-converted-space"> </span></p>
+<p class="p2"><span class="Apple-converted-space">  </span></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Dry-Wet Mix</b> <span class="Apple-converted-space"> </span></p>
+</body>
+</html>

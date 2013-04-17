@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Audio Trigger</b></p>
+<p class="p2"><br></p>
+<p class="p1">Module type:<span class="Apple-converted-space">  </span>Control Source</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module triggers up to 10 Actions when the amplitude (volume level) of a mono audio signal coming into it goes above a certain level (the threshold). Nothing happens when it the amplitude goes from above to below the threshold.</p>
+<p class="p1">Once an Audio Trigger module has been created, it will appear in the list of possible destinations for audio channels. This allows you to send an audio signal to it from another channel.</p>
+<p class="p1">It sends out a control signal at the same level as the audio coming in.</p>
+<p class="p1">For more detials on Actions in the TX Modular system, see help file <span class="s1">[TX_What_Are_Actions]</span>.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Trigger button</b></p>
+<p class="p1"><b>Trig threshold</b> - The module will only trigger when the incoming audio signal level goes above this threshold. This helps to stop triggering by low level noise.</p>
+<p class="p1"><b>Reload time</b> - The minimum amount time before a new trigger can happen.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Actions 1-5/ Actions 6-10<span class="Apple-converted-space">  </span>buttons</b></p>
+<p class="p1"><b>Module 1..10</b> - selects which module will be used.</p>
+<p class="p1"><b>Reset</b> - resets the action to the default action (which does nothing).</p>
+<p class="p1"><b>Action 1..10</b> - selects action will be run out of all the possible actions for that module.</p>
+<p class="p1"><b>Settings 1..10</b> - depending on which action is run, values can be set for the action.<span class="Apple-converted-space"> </span></p>
+<p class="p1">For example, if the action selected was to set the Frequency of a Waveform module, then a slider would be displayed for setting the frequency.</p>
+<p class="p1"><b>Note:<span class="Apple-converted-space"> </span></b> the controls are the same for all other actions.</p>
+<p class="p2"><b><i></i></b><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>Audio in</b> - the incoming mono audio signal.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Threshold</b> <span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1">See example file: <b>AudioTrigger</b></p>
+</body>
+</html>

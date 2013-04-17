@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+  </style>
+</head>
+<body>
+<p class="p1"><b>OSC Out<span class="Apple-converted-space"> </span></b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Action</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This<b> </b>module sends an OSC message to up to 10 different network addresses. The OSC messages can have up to 10 arguments.</p>
+<p class="p1">This allows communication across a network to other TX Modular systems running on other computers, or to any software (such as Processing &amp; Max/MSP) that can respond to OSC messages (see help file: <A href="../TX_OSC_Info.html">OSC_Info<A></p>
+<p class="p1">To send an OSC message out, you need to run an action which tells the module to do it. To run the action, you need to create it in another module or use an action button on the front interface<span class="Apple-converted-space">  </span>(see help file <A href="../TX_What_Are_Actions.html">What_Are_Actions<A> for more detials).</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Messsage &amp; Args1-4 / Arguments 5-10</b></p>
+<p class="p1"><b>Send OSC message now</b> button - can be used for testing a network<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>OSC String</b> - this OSC string will be sent out.</p>
+<p class="p1"><b>No. of args</b> - the number of arguments to be sent with the OSC message</p>
+<p class="p1"><b>Latency</b> - the time delay before the message will be sent.</p>
+<p class="p1"><b>Arguments</b> - each argument can be a String, a Float or an Integer.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Addresses 1-4 / 5-8 / 9-10</b></p>
+<p class="p1"><b>Address</b> - the <b>network address</b> (<b>IP Address</b>) of the computer being sent to. (to confirm this, search onlline for "What is my ip address". To check the IP address on an airport network, go to: System Preferences - Network - Airport - Advanced - TCP/IP - IPv4 Address.<span class="Apple-converted-space">  </span>).</p>
+<p class="p1"><b>Port</b> - the port to be sent to. To send OSC messages to another <b>TX Modular system</b> running on the network, you usually set the port to <b>57120</b>.<span class="Apple-converted-space">  </span>The <b>default</b> button will set the port to <b>57120</b>. (NB: to see which Airport IP address and Port the TX Modular System is currently using, go to the <b>Notes &amp; Options</b> screen, see button near the top of the screen.).</p>
+<p class="p1"><b>Activate</b> - this will activate the address so messages will be sent there.</p>
+<p class="p1"><b>Notes</b> - a space to put notes or comments - for example the name of the person at the address.<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>What is OSC?</i></b></p>
+<p class="p1">See help file: <A href="../TX_OSC_Info.html">OSC_Info<A></p><br>
+<p class="p1"><b><i>- See</i></b> <b><i>example files</i></b>:<span class="Apple-converted-space">  </span><b>OSCMaster </b>&amp;<b> OSCSlave</b></p>
+</body>
+</html>

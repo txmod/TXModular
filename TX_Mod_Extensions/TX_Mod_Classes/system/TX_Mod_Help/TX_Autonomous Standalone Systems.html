@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+  </style>
+</head>
+<body>
+<p class="p1">// Copyright (C) 2013 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <A href="LICENSE.html"> LICENSE<A>).</p>
+<p class="p2"><b></b><br></p>
+<p class="p3"><b>TX Autonomous Standalone Systems</b></p>
+<p class="p2"><b></b><br></p>
+<p class="p3"><i>Please note</i> - this set of instructions is for experienced users. It assumes you already know how to build systems and interface screens.</p>
+<p class="p2"><br></p>
+<p class="p3">A TX Autonomous Standalone System is a copy of the TX Modular Standalone which automatically loads a pre-saved system. The pre-saved system and any external files used by the system, such as samples, are enclosed within the self-contained app.<span class="Apple-converted-space"> </span></p>
+<p class="p3">An autonomous system can't be edited or saved, so it's like a play-only version of a TX Modular instrument or system.<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p3">The screen layout is different to the normal TX Modular system. Only the Interface screens are shown and the system itself is hidden - none of the modules, channels or other system screens can be accessed directly.<span class="Apple-converted-space"> </span></p>
+<p class="p3">Along the top of the screen, only the Volume slider and Quit button are displayed, but not any other system buttons (Help, Open File, Save File, etc.) nor any screen selection buttons (Modules, Signal Flow, etc). So the interface looks much simpler.</p>
+<p class="p2"><br></p>
+<p class="p3">Since all the external files used by the system - such as aiff &amp; wav samples &amp; loops, Quartz files - are placed in a folder inside the standalone, it is completely self-contained, which makes it easy to give to other users.</p>
+<p class="p2"><br></p>
+<p class="p3">A TX Autonomous Standalone system could be useful for example in creating an installation where you want users to easily open a prebuilt system every time the installation is set up. (e.g. the Inteface might just have a simple Play button to start it up.) Or to create a standalone Audio/Visual instrument for live playing and sharing with other players.</p>
+<p class="p2"><br></p>
+<p class="p3"><b>-----------------------------------------------------</b></p>
+<p class="p2"><br></p>
+<p class="p3"><b>How to create a TX Autonomous Standalone System:</b></p>
+<p class="p2"><b></b><br></p>
+<p class="p3">1 - first build an instrument using the TX Modular system, with all needed controls added onto<span class="Apple-converted-space">  </span>Interface screens, and save it. Make sure to put equivalent SyncStart and SyncStop buttons onto the interface screens if they're needed since the system buttons won't be shown.<span class="Apple-converted-space"> </span></p>
+<p class="p3">If you have controls on more than one interface screen then you will need a way to navigate between screens.<span class="Apple-converted-space"> </span></p>
+<p class="p3">For example, by creating "Next" and "Previous" action buttons on each screen to jump between them, or a row of buttons such as "Screen 1", "Screen 2", etc.</p>
+<p class="p3">For an example of interface screens with simple screen jump buttons, see the file<span class="Apple-converted-space">  </span>"<b>Four_Live_Loopers</b>" in the "<b><i>TX Mod Examples/Larger_Systems</i></b>" folder.</p>
+<p class="p2"><br></p>
+<p class="p3">2 - make a new copy of the TX Modular system standalone application (or download one from <b> www.palemoonrising.co.uk</b>) and rename it.</p>
+<p class="p2"><br></p>
+<p class="p3">3 - open the folders inside the standalone in <b>Finder</b> by Command (or right-) clicking and selecting "Show Package Contents".<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p3">4 - inside the standalone there is a folder called"<b><i>Contents/Resources/SCClassLibrary/TX Mod Classes/system/TXDefaultSystemData/</i></b>".<span class="Apple-converted-space">  </span>Into this folder, put a copy of the prebuilt TX Modular system you want to use and rename the copied file as: <b>TXDefaultSystem</b>. When the TX Modular System starts and finds the file TXDefaultSystem in this folder, it opens it automatically as a TX Autonomous Standalone System.</p>
+<p class="p2"><br></p>
+<p class="p3">5 - make a copy of any external files used by TXDefaultSystem also putting them inside the standalone in the folder "<b><i>Contents/Resources/SCClassLibrary/TX Mod Classes/system/TXDefaultSystemData/</i></b>" .<span class="Apple-converted-space"> </span></p>
+<p class="p3">Make sure to include all Wav/Aiff files in Loop and Sample Banks used by File Players, Loop Players, Sample Players, Granulators, Convolutions, as well as any Quartz files used by Quartz Players.</p>
+<p class="p3"><i>Please note</i> - any external files which aren't placed in the TXDefaultSystemData folder won't be loaded by the system since, unlike the normal TX Modular system, an autonomous system won't look in external folders. This keeps it self-contained.</p>
+<p class="p2"><br></p>
+<p class="p3"><b>-----------------------------------------------------</b></p>
+</body>
+</html>

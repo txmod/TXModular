@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>FM Synth</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Source (mono output, triggered)</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module creates polyphonic synthesised notes using multi-layer Frequency Modulation (FM) Synthesis.</p>
+<p class="p1">It uses 6 "operators" (which are the equivalent to oscillators), which can each modulate the frequency of any of the other 6 operators, including self-modulating. The output level of each operator can also be set (see controls below).</p>
+<p class="p1">Notes can be triggered in various ways such as by MIDI notes, other modules (e.g.<span class="Apple-converted-space">  </span><b>Step Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. <span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Operators button</b></p>
+<p class="p1"><b>Main level</b> - this sets the overall output level of the synth</p>
+<p class="p1"><b>Op 1 ... Op6/ All Ops buttons<span class="Apple-converted-space"> </span></b> - these select which operator is being edited. The final one shows all 6 operators.</p>
+<p class="p1"><b>Freq ratio</b> - this sets the frequency of the current operator in relation to the midi note played. For example, if the frequency ratio is 1, the operator's frequency will be the same as the midi note played. Whereas if the frequency ratio is 0.5, the operator's frequency will be an octave below the midi note played.</p>
+<p class="p1"><b>Phase</b> - this sets the starting phase of the current operator.</p>
+<p class="p1"><b>Amplitude</b> - the amplitude of the operator affects how much it can modulate the frequency of other operators. It also affects<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Mod Op 1 - 6</b> - these set the amount of frequency modulation coming from operators 1- 6 to affect the frequency of the current operator.</p>
+<p class="p1"><b>Level</b> - this sets the output level of the current operator</p>
+<p class="p2"><br></p>
+<p class="p1"><b>MIDI/ Note button</b></p>
+<p class="p1">See help file <A href="../TX_MIDI Note Button.html">MIDI Note Button<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Envelopes button</b></p>
+<p class="p1">There are buttons to select one the following envelopes which are triggered when a note is played:</p>
+<p class="p1"><b>Vol Env</b> - overall volume envelope for each note played</p>
+<p class="p1"><b>Op 1 Env</b> - optional envelope which is added to the amplitude of Operator 1</p>
+<p class="p1"><b>Op 2 Env</b> - optional envelope which is added to the amplitude of Operator 2</p>
+<p class="p1"><b><i>For Op 1 Env and Op 2 Env</i></b><i> , the following controls are shown:</i></p>
+<p class="p1"><b>OFF/ON Op 1/2 Env</b> - turns the envelope on/off.</p>
+<p class="p1"><b>Env amount</b> - sets how much the envelope will affect the amplitude of Operator 1/2. The range is -1 to +1. Negative values will mean the envelope moves the amplitude in a negative direction.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b><i>For other envelope controls</i></b>, see help file <A href="TX_Env DADSR.html">Env DADSR<A>.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Pitch bend</b></p>
+<p class="p1"><b>Op 1 Freq Ratio</b></p>
+<p class="p1"><b>Op 1 Phase</b></p>
+<p class="p1"><b>Op 1 Amp</b></p>
+<p class="p1"><b>. . .<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Op 6 Freq Ratio</b></p>
+<p class="p1"><b>Op 6 Phase</b></p>
+<p class="p1"><b>Op 6 Amp</b></p>
+<p class="p1"><b>Mod Ind 1 -&gt; 1</b></p>
+<p class="p1"><b>Mod Ind 2 -&gt; 1</b></p>
+<p class="p1"><b>Mod Ind 3 -&gt; 1</b></p>
+<p class="p1"><b>. . .</b></p>
+<p class="p1"><b>Mod Ind 4 -&gt; 6</b></p>
+<p class="p1"><b>Mod Ind 5 -&gt; 6</b></p>
+<p class="p1"><b>Mod Ind 6 -&gt; 6</b></p>
+<p class="p1"><b>Vol Env Delay</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Vol Env Attack</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Vol Env Decay</b></p>
+<p class="p1"><b>Vol Env Sustain level</b></p>
+<p class="p1"><b>Vol Env Sustain time</b></p>
+<p class="p1"><b>Vol Env Release <span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Op 1 Env Delay</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Op 1 Env Attack</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Op 1 Env Decay</b></p>
+<p class="p1"><b>Op 1 Env Sustain level</b></p>
+<p class="p1"><b>Op 1 Env Sustain time</b></p>
+<p class="p1"><b>Op 1 Env Release <span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Op 2 Env Delay</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Op 2 Env Attack</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Op 2 Env Decay</b></p>
+<p class="p1"><b>Op 2 Env Sustain level</b></p>
+<p class="p1"><b>Op 2 Env Sustain time</b></p>
+<p class="p1"><b>Op 2 Env Release <span class="Apple-converted-space"> </span></b></p>
+</body>
+</html>

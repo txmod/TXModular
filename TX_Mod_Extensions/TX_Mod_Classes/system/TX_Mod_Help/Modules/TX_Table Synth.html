@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Table Synth</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Source (mono output, triggered)</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module creates polyphonic synthesised notes using wavetable synthesis, with optional frequency modulation.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Wavetables are<span class="Apple-converted-space">  </span>single waveforms made up from a mixture of different harmonics. You can draw the harmonic levels for each wavetable or run various processes to create new wavetables.<span class="Apple-converted-space"> </span></p>
+<p class="p1">This module can move between different wavetables to create smoothly changing waveforms.</p>
+<p class="p1">There are 8 wavetables which can each be filled with a mix of up to 32 harmonics.</p>
+<p class="p1">There are 5 banks which can be used to store and load sets of wavetables.</p>
+<p class="p1">Frequency modulation is also available - using an audio side-chain input. <span class="Apple-converted-space"> </span></p>
+<p class="p1">Notes can be triggered in various ways such as by MIDI notes, other modules (e.g.<span class="Apple-converted-space">  </span><b>Step Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. <span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Wavetables</b> <b>button</b></p>
+<p class="p1"><b>Table position</b> - sets which wavetable, or mixture of wavetables, is being used for synthesis.</p>
+<p class="p1"><b>Stepping</b> - if set to "None", there will be smooth changes in the waveform as the table position is moved. Otherwise, the changes will be stepped. The higher the value, the bigger the changes between steps. Stepping can be used for creative effects.</p>
+<p class="p1"><b>Harmonic gap</b> - normally the gap between each harmonic is <b>1</b>, so the frequency of the 2nd harmonic is 2 times the first harmonic, and the 3rd harmonic is 3 times the first. Change this to other values to get different timbres (these are often sound more "buzzy" than with a gap of 1).The range of possible values is 0-3.</p>
+<p class="p1"><b>Scaling</b> - This emphasises the difference between louder and quiter harmonics. Higher values create more of a difference - i.e quieter harmonics become much quieter. The default value is 1. The range of possible values is 1-5.</p>
+<p class="p1"><b>No. harmonics</b> - sets the number of harmonics from a choice of 8, 16, 24 or 32.</p>
+<p class="p1"><b>Wavetables 1-8</b> - buttons to display the harmonics of different wavetables.</p>
+<p class="p1"><b>Harmonics</b> - a row of sliders which set the proportion of each of 8-32 harmonics. Drag across with a mouse to set values.</p>
+<p class="p1"><b>Copy/Paste</b> - for copying between different wavetables.</p>
+<p class="p1"><b>Reset</b> - sets all harmonics to zero in current wavetable.</p>
+<p class="p1"><b>Load bank 1/2/3/4/5</b> - these buttons can be used to load wavetables stored in banks 1-5. Banks are places to store all 8 wavetables - they are useful for keeping wavetables during experimentation.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Store bank 1/2/3/4/5</b> - these buttons can be used to store wavetables in banks 1-5.</p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Processes</b> <b>button</b> -<b> </b>there are various processes which can be run on some or all of the wavetables to create a new set of wavetables.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Some processes transform the current wavetables, others generate completely new wavetables.</p>
+<p class="p1">For all processes, you can decide how much of the original wavetable is mixed with the new one.<span class="Apple-converted-space"> </span></p>
+<p class="p1">This can be useful, for example, if you want to add a small amount of randomness to the harmonic values of the wavetables. You could achieve this by using the process "Generate: random harmonic levels" and using a small mix percent (e.g. 5 percent).</p>
+<p class="p1"><b>Wavetables 1-8</b> - see above.</p>
+<p class="p1"><b>Harmonics</b> - see above.</p>
+<p class="p1"><b>Copy/Paste</b> - see above.</p>
+<p class="p1"><b>Reset</b> - see above.</p>
+<p class="p1"><b>Load bank 1/2/3/4/5</b> - see above.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Store bank 1/2/3/4/5</b> - see above.</p>
+<p class="p1"><b>Process</b> - sets the process</p>
+<p class="p1"><b>Processing parameters - start &amp; end values</b> - each processing parameter has two values which will be used for the first and last wavetables selected.<span class="Apple-converted-space"> </span></p>
+<p class="p1">For example if wavetables 3-6 are selected for processing, then the start value will apply to wavetable 3 and the end value to wavetable 6.<span class="Apple-converted-space"> </span></p>
+<p class="p1">All wavetables in between will have proportionate amounts in between the start and end values.</p>
+<p class="p1">For examples of this, try running<span class="Apple-converted-space">  </span>the various processes marked "Generate" using the default parameter values.</p>
+<p class="p1"><b>Run</b> - button to run the currently the<span class="Apple-converted-space">  </span>process on the selected wavetables</p>
+<p class="p1"><b>Wavetables</b> - select which wavetables will be processed.</p>
+<p class="p1"><b>Mix percent</b> - of the original and processed wavetables will be mixed together. 100 percent mix will mean only processed wavetables.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>other parameters</b> - processes may have other parameters which will be labelled. These all have start and end values.</p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>MIDI/ Note button</b></p>
+<p class="p1">See help file <A href="../TX_MIDI Note Button.html">MIDI Note Button<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Vol Env button </b>-<span class="Apple-converted-space">  </span>sets the control for the volume envelope of the synth</p>
+<p class="p1">See help file <A href="TX_Env DADSR.html">Env DADSR<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Table Env button </b>-<span class="Apple-converted-space">  </span>sets the control for an envelope which affects the <b>Table position</b> of the synth.</p>
+<p class="p1"><b>OFF/ON Table Env</b> - turns the envelope on/off.</p>
+<p class="p1"><b>Env amount</b> - sets how much the envelope will affect the <b>Table position</b>. The range is -1 to +1. Negative values will mean the envelope moves the <b>Table position</b> in a negative direction.<span class="Apple-converted-space"> </span></p>
+<p class="p1">For other controls, see help file <A href="TX_Env DADSR.html">Env DADSR<A>.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Frequency Mod button</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>FM option</b> - can be set to: "No Frequency Modulation" or "Frequency Modulation using FM input". If set on, the FM Input audio side-chain input bus will be used to modulate the frequency of the synth.<span class="Apple-converted-space"> </span></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>FM input</b> - the incoming mono audio signal used for frequency modulation (if switched on).</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Table position</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Pitch bend</b></p>
+<p class="p1"><b>Frequency</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Vol env delay</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Vol env attack <span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Vol env decay</b></p>
+<p class="p1"><b>Vol env sustain level</b></p>
+<p class="p1"><b>Vol env sustain time</b></p>
+<p class="p1"><b>Vol env release <span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Table env amount</b></p>
+<p class="p1"><b>Table env delay<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Table env attack<span class="Apple-converted-space">   </span></b></p>
+<p class="p1"><b>Table env decay<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Table env sustain level<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Table env sustain time<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Table env release<span class="Apple-converted-space"> </span></b></p>
+</body>
+</html>

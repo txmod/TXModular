@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+    span.Apple-tab-span {white-space:pre}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Sample Player+</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Source (mono output, triggered)</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module takes a mono sample from the sample bank and plays it back. It is like the Sample Player module, but includes extra features including a filter and various modulation sources, such as LFOs.</p>
+<p class="p1">It can be triggered in various ways such as by MIDI notes, other modules (e.g.<span class="Apple-converted-space">  </span><b>Step Sequencer</b>, <b>Action Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. <span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Sample button</b></p>
+<p class="p1"><b>Mono sample</b> - select from all the mono samples in the system's sample bank. Stereo samples from the sample bank won't be shown.</p>
+<p class="p1"><b>Add samples to bank</b> - to add any audio samples stored on the hard disk.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Show/Hide</b> - buttons for the display of the sample waveform. When the waveform is displayed, you can zoom in and out using the zoom buttons. You can also select which part of the waveform is used for granulation by using the select all/ select none buttons.</p>
+<p class="p1"><b>Play range</b> - which part of the sample will be played.</p>
+<p class="p1"><b>Loop type</b> - there are various options:</p>
+<p class="p1"><span class="Apple-tab-span">	</span><b><i>single shot</i></b> - play sample once</p>
+<p class="p1"><span class="Apple-tab-span">	</span><b><i>looped</i> </b>- loop sample at start and end of play range</p>
+<p class="p1"><span class="Apple-tab-span">	</span><b><i>single waveform</i></b> - to loop single waveform samples</p>
+<p class="p1"><span class="Apple-tab-span">	</span><b><i>x-fade looped</i> </b>- x-fades between 2 loops for smoother looping</p>
+<p class="p1"><b>Reverse</b> - if on, sample playback will be reversed.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Level</b> - the output level of the sampler.<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b>MIDI/ Note button</b></p>
+<p class="p1">See help file <A href="../TX_MIDI Note Button.html">MIDI Note Button<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Filter button</b></p>
+<p class="p1">See help file <A href="TX_Filter.html">Filter<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Amp Envelope button</b></p>
+<p class="p1">This is for the amplitude (volume) envelope for each note.<span class="Apple-converted-space"> </span></p>
+<p class="p1">See help file <A href="TX_Env DADSR.html">Env DADSR<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Envelope 2 button</b></p>
+<p class="p1">This is an envelope that can be used for modulation in the modulation matrix (see below).<span class="Apple-converted-space"> </span></p>
+<p class="p1">See help file <A href="TX_Env DADSR.html">Env DADSR<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>LFO 1/2 button</b></p>
+<p class="p1">This is for 2 Low Frequency Oscillators that can be used for modulation in the modulation matrix (see below).<span class="Apple-converted-space"> </span></p>
+<p class="p1">See help file <A href="TX_LFO.html">LFO<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Mod Matrix button</b></p>
+<p class="p1">This is for the modulation matrix which allows you to use various modulation sources to control the synth. The lower half of the window has 10 <b>modulation rows</b> for setting modulation parameters.</p>
+<p class="p1"><b>Note range</b> - when using the note played as a modulation source, this sets the lowest and highest notes that will be tracked.</p>
+<p class="p1"><b>Vel range</b> - when using the note velocity as a modulation source, this sets the lowest and highest velocities that will be tracked.</p>
+<p class="p1"><b>Slider 1/2</b> - these are free sliders that can be used as modulation sources<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Source</b> - sets the source of the modulation . This includes 2 random sources (Random val 1/2) which create random values for every note, and a source called Offset which allows you to set a fixed value of modulation.</p>
+<p class="p1"><b>Destination</b> - sets the destination of the modulation (i.e. what is being modulated).</p>
+<p class="p1"><b>Modulation amount</b> - This is a percentage and can be positive or negative from -100% to +100%. A modulation of 0% will have no effect.</p>
+<p class="p1"><b>Scale</b> - This allow you to use note, velocity, slider1 and slider2 to scale the modulation amount for extra flexibility. If nothing is selected (the default), a scaling of 1 will be used - i.e. the modulation amount set by the slider will by used directly.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Sample start</b> - start of play range</p>
+<p class="p1"><b>Sample end</b> - end of play range</p>
+<p class="p1"><b>Sample Reverse</b></p>
+<p class="p1"><b>Pitch bend</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Filt Freq</b><span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Filt Res</b></p>
+<p class="p1"><b>Filt Sat</b></p>
+<p class="p1"><b>Delay</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Attack</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Decay</b></p>
+<p class="p1"><b>Sustain level</b></p>
+<p class="p1"><b>Sustain time</b></p>
+<p class="p1"><b>Release</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Delay</b>2</p>
+<p class="p1"><b>Attack2</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Decay2</b></p>
+<p class="p1"><b>Sustain level2</b></p>
+<p class="p1"><b>Sustain time2</b></p>
+<p class="p1"><b>Release2</b></p>
+<p class="p1"><b>LFO 1 Freq</b></p>
+<p class="p1"><b>LFO 1 Fade-in</b></p>
+<p class="p1"><b>LFO 2 Freq</b></p>
+<p class="p1"><b>LFO 2 Fade-in</b></p>
+<p class="p1"><b>Slider 1</b></p>
+<p class="p1"><b>Slider 2</b></p>
+</body>
+</html>
