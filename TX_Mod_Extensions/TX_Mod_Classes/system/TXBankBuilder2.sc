@@ -1,10 +1,10 @@
 // Copyright (C) 2011  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXBankBuilder2 {	// Channel Routing  
+TXBankBuilder2 {	// Channel Routing
 
 classvar	<>system;	    			// system
 classvar	<>arrSampleBanks, <>arrLoopBanks;
-classvar	currentSampleBankNo, currentLoopBankNo; 
+classvar	currentSampleBankNo, currentLoopBankNo;
 classvar	displayBankType, holdArray, holdArrBankNames, holdCurrentBankNo, holdCurrentBankName, showWaveform;
 classvar path, txtQuestion, errorScreen;
 classvar strBankType, strNoElements, strNo, btnChangeBank;
@@ -38,13 +38,13 @@ classvar classData; //event dict for data
 }
 
 *sampleBank{ arg bankNo=0;
-	// get bank 
+	// get bank
 	^arrSampleBanks[bankNo];
 }
 
 *sampleBank_ { arg argBank, bankNo=0;
-	var newBank; 
-	// set bank 
+	var newBank;
+	// set bank
 	if (argBank.notNil, {
 		newBank = this.checkSndFilePaths(argBank, "Sample");
 		arrSampleBanks[bankNo] = newBank;
@@ -52,13 +52,13 @@ classvar classData; //event dict for data
 }
 
 *loopBank{ arg bankNo=0;
-	// get bank 
+	// get bank
 	^arrLoopBanks[bankNo];
 }
 
 *loopBank_ { arg argBank, bankNo=0;
-	var newBank; 
-	// set bank 
+	var newBank;
+	// set bank
 	if (argBank.notNil, {
 		newBank = this.checkSndFilePaths(argBank, "Loop");
 		arrLoopBanks[bankNo] = newBank;
@@ -85,16 +85,16 @@ classvar classData; //event dict for data
 		holdCurrentBankNo = currentLoopBankNo.copy;
 		holdCurrentBankName = arrLoopBanks[currentLoopBankNo][1];
 	});
-	
+
 //	argView.decorator.shift(4, 0);
 	parent = CompositeView(argView, Rect(0,0, 1060, 600)).background_(TXColor.sysModuleWindow);
 	parent.decorator = FlowLayout(parent.bounds);
 
 	if (displayBankType == "Sample", {
 		specNewFreqOrBeats = [1, 2000, \linear, 0].asSpec;
-	}, {	
+	}, {
 		specNewFreqOrBeats = [1, 128, \linear, 1].asSpec;
-	});	
+	});
 
 	// spacing
 	parent.decorator.nextLine;
@@ -114,15 +114,15 @@ classvar classData; //event dict for data
 	// spacing
 	parent.decorator.nextLine;
 	parent.decorator.shift(10, 0);
-	
+
 	// spacing
 	parent.decorator.shift(0, 5);
 	parent.decorator.nextLine;
 
-	// divider 
+	// divider
 	StaticText(parent, 1050 @ 1) .string_("") .background_(TXColor.sysGuiCol1);
 
-	// bank no. 
+	// bank no.
 	strBankNo = StaticText (parent, 80 @ 24)
 		.background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
@@ -190,14 +190,14 @@ classvar classData; //event dict for data
 	// spacing
 	parent.decorator.shift(0, 5);
 	parent.decorator.nextLine;
-	// divider 
+	// divider
 	StaticText(parent, 1050 @ 1) .string_("") .background_(TXColor.sysGuiCol1);
 
 	// spacing
 	parent.decorator.shift(0, 5);
 	parent.decorator.nextLine;
 
-	// sample selection 
+	// sample selection
 	strListTitle = StaticText(parent, 186 @ 24)
 			.string_("Select:")
 			.background_(TXColor.white)
@@ -207,17 +207,17 @@ classvar classData; //event dict for data
 	},{
 		strListTitle.string = "Select Loop:";
 	});
-	listSamples = holdArray.collect({ arg item, i; 
-		var errorText; 
+	listSamples = holdArray.collect({ arg item, i;
+		var errorText;
 		errorText = "";
 		if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-			errorText = "** INVALID FILE: "; 
+			errorText = "** INVALID FILE: ";
 		});
 		errorText ++ item.at(0);
 	});
 
-	// make box	
-	classData.sampleListBox =  CompositeView(parent, Rect(0,0, 850, 200));  
+	// make box
+	classData.sampleListBox =  CompositeView(parent, Rect(0,0, 850, 200));
 	classData.sampleListBox.background = TXColour.sysChannelAudio;
 	classData.sampleListBox.decorator = FlowLayout(classData.sampleListBox.bounds);
 	classData.sampleListBox.decorator.margin.x = 0;
@@ -231,15 +231,15 @@ classvar classData; //event dict for data
 		classData.samplesScrollView.autoScrolls_(false);
 	});
 
-	classData.samplesScrollView.action = {arg view; 
+	classData.samplesScrollView.action = {arg view;
 		if (displayBankType == "Sample", {
-			classData.samplesVisibleOrigin = view.visibleOrigin; 
+			classData.samplesVisibleOrigin = view.visibleOrigin;
 		},{
-			classData.loopsVisibleOrigin = view.visibleOrigin; 
+			classData.loopsVisibleOrigin = view.visibleOrigin;
 		});
 	};
-	
-	classData.samplesBox = CompositeView(classData.samplesScrollView, 
+
+	classData.samplesBox = CompositeView(classData.samplesScrollView,
 		Rect(0,0, 828, ((listSamples.size + 1) * 22).max(192)));
 	classData.samplesBox.decorator = FlowLayout(classData.samplesBox.bounds);
 	classData.samplesBox.decorator.margin.x = 0;
@@ -252,7 +252,7 @@ classvar classData; //event dict for data
 		holdSampleNo = classData.displaySampleNo;
 	},{
 		holdSampleNo = classData.displayLoopNo;
-	});	
+	});
 
 	listSamples.do({arg item, i;
 		var btnSample, stringCol, backCol;
@@ -267,14 +267,14 @@ classvar classData; //event dict for data
 		btnSample.background = backCol;
 		btnSample.drawFunc = {
 			Pen.fillColor = stringCol;
-			Pen.stringAtPoint(item, Point(2, 2));	
+			Pen.stringAtPoint(item, Point(2, 2));
 		};
 		btnSample.mouseDownAction = {
-			this.setSampleNo(i); 
+			this.setSampleNo(i);
 			system.showView;
 		};
 	});
-	
+
 	if (listSamples.size > 0, {
 		if (displayBankType == "Sample", {
 			classData.samplesScrollView.visibleOrigin = classData.samplesVisibleOrigin;
@@ -287,9 +287,9 @@ classvar classData; //event dict for data
 	parent.decorator.nextLine;
 	parent.decorator.shift(0, -32);
 
-	// TXCheckBox: arg argParent, bounds, text, offStringColor, offBackground, 
+	// TXCheckBox: arg argParent, bounds, text, offStringColor, offBackground,
 	// onStringColor, onBackground, onOffTextType=0;
-	classData.displayWaveform = TXCheckBox(parent, 140 @ 24, "Show waveform", TXColor.sysGuiCol1, TXColour.white, 
+	classData.displayWaveform = TXCheckBox(parent, 140 @ 24, "Show waveform", TXColor.sysGuiCol1, TXColour.white,
 		TXColor.white, TXColor.sysGuiCol1);
 	classData.displayWaveform.value = showWaveform;
 
@@ -334,17 +334,17 @@ classvar classData; //event dict for data
 	}, {
 		btnDeleteSample.states = [["Remove Loop from Bank", TXColor.white, TXColor.sysDeleteCol]];
 	});
-	
+
 	// spacing
 	parent.decorator.shift(0, 5);
 	parent.decorator.nextLine;
-	// divider 
+	// divider
 	StaticText(parent, 1050 @ 1) .string_("") .background_(TXColor.sysGuiCol1);
 
 	// spacing
 	parent.decorator.shift(0, 5);
 	parent.decorator.nextLine;
-	// sample no. 
+	// sample no.
 	strSampleLoop = StaticText (parent, 80 @ 24)
 		.background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
@@ -375,7 +375,7 @@ classvar classData; //event dict for data
 
 	// spacing
 	parent.decorator.shift(5, 0);
-	// length 
+	// length
 	StaticText(parent, 80 @ 24)
 			.string_("Length (ms)")
 			.background_(TXColor.white)
@@ -387,7 +387,7 @@ classvar classData; //event dict for data
 
 	// spacing
 	parent.decorator.shift(5, 0);
-	// no. channels 
+	// no. channels
 	StaticText(parent, 80 @ 24)
 			.string_("No. Channels")
 			.background_(TXColor.white)
@@ -435,7 +435,7 @@ classvar classData; //event dict for data
 	if (displayBankType == "Sample", {
 		popupMidiNote = PopUpMenu(parent, 50 @ 24)
 			.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
-		popupMidiNote.items = ["notes"] 
+		popupMidiNote.items = ["notes"]
 			++ 103.collect({arg item; TXGetMidiNoteString(item + 24);});
 		popupMidiNote.action = {
 			if (popupMidiNote.value > 0, {
@@ -461,9 +461,9 @@ classvar classData; //event dict for data
 	parent.decorator.nextLine;
 
 	////////////////////////////////////////////////////////////////////////////////////////
-	// DEFINE GUI ACTIONS 
+	// DEFINE GUI ACTIONS
 
-	numBankNo.action = 
+	numBankNo.action =
 		{arg view;
 			holdCurrentBankNo = view.value.min(99).max(0);
 			if (displayBankType == "Sample", {
@@ -477,33 +477,33 @@ classvar classData; //event dict for data
 			this.setSampleNo(0);
 			// recreate view
 			system.showView;
-		};			
+		};
 
-	btnBankPlus.action = 
+	btnBankPlus.action =
 		{
 		numBankNo.value = (numBankNo.value + 1);
 		numBankNo.doAction;
-		};			
+		};
 
-	btnBankMinus.action = 
+	btnBankMinus.action =
 		{
 		numBankNo.value = (numBankNo.value - 1);
 		numBankNo.doAction;
-		};			
+		};
 
 	popBank.action =
 		{arg view;
 		numBankNo.value = view.value;
 		numBankNo.doAction;
-		};			
+		};
 
-	textBankName.action = 
+	textBankName.action =
 		{arg view;
 			holdCurrentBankName = view.string;
 			this.updateBank;
-		};			
+		};
 
-	btnOpenBank.action = 
+	btnOpenBank.action =
 		{var errFound, errorScreen, fileType;
 		var newPath, newFile, newData;
 		errFound = 0;
@@ -512,7 +512,7 @@ classvar classData; //event dict for data
 		},{
 			fileType = "LoopBank";
 		});
-		CocoaDialog.getPaths({ arg paths;
+		Dialog.getPaths({ arg paths;
 			newPath = paths.at(0);
 			newFile = File(newPath,"r");
 			newData = thisProcess.interpreter.executeFile(newPath);
@@ -536,8 +536,8 @@ classvar classData; //event dict for data
 		if (errFound==1, {
 			errorScreen = TXInfoScreen.new("ERROR: invalid " ++ fileType ++ ": " ++ newFile.path);		});
 		this.sizeChange;
-	};			
-	btnSaveBank.action = 
+	};
+	btnSaveBank.action =
 		{
 		var newPath, newFile, newData;
 		if (holdArray.size > 0, {
@@ -558,7 +558,7 @@ classvar classData; //event dict for data
 
 		});
 	};
-	
+
 	btnEmptyBank.action = {
 		holdArray = [];
 		this.updateBank;
@@ -567,64 +567,64 @@ classvar classData; //event dict for data
 		// recreate view
 		system.showView;
 		};
-	
+
 	btnAddSamples.action = {this.addSampleDialog(displayBankType); };
 
-	btnDeleteSample.action = { 
+	btnDeleteSample.action = {
 		holdArray[numSampleNo.value][0] = "REMOVED";
 		holdArray[numSampleNo.value][3] = false;
 		this.updateBank;
 		showWaveform = 0;
 		// recreate view
 		system.showView;
-	};	
+	};
 
 	classData.displayWaveform.action = {arg view; showWaveform = view.value; system.showView};
 
 	numSampleNo.action = {arg view;
 		this.setSampleNo(view.value);
-	};			
+	};
 
 	btnSamplePlus.action = {
 		numSampleNo.value = (numSampleNo.value + 1).min(holdArray.size-1).max(0);
 		this.setSampleNo(numSampleNo.value);
-	};			
+	};
 
-	btnSampleMinus.action = 
+	btnSampleMinus.action =
 		{
 		numSampleNo.value = (numSampleNo.value - 1).max(0);
 		this.setSampleNo(numSampleNo.value);
-		};			
-	
-	btnChangeValue.action = 
+		};
+
+	btnChangeValue.action =
 		{if (holdArray.notEmpty, {
 			holdArray.at(numSampleNo.value.asInteger).put(1, numNewFreqOrBeats.value);
 			this.updateBank;
 			this.loadSample;
 			});
-		};			
+		};
 
 	numNewFreqOrBeats.action = { |view| view.value = specNewFreqOrBeats.constrain(view.value)};
 
-	btnPlaySample.action = {	
+	btnPlaySample.action = {
 		// release any synth running
 		btnStopPlay.doAction;
-		if (holdArray.notEmpty and: holdBuffer.notNil, { 
-			holdSynth = { sldVolume.value * 
+		if (holdArray.notEmpty and: holdBuffer.notNil, {
+			holdSynth = { sldVolume.value *
 				PlayBuf.ar(1, holdBuffer.bufnum, BufRateScale.kr(holdBuffer.bufnum)) }.play;
 		});
-	};			
+	};
 
-	btnStopPlay.action = 
+	btnStopPlay.action =
 		{if (holdSynth.notNil, {
 				holdSynth.free;
 				holdSynth = nil;
 				});
-		};			
-	
+		};
+
 	// initialise
 	this.sizeChange;
-	
+
 } // end of class method makeGui
 
 *setSampleNo { arg sampleNo = 0;
@@ -636,7 +636,7 @@ classvar classData; //event dict for data
 	});
 	numSampleNo.value = sampleNo;
 	this.loadSample;
-}			
+}
 
 *addSampleDialog { arg argBankType = "Sample", argBankNo;
 	var holdString;
@@ -650,7 +650,7 @@ classvar classData; //event dict for data
 				currentLoopBankNo = argBankNo;
 			});
 		});
-			
+
 		// get path/filenames
 		Dialog.getPaths({ arg paths;
 			var validPaths, validPathsNumChannels, invalidPaths;
@@ -684,7 +684,7 @@ classvar classData; //event dict for data
 			this.updateBank;
 			if ((system.showWindow == "Sample bank") or:
 				(system.showWindow == "Loop bank"),
-			{	
+			{
 				strNoElements.string = holdString;
 			});
 			// recreate view
@@ -708,13 +708,13 @@ classvar classData; //event dict for data
 		holdSampleNo = classData.displaySampleNo;
 	},{
 		holdSampleNo = classData.displayLoopNo;
-	});	
+	});
 	holdSampleNo = holdSampleNo ? 0;
-	listSamples = holdArray.collect({ arg item, i; 
-		var errorText; 
+	listSamples = holdArray.collect({ arg item, i;
+		var errorText;
 		errorText = "";
 		if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-			errorText = "** INVALID FILE: "; 
+			errorText = "** INVALID FILE: ";
 		});
 		errorText ++ item.at(0);
 	});
@@ -728,14 +728,14 @@ classvar classData; //event dict for data
 		}, { // else for loops
 			strNoElements.string = "Total no. of Loops in Bank:  0";
 			numNewFreqOrBeats.value = 1;
-		}); 
+		});
 	}, { // load sample/loop details for current sample number
 		this.setSampleNo(holdSampleNo.min(holdArray.size-1));
 		if (displayBankType == "Sample", {
 				strNoElements.string = "Total no. of Samples in Bank:  " ++ holdArray.size.asString;
 		}, { // else for loops
 			strNoElements.string = "Total no. of Loops in Bank:  " ++ holdArray.size.asString;
-		}); 
+		});
 	});
 } 		// end of class method sizeChange
 
@@ -745,7 +745,7 @@ classvar classData; //event dict for data
 		holdSampleNo = classData.displaySampleNo;
 	},{
 		holdSampleNo = classData.displayLoopNo;
-	});	
+	});
 	if (holdArray.isNil or: holdArray.isEmpty or: {holdArray.at(holdSampleNo).at(3) == false}, {
 		strSampleFileName.string =  "";
 		strFreqOrBeats.string = "";
@@ -753,8 +753,8 @@ classvar classData; //event dict for data
 		strNumChannels.string = "";
 		if (displayBankType == "Loop", {strBPM.string =  ""; });
 	},{
-		holdBuffer = 
-			Buffer.read(system.server,holdArray.at(numSampleNo.value.asInteger).at(0), action: { arg buffer; 
+		holdBuffer =
+			Buffer.read(system.server,holdArray.at(numSampleNo.value.asInteger).at(0), action: { arg buffer;
 			{
 			//	if file loaded ok
 				if (buffer.notNil, {
@@ -764,16 +764,16 @@ classvar classData; //event dict for data
 						soundFileView.readWithTask( block: 16, showProgress: false);
 					});
 					strFreqOrBeats.string = holdArray.at(numSampleNo.value.asInteger).at(1).asString;
-					strLength.string = 
+					strLength.string =
 						((buffer.numFrames / buffer.sampleRate).round(0.001) * 1000).asString;
 					strNumChannels.string = buffer.numChannels.asString;
 					if (displayBankType == "Loop", {
-						strBPM.string =  
+						strBPM.string =
 							((60 * buffer.sampleRate * holdArray.at(numSampleNo.value.asInteger).at(1))
 								/ buffer.numFrames ).round(0.01).asString;
 					});
 				},{
-					strSampleFileName.string = 
+					strSampleFileName.string =
 						holdArray.at(numSampleNo.value.asInteger).at(0) ++ "-  NOT FOUND";
 					strLength.string = "";
 					strNumChannels.string = "";
@@ -785,8 +785,8 @@ classvar classData; //event dict for data
 			TXInfoScreen.new("Invalid Sample File" ++ holdArray.at(numSampleNo.value.asInteger).at(0));
 		});
 	});
-}	// end of class method loadSample 
-	
+}	// end of class method loadSample
+
 *checkSndFilePaths { arg argBank, bankTypeString, showMessages = true;
 	var newBank, holdSoundFile, invalidPaths;
 	newBank = argBank.deepCopy;

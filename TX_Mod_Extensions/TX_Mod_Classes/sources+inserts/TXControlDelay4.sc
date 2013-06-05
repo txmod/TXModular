@@ -1,19 +1,19 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXControlDelay4 : TXModuleBase {		// delay module 
+TXControlDelay4 : TXModuleBase {		// delay module
 
 	//	Notes:
 	//	This is a delay which can be set to any time up to 16 secs.
 	//	This version uses BufCombC
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<guiWidth=500;
 	classvar	<arrBufferSpecs;
@@ -21,32 +21,32 @@ TXControlDelay4 : TXModuleBase {		// delay module
 	var 		holdTapTime, newTapTime;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "Control Delay";
 	moduleRate = "control";
 	moduleType = "insert";
-	noInChannels = 1;			
-	arrCtlSCInBusSpecs = [ 
+	noInChannels = 1;
+	arrCtlSCInBusSpecs = [
 		["Delay Time", 1, "modDelay", 0],
 		["Wet-Dry Mix", 1, "modWetDryMix", 0]
-	];	
+	];
 	noOutChannels = 1;
-	arrOutBusSpecs = [ 
+	arrOutBusSpecs = [
 		["Out", [0]]
-	];	
-} 
+	];
+}
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 init {arg argInstName;
 	//	set  class specific instance variables
 	extraLatency = 0.2;	// allow extra time when recreating
 	arrOptions = [0];
 	arrOptionData = [
-		[	
+		[
 			["5 seconds", 5],
 			["15 seconds", 15],
 			["30 seconds", 30],
@@ -69,25 +69,25 @@ init {arg argInstName;
 		["modWetDryMix", 0, defLagTime],
 		// N.B. arg below not used in synthdef, just kept here for convenience
 		["autoTapTempo", 0, \ir],
-	]; 
-	synthDefFunc = { 
-		arg in, out, bufnumDelay, delay=0.1, delayMin, delayMax, wetDryMix, 
+	];
+	synthDefFunc = {
+		arg in, out, bufnumDelay, delay=0.1, delayMin, delayMax, wetDryMix,
 			modDelay=0, modWetDryMix=0;
 		var input, outSignal, delaytime, decaytime, mixCombined;
 		input = In.kr(in,1);
-		delaytime =( (delayMax/delayMin) ** ((delay + modDelay).max(0.0001).min(1)) ) 
+		delaytime =( (delayMax/delayMin) ** ((delay + modDelay).max(0.0001).min(1)) )
 			* delayMin / 1000;
 		mixCombined = (wetDryMix + modWetDryMix).max(0).min(1);
 		//	CombC.kr(in, maxdelaytime, delaytime, decaytime, mul, add)
-		outSignal = BufDelayC.kr(bufnumDelay, input, delaytime, mixCombined, 
+		outSignal = BufDelayC.kr(bufnumDelay, input, delaytime, mixCombined,
 			input * (1-mixCombined));
 		Out.kr(out, TXClean.kr(outSignal));
 	};
 	this.buildGuiSpecArray;
 	arrActionSpecs = this.buildActionSpecs(
-		[["commandAction", "Tap Tempo", {this.actionTapTempo;}]] 
+		[["commandAction", "Tap Tempo", {this.actionTapTempo;}]]
 		++ guiSpecArray);
-	//	use base class initialise 
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 	//	make buffers, load the synthdef and create the synth
 	this.makeBuffersAndSynth(this.getArrBufferSpecs);
@@ -97,34 +97,34 @@ buildGuiSpecArray {
 	var holdControlSpec;
 	holdControlSpec = ControlSpec.new(10, 1000 * this.getMaxDelaytime, \exp );
 	guiSpecArray = [
-		["SynthOptionPopupPlusMinus", "Maximum time", arrOptionData, 0, 200,
+		["SynthOptionPopupPlusMinus", "Maximum time", arrOptionData, 0, 300,
 			{this.buildGuiSpecArray;
 			system.showViewIfModDisplay(this);
 			this.makeBuffersAndSynth(this.getArrBufferSpecs);
 			}
-		], 
-		["SpacerLine", 6], 
+		],
+		["SpacerLine", 6],
 		["TapTempoButton", {arg argTempo; this.useTapTempo(argTempo);}],
-		["Spacer", 10], 
+		["Spacer", 10],
 		["TXCheckBox", "Auto copy tap tempo to delay bpm ", "autoTapTempo", nil, 230],
-		["SpacerLine", 6], 
+		["SpacerLine", 6],
 		["TextBarLeft", "Delay time shown in ms and bpm", 200],
-		["Spacer", 3], 
-		["ActionButton", "time x 2", {this.delayTimeMultiply(2);}, 60], 
-		["ActionButton", "time x 3", {this.delayTimeMultiply(3);}, 60], 
-		["ActionButton", "time / 2", {this.delayTimeMultiply(0.5);}, 60], 
-		["ActionButton", "time / 3", {this.delayTimeMultiply(1/3);}, 60], 
+		["Spacer", 3],
+		["ActionButton", "time x 2", {this.delayTimeMultiply(2);}, 60],
+		["ActionButton", "time x 3", {this.delayTimeMultiply(3);}, 60],
+		["ActionButton", "time / 2", {this.delayTimeMultiply(0.5);}, 60],
+		["ActionButton", "time / 3", {this.delayTimeMultiply(1/3);}, 60],
 		["NextLine"],
-		["TXTimeBpmMinMaxSldr", "Delay time", holdControlSpec, "delay", "delayMin", "delayMax"], 
-		["SpacerLine", 6], 
-		["WetDryMixSlider"], 
+		["TXTimeBpmMinMaxSldr", "Delay time", holdControlSpec, "delay", "delayMin", "delayMax"],
+		["SpacerLine", 6],
+		["WetDryMixSlider"],
 	];
 }
 
 getMaxDelaytime {
 	^arrOptionData.at(0).at(arrOptions.at(0)).at(1);
 }
-	
+
 getArrBufferSpecs {
 	arrBufferSpecs = [ ["bufnumDelay", defSampleRate * this.getMaxDelaytime, 1] ];
 	^arrBufferSpecs;

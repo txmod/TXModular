@@ -316,7 +316,7 @@ TXChannelRouting {	// Channel Routing
 		var arrAllSourceActionModules, arrAllSourceActionModNames;
 		var modListBox, listModules, listViewModules;
 		var modListBoxWidth, plusMinusString, plusMinusActionFunc, holdView;
-		var modulesScrollView, modulesBox, btnDelete;
+		var modulesScrollView, modulesBoxWidth, modulesBox, btnDelete;
 		var numStartChannel, channelBox, colourBox1, colourBox2;
 		var holdSet, holdText, holdIndex;
 
@@ -611,12 +611,12 @@ TXChannelRouting {	// Channel Routing
 		parent.decorator.nextLine;
 
 		if ( showDelButtons == false, {
-			modListBoxWidth = 166;
-			plusMinusString = "->";
+			modListBoxWidth = 168;
+			plusMinusString = ">";
 			plusMinusActionFunc = {showDelButtons = true; system.showView;};
 			},{
-				modListBoxWidth = 200;
-				plusMinusString = "<-";
+				modListBoxWidth = 196;
+				plusMinusString = "<";
 				plusMinusActionFunc = {showDelButtons = false; system.showView;};
 		});
 		// make box
@@ -624,10 +624,10 @@ TXChannelRouting {	// Channel Routing
 		modListBox.background = TXColour.sysChannelAudio;
 		modListBox.decorator = FlowLayout(modListBox.bounds);
 		// Heading
-		holdView = StaticText(modListBox, Rect(0,0, 122, 24));
+		holdView = StaticText(modListBox, Rect(0,0, 112, 24));
 		holdView.string = "System Modules";
 		holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.setProperty(\align,\center);
+		holdView.align_(\center);
 		// plus minus button
 		holdView = Button(modListBox, 24 @ 24);
 		holdView.states = [[plusMinusString, TXColor.white, TXColor.sysGuiCol1]];
@@ -640,8 +640,13 @@ TXChannelRouting {	// Channel Routing
 			modulesScrollView.autoScrolls_(false);
 		});
 		modulesScrollView.action = {arg view; modulesVisibleOrigin = view.visibleOrigin; };
+		if ( showDelButtons == true, {
+			modulesBoxWidth = 172;
+		}, {
+			modulesBoxWidth = 144;
+		});
 		modulesBox = CompositeView(modulesScrollView,
-			Rect(0,0, modListBoxWidth-20, (arrAllSourceActionModNames.size * 26).max(20)));
+			Rect(0,0, modulesBoxWidth, (arrAllSourceActionModNames.size * 26).max(20)));
 		modulesBox.background = TXColour.sysChannelAudio;
 		modulesBox.decorator = FlowLayout(modulesBox.bounds);
 		modulesBox.decorator.margin.x = 0;

@@ -9,7 +9,7 @@ TXBuildActions {		// Action Builder
 	var arrActionSpecs, holdAction, holdActionFunc, holdGetItemsFunction, holdControlSpecFunc, actionCounter;
 
 	// add initial dummy action
-	argArray = [["commandAction", " ..."]] ++ argArray;
+	argArray = [["commandAction", "..."]] ++ argArray;
 	// add title items (or defaults if nil) to argArray
 	if (argModule.guiSpecTitleArray.notNil, {
 		argArray = argArray ++ argModule.guiSpecTitleArray;
@@ -417,7 +417,7 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
-	// TXPopupAction
+	// TXPopupAction, TXPopupActionPlusMinus
 		// arguments- index1 is text, index2 is items array (function or value),
 		//	index3 is synth arg name to be updated, index4 is optional popup action,
 		// 	index5 is the optional width,

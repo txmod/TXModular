@@ -1,0 +1,16 @@
+// Copyright (C) 2013  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
+
+The TX Modular System - Adding TX Classes to SuperCollider  3
+
+The TX Modular system uses various classes which SuperCollider needs to know about in order to run the system. 
+
+To add these, copy the supplied folder TX Mod Extensions (or an alias of it) your Extensions folder (see SC help file Using Extensions for more details).
+
+If you have an older TX Modular Extensions folder there then remove it first.
+
+You also need to add the following to your Extensions folder:
+-  sc3-plugins folder, which comes as an extra download with SC3
+-  latest version of the wslib SuperCollider Quark (see Quarks help if required)
+
+Note: If SuperCollider was already open before adding the extensions, you'll need to recompile the SuperCollider library (or if you prefer, quit and restart SuperCollider).
+

@@ -106,7 +106,7 @@ TXColour : Color {		// TX system colours
 		sysViewHighlight =   Color.new255(76, 21, 165);
 	}
 
-	*blank { ^Color.new255(0, 0, 0,0).alpha_(sysAlpha) }
+	*blank { ^Color.new255(0, 0, 0, 0) }
 
 	*blue1 { ^Color.new255(0, 0, 139).alpha_(sysAlpha) }
 	*blue2 { ^Color.new255(0, 178, 238).alpha_(sysAlpha) }

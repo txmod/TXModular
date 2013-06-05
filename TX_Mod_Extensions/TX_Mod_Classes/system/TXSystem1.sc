@@ -83,13 +83,12 @@ TXSystem1 {		// system module 1
 		// create event and set variable:
 		dataBank = ();
 		dataBank.modulesVisibleOrigin = Point.new(0,0);
-	}
+}
 	// start the system
 
 	*startCocoa {
 		this.start;
 	}
-
 
 	*start { arg argStandAlone = 0, argFileNameString, showAudioOptions = true;
 		var holdString;
@@ -97,6 +96,13 @@ TXSystem1 {		// system module 1
 			txStandAlone = 1; // for running TX system as a standalone
 			// removed for now
 			//		showAudioOptions = false; // force to false if standalone
+
+			// FOR STANDALONE ONLY
+			// for SC3Plugins
+			"cd %; ln -s ../SCClassLibrary/Extensions Extensions"
+			.format( (String.scDir +/+ "plugins").shellQuote )
+			.unixCmd;
+
 		});
 
 		// removed for now
@@ -252,6 +258,7 @@ TXSystem1 {		// system module 1
 			TXOSCOut,
 			TXOSCRemote,
 			TXOSCTrigger,
+			TXPatternCode,
 			TXPerlinNoise,
 			TXPhaser,
 			TXPItchFollower4,
@@ -260,8 +267,9 @@ TXSystem1 {		// system module 1
 			TXPingPong,
 			TXPingPongSt,
 			TXPluckSynth,
-			TXQCParticles2,
-			TXQCPlayer4,
+			// Removed for Qt
+			// TXQCParticles2,
+			// TXQCPlayer4,
 			TXReverb2,
 			TXReverbSt2,
 			TXReverbA,
@@ -371,10 +379,11 @@ TXSystem1 {		// system module 1
 		["Control: Sequencer", "Step Sequencer", TXStepSequencer],
 		["Control: Slider", "Action Slider", TXActionSlider],
 		["Control: Slider", "Simple Slider", TXSimpleSlider2],
+		["Control: SC Code", "Animate Code", TXAnimateCode2],
 		["Control: SC Code", "Code Source C", TXCodeSourceCtrl],
-		["Control: Visual", "QC Particles", TXQCParticles2],
-		["Control: Visual", "Quartz Player", TXQCPlayer4],
-		["Control: Visual", "Animate Code", TXAnimateCode2],
+		["Control: SC Code", "Pattern Code", TXPatternCode],
+		// ["Control: Visual", "QC Particles", TXQCParticles2],
+		// ["Control: Visual", "Quartz Player", TXQCPlayer4],
 		["Control: Wii", "Wii Ctrl Darwiin", TXWiiController],
 		["Control: Wii", "Wii Ctrl OSC", TXWiiControllerOSC2],
 		["Control: Wii", "Wii Trig Darwiin", TXWiiTrigger],
@@ -479,13 +488,15 @@ TXSystem1 {		// system module 1
 			[">SuperCollider Code ", nil ],
 			["    Code Insert C", TXCodeInsertCtrl],
 		];
-		// adjust for cocoa
-		if (GUI.current.asSymbol != \cocoa, {
-			arrAllPossModules.remove(TXQCParticles2);
-			arrAllPossModules.remove(TXQCPlayer4);
-			dataBank.arrSourceModulesByCategory.remove(["Control: Visual", "QC Particles", TXQCParticles2]);
-			dataBank.arrSourceModulesByCategory.remove(["Control: Visual", "Quartz Player", TXQCPlayer4]);
-		});
+		// REMOVED FOR QT:
+		// // adjust for cocoa
+		// if (GUI.current.asSymbol != \cocoa, {
+		// 	arrAllPossModules.remove(TXQCParticles2);
+		// 	arrAllPossModules.remove(TXQCPlayer4);
+		// 	dataBank.arrSourceModulesByCategory.remove(["Control: Visual", "QC Particles", TXQCParticles2]);
+		// 	dataBank.arrSourceModulesByCategory.remove(["Control: Visual", "Quartz Player", TXQCPlayer4]);
+		// });
+
 		// create arrays of all possible old and current sequencer modules
 		arrAllPossOldSeqModules = [	// kept for instruments saved using earlier builds
 			TXSequencer4,
@@ -541,6 +552,7 @@ TXSystem1 {		// system module 1
 
 		// Create a new instance of ServerOptions
 		holdServerOptions = ServerOptions.new;
+		holdServerOptions.numInputBusChannels = 16;
 		holdServerOptions.numOutputBusChannels = 16;
 		holdServerOptions.numAudioBusChannels = 128 * 4;
 		holdServerOptions.numControlBusChannels = 4096 * 4;
@@ -806,7 +818,7 @@ TXSystem1 {		// system module 1
 			// FIXME: this won't work on Windows
 			// ("mkdir" + holdPath.fullPath).unixCmd;
 			// NEW CODE
-			holdPath.asString.makeDir;
+			holdPath.fullPath.makeDir;
 		});
 
 		if (File.exists(holdFile.fullPath),  {
@@ -849,18 +861,21 @@ TXSystem1 {		// system module 1
 
 	*syncStart{
 		this.syncStartSequencers;
+		this.syncStartPatternCode;
 		this.syncStartRecorders;
 		this.syncStartPlayers;
 	}
 
 	*syncStop{
 		this.syncStopSequencers;
+		this.syncStopPatternCode;
 		this.syncStopRecorders;
 		this.syncStopPlayers;
 	}
 
 	*stopAllSyncModules {
 		this.stopAllSequencers;
+		this.stopAllPatternCode;
 		this.stopAllRecorders;
 		this.stopAllPlayers;
 	}
@@ -880,6 +895,15 @@ TXSystem1 {		// system module 1
 		(this.arrAllPossCurSeqModules ++ this.arrAllPossOldSeqModules).do ({ arg item, i;
 			item.stopAllSequencers;
 		});
+	}
+	*syncStartPatternCode{
+		TXPatternCode.syncStartAll;
+	}
+	*syncStopPatternCode{
+		TXPatternCode.syncStopAll;
+	}
+	*stopAllPatternCode{
+		TXPatternCode.stopAll;
 	}
 	*syncStartRecorders{
 		TXFileRecorder.syncStartAllRecorders;
@@ -933,6 +957,7 @@ TXSystem1 {		// system module 1
 	*instSortingName {
 		^instName;
 	}
+	////////////////////////////////////////////////////////////////////////////////////
 	/*	NOTE - removed for now, can cause crashes
 		*startMouseSynth{
 		var mouseTrigID;
@@ -1040,59 +1065,63 @@ TXSystem1 {		// system module 1
 		^newName;
 	}
 
-	*arrPatternEvents {
+	*arrPatternEvents { arg matchModuleID;
 		// returns an array of events that can be used with Pbind patterns
+		// only objects of type \number and \checkbox are included that expect numbers
 		var holdArrModules, holdArrActionSpecs, holdArrAllEvents;
 		holdArrAllEvents = (); // this is in itself an Event
 		holdArrModules = this.arrWidgetActionModules;
 		holdArrModules.do({arg argModule, i;
 			var holdArrNumericalActionSpecs, holdArrModuleEvents;
-			holdArrModuleEvents = [];
-			holdArrNumericalActionSpecs = argModule.arrActionSpecs.select({arg action, i;
-				(action.guiObjectType == \number and: (action.arrControlSpecFuncs.size > 0))
-				or: (action.guiObjectType == \checkbox);
-			});
-			holdArrNumericalActionSpecs.do({arg argActionSpec, i;
-				var holdEvent, arrValNames;
-				holdEvent =  ( // new event
-					moduleName: argModule.instName,
-					actionName: argActionSpec.actionName,
-					val1: 0,
-					val2: 0,
-					val3: 0,
-					val4: 0,
-					dur: 1,
-					play: {
-						var holdArrOldVals, holdArrNewVals;
-						holdArrOldVals = [~val1,~val2, ~val3, ~val4];
-						holdArrNewVals = nil!4;
-						if (argActionSpec.guiObjectType == \number, {
-							argActionSpec.arrControlSpecFuncs.do({arg argSpec, i;
-								holdArrNewVals[i] = argSpec.value.constrain(holdArrOldVals[i])
+			// filter with matchModuleID if passed
+			if (matchModuleID.isNil or: (argModule.moduleID == matchModuleID), {
+				holdArrModuleEvents = [];
+				holdArrNumericalActionSpecs = argModule.arrActionSpecs.select({arg action, i;
+					(action.actionName != "...")
+					and: (action.actionName != "---/")
+					and: ((action.guiObjectType == \number) or: (action.guiObjectType == \checkbox));
+				});
+				holdArrNumericalActionSpecs.do({arg argActionSpec, i;
+					var holdValCount, holdEvent, arrValNames;
+					if (argActionSpec.guiObjectType == \checkbox, {
+						holdValCount = 1;
+						},{
+							holdValCount = argActionSpec.arrControlSpecFuncs.size;
+					});
+					holdEvent =  ( // new event
+						moduleName: argModule.instName,
+						actionName: argActionSpec.actionName,
+						val1: 0,
+						val2: 0,
+						val3: 0,
+						val4: 0,
+						dur: 1,
+						valCount: holdValCount,
+						play: {
+							var holdArrOldVals, holdArrNewVals;
+							holdArrOldVals = [~val1,~val2, ~val3, ~val4];
+							holdArrNewVals = nil!4;
+							if (argActionSpec.guiObjectType == \number, {
+								argActionSpec.arrControlSpecFuncs.do({arg argSpec, i;
+									holdArrNewVals[i] = argSpec.value.constrain(holdArrOldVals[i])
+								});
+								},{
+									holdArrNewVals[0] = ControlSpec(0, 1, step: 1).constrain(holdArrOldVals[0]);
 							});
-						},{
-							holdArrNewVals[0] = ControlSpec(0, 1, step: 1).constrain(holdArrOldVals[0]);
-						});
-						if (argActionSpec.actionType == \commandAction, {
-							argActionSpec.actionFunction.value(holdArrNewVals[0],holdArrNewVals[1],
-								holdArrNewVals[2], holdArrNewVals[3]);
-						},{
-							argActionSpec.setValueFunction.value(holdArrNewVals[0]);
-						});
-					}
-				);
-				arrValNames = [\val1, \val2, \val3, \val4];
-				argActionSpec.arrControlSpecFuncs.do({arg argSpecFunc, i;
-					holdEvent[arrValNames[i]] = argSpecFunc.value.default;
+							if (argActionSpec.actionType == \commandAction, {
+								argActionSpec.actionFunction.value(holdArrNewVals[0],holdArrNewVals[1],
+									holdArrNewVals[2], holdArrNewVals[3]);
+								},{
+									argActionSpec.setValueFunction.value(holdArrNewVals[0]);
+							});
+						}
+					);
+					arrValNames = [\val1, \val2, \val3, \val4];
+					argActionSpec.arrControlSpecFuncs.do({arg argSpecFunc, i;
+						holdEvent[arrValNames[i]] = argSpecFunc.value.default;
+					});
+					holdArrModuleEvents = holdArrModuleEvents.add(holdEvent);
 				});
-				holdArrModuleEvents = holdArrModuleEvents.add(holdEvent);
-
-				// testing
-				if (argModule.class == TXSystem1, {
-					holdEvent.postcs;
-					" ".postln;
-				});
-
 			});
 			// end of holdArrNumericalActionSpecs.do
 			holdArrAllEvents[argModule.moduleID] = holdArrModuleEvents;
@@ -1100,6 +1129,50 @@ TXSystem1 {		// system module 1
 		// end of holdArrModules.do
 		^holdArrAllEvents;
 	}
+
+	*displayAllPatternEvents {
+		var a, b, c, w;
+		a = this.arrPatternEvents;
+
+		c = " \n" ++
+		"Actions that work with Pbind patterns in the current TX Modular system" ++ "\n" ++
+		"\n" ++
+		"Format:  arrPatternEvents [Module ID] [Action ID] Module name - Action name (no. numeric arguments)" ++ "\n" ++
+		"\n";
+		b = [];
+		a.keysDo({arg argModuleID, argModNo;
+			var arrStrings;
+			arrStrings = [];
+			a[argModuleID].do({arg item, i;
+				var holdString, gapString;
+				// holdString = "[" ++ argModuleID ++ "]["++ i.asString ++ "]";
+				// holdString = holdString.keep(14) + item.moduleName ++ " -" + item.actionName;
+				holdString = "arrPatternEvents[" ++ argModuleID ++ "]["++ i.asString + "]"
+				+ item.moduleName + "-" + item.actionName
+				+ "(" ++ item.valCount + "args)";
+				arrStrings = arrStrings.add(holdString);
+			});
+			b = b.add([this.getModuleFromID(argModuleID).instSortingName, arrStrings]);
+		});
+		b = b.sort({arg a, b; a[0] < b[0]});
+		b.do({ arg group;
+			c = c ++ "-------------------------------------------------------------------------------\n";
+			group[1].do({ arg item, i;
+				c = c ++ item ++ "\n";
+			});
+		});
+		c = c ++ "-------------------------------------------------------------------------------\n";
+
+		w = Window("Pattern Events", Rect(20, 800, 600, 600));
+		w.front;
+		w.view.decorator = FlowLayout(w.view.bounds);
+		w.view.decorator.shift(10,10);
+		TextView(w, 580 @ 580)
+		.resize_(5)
+		.string_(c)
+		.background_(TXColour.white);
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////
 
 	*makeGui {
@@ -1290,6 +1363,10 @@ TXSystem1 {		// system module 1
 				this.server.sync;
 				// run the Module's new method to get new instance of module
 				holdModuleClass = item.at(1).interpret;
+				// // check class
+				// if (arrAllPossModules.indexOf(holdModuleClass).isNil {
+				// 	("Info: Opening " ++ holdModuleClass.name.asString ++ " - this is an older TX module.").postln;
+				// });
 				newModule = holdModuleClass.new;
 				// pause
 				this.server.sync;
@@ -1960,11 +2037,11 @@ TXSystem1 {		// system module 1
 
 					// system title
 					btnTitle = Button(headerBox,Rect(0,0,140,27))
-					.font_(Font.new("Helvetica-Bold",16));
+					.font_(Font.new(Font.defaultSansFace,16));
 					btnTitle.states = [["TX Modular " ++ systemVersion, TXColor.sysGuiCol1,
 						TXColor.white]];
 					btnTitle.action = {
-						"TX_Links".openHelpFile;
+						TXHelpScreen.openFile("TX_Links");
 					};
 					// space
 					headerBox.decorator.shift(4, 0);

@@ -137,8 +137,8 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 			["Spacer", 3],
 			["HideModuleButton"],
 			["NextLine"],
-			["ModuleActionPopup"],
-			["ModuleInfoTxt"],
+			["ModuleActionPopup", 500],
+			["ModuleInfoTxt", 500],
 			["SpacerLine", 2],
 		];
 		guiSpecArray = [

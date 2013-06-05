@@ -21,7 +21,8 @@ classvar window;
 	var holdActionText, holdActionType, backgroundName;
 	var backgroundPopup, backgroundRed, backgroundGreen, backgroundBlue, backgroundAlpha;
 	var colourRevCheckbox, colourSwapButton, clearTextButton, knobColourBox, stringColorBox;
-	var stringColorRed, stringColorGreen, stringColorBlue, stringColorAlpha;	var knobColourRed, knobColourGreen, knobColourBlue, knobColourAlpha, knobWidthBox, numberSizeBox;
+	var stringColorRed, stringColorGreen, stringColorBlue, stringColorAlpha;
+	var knobColourRed, knobColourGreen, knobColourBlue, knobColourAlpha, knobWidthBox, numberSizeBox;
 	var rotateButton, labelText, fontPopup, fontSizeBox, holdView;
 	var midiListenCheckbox, midiNoteBox, midiNotePopup, midiCCNoBox, midiCCNoBox2, midiLearnCheckbox;
 	var midiChannelMinPopup, midiChannelMaxPopup, keyListenCheckbox, keyTextField;
@@ -35,7 +36,7 @@ classvar window;
 
 	if (window.isNil, {
 		if (classData.guiPropsWinBounds.isNil, {
-			classData.guiPropsWinBounds = Rect(900, 100, 600, 340);
+			classData.guiPropsWinBounds = Rect(770, 10, 630, 560);
 		});
 		window = Window.new(
 			"GUI Properties",
@@ -83,10 +84,6 @@ classvar window;
 	// set visibleOrigin
 	if (classData.visibleOrigin.notNil, {window.view.visibleOrigin = classData.visibleOrigin; });
 
-	// line
-	StaticText(propertiesBox, Rect(0, 0, 580, 2))
-		.background_(TXColor.white);
-
 	// spacer & go to next line
 	propertiesBox.decorator.shift(0, 4).nextLine;
 
@@ -97,7 +94,7 @@ classvar window;
 		.string_("Current screen");
 
 	// popup - current layer
-	layerPopupView = PopUpMenu(propertiesBox, Rect(0, 0, 80, 20))
+	layerPopupView = PopUpMenu(propertiesBox, Rect(0, 0, 100, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_((1 .. 20).collect({arg item, i; "Screen " ++ item.asString}))
 		.action_({arg view;
@@ -174,7 +171,7 @@ classvar window;
 	screenWidthBox.value = screenWidth;
 
 	// popup - width choices
-	PopUpMenu(propertiesBox, Rect(0, 0, 14, 20))
+	PopUpMenu(propertiesBox, Rect(0, 0, 70, 20))
 		.items_(classData.arrScreenSizes.collect({arg item, i; item.asString});)
 		.background_(TXColor.white)
 		.action_({arg view;
@@ -199,7 +196,7 @@ classvar window;
 	screenHeightBox.value = screenHeight;
 
 	// popup - height choices
-	PopUpMenu(propertiesBox, Rect(0, 0, 14, 20))
+	PopUpMenu(propertiesBox, Rect(0, 0, 70, 20))
 		.items_(classData.arrScreenSizes.collect({arg item, i; item.asString});)
 		.background_(TXColor.white)
 		.action_({arg view;
@@ -319,7 +316,7 @@ classvar window;
 		TXColour.showPicker;
 	});
 	// popup - screenColour presets
-	screenColourPopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
+	screenColourPopup = PopUpMenu(propertiesBox, Rect(0, 0, 110, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_(["Presets"] ++ TXColour.colourNames)
 		.action_({arg view;
@@ -415,7 +412,7 @@ if (totalHighlighted == 1, {
 		.align_(\left)
 		.string_("Current widget");
 	// popup - current widget id
-	currWidgetIDPopupView = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
+	currWidgetIDPopupView = PopUpMenu(propertiesBox, Rect(0, 0, 70, 20))
 		.background_(TXColor.white).stringColor_(TXColor.black)
 		.items_(TXFrontScreen.arrWidgets.collect({arg item, i; "W " ++ item.widgetID.asString}))
 		.action_({arg view;
@@ -508,7 +505,7 @@ if (totalHighlighted == 1, {
 		.string_("Width");
 
 	// numberbox - current module width
-	currWidgetWidth = NumberBox(propertiesBox, Rect(0, 0, 35, 20))
+	currWidgetWidth = NumberBox(propertiesBox, Rect(0, 0, 70, 20))
 		.scroll_(false)
 		.action_({arg view;
 			view.value = view.value
@@ -522,7 +519,7 @@ if (totalHighlighted == 1, {
 	currWidgetWidth.value = holdCurrentWidget.width;
 
 	// popup - width choices
-	PopUpMenu(propertiesBox, Rect(0, 0, 15, 20))
+	PopUpMenu(propertiesBox, Rect(0, 0, 70, 20))
 		.items_(arrSizes.collect({arg item, i; item.asString});)
 		.background_(TXColor.white)
 		.action_({arg view;
@@ -550,7 +547,7 @@ if (totalHighlighted == 1, {
 	currWidgetHeight.value = holdCurrentWidget.height;
 
 	// popup - height choices
-	PopUpMenu(propertiesBox, Rect(0, 0, 15, 20))
+	PopUpMenu(propertiesBox, Rect(0, 0, 70, 20))
 		.items_(arrSizes.collect({arg item, i; item.asString});)
 		.background_(TXColor.white)
 		.action_({arg view;
@@ -558,8 +555,8 @@ if (totalHighlighted == 1, {
 		});
 
 	// button swap width and height
-	rotateButton = Button(propertiesBox, Rect(0, 0, 160, 20))
-		.states_([["Swap width and height",
+	rotateButton = Button(propertiesBox, Rect(0, 0, 120, 20))
+		.states_([["Swap width & height",
 			TXColor.white, TXColor.blue]]);
 	rotateButton.action = {arg view;
 		var holdHeight, holdWidth;
@@ -662,7 +659,7 @@ if (totalHighlighted == 1, {
 	});
 
 	// popup - background presets
-	backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
+	backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 110, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 		.items_(["Presets"] ++ TXColour.colourNames)
 		.action_({arg view;
@@ -792,7 +789,7 @@ if (totalHighlighted == 1, {
 		});
 
 		// popup - background presets
-		backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
+		backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 110, 20))
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 			.items_(["Presets"] ++ TXColour.colourNames)
 			.action_({arg view;
@@ -952,7 +949,7 @@ if (totalHighlighted == 1, {
 			.align_(\left)
 			.string_("Text to be displayed");
 		// text box
-		labelText = TextField(propertiesBox, Rect(0, 0, 240, 20))
+		labelText = TextField(propertiesBox, Rect(0, 0, 340, 20))
 			.action_({arg view;
 				holdCurrentWidget.string = view.string;
 				// update view
@@ -1010,7 +1007,7 @@ if (totalHighlighted == 1, {
 		});
 
 		// popup - background presets
-		backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
+		backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 110, 20))
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 			.items_(["Presets"] ++ TXColour.colourNames)
 			.action_({arg view;
@@ -1199,7 +1196,7 @@ if (totalHighlighted == 1, {
 		midiNoteBox.value = holdCurrentWidget.midiNote ? 0;
 
 		// popup - midi note text
-		midiNotePopup = PopUpMenu(propertiesBox, Rect(0, 0, 50, 20))
+		midiNotePopup = PopUpMenu(propertiesBox, Rect(0, 0, 60, 20))
 			.items_((0 .. 127).collect({arg item, i; TXGetMidiNoteString.new(item)});)
 			.background_(TXColor.white)
 			.action_({arg view;
@@ -1246,7 +1243,7 @@ if (totalHighlighted == 1, {
 		propertiesBox.decorator.shift(10, 0);
 
 		// checkbox Midi Note Learn
-		midiLearnCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 120, 20),
+		midiLearnCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 100, 20),
 			"MIDI Learn", TXColour.blue, TXColor.white,
 			TXColour.white, TXColor.blue, 0);
 		midiLearnCheckbox.action = {arg view;

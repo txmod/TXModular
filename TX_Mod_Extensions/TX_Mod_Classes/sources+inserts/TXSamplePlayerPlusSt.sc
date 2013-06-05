@@ -21,7 +21,6 @@ TXSamplePlayerPlusSt : TXModuleBase {
 	var	arrMMSourceNames, arrMMDestNames, arrMMScaleNames;
 	var <>sampleNo = 0;
 	var <>bankNo = 0;
-	var <>sampleData;
 	var sampleFileName = "";
 	var showWaveform = 0;
 	var sampleNumChannels = 0;
@@ -650,11 +649,10 @@ buildGuiSpecArray {
 			["ActionButton", "Add Samples to Sample Bank", {TXBankBuilder2.addSampleDialog("Sample", bankNo)}, 200],
 			["ActionButton", "Show", {showWaveform = 1; system.showView; {showWaveform = 0}.defer(0.5);},
 				80, TXColor.white, TXColor.sysGuiCol2],
-			["ActionButton", "Hide", {showWaveform = 0; system.showView;  this.sampleData_(nil);},
+			["ActionButton", "Hide", {showWaveform = 0; system.showView;},
 				80, TXColor.white, TXColor.sysDeleteCol],
 			["NextLine"],
-			["TXSoundFileViewRange", {sampleFileName}, "start", "end", nil, {showWaveform}, nil, {this.sampleData},
-				{arg argData; this.sampleData_(argData);}],
+			["TXSoundFileViewRange", {sampleFileName}, "start", "end", nil, {showWaveform}],
 			["SpacerLine", 4],
 			["SynthOptionPopup", "Loop type", arrOptionData, 0, 210],
 			["SpacerLine", 4],

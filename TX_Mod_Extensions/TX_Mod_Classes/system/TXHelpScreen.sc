@@ -91,6 +91,16 @@ TXHelpScreen {
 		{v.url = this.class.filenameSymbol.asString.dirname ++ indexString;}.defer;
 	}
 
+	*openFile {arg helpFileName;
+		var holdString;
+		{
+			this.open;
+			holdString = this.class.filenameSymbol.asString.dirname ++ "/TX_Mod_Help/" ++ helpFileName ++ ".html";
+			("Opening Help File: " ++ holdString).postln;
+			v.url = holdString;
+		}.defer;
+	}
+
 	*openModule {arg moduleName;
 		var holdString;
 		{
@@ -104,7 +114,9 @@ TXHelpScreen {
 	*close {		//	close window
 		// OLD if (w.isClosed.not, {w.close;});
 		// NEW:
-		if (w.isClosed.not, {{w.close; w = nil;}.defer;});
+		if (w.notNil,{
+			if (w.isClosed.not, {{w.close; w = nil;}.defer;});
+		});
 	}
 
 

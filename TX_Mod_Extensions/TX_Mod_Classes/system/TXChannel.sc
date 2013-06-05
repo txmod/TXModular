@@ -778,6 +778,7 @@ TXChannel : TXModuleBase { //  Channel module
 								// update screen
 								system.showView;
 							});
+							view.value = 0;
 						});
 					};
 			});

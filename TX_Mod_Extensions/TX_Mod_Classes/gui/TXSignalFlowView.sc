@@ -168,7 +168,7 @@ TXSignalFlowView {
 			offsetX = 82;
 			if (fromModule.highlight or: toModule.highlight, {
 				Pen.width =3;
-				Pen.strokeColor = TXColor.paleBlue;
+				Pen.strokeColor = TXColor.paleBlue2;
 			},{
 				Pen.width =2;
 				Pen.strokeColor = TXColor.sysGuiCol1;

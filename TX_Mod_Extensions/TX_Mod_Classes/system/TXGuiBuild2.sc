@@ -101,6 +101,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// TXListViewAction
 	// TXMinMaxSlider
 	// TXMinMaxSliderSplit
+	// TXMultiButton
 	// TXMultiCheckBox
 	// TXMultiKnob
 	// TXMultiNumber
@@ -134,7 +135,6 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	classvar argModule, holdView, holdView2, holdView3, holdVal, holdVal2, labelView, holdInitVal, holdStartIndex;
 	classvar holdNoteBase, holdNoteNo, holdNoteString, holdNoteShiftRow, holdNoteTexts;
 	classvar holdSFView, holdRangeView, holdTXFraction1, holdTXFraction2, holdSeqRangeView;
-
 
 	*new{ arg inModule, argParent;
 
@@ -207,7 +207,6 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				w.decorator.nextLine;
 		});
 	}
-
 
 	// NextLine
 	// arguments- index1 is optional action to run after nextline is executed
@@ -287,7 +286,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		holdView.string = item.at(1).value;
 		holdView.stringColor_(item.at(4) ? TXColour.sysGuiCol1)
 		.background_(item.at(5) ? TXColor.white);
-		holdView.setProperty(\align, item.at(6) ? \center);
+		holdView.align_(item.at(6) ? \center);
 	}
 
 	// TextBarLeft
@@ -332,8 +331,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index2 is function to run when code is edited
 	// index3 is optional width
 	// index4 is optional height
+	// index5 is optional text for evaluation button
+	// index6 is optional width of evaluation button
+	// index7 is optional function to be valued with view as argument (e.g. for storing view to variable in module),
 	// e.g. ["TextViewCompile", getTextFunc, setTextFunc, 300, 200]
 	*guiTextViewCompile { arg item, w;
+		var holdView;
 		holdView = TextView(w, (item.at(3) ? viewWidth) @ (item.at(4)-24 ? 100));
 		holdView.string = item.at(1).value;
 		holdView.stringColor_(TXColour.sysGuiCol1);
@@ -345,10 +348,19 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		holdView.hasHorizontalScroller = true;
 		holdView.autohidesScrollers = true;
 		holdView.syntaxColorize;
+		holdView.tabWidth = 20;
+		holdView.action_({|view|
+			holdView.syntaxColorize;
+			"testing xxx - in TXGuiBuild2.guiTextViewCompile: ----".postln;
+		});
+		// value function
+		if (item.at(7).notNil, {
+			item.at(7).value(holdView);
+		});
 		// button to evaluate text
-		Button(w, 120 @ 20)
+		Button(w, item.at(6) ? 120 @ 20)
 		.states_([
-			["Evaluate text", TXColor.white, TXColor.sysGuiCol1]
+			[item.at(5) ? "Evaluate text", TXColor.white, TXColor.sysGuiCol1]
 		])
 		.action_({|view|
 			item.at(2).value(holdView.string);
@@ -415,10 +427,11 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	}
 
 	// ModuleActionPopup
+	// arguments- index1 is popup width
 	*guiModuleActionPopup { arg item, w;
 		var totPresets;
 		totPresets = argModule.arrPresets.size;
-		holdView = PopUpMenu(w, viewWidth @ 20);
+		holdView = PopUpMenu(w, (item[1] ? viewWidth) @ 20);
 		holdView.items = [
 			"Presets",
 			"-",
@@ -1073,12 +1086,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// TXCheckBox
 	// arguments- index1 is checkbox text, index2 is synth arg name to be updated,
 	// 	index3 is an optional ACTION function to be valued in views action,
-	// index 4 is optional width (default 150), index 4 is optional height (default 20),
+	// index 4 is optional width (default 150),
+	// index 5 is optional height (default 20),
+	// index 6 is optional checkbox Text Type (default 0)
 	// e.g. ["TXCheckBox", "Loop", "loop", {some action}, 150, 20]
 	*guiTXCheckBox { arg item, w;
 		holdView = TXCheckBox(w, (item.at(4) ? 150) @ (item.at(5) ? 20),
 			item.at(1), TXColor.sysGuiCol1, TXColour.grey(0.8),
-			TXColor.white, TXColor.sysGuiCol1);
+			TXColor.white, TXColor.sysGuiCol1, item.at(6) ? 0);
 		holdView.action = {|view|
 			// set current value on node
 			if (argModule.moduleNode.notNil, {
@@ -2110,6 +2125,24 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		);
 	}
 
+	// TXMultiButton
+	// arguments- index1 is an array of textStrings
+	// index2 is ACTION function which is passed arg of indexNo of button pressed
+	// index3 is an optional width (default viewWidth)
+	// index4 is an optional height (default 80)
+	// index5 is an optional height of rows (default 24)
+	// index6 is an optional stringColor
+	// index7 is an optional background
+	*guiTXMultiButton { arg item, w;
+		var holdWidth, holdHeight, holdButtonWidth, holdRowHeight;
+		holdWidth =  item.at(3) ? viewWidth;
+		holdHeight = item.at(4) ? 24;
+		holdRowHeight = item.at(5) ? 24;
+		this.nextline(w);
+		holdView = TXMultiButton(w, holdWidth @ holdHeight, item.at(1).value, item.at(2), holdRowHeight, item.at(6), item.at(7));
+		argModule.arrControls = argModule.arrControls.add(holdView);
+	}
+
 	// TXMultiSlider
 	// arguments- index1 is row text, index2 is controlSpec, index3 is synth arg name to be updated,
 	// index4 in no. items in row function, index5 is an optional ACTION function to be valued in views action
@@ -2380,7 +2413,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		if (item.at(6).notNil, {
 			holdScrollViewWidth = 580;
 		});
-		holdView = TXMultiSlider(w, ((item.at(3).value * 24)+78) @ 20, item.at(1), ControlSpec(0, 1, step: 1),
+		holdView = TXMultiSlider(w, ((item.at(3).value * 24)+78) @ 24, item.at(1), ControlSpec(0, 1, step: 1),
 			{|view|
 				var holdArr;
 				// get initial value
@@ -2532,11 +2565,6 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// e.g. ["TXMultiKnob", "Input 1", ["In1Out1", "In1Out2", "In1Out3", "In1Out4"], 4]
 	*guiTXMultiKnob { arg item, w;
 		var holdWidth;
-		// set default colours
-		GUI.skins.default.knob.default.center = TXColour.white;
-		GUI.skins.default.knob.default.scale = TXColour.white;
-		GUI.skins.default.knob.default.level = TXColour.blue;
-		GUI.skins.default.knob.default.dial = TXColour.blue;
 		holdWidth = 84 + (54 * item.at(3));
 		holdView = TXMultiKnob(w, holdWidth @ 40, item.at(1),
 			item.at(4) ? ControlSpec.new,
@@ -3449,15 +3477,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		argModule.arrControls = argModule.arrControls.add(holdSFView);
 		// next line
 		this.nextline(w);
-	}	// end of TXSoundFileViewRange
+	}	// end of TXSoundFileView
 
 	// TXSoundFileViewRange
 	// arguments- index1 is filename path function, index2/3 are synth arg names to be updated,
 	// 	index4 is an optional ACTION function to be valued in views action
 	// 	index5 is an optional function (val 0 or 1) for whether to display the file or not (to save CPU if not needed)
 	// 	index6 is an optional height
-	// 	index7 is an optional function to get sampleData
-	// 	index8 is an optional function to set sampleData
+	// 	NO LONGER USED: index7 is an optional function to get sampleData - NO LONGER USED
+	// 	NO LONGER USED: index8 is an optional function to set sampleData - NO LONGER USED
 	// e.g. ["TXSoundFileViewRange", {sampleFileName}, "start", "end"]
 	*guiTXSoundFileViewRange { arg item, w;
 		holdSFView = TXSoundFile(w, 450 @ (item.at(6) ?? 150),
@@ -3483,9 +3511,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3)),
 			false,
 			item.at(1).value,
-			item.at(5).value,
-			item.at(7),
-			item.at(8)
+			item.at(5).value
 		);
 		argModule.arrControls = argModule.arrControls.add(holdSFView);
 		// next line
@@ -4164,8 +4190,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index5 is the optional lowest midi note of the keyboard
 	// index6 is the optional note stop function to be valued with note as argument
 	// index7 is the optional label string default: "Notes: C1 - B6"
+	// index8 is the optional boolean: Show velocity slider, default: true
 
 	*guiMIDIKeyboard { arg item, w;
+		var holdView;
 		// Midi Keyboard
 		holdView = TXMIDIKeyboard.new(w, Rect(0, 0, item.at(4) ? viewWidth, item.at(3) ? 60),
 			item.at(2) ? 4, item.at(5) ? 48);
@@ -4199,18 +4227,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.arrControls = argModule.arrControls.add(holdView);
 			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		});
+		if (item.at(8).isNil or: (item.at(8) == true), {
 		// Velocity slider
-		holdView = TXSlider(w, 180 @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
-			{|view|
-				// store current data
-				argModule.testMIDIVel = view.value;
-			},
-			// get starting value
-			argModule.testMIDIVel,
-			false, 60, 30
-		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			holdView = TXSlider(w, 180 @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
+				{|view|
+					// store current data
+					argModule.testMIDIVel = view.value;
+				},
+				// get starting value
+				argModule.testMIDIVel,
+				false, 60, 30
+			);
+			argModule.arrControls = argModule.arrControls.add(holdView);
+			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		});
 	}
 
 }

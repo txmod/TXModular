@@ -289,7 +289,7 @@ init {arg argInstName;
 		["procOctTranspMin", 0],
 		["procOctTranspMax", 0],
 		["procScaleTypeInd", 0],
-		["procScaleRoot", 48],
+		["procScaleRoot", 0],
 		["procNoteOrderInd", 0],
 		["procTranspose", 1],
 
@@ -393,8 +393,8 @@ init {arg argInstName;
 			["Spacer", 3],
 		["HideModuleButton"],
 		["NextLine"],
-		["ModuleActionPopup"],
-		["ModuleInfoTxt"],
+		["ModuleActionPopup", 320],
+		["ModuleInfoTxt", 420],
 		["SpacerLine", 2],
 	];
 	arrActionSpecs = this.buildActionSpecs([
@@ -678,7 +678,7 @@ buildGuiSpecArray {
 			["SpacerLine", 10],
 			["TXMinMaxSliderSplit", "BPM", ControlSpec(1, 900), "seqBPM", "seqBPMMin", "seqBPMMax",
 				{arg view; this.setTempo; this.updatePatternTime;}, arrBPMRangePresets ],
-			["SpacerLine", 6],
+			["SpacerLine", 2],
 			["Spacer", 80],
 			["TapTempoButton", {arg argTempo; this.useTapTempo(argTempo);}],
 			["Spacer", 10],
@@ -697,7 +697,7 @@ buildGuiSpecArray {
 				{triggerModeRunning = false; this.stopSequencer; this.prepareToStartSeq;},
 				700
 			],
-			["SpacerLine", 6],
+			["SpacerLine", 2],
 		];
 		//  Manual controls
 		guiSpecArray = guiSpecArray ++[
@@ -728,7 +728,7 @@ buildGuiSpecArray {
 			["TextBar", "Randomise", 80, nil, nil, nil, \right],
 			["TXCheckBox", "Randomise step order for selected parameters: ", "randomiseStepOrder",
 				{this.buildGuiSpecArray; this.rebuildStepOrderRandArr; system.showView;}, 378],
-			["SpacerLine", 6],
+			["SpacerLine", 2],
 		];
 		if (this.getSynthArgSpec("randomiseStepOrder") == 1, {
 			guiSpecArray = guiSpecArray ++[
