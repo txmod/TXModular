@@ -1065,7 +1065,7 @@ TXSystem1 {		// system module 1
 		^newName;
 	}
 
-	*arrPatternEvents { arg matchModuleID;
+	*arrTXEvents { arg matchModuleID;
 		// returns an array of events that can be used with Pbind patterns
 		// only objects of type \number and \checkbox are included that expect numbers
 		var holdArrModules, holdArrActionSpecs, holdArrAllEvents;
@@ -1130,14 +1130,13 @@ TXSystem1 {		// system module 1
 		^holdArrAllEvents;
 	}
 
-	*displayAllPatternEvents {
+	*displayAllTXEvents {
 		var a, b, c, w;
-		a = this.arrPatternEvents;
-
+		a = this.arrTXEvents;
 		c = " \n" ++
-		"Actions that work with Pbind patterns in the current TX Modular system" ++ "\n" ++
+		"Events that work with Pbind patterns in the current TX Modular system" ++ "\n" ++
 		"\n" ++
-		"Format:  arrPatternEvents [Module ID] [Action ID] Module name - Action name (no. numeric arguments)" ++ "\n" ++
+		"Format:  arrTXEvents [Module ID] [Action ID] Module name - Action name (no. numeric arguments)" ++ "\n" ++
 		"\n";
 		b = [];
 		a.keysDo({arg argModuleID, argModNo;
@@ -1147,7 +1146,7 @@ TXSystem1 {		// system module 1
 				var holdString, gapString;
 				// holdString = "[" ++ argModuleID ++ "]["++ i.asString ++ "]";
 				// holdString = holdString.keep(14) + item.moduleName ++ " -" + item.actionName;
-				holdString = "arrPatternEvents[" ++ argModuleID ++ "]["++ i.asString + "]"
+				holdString = "arrTXEvents[" ++ argModuleID ++ "]["++ i.asString ++ "]"
 				+ item.moduleName + "-" + item.actionName
 				+ "(" ++ item.valCount + "args)";
 				arrStrings = arrStrings.add(holdString);
@@ -1163,7 +1162,7 @@ TXSystem1 {		// system module 1
 		});
 		c = c ++ "-------------------------------------------------------------------------------\n";
 
-		w = Window("Pattern Events", Rect(20, 800, 600, 600));
+		w = Window("TX Events", Rect(20, 800, 600, 600));
 		w.front;
 		w.view.decorator = FlowLayout(w.view.bounds);
 		w.view.decorator.shift(10,10);

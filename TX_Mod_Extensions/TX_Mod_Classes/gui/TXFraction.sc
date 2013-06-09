@@ -1,18 +1,18 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXFraction {	// Fraction module with label
-	var <>labelView, <>labelView2, <>labelView3, <>numberViewX, <>numberViewY, <>numberView, <>action, <value;
+	var <>labelView, <>labelView2, <>labelView3, <>numberViewX, <>numberViewY, <>numberView, <>controlSpec, <>action, <value;
 
 	*new { arg argParent, dimensions, label, controlSpec, action, initVal,
 			initAction=false, labelWidth=80, numberWidth=50;
 		^super.new.init(argParent, dimensions, label, controlSpec, action, initVal,
 			initAction, labelWidth, numberWidth);
 	}
-	init { arg argParent, dimensions, label, controlSpec, argAction, initVal,
+	init { arg argParent, dimensions, label, argControlSpec, argAction, initVal,
 			initAction, labelWidth, numberWidth;
 		var holdFraction;
 
-		controlSpec = controlSpec.asSpec;
+		controlSpec = argControlSpec.asSpec;
 		labelView = StaticText(argParent, labelWidth @ dimensions.y);
 		labelView.string = label;
 		labelView.align = \right;
@@ -76,7 +76,7 @@ TXFraction {	// Fraction module with label
 	}
 	valueNoAction_  { arg argVal;
 		var holdFraction;
-		numberView.value = value = numberView.controlSpec.constrain(argVal);
+		numberView.value = value = controlSpec.constrain(argVal);
 		if (value == 0, {
 			numberViewX.value = 0;
 			numberViewY.value = 0;
@@ -87,18 +87,18 @@ TXFraction {	// Fraction module with label
 		});
 	}
 // to do - check set method
-	set { arg label, argAction, initVal, initAction=false;
-		labelView.string = label;
-		action = argAction;
-		initVal = initVal ? 0;
-		if (initAction) {
-			this.value = initVal;
-		}{
-			value = initVal;
-			numberView.value = value;
-			numberViewX.value = numberView.value;
-			numberViewY.value = 1;
-		};
-	}
+	// set { arg label, argAction, initVal, initAction=false;
+	// 	labelView.string = label;
+	// 	action = argAction;
+	// 	initVal = initVal ? 0;
+	// 	if (initAction) {
+	// 		this.value = initVal;
+	// 	}{
+	// 		value = initVal;
+	// 		numberView.value = value;
+	// 		numberViewX.value = numberView.value;
+	// 		numberViewY.value = 1;
+	// 	};
+	// }
 }
 

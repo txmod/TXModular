@@ -27,7 +27,8 @@
 <p class="p2"><br></p>
 <p class="p1"><b><i>Controls in the top row of the module:</i></b></p>
 <p class="p1"><b>Initialise </b>- button to run the initialise code.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Start</b> - button to run the start code.</p>
+<p class="p1"><b>Start</b> - button to run the start code.<span class="Apple-converted-space"> </span></p>
+<p class="p1">(NOTE: If the start code is run, the Initialise function will automatically be run first if it hasn't been run at least once since it was compiled.)</p>
 <p class="p1"><b>Stop</b> - button to run the stop code.</p>
 <p class="p1"><b>Sync Start</b> - this checkbox sets whether the start code will be run when the "Sync Start" button is pressed. The button is located at the top of the main screen and is used to start multiple modules at the same time.</p>
 <p class="p1"><b>Sync Stop</b> - this checkbox sets whether the stop code will be run when the "Sync Stop" button is pressed. The button is located at the top of the main screen and is used to stop multiple modules at the same time.</p>
@@ -35,17 +36,15 @@
 <p class="p1"><b><i>Other Controls:</i></b></p>
 <p class="p2"><br></p>
 <p class="p1">3 different functions can be edited using buttons:</p>
-<p class="p1"><b>Initialise Code</b> - a function which initialises any data needed for the pattern to run.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Start Code</b> - a function which starts patterns running and stores any event streams as data.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Stop Code</b> - a function which stops any running event streams.</p>
+<p class="p1"><b>Edit Initialise Code</b> - a function which initialises any data needed for the pattern to run.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Edit Start Code</b> - a function which starts patterns running and stores any event streams as data.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Edit Stop Code</b> - a function which stops any running event streams.</p>
 <p class="p2"><br></p>
 <p class="p1"><b>SuperCollider Code Box</b> - contains the code used by the module. Each function is passed 2 arguments:<span class="Apple-converted-space"> </span></p>
 <p class="p1"><b>arrTXEvents</b> - an event containing events to control all modules in the current system. Use the TX Events button to see all the events available for each module in the system.</p>
 <p class="p1"><b>dataEvent</b> - an event where any data can be stored and shared between different functions. i.e. data is created in the Initialisation function, and stored in dataEvent. The Start and Stop functions can then access the data and dataEvent is also used to hold the event stream created in the Start function.<span class="Apple-converted-space"> </span></p>
 <p class="p2"><br></p>
 <p class="p1"><b>Store &amp; compile code</b> - always use this button after you have edited the code, otherwise your edits won't be stored. You will see the result of the compile in the Status box. If the compile isn't successful, relevant error messages will appear on the SuperCollider post window.</p>
-<p class="p1"><b>Run code now</b> - this will only run if the code has already been successfully compiled.</p>
-<p class="p1">NOTE: If the Start function is run, the Initialise function will automatically be run first if it hasn't been run at least once since it was compiled.</p>
 <p class="p2"><br></p>
 <p class="p1"><b>Text Insert Tools: Durations, Midi keyboard, Patterns, TX Events </b>- these buttons open banks of extra buttons which will automatically insert code into the code box at the current cursor position.</p>
 </body>

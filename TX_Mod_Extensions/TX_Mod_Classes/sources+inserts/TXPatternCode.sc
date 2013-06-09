@@ -123,7 +123,7 @@ TXPatternCode : TXModuleBase {
 
 	buildGuiSpecArray {
 		var holdArray, holdModuleID, holdSystemEvents, holdModuleEvents, showTools;
-		holdSystemEvents = system.arrPatternEvents;
+		holdSystemEvents = system.arrTXEvents;
 
 		guiSpecArray = [
 			["ActionButton", "Edit Initialise Code", {displayOption = "showInitialiseCode";
@@ -256,7 +256,7 @@ TXPatternCode : TXModuleBase {
 			});
 			// build array of code inserts and descriptions
 			holdArray = [];
-			holdModuleEvents = system.arrPatternEvents(holdModuleID);
+			holdModuleEvents = system.arrTXEvents(holdModuleID);
 			holdModuleEvents[holdModuleID].do({arg event, eventNo;
 				var codeInsert, description;
 				description = event.moduleName ++ ": " ++ event.actionName ++ "(" ++ event.valCount ++ " args)";
@@ -400,7 +400,7 @@ TXPatternCode : TXModuleBase {
 	runInitFunction {
 		if (initFunctionCompResult.notNil, {
 			initFunctionHasRun = true;
-			initFunctionCompResult.value.value(TXSystem1.arrPatternEvents, dataEvent);
+			initFunctionCompResult.value.value(TXSystem1.arrTXEvents, dataEvent);
 		});
 	}
 
@@ -409,13 +409,13 @@ TXPatternCode : TXModuleBase {
 			if (initFunctionHasRun == false, {
 				this.runInitFunction;
 			});
-			startFunctionCompResult.value.value(TXSystem1.arrPatternEvents, dataEvent);
+			startFunctionCompResult.value.value(TXSystem1.arrTXEvents, dataEvent);
 		});
 	}
 
 	runStopFunction {
 		if (stopFunctionCompResult.notNil, {
-			stopFunctionCompResult.value.value(TXSystem1.arrPatternEvents, dataEvent);
+			stopFunctionCompResult.value.value(TXSystem1.arrTXEvents, dataEvent);
 		});
 	}
 
