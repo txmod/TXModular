@@ -5,7 +5,7 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 	var linearArray, resetArray, tableSize, userView, gridRows, gridCols;
 
 	*new { arg window, dimensions, label, action, initVal, initAction=false, labelWidth=80, initSlotVals,
-			showPresets, curveWidth=257, curveHeight=257, resetAction="Ramp",
+			showPresets, curveWidth=270, curveHeight=257, resetAction="Ramp",
 			gridRowsFunc, gridColsFunc, xLabel, yLabel;
 		^super.new.init(window, dimensions, label, action, initVal, initAction, labelWidth, initSlotVals,
 			showPresets, curveWidth, curveHeight, resetAction,

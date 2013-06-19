@@ -96,7 +96,7 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 			["TXCurveDraw", "LFO curve", {arrCurveValues},
 				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
 					this.bufferStore(view.value);},
-				{arrSlotData}, "LFO", 700, 340, nil, "gridRows", "gridCols",
+				{arrSlotData}, "LFO", 706, 340, nil, "gridRows", "gridCols",
 				"time", "output level"],
 			["ActionButton", "Rebuild curve by mirroring ", {this.runMirror}, 250],
 			["Spacer", 10],

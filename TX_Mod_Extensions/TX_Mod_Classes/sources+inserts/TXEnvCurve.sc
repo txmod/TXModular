@@ -96,7 +96,7 @@ TXEnvCurve : TXModuleBase {		// Audio In module
 			["TXCurveDraw", "Env curve", {arrCurveValues},
 				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
 					this.bufferStore(view.value);},
-				{arrSlotData}, nil, 700, 250, "Sine", "gridRows", "gridCols",
+				{arrSlotData}, nil, 706, 250, "Sine", "gridRows", "gridCols",
 				"time", "output level"],
 			["SpacerLine", 2],
 			["TXNumberPlusMinus", "Grid rows", ControlSpec(1, 99), "gridRows", {system.showView}],
