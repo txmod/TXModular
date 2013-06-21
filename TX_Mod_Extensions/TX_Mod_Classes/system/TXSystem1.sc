@@ -83,7 +83,7 @@ TXSystem1 {		// system module 1
 		// create event and set variable:
 		dataBank = ();
 		dataBank.modulesVisibleOrigin = Point.new(0,0);
-}
+	}
 	// start the system
 
 	*startCocoa {
@@ -1570,7 +1570,7 @@ TXSystem1 {		// system module 1
 		// clear system clock
 		SystemClock.clear;
 		// stop meters
-		arrMeters.do({arg item, i; item.quit;});
+		arrMeters.do({arg item, i; try{item.quit;};});
 		// deactivate any midi and keydown functions
 		TXFrontScreen.midiDeActivate;
 		TXFrontScreen.keyDownDeActivate;
@@ -2174,12 +2174,12 @@ TXSystem1 {		// system module 1
 						}.play;
 					};
 					// popup - Meters
-					popMeters = PopUpMenu(headerBox, 140 @ 27)
+					popMeters = PopUpMenu(headerBox, 144 @ 27)
 					.background_(TXColor.sysGuiCol2).stringColor_(TXColor.white);
 					arrModulesForMeters = arrSystemModules
 					.select({arg item, i; item.class.noOutChannels > 0 ;})
 					.sort({arg item1, item2; item2.instName > item1.instName;});
-					popMeters.items = ["Meters"]
+					popMeters.items = ["Meters..."]
 					++ arrModulesForMeters.collect({ arg item, i; item.instName; })
 					++ [	"Audio Out 1+2", "Audio Out 3+4", "Audio Out 5+6", "Audio Out 7+8",
 						"Audio Out 9+10", "Audio Out 11+12", "Audio Out 13+14", "Audio Out 15+16",
@@ -2187,9 +2187,15 @@ TXSystem1 {		// system module 1
 						"Audio In 1+2", "Audio In 3+4", "Audio In 5+6", "Audio In 7+8",
 						"Audio In 1-4", "Audio In 1-8",
 					] ++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
-					.collect({ arg item, i; item.instName; });
+					.collect({ arg item, i; item.instName; })
+					++ [ "Freqs: Audio Out 1", "Freqs: Audio Out 2", "Freqs: Audio Out 3",
+						"Freqs: Audio Out 4", "Freqs: Audio Out 5", "Freqs: Audio Out 6",
+						"Freqs: Audio Out 7", "Freqs: Audio Out 8", "Freqs: Audio Out 9",
+						"Freqs: Audio Out 11", "Freqs: Audio Out 11", "Freqs: Audio Out 12",
+						"Freqs: Audio Out 13", "Freqs: Audio Out 14", "Freqs: Audio Out 15", "Freqs: Audio Out 16",
+					];
 					popMeters.action = {|view|
-						var arrAllBusArrays, arrBusses, meterRate, arrBusRates, holdMethod;
+						var arrAllBusArrays, arrBusses, meterRate, arrBusRates, holdMethod, holdValue;
 
 						arrAllBusArrays = [ [] ]
 						++ arrModulesForMeters.collect({
@@ -2209,7 +2215,10 @@ TXSystem1 {		// system module 1
 							(1..4), (1..8),
 						]
 						++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
-						.collect({ arg item, i; item.arrOutBusChoices.at(0).at(1) + 1; });
+						.collect({ arg item, i; item.arrOutBusChoices.at(0).at(1) + 1; })
+						++ [
+							[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [11], [12], [13], [14], [15],
+						];
 						arrBusses = arrAllBusArrays.at(view.value);
 
 						arrBusRates = [\audio]
@@ -2222,6 +2231,17 @@ TXSystem1 {		// system module 1
 
 						if (arrBusses.size > 0, {
 							case
+							{ view.value > (17 + arrModulesForMeters.size + arrAudioAuxBusses.size
+								+ arrFXSendBusses.size + arrControlAuxBusses.size) } {
+								holdValue = view.value;
+								{
+									if (FreqScope.scopeOpen == true, {
+										dataBank.holdFreqScope.window.close;
+										0.5.wait;
+									});
+									dataBank.holdFreqScope = FreqScope.new(800, 400, arrAllBusArrays.at(holdValue).at(0));
+								}.fork(AppClock);
+							}
 							{ view.value > (17 + arrModulesForMeters.size) } {
 								holdMeter = TXMeter.perform(
 									'new', arrBusses-1, nil, nil, 10 @ 80,
@@ -2351,7 +2371,7 @@ TXSystem1 {		// system module 1
 					.string_(holdFileName)
 					.stringColor_(TXColor.white);
 					// spacing
-					headerBox.decorator.shift(-154, 0);
+					headerBox.decorator.shift(-150, 0);
 					// keep vals
 					holdLeftVal = headerBox.decorator.left;
 					holdTopVal = headerBox.decorator.top;
