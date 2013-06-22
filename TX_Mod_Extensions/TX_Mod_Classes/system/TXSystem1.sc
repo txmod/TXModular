@@ -1714,6 +1714,9 @@ TXSystem1 {		// system module 1
 			screenUpdRoutine.stop;
 			{TXFrontScreenGuiProperties.closeWindow;}.defer;
 			{TXHelpScreen.close;}.defer;
+			if (FreqScope.scopeOpen == true and: dataBank.holdFreqScope.notNil, {
+				dataBank.holdFreqScope.window.close;
+			});
 			// empty system
 			this.emptySystem;
 			//	NOTE - removed for now, can cause crashes
@@ -2188,15 +2191,25 @@ TXSystem1 {		// system module 1
 						"Audio In 1-4", "Audio In 1-8",
 					] ++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
 					.collect({ arg item, i; item.instName; })
-					++ [ "Freqs: Audio Out 1", "Freqs: Audio Out 2", "Freqs: Audio Out 3",
+					++ [
+						"Freqs: Audio Aux 1", "Freqs: Audio Aux 2", "Freqs: Audio Aux 3",
+						"Freqs: Audio Aux 4", "Freqs: Audio Aux 5", "Freqs: Audio Aux 6",
+						"Freqs: Audio Aux 7", "Freqs: Audio Aux 8", "Freqs: Audio Aux 9",
+						"Freqs: Audio Aux 10",
+						"Freqs: Audio Out 1", "Freqs: Audio Out 2", "Freqs: Audio Out 3",
 						"Freqs: Audio Out 4", "Freqs: Audio Out 5", "Freqs: Audio Out 6",
 						"Freqs: Audio Out 7", "Freqs: Audio Out 8", "Freqs: Audio Out 9",
-						"Freqs: Audio Out 11", "Freqs: Audio Out 11", "Freqs: Audio Out 12",
+						"Freqs: Audio Out 10", "Freqs: Audio Out 11", "Freqs: Audio Out 12",
 						"Freqs: Audio Out 13", "Freqs: Audio Out 14", "Freqs: Audio Out 15", "Freqs: Audio Out 16",
 					];
 					popMeters.action = {|view|
-						var arrAllBusArrays, arrBusses, meterRate, arrBusRates, holdMethod, holdValue;
+						var arrAllBusArrays, arrBusses, meterRate, arrBusRates, holdMethod, holdValue, arrAudioAuxMonoBusses;
 
+						arrAudioAuxMonoBusses = [];
+						arrAudioAuxBusses.do({ arg item, i;
+							arrAudioAuxMonoBusses = arrAudioAuxMonoBusses.add([item.outBus.index]);
+							arrAudioAuxMonoBusses = arrAudioAuxMonoBusses.add([item.outBus.index + 1]);
+						});
 						arrAllBusArrays = [ [] ]
 						++ arrModulesForMeters.collect({
 							arg item, i;
@@ -2216,8 +2229,9 @@ TXSystem1 {		// system module 1
 						]
 						++ (arrAudioAuxBusses ++ arrFXSendBusses ++ arrControlAuxBusses)
 						.collect({ arg item, i; item.arrOutBusChoices.at(0).at(1) + 1; })
+						++ arrAudioAuxMonoBusses
 						++ [
-							[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [11], [12], [13], [14], [15],
+							[0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15],
 						];
 						arrBusses = arrAllBusArrays.at(view.value);
 
@@ -2235,12 +2249,13 @@ TXSystem1 {		// system module 1
 								+ arrFXSendBusses.size + arrControlAuxBusses.size) } {
 								holdValue = view.value;
 								{
-									if (FreqScope.scopeOpen == true, {
+									if (FreqScope.scopeOpen == true and: dataBank.holdFreqScope.notNil, {
 										dataBank.holdFreqScope.window.close;
 										0.5.wait;
 									});
 									dataBank.holdFreqScope = FreqScope.new(800, 400, arrAllBusArrays.at(holdValue).at(0));
 								}.fork(AppClock);
+								holdMeter = nil; // not used in case of FreqScope
 							}
 							{ view.value > (17 + arrModulesForMeters.size) } {
 								holdMeter = TXMeter.perform(
