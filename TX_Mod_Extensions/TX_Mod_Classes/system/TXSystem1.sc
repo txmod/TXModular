@@ -2203,7 +2203,8 @@ TXSystem1 {		// system module 1
 						"Freqs: Audio Out 13", "Freqs: Audio Out 14", "Freqs: Audio Out 15", "Freqs: Audio Out 16",
 					];
 					popMeters.action = {|view|
-						var arrAllBusArrays, arrBusses, meterRate, arrBusRates, holdMethod, holdValue, arrAudioAuxMonoBusses;
+						var arrAllBusArrays, arrBusses, meterRate, arrBusRates;
+						var holdMethod, holdValue, arrAudioAuxMonoBusses, holdString;
 
 						arrAudioAuxMonoBusses = [];
 						arrAudioAuxBusses.do({ arg item, i;
@@ -2248,12 +2249,16 @@ TXSystem1 {		// system module 1
 							{ view.value > (17 + arrModulesForMeters.size + arrAudioAuxBusses.size
 								+ arrFXSendBusses.size + arrControlAuxBusses.size) } {
 								holdValue = view.value;
+								holdString = view.items[view.value];
 								{
 									if (FreqScope.scopeOpen == true and: dataBank.holdFreqScope.notNil, {
 										dataBank.holdFreqScope.window.close;
 										0.5.wait;
 									});
 									dataBank.holdFreqScope = FreqScope.new(800, 400, arrAllBusArrays.at(holdValue).at(0));
+									holdString = dataBank.holdFreqScope.window.name + holdString + "(bus no."
+									+ arrAllBusArrays.at(holdValue).at(0) ++ ")";
+									dataBank.holdFreqScope.window.name = holdString;
 								}.fork(AppClock);
 								holdMeter = nil; // not used in case of FreqScope
 							}
