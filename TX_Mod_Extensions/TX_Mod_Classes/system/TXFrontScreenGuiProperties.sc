@@ -318,7 +318,7 @@ classvar window;
 	// popup - screenColour presets
 	screenColourPopup = PopUpMenu(propertiesBox, Rect(0, 0, 110, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
-		.items_(["Presets"] ++ TXColour.colourNames)
+		.items_(["presets"] ++ TXColour.colourNames)
 		.action_({arg view;
 			if (view.value > 0, {
 				classData.screenColour =
@@ -661,7 +661,7 @@ if (totalHighlighted == 1, {
 	// popup - background presets
 	backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 110, 20))
 		.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
-		.items_(["Presets"] ++ TXColour.colourNames)
+		.items_(["presets"] ++ TXColour.colourNames)
 		.action_({arg view;
 			if (view.value > 0, {
 				holdCurrentWidget.background =
@@ -791,7 +791,7 @@ if (totalHighlighted == 1, {
 		// popup - background presets
 		backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 110, 20))
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
-			.items_(["Presets"] ++ TXColour.colourNames)
+			.items_(["presets"] ++ TXColour.colourNames)
 			.action_({arg view;
 				if (view.value > 0, {
 					holdCurrentWidget.knobColour =
@@ -1009,7 +1009,7 @@ if (totalHighlighted == 1, {
 		// popup - background presets
 		backgroundPopup = PopUpMenu(propertiesBox, Rect(0, 0, 110, 20))
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
-			.items_(["Presets"] ++ TXColour.colourNames)
+			.items_(["presets"] ++ TXColour.colourNames)
 			.action_({arg view;
 				if (view.value > 0, {
 					holdCurrentWidget.stringColor =

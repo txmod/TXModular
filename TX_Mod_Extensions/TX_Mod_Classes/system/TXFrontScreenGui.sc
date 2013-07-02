@@ -146,7 +146,7 @@ TXFrontScreenGui {	// Front Screen gui
 		layerBar.decorator = FlowLayout(layerBar.bounds);
 
 			// popup - current layer
-			layerPopupView = PopUpMenu(layerBar, Rect(0, 30, 380, 20))
+			layerPopupView = PopUpMenu(layerBar, Rect(0, 30, 360, 20))
 				.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 				.items_(
 					TXFrontScreen.arrLayers.collect({arg item, i;
@@ -174,7 +174,7 @@ TXFrontScreenGui {	// Front Screen gui
 			.string_("Grid size");
 
 		// popup - current grid size
-		currGridSizePopupView = PopUpMenu(layerBar, Rect(0, 0, 40, 20))
+		currGridSizePopupView = PopUpMenu(layerBar, Rect(0, 0, 46, 20))
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1)
 			.items_([1,3,5,10,20,30,40,60,80,100].collect({arg item; item.asString}))
 			.action_({arg view;
@@ -232,7 +232,7 @@ TXFrontScreenGui {	// Front Screen gui
 		newWidgetWidth.value = classData.holdWidgetWidth;
 
 		// popup - width choices
-		PopUpMenu(layerBar, Rect(0, 0, 15, 20))
+		PopUpMenu(layerBar, Rect(0, 0, 65, 20))
 			.items_(classData.arrSizes.collect({arg item, i; item.asString});)
 			.background_(TXColor.white)
 			.action_({arg view;
@@ -257,7 +257,7 @@ TXFrontScreenGui {	// Front Screen gui
 		newWidgetHeight.value = classData.holdWidgetHeight;
 
 		// popup - height choices
-		PopUpMenu(layerBar, Rect(0, 0, 15, 20))
+		PopUpMenu(layerBar, Rect(0, 0, 65, 20))
 			.items_(classData.arrSizes.collect({arg item, i; item.asString});)
 			.background_(TXColor.white)
 			.action_({arg view;
@@ -270,7 +270,7 @@ TXFrontScreenGui {	// Front Screen gui
 		layerBar.decorator.shift(20, 0);
 
 		// checkbox - show gui properties
-		chkboxShowGUIProperties = TXCheckBox(layerBar, Rect(0, 0, 180, 20), "Show GUI Properties",
+		chkboxShowGUIProperties = TXCheckBox(layerBar, Rect(0, 0, 150, 20), "Show GUI Properties",
 			TXColor.sysGuiCol1, TXColour.grey(0.8), TXColor.white, TXColor.sysGuiCol1)
 			.action_({arg view;
 				// make or close Gui Properties window
