@@ -2513,6 +2513,7 @@ TXSystem1 {		// system module 1
 				}, {
 					TXFrontScreenGuiProperties.closeWindow;
 				});
+				w.front;
 			}, clock: AppClock); // end of Routine.run
 		}); // end of if
 	} // end of method showViewAction
