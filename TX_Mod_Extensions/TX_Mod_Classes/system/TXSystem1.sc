@@ -2068,11 +2068,11 @@ TXSystem1 {		// system module 1
 							//	newFile = File(newPath,"r");
 							//	newString = newFile.readAllString;
 							//	newFile.close;
+							// post message
+							("TX Opening File: " ++ newPath).postln;
 							newData = thisProcess.interpreter.executeFile(newPath);
 							holdFileName = "    File name: " ++ newPath;
 							this.loadData(newData);
-							// post message
-							("TX Opening File: " ++ newPath).postln;
 						});
 					};
 					// button - save file
@@ -2091,6 +2091,7 @@ TXSystem1 {		// system module 1
 							newFile.close;
 							stTextFileName.string = "    File name: " ++ newPath.copy;
 							holdFileName = "    File name: " ++ newPath.copy;
+							w.front;
 						});
 					};
 					// button - rebuild system
