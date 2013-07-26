@@ -336,13 +336,20 @@ TXChannel : TXModuleBase { //  Channel module
 				arrInsert5Outs = arrInsert5Outs.add(insert5Module.outBus.index + i);
 			});
 		});
+
 		if (destModule.notNil, {
 			if (channelRate ==  "audio", {
 				arrDestBusses = destModule.arrAudSCInBusChoices;
 				}, {
 					arrDestBusses = destModule.arrCtlSCInBusChoices;
 			});
-			arrDestOuts = arrDestBusses.at(destBusNo ? 0).at(1);  // array of bus indices
+			// check for invalid destBusNo
+			destBusNo = destBusNo ? 0;
+			if (destBusNo > (arrDestBusses.size-1), {
+				destBusNo = 0;
+				this.setSynthArgSpec("DestBusInd", 0);
+			});
+			arrDestOuts = arrDestBusses.at(destBusNo).at(1);  // array of bus indices
 		});
 		//	set to reactivate channel
 		reactivateOn = true;
