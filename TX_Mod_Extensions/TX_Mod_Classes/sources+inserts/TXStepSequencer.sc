@@ -800,8 +800,7 @@ buildGuiSpecArray {
 		if (parmIndex == 0, {holdKeybOctaves = 3;}, {holdKeybOctaves = 2;});
 		guiSpecArray = guiSpecArray ++[
 //			["SeqSelectFirstDisplayStep", 16, "displayFirstStep", 64],
-			["SeqScrollStep", 64, {arg view; this.addScrollViewH(view);},
-				/*{arg view; this.updateScrollOriginX(view, view.visibleOrigin)}*/],
+			["SeqScrollStep", 64, {arg view; this.addScrollViewH(view);}, nil, "seqStartStep", "seqEndStep"],
 			["TXMultiSwitch", "Step on/off", "arrOnOffSteps", 64, {this.updateSlot;}, "displayFirstStep",
 				{arg view; this.addScrollViewH(view);}],
 			["MidiNoteText", "seqNoteBase", "arrNotes", 64, "displayFirstStep",
@@ -907,7 +906,7 @@ buildGuiSpecArray {
 	if (this.getSynthArgSpec("displayOption") == "showGroups", {
 		guiSpecArray = guiSpecArray ++[
 			["SeqScrollStep", 64, {arg view; this.addScrollViewH(view);},
-				{arg view; this.updateScrollOriginX(view, view.visibleOrigin)}],
+				{arg view; this.updateScrollOriginX(view, view.visibleOrigin)}, "seqStartStep", "seqEndStep"],
 			["TXMultiSwitch", "Step on/off", "arrOnOffSteps", 64, {this.updateSlot;}, "displayFirstStep",
 				{arg view; this.addScrollViewH(view);}],
 			["MidiNoteText", "seqNoteBase", "arrNotes", 64, "displayFirstStep",
@@ -945,7 +944,7 @@ buildGuiSpecArray {
 	if (this.getSynthArgSpec("displayOption") == "showPatterns", {
 		guiSpecArray = guiSpecArray ++[
 			["SeqScrollStep", 64, {arg view; this.addScrollViewH(view);},
-				{arg view; this.updateScrollOriginX(view, view.visibleOrigin)}],
+				{arg view; this.updateScrollOriginX(view, view.visibleOrigin)}, "seqStartStep", "seqEndStep"],
 			["TXMultiSwitch", "Step on/off", "arrOnOffSteps", 64, {this.updateSlot;}, "displayFirstStep",
 				{arg view; this.addScrollViewH(view);}],
 			["MidiNoteText", "seqNoteBase", "arrNotes", 64, "displayFirstStep",
@@ -1021,7 +1020,7 @@ buildGuiSpecArray {
 	if (this.getSynthArgSpec("displayOption") == "showProcesses", {
 		guiSpecArray = guiSpecArray ++[
 			["SeqScrollStep", 64, {arg view; this.addScrollViewH(view);},
-				{arg view; this.updateScrollOriginX(view, view.visibleOrigin)}],
+				{arg view; this.updateScrollOriginX(view, view.visibleOrigin)}, "seqStartStep", "seqEndStep"],
 			["TXMultiSwitch", "Step on/off", "arrOnOffSteps", 64, {this.updateSlot;}, "displayFirstStep",
 				{arg view; this.addScrollViewH(view);}],
 			["MidiNoteText", "seqNoteBase", "arrNotes", 64, "displayFirstStep",

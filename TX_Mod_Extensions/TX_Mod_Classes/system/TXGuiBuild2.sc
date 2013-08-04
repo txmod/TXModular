@@ -2440,8 +2440,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
 		holdView.multiSliderView.valueThumbSize_(0.1);
-		holdView.multiSliderView.indexThumbSize_(19);
-		holdView.multiSliderView.gap_(5);
+		holdView.multiSliderView.indexThumbSize_(23);
+		holdView.multiSliderView.gap_(1);
 		holdView.multiSliderView.step_(1);
 		// add screen update function
 		system.addScreenUpdFunc(
@@ -2925,7 +2925,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 					item.background_(TXColor.paleYellow2);
 					item.refresh;
 					},{
-						item.background_(TXColor.white);
+						item.background_(TXColor.grey6);
 						item.refresh;
 				});
 			});
@@ -2960,7 +2960,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 							item.background_(TXColor.paleYellow2);
 							item.refresh;
 							},{
-								item.background_(TXColor.white);
+								item.background_(TXColor.grey6);
 								item.refresh;
 						});
 					});
@@ -2994,11 +2994,11 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				holdStartIndex = 0;
 		});
 		if (item.at(12).notNil, {
-			holdScrollWidth = 580;
+			holdScrollWidth = 598;
 		});
 
 		// create keyboard grid for note steps
-		holdMidiNoteKeybGrid = TXMidiNoteKeybGrid(w, viewWidth @ (108 * item.at(8)),
+		holdMidiNoteKeybGrid = TXMidiNoteKeybGrid(w, viewWidth+18 @ (108 * item.at(8)),
 			{|view|
 				var holdArr, holdValue;
 				// get initial value
@@ -3153,15 +3153,52 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// SeqScrollStep
 	// arguments- index1 is total no. of steps,
 	// index2 is ScrollView init action, index3 is ScrollView update action,
+	// index4/5 are optional synth arg names for start/end steps of play range (notes in range are highlighted)
 	// e.g. ["SeqScrollStep", 64, {arg view; this.addScrollViewH(view);},
 	//		{arg view; this.updateScrollOrigin(view.visibleOrigin)}]
 	*guiSeqScrollStep { arg item, w;
+		var holdFirstStep, holdLastStep;
 		this.nextline(w);
 		holdView = TXMultiTextBox(w, viewWidth @ 20, "Step", Array.series(item.at(1), 1),
 			scrollViewWidth: 580, scrollViewAction: item.at(3));
 		item.at(2).value(holdView.scrollView);
+		// highlight text that falls within play range
+		if (item.at(4).notNil and: item.at(5).notNil, {
+			holdFirstStep = argModule.getSynthArgSpec(item.at(4)).min(argModule.getSynthArgSpec(item.at(5)));
+			holdLastStep = argModule.getSynthArgSpec(item.at(4)).max(argModule.getSynthArgSpec(item.at(5)));
+			holdView.arrTextViews.do({ arg item, i;
+				if ( ((i+1) >= (holdFirstStep) ) and: ((i+1) <= (holdLastStep) ), {
+					item.background_(TXColor.paleYellow2);
+					item.refresh;
+					},{
+						item.background_(TXColor.grey6);
+						item.refresh;
+				});
+			});
+		});
 		argModule.arrControls = argModule.arrControls.add(holdView);
 		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argModule = argArray.at(1), holdFirstStep, holdLastStep;
+				// highlight text that falls within play range
+				if (item.at(4).notNil and: item.at(5).notNil, {
+					holdFirstStep = argModule.getSynthArgSpec(item.at(4)).min(argModule.getSynthArgSpec(item.at(5)));
+					holdLastStep = argModule.getSynthArgSpec(item.at(4)).max(argModule.getSynthArgSpec(item.at(5)));
+					argView.arrTextViews.do({ arg item, i;
+						if ( ((i+1) >= (holdFirstStep) ) and: ((i+1) <= (holdLastStep) ), {
+							item.background_(TXColor.paleYellow2);
+							item.refresh;
+							},{
+								item.background_(TXColor.grey6);
+								item.refresh;
+						});
+					});
+				});
+			}
+		);
 	}
 
 	// SeqSelectFirstDisplayStep

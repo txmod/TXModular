@@ -325,9 +325,9 @@ TXChannelRouting {	// Channel Routing
 		startChannel = startChannel.min(this.arrShowChannels.size-1).max(0);
 
 		// create array of names of all possible source modules.
-		arrAllPossSourceActClasses = system.dataBank.arrSourceModulesByCategory.collect({arg item; item[2]});
-		arrAllPossSourceActNames = system.dataBank.arrSourceModulesByCategory.collect({arg item; item[1]});
-		holdSet = system.dataBank.arrSourceModulesByCategory.collect({arg item; item[0]}).asSet;
+		arrAllPossSourceActClasses = system.dataBank.arrSourceModulesByCategoryWithAlpha.collect({arg item; item[2]});
+		arrAllPossSourceActNames = system.dataBank.arrSourceModulesByCategoryWithAlpha.collect({arg item; item[1]});
+		holdSet = system.dataBank.arrSourceModulesByCategoryWithAlpha.collect({arg item; item[0]}).asSet;
 		arrAllPossSourceCats = SortedList[].addAll(holdSet).asArray;
 
 		// create array of names of all system's source modules.
@@ -382,7 +382,7 @@ TXChannelRouting {	// Channel Routing
 				popNewModuleInd = holdIndex = -1;
 				while({popNewModuleInd == -1}, {
 					holdIndex = holdIndex + 1;
-					if (system.dataBank.arrSourceModulesByCategory[holdIndex][0] == holdText, {
+					if (system.dataBank.arrSourceModulesByCategoryWithAlpha[holdIndex][0] == holdText, {
 						popNewModuleInd = holdIndex + 1;
 					});
 				});
@@ -391,7 +391,7 @@ TXChannelRouting {	// Channel Routing
 				popNewModule.value = popNewModuleInd;
 			});
 		};
-		holdText = system.dataBank.arrSourceModulesByCategory[popNewModuleInd];
+		holdText = system.dataBank.arrSourceModulesByCategoryWithAlpha[popNewModuleInd];
 		popNewModuleCats.value =  arrAllPossSourceCats.indexOfEqual(holdText) ? 0;
 		arrControls = arrControls.add(popNewModuleCats);
 
@@ -403,7 +403,7 @@ TXChannelRouting {	// Channel Routing
 			// store current data
 			popNewModuleInd = view.value;
 			if (popNewModuleInd > 0, {
-				holdText = system.dataBank.arrSourceModulesByCategory[popNewModuleInd-1][0];
+				holdText = system.dataBank.arrSourceModulesByCategoryWithAlpha[popNewModuleInd-1][0];
 				popNewModuleCats.value = 1 + arrAllPossSourceCats.indexOfEqual(holdText) ? 0;
 			});
 		};
