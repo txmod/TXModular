@@ -30,7 +30,7 @@ classvar <classData;
 		TXWSliderNo,
 		TXWSliderNoV,
 		TXW2DSlider,
-		TXW2DTablet,
+		// TXW2DTablet,
 		TXWTextDisplayBox,
 		TXWTextEditBox,
 	];

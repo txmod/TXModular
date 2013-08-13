@@ -698,6 +698,11 @@ TXW2DSlider : TXWSlider {
 
 }
 
+// TXW2DTablet removed for Qt
+
+TXW2DTablet : TXW2DSlider {}
+
+/*
 TXW2DTablet : TXWSlider {
 
 	classvar <widgetName;
@@ -893,6 +898,7 @@ TXW2DTablet : TXWSlider {
 		system.flagGuiUpd;
 	}
 }
+*/
 
 TXWNumberBox : TXWSlider {
 

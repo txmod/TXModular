@@ -1368,7 +1368,7 @@ TXSystem1 {		// system module 1
 				// run the Module's new method to get new instance of module
 				holdModuleClass = item.at(1).interpret;
 				// // check class
-				// if (arrAllPossModules.indexOf(holdModuleClass).isNil {
+				// if (arrAllPossModules.indexOf(holdModuleClass).isNil, {
 				// 	("Info: Opening " ++ holdModuleClass.name.asString ++ " - this is an older TX module.").postln;
 				// });
 				newModule = holdModuleClass.new;
