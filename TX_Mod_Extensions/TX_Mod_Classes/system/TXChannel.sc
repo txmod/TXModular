@@ -224,7 +224,7 @@ TXChannel : TXModuleBase { //  Channel module
 		sourceBusno = 0;
 		this.setSynthArgSpec("SourceBusInd", 0);
 		arrSourceOuts = arrSourceBusses.at(sourceBusno).at(1);
-		sourceName = sourceModule.instName;
+		sourceName = sourceModule.instDisplayName;
 	}
 
 	getSourceBusName {
@@ -299,7 +299,7 @@ TXChannel : TXModuleBase { //  Channel module
 		insert4Module = holdModules.at(4); // insert 4 & 5 are newer
 		insert5Module = holdModules.at(5);
 		if (destModule.notNil, {
-			destName = destModule.instName;
+			destName = destModule.instDisplayName;
 		});
 		// update busses
 		arrSourceBusses = sourceModule.arrOutBusChoices;
@@ -438,7 +438,7 @@ TXChannel : TXModuleBase { //  Channel module
 			++ system.arrAudioAuxBusses	// array of Audio Aux busses
 			++ system.arrMainOutBusses	// array of Main Out busses
 		);
-		arrAudioSourceBusNames = arrAudioSourceBusses.collect({arg item, i;  item.instName; });
+		arrAudioSourceBusNames = arrAudioSourceBusses.collect({arg item, i;  item.instDisplayName; });
 
 		// create array of names of all system's control source modules.
 		arrControlSourceMods = system.arrSystemModules
@@ -457,7 +457,7 @@ TXChannel : TXModuleBase { //  Channel module
 			arrControlSourceMods
 			++ system.arrControlAuxBusses	// array of Control Aux busses
 		);
-		arrControlSourceBusNames = arrControlSourceBusses.collect({arg item, i;  item.instName; });
+		arrControlSourceBusNames = arrControlSourceBusses.collect({arg item, i;  item.instDisplayName; });
 
 		/* // OLDER CODE:
 		// set variables depending on rate
@@ -515,7 +515,7 @@ TXChannel : TXModuleBase { //  Channel module
 					++ system.arrControlAuxBusses
 				);
 		});
-		arrAllDestModNames = arrAllDestModules.collect({arg item, i;  item.instName; });
+		arrAllDestModNames = arrAllDestModules.collect({arg item, i;  item.instDisplayName; });
 
 		// create column for channel
 		column =  CompositeView(argParent,Rect(argLeftIndent ? 0,0, guiWidth+7, 595));
@@ -579,7 +579,7 @@ TXChannel : TXModuleBase { //  Channel module
 						// recreate view
 						system.showView;
 					},
-					"Are you sure you want to delete " ++ this.instName
+					"Are you sure you want to delete " ++ this.instDisplayName
 					++ " and its Insert modules?  -  its Source module won't be deleted."
 				);
 				},{
@@ -604,7 +604,7 @@ TXChannel : TXModuleBase { //  Channel module
 		// go to next line
 		column.decorator.nextLine;
 		// view - source
-		sourceName = sourceModule.instName;
+		sourceName = sourceModule.instDisplayName;
 		viewSource = Button(column, guiWidth@ guiRowHeight)
 		.states_([[sourceName, this.moduleStringColour(sourceModule), chanColour]])
 		.action_({this.channelHighlight;
@@ -684,7 +684,7 @@ TXChannel : TXModuleBase { //  Channel module
 				// shift decorator
 				column.decorator.shift(0,4);
 				holdView = Button(column, guiWidth-16 @ guiRowHeight);
-				holdView.states = [[holdModule.instName,
+				holdView.states = [[holdModule.instDisplayName,
 					this.moduleStringColour(holdModule),
 					chanColour]
 				];
@@ -798,7 +798,7 @@ TXChannel : TXModuleBase { //  Channel module
 			column.decorator.shift(0,4);
 			// change button width
 			viewDest = Button(column, guiWidth-16 @ guiRowHeight);
-			viewDest.states = [[destModule.instName, this.moduleStringColour(destModule),
+			viewDest.states = [[destModule.instDisplayName, this.moduleStringColour(destModule),
 				chanColour]
 			];
 			viewDest.action = {
@@ -834,7 +834,7 @@ TXChannel : TXModuleBase { //  Channel module
 						}, {
 							arrDestBusses = destModule.arrCtlSCInBusChoices;
 					});
-					destName = destModule.instName;
+					destName = destModule.instDisplayName;
 					//  assign busses
 					if (arrDestBusses.notNil, {
 						arrDestOuts = arrDestBusses.at(destBusNo ? 0).at(1);  // array of bus indices

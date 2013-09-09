@@ -154,6 +154,7 @@ TXModuleBase {		// Base Class for all modules
 	var <autoModOptions = false;	// to automatically show modulation options on gui
 								// n.b. always false - modoptions now automatic
 	var <>arrPresets;			// presets
+	var <>legacyModule = false; // to mark older legacy modules
 
 	// layout gui vars:
 	var <>posX = 0;			// x coord
@@ -1178,6 +1179,16 @@ instSortingName {
 	newName = instName.keep(index1+1) ++ holdZeros ++
 		instName.keep(1 - (instName.size - index1));
 	^newName;
+}
+
+instDisplayName {
+	var displayName;
+		if (legacyModule == true, {
+			displayName = this.instName ++ " *";
+			}, {
+			displayName = this.instName;
+		});
+	^displayName;
 }
 
 }

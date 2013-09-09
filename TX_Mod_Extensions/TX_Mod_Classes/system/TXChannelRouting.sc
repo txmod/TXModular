@@ -340,7 +340,7 @@ TXChannelRouting {	// Channel Routing
 			(item.class.moduleType == "insert") ;    // allow inserts to be sources for channels
 		})
 		.sort({ arg a, b; a.instSortingName < b.instSortingName; });
-		arrAllSourceModNames = arrAllSourceModules.collect({arg item, i;  item.instName; });
+		arrAllSourceModNames = arrAllSourceModules.collect({arg item, i;  item.instDisplayName; });
 
 		// create array of names of all system's source, insert & action modules.
 		arrAllSourceActionModules = system.arrSystemModules
@@ -357,7 +357,7 @@ TXChannelRouting {	// Channel Routing
 		})
 		.sort({ arg a, b; a.instSortingName < b.instSortingName; });
 		arrAllSourceActionModNames = arrAllSourceActionModules
-		.collect({arg item, i;  item.instName; });
+		.collect({arg item, i;  item.instDisplayName; });
 		// create array of names of all system's source modules and busses.
 		arrAllSourceModsBusses = (
 			arrAllSourceModules
@@ -366,7 +366,7 @@ TXChannelRouting {	// Channel Routing
 			++ system.arrControlAuxBusses	// array of Control Aux busses
 			++ system.arrMainOutBusses	// array of Main Out busses
 		);
-		arrAllSourceModBusNames = arrAllSourceModsBusses.collect({arg item, i;  item.instName; });
+		arrAllSourceModBusNames = arrAllSourceModsBusses.collect({arg item, i;  item.instDisplayName; });
 
 		// create colourBox1 to display selected window
 		colourBox1 = CompositeView(parent, 560 @ 30).background_(TXColor.sysLabelBackground);
@@ -670,7 +670,7 @@ TXChannelRouting {	// Channel Routing
 			});
 			// button -  module
 			btnModule = Button(modulesBox, 140 @ 20);
-			btnModule.states = [[item, stringCol, backCol]];
+			btnModule.states = [[holdModule.instDisplayName, stringCol, backCol]];
 			btnModule.action = {
 				displayModule = arrAllSourceActionModules.at(i);
 				showModuleBox = true;

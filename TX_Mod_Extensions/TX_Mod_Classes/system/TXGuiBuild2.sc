@@ -36,6 +36,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// EZsliderUnmapped
 	// HelpButton
 	// HideModuleButton
+	// LegacyModuleText
 	// MIDIChannelSelector
 	// MIDIKeyboard
 	// MIDIListenCheckBox
@@ -172,6 +173,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 					["DeleteModuleButton"],
 					["RebuildModuleButton"],
 					["HideModuleButton"],
+					["LegacyModuleText"],
 					["NextLine"],
 					["ModuleActionPopup"],
 					["NextLine"],
@@ -259,7 +261,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		holdView = PopUpMenu(w, 150 @ 30);
 		holdView.items = system.arrSystemModules.copy
 		.sort({ arg a, b; a.instSortingName < b.instSortingName })
-		.collect({arg item, i; item.instName;});
+		.collect({arg item, i; item.instDisplayName;});
 		holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColour.sysModuleName);
 		holdView.action = { arg view;
 			// change current display module to new one
@@ -398,6 +400,16 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		})
 	}
 
+	// LegacyModuleText
+	*guiLegacyModuleText { arg item, w;
+		if (argModule.legacyModule == true, {
+			holdView = StaticText(w, 280 @ 18);
+			holdView.string = "(* this is an earlier version of this type of module)";
+			holdView.stringColor_(TXColour.sysGuiCol1)
+			.background_(TXColor.white);
+			holdView.align_(\left);
+		});
+	}
 
 	// DeleteModuleButton
 	*guiDeleteModuleButton { arg item, w;

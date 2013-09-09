@@ -1,6 +1,6 @@
 // Copyright (C) 2010  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXAudioOptionsScreen {		// Information Screen module 
+TXAudioOptionsScreen {		// Information Screen module
 
 classvar system, w;
 
@@ -8,7 +8,7 @@ classvar system, w;
 	var txtTitle, btnHelp, popAudioDevice, popBufferSize, popSampleRate;
 	var btnConfirm, btnCancel;
 	var arrRejectStrings, arrValidDevices;
-		
+
 	arrRejectStrings = ["Built-in Microphone", "Built-in Input", "Built-in Output"];
 	system = argSystem;
 	w = Window("TX Modular System", Rect(0, 600, 800, 460));
@@ -17,7 +17,7 @@ classvar system, w;
 	w.view.background = TXColor.sysMainWindow;
 	w.view.decorator.shift(36, 36);
 
-	// system title	
+	// system title
 	txtTitle = StaticText(w, 270 @ 40)
 			.string_("TX Modular " ++ system.systemVersion ++ " - Audio Setup")
 			.font_(Font.new("Helvetica-Bold",18))
@@ -26,50 +26,50 @@ classvar system, w;
 			.stringColor_(TXColor.sysGuiCol1);
 
 
-	// decorator 
+	// decorator
 	w.view.decorator.shift(30, 0);
-	// button - help 
+	// button - help
 	btnHelp = Button(w, 90 @ 40);
 	btnHelp.states = [["Help", TXColor.white, TXColor.sysHelpCol]];
 	btnHelp.action = {
-//		"TX_0 TX Modular Help".openHelpFile;
-		"TX_2 Audio Setup".openHelpFile;
+			// TXHelpScreen.open;
+			TXHelpScreen.openFile("TX_2 Audio Setup");
 	};
 
-	// decorator 
+	// decorator
 	w.view.decorator.shift(30, 0);
-	// confirm button 
+	// confirm button
 	btnConfirm = Button(w, 160 @ 40)
 		.states = [["Start Audio Engine", TXColor.white, TXColor.sysGuiCol1]];
-	btnConfirm.action = { 
-		if (w.isClosed.not, {w.close}); 
+	btnConfirm.action = {
+		if (w.isClosed.not, {w.close});
 		// run confirm function
 		argConfirmFunction.value;
 	};
 	btnConfirm.focus(true);
 
-	// decorator 
+	// decorator
 	w.view.decorator.shift(30, 0);
-	// quit button 
+	// quit button
 	btnCancel = Button(w, 90 @ 40)
 		.states = [["Quit", TXColor.white, TXColor.sysDeleteCol]];
 	btnCancel.action = {
 		system.audioSetupQuit = true;
 		this.close;
-	};	
+	};
 
-	// decorator 
+	// decorator
 	w.view.decorator.nextLine;
 	w.view.decorator.shift(36, 50);
 
-	// Title  
+	// Title
 	StaticText(w, 270 @ 27)
 		.string_("Audio Device for Input and Output")
 		.align_(\centre)
 		.background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
 
-	// decorator 
+	// decorator
 	w.view.decorator.shift(30, 0);
 	if (thisProcess.platform.name == 'osx', {
 		// popup - Audio device
@@ -92,37 +92,37 @@ classvar system, w;
 		popAudioDevice.value = ([nil] ++ ServerOptions.devices).indexOfEqual(system.dataBank.audioDevice) ? 0;
 	});
 
-	// decorator 
+	// decorator
 	w.view.decorator.nextLine;
 	w.view.decorator.shift(36, 40);
 
-	// popup - sample rate  
+	// popup - sample rate
 	StaticText(w, 270 @ 27)
 		.string_("Audio Device Sample Rate ")
 		.align_(\centre)
 		.background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
 
-	// decorator 
+	// decorator
 	w.view.decorator.shift(30, 0);
 
 	popSampleRate = PopUpMenu(w, 270 @ 27)
 		.background_(TXColor.sysGuiCol2).stringColor_(TXColor.white);
-	popSampleRate.items = ["Use Default Sample Rate", "8000", "11025", "22050", "32000", "44100", 
+	popSampleRate.items = ["Use Default Sample Rate", "8000", "11025", "22050", "32000", "44100",
 		"48000", "88200", "96000", "176400", "192000" ];
 	popSampleRate.action = {|view|
 		var arrSampleRates;
-		arrSampleRates = [nil, 8000, 11025, 22050, 32000, 44100, 48000, 
+		arrSampleRates = [nil, 8000, 11025, 22050, 32000, 44100, 48000,
 			88200, 96000, 176400, 192000] ;
 		system.dataBank.sampleRate = arrSampleRates.at(view.value);
 		holdServerOptions.sampleRate = system.dataBank.sampleRate;
 		system.saveSystemSettings;
 	};
-	popSampleRate.value = [nil, 8000, 11025, 22050, 32000, 44100, 48000, 
+	popSampleRate.value = [nil, 8000, 11025, 22050, 32000, 44100, 48000,
 		88200, 96000, 176400, 192000]
 		.indexOfEqual(system.dataBank.sampleRate) ? 0;
 
-	// decorator  
+	// decorator
 	w.view.decorator.nextLine;
 	w.view.decorator.shift(36, 40);
 
@@ -132,10 +132,10 @@ classvar system, w;
 		.background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
 
-	// decorator 
+	// decorator
 	w.view.decorator.shift(30, 0);
 
-	// popup - Buffer size  
+	// popup - Buffer size
 	popBufferSize = PopUpMenu(w, 270 @ 27)
 		.background_(TXColor.sysGuiCol2).stringColor_(TXColor.white);
 	popBufferSize.items = ["Use Default Buffer Size","2048", "1024", "512", "256", "128", "64", "32"];
@@ -146,26 +146,26 @@ classvar system, w;
 		holdServerOptions.hardwareBufferSize = system.dataBank.bufferSize;
 		system.saveSystemSettings;
 	};
-	popBufferSize.value = 
+	popBufferSize.value =
 		[nil, 2048, 1024, 512, 256, 128, 64, 32].indexOfEqual(system.dataBank.bufferSize) ? 0;
 
-	// decorator 
+	// decorator
 	w.view.decorator.nextLine;
 	w.view.decorator.shift(36, 50);
 
-	// Title  
+	// Title
 	StaticText(w, 574 @ 60)
 		.font_(Font("Arial", 12))
 		.background_(TXColor.sysGuiCol4)
 		.stringColor_(TXColor.white)
 		.string_(
 
-" Note: Not all sample rates and buffer sizes will work on all audio devices. 
+" Note: Not all sample rates and buffer sizes will work on all audio devices.
  See hardware documentation or open Audio MIDI Setup software to check which settings can be used."
 		);
 }
 
-*close {		//	close window 
+*close {		//	close window
 	// if standalone system then quit completely else just close TX
 	if (system.txStandAlone == 1, {
 		0.exit;
