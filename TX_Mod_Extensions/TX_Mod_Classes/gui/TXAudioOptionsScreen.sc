@@ -13,6 +13,7 @@ classvar system, w;
 	system = argSystem;
 	w = Window("TX Modular System", Rect(0, 600, 800, 460));
 	w.front;
+	w.onClose = {this.close};
 	w.view.decorator = FlowLayout(w.view.bounds);
 	w.view.background = TXColor.sysMainWindow;
 	w.view.decorator.shift(36, 36);
@@ -42,6 +43,7 @@ classvar system, w;
 	btnConfirm = Button(w, 160 @ 40)
 		.states = [["Start Audio Engine", TXColor.white, TXColor.sysGuiCol1]];
 	btnConfirm.action = {
+		w.onClose = nil;
 		if (w.isClosed.not, {w.close});
 		// run confirm function
 		argConfirmFunction.value;
