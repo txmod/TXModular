@@ -61,6 +61,12 @@ TXCurveBuilder {
 		{this.showWindow;}.defer(0.1);
 	}
 
+	*openWithCurve {arg curve;
+		this.curve1Changed(curve);
+		this.setCurveSize(curve.size);
+		this.showWindow;
+	}
+
 	*setCurveSize {arg argSize;
 		classData.curveSize = argSize;
 		// change all curves

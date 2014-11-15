@@ -227,7 +227,7 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 			Button(window, 60 @ 20)
 			.states_([["Builder", TXColor.paleYellow, TXColor.sysGuiCol1]])
 			.action_({
-				TXCurveBuilder.showWindow;
+				TXCurveBuilder.openWithCurve(this.value);
 			});
 			// decorator shift
 			if (window.class == Window, {
