@@ -3,7 +3,7 @@
 TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 	// ========================================================================
-	/* 	NOTE - Use the following code to generate the list below:
+	/* 	NOTE - the following code generates the list below:
 	(
 	a = TXGuiBuild2.class.methods;
 	b = a.collect ({ arg item, i; item.name.asString;});
@@ -27,6 +27,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// ActionPopup
 	// allNotesOffButton
 	// DeleteModuleButton
+	// DragSink
 	// DividingLine
 	// EZNumber
 	// EZNumberUnmapped
@@ -41,7 +42,6 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// MIDIKeyboard
 	// MIDIListenCheckBox
 	// MIDINote
-	// TXMidiNoteKeybGrid
 	// MidiNoteRow
 	// MIDINoteSelector
 	// MidiNoteText
@@ -100,6 +100,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// TXGridGreyTarget
 	// TXGridGreyZone
 	// TXListViewAction
+	// TXMidiNoteKeybGrid
 	// TXMinMaxSlider
 	// TXMinMaxSliderSplit
 	// TXMultiButton
@@ -127,6 +128,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// TXTextBox
 	// TXTimeBeatsBpmNumber
 	// TXTimeBpmMinMaxSldr
+	// TXV_GuiScroller
 	// TXWaveTableSpecs
 	// WetDryMixSlider
 
@@ -251,6 +253,26 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		StaticText(w, holdVal @ holdVal2).background_(TXColor.white);
 	}
 
+	// DragSink
+	// arguments- index1 is string to display,
+	// index2 is canReceiveDragHandler function
+	// 	index3 is receiveDragHandler function
+	// index 4 is optional showDraggedContent (default false)
+	// index 5 is optional width (default viewWidth)
+	*guiDragSink { arg item, w;
+		// if (w.class == Window, {
+		// 	w.view.decorator.nextLine;
+		// 	}, {
+		// 		w.decorator.nextLine;
+		// });
+		holdVal = item[5] ? 200;
+		holdView = DragSink(w, Rect(10, 70, holdVal, 20)).align_(\center);
+		holdView.string = item[1];
+		holdView.canReceiveDragHandler = item[2];
+		holdView.receiveDragHandler = item[3];
+		holdView.setBoth = item[4] ? false;
+	}
+
 	// TitleBar
 	*guiTitleBar { arg item, w;
 		//		holdView = StaticText(w, 150 @ 30);
@@ -258,7 +280,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		//		holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColour.sysModuleName);
 		//		holdView.setProperty(\align,\center);
 
-		holdView = PopUpMenu(w, 150 @ 30);
+		holdView = PopUpMenu(w, 170 @ 30);
 		holdView.items = system.arrSystemModules.copy
 		.sort({ arg a, b; a.instSortingName < b.instSortingName })
 		.collect({arg item, i; item.instDisplayName;});
@@ -404,7 +426,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiLegacyModuleText { arg item, w;
 		if (argModule.legacyModule == true, {
 			holdView = StaticText(w, 280 @ 18);
-			holdView.string = "(* this is an earlier version of this type of module)";
+			holdView.string = " * this is an earlier version of this type of module";
 			holdView.stringColor_(TXColour.sysGuiCol1)
 			.background_(TXColor.white);
 			holdView.align_(\left);
@@ -499,11 +521,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index3 is optional width (default view width)
 	// index4 is optional text color,
 	// index5 is optional background color,
+	// index6 is optional initial value function
 	// e.g. ["ActionPopup", arrItems, {arg holdView; this.runAction(holdView.value);}, 200]
 	*guiActionPopup { arg item, w;
 		holdView = PopUpMenu(w, (item.at(3) ?? viewWidth) @ 20);
 		holdView.items = item.at(1);
 		holdView.stringColor_(item.at(4) ?? TXColour.black).background_(item.at(5) ?? TXColor.white);
+		holdView.value = item.at(6) ? 0;
 		holdView.action = { arg view;
 			// run action function passing it view as arg
 			item.at(2).value(view);
@@ -513,7 +537,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 	// ActionButton
 	// arguments- index1 is button text, index2 is action function, index3 is optional width
-	// index4 is optional text color, index5 is optionalbackground color,
+	// index4 is optional text color, index5 is optional background color,
 	// e.g. ["ActionButton", "Start", {this.startSequencer}, 100]
 	*guiActionButton { arg item, w;
 		Button(w, item.at(3) ? 80 @ 20)
@@ -1601,7 +1625,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 	// TXTextBox
 	// arguments- index1 is row label, index2 is synth arg name to be updated,
-	// 	index3 is an optional ACTION function to be valued in views action,		// 	index4 is optional text width, index5 is optional label width
+	// 	index3 is an optional ACTION function to be valued in views action,
+	// 	index4 is optional text width, index5 is optional label width
 	// e.g. ["TXTextBox", "Text", "textString"]
 	*guiTXTextBox { arg item, w;
 		var holdWidth;
@@ -4132,6 +4157,40 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argView.update(item.at(4).value, item.at(2).value, argModule);
 			}
 		);
+	}
+
+	// TXV_GuiScroller
+	// arguments:
+	// 	index1 is array of parameters
+	//	index2 is dictionary of current values to write to
+	// 	index3 is sendParameter action
+	// 	index4 is ScrollView init action
+	// 	index5 is ScrollView update action
+	// 	index6 is dictParameterGroups
+	// 	index7 is optional height
+	// e.g. ["TXV_GuiScroller", {data["arrParameters"]},
+	//		{dictCurrentParameterVals},
+	//		{arg argAddress, argValue; this.sendParameterToTXV( argAddress, argValue);},
+	//		{arg view; holdScrollView = view;},
+	//		{arg view; holdVisibleOrigin = view.visibleOrigin; },
+	//	],
+	*guiTXV_GuiScroller { arg item, w;
+		var extraWidth = 40;
+		holdView = TXV_GuiScroller(system, w, (viewWidth + extraWidth) @ (item.at(7) ? 500), argModule, item.at(1),
+			item.at(2), item.at(3), item.at(5), item.at(6));
+		if (item.at(4).notNil, {
+			item.at(4).value(holdView.scrollView);
+		});
+		argModule.arrControls = argModule.arrControls.add(holdView);
+		// NOT CURRENTLY USED:::::::::::::::::::::
+		// add screen update function
+		// system.addScreenUpdFunc(
+		// 	[holdView, argModule],
+		// 	{ arg argArray;
+		// 		var argView = argArray.at(0), argModule = argArray.at(1);
+		// 		argView.update(item.at(1).value, item.at(2).value, argModule);
+		// 	}
+		// );
 	}
 
 	// ModMatrixRow

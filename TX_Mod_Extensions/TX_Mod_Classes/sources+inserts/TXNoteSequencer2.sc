@@ -812,7 +812,7 @@ buildGuiSpecArray {
 				holdKeybOctaves, arrParmNames, {this.parmIndex.asInteger},
 				{arg argIndex; this.parmIndex_(argIndex); this.buildGuiSpecArray; system.showView;},
 				{arg arrViews; this.addScrollViewV(arrViews[0]); this.addScrollViewVH(arrViews[1]);},
-				{arg view; this.updateScrollOrigin(view, view.visibleOrigin)}
+				{arg view; {this.updateScrollOrigin(view, view.visibleOrigin)}.defer;}
 			 ],
 		];
 		guiSpecArray = guiSpecArray ++[

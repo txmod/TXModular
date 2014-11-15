@@ -692,14 +692,12 @@ TXChannel : TXModuleBase { //  Channel module
 					this.channelHighlight;
 					this.openModuleGui(holdModule)
 				};
-				// button insert  delete
+				// button insert delete
 				holdDelButton = Button(column, 11 @ guiRowHeight);
 				holdDelButton.states = [["d", TXColor.white, TXColor.sysDeleteCol]];
 				holdDelButton.action = {
 					this.channelHighlight;
-					this.deactivate;
 					holdModule.confirmDeleteModule;
-					this.activate;
 					// recreate view
 					system.showView;
 				};
@@ -1782,8 +1780,11 @@ TXChannel : TXModuleBase { //  Channel module
 			this.deactivate;
 		});
 
-		//	reactivate if stored channel status is "active"
-		if (reactivateOn == true and: holdChanStatus == "active", {
+		//	reactivate
+		// if (reactivateOn == true and: holdChanStatus == "active", {
+		// 	this.reactivate;
+		// });
+		if (reactivateOn == true, {
 			this.reactivate;
 		});
 	}

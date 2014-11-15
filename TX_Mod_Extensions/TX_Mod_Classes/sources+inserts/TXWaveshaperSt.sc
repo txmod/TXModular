@@ -1,45 +1,45 @@
 // Copyright (C) 2009  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXWaveshaperSt : TXModuleBase {		// Distortion module 
+TXWaveshaperSt : TXModuleBase {		// Distortion module
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<guiWidth=500;
 	classvar	<arrBufferSpecs;
-	
+
 	var arrCurveValues;
 	var arrSlotData;
 	var displayOption;
-	
+
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "Waveshaper St";
 	moduleRate = "audio";
 	moduleType = "insert";
-	noInChannels = 2;			
-	arrCtlSCInBusSpecs = [ 
+	noInChannels = 2;
+	arrCtlSCInBusSpecs = [
 		["Dry-Wet Mix", 1, "modWetDryMix", 0]
-	];	
+	];
 	noOutChannels = 2;
-	arrOutBusSpecs = [ 
-		["Out L + R", [0,1]], 
-		["Out L only", [0]], 
-		["Out R only", [1]] 
-	];	
+	arrOutBusSpecs = [
+		["Out L + R", [0,1]],
+		["Out L only", [0]],
+		["Out R only", [1]]
+	];
 	arrBufferSpecs = [ ["bufnumShape", 512, 1] ];
-} 
+}
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 init {arg argInstName;
 	//	set  class specific instance variables
@@ -56,16 +56,16 @@ init {arg argInstName;
 		["noiseMix", 10, \ir],
 		["harmonicsMix", 100, \ir],
 		["arrHarmonics", [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], \ir],
-	]; 
+	];
 	arrOptions = [0];
 	arrOptionData = [
 		[
-			["Variable waveshaping - changes with amplitude", 
+			["Variable waveshaping - changes with amplitude",
 				{arg inSound, inBufnum; Shaper.ar(inBufnum, inSound); }
 			],
-			["Constant waveshaping - no changes with amplitude", 
-				{arg inSound, inBufnum; 
-					Balance.ar(Shaper.ar(inBufnum, Normalizer.ar(inSound)), inSound); 
+			["Constant waveshaping - no changes with amplitude",
+				{arg inSound, inBufnum;
+					Balance.ar(Shaper.ar(inBufnum, Normalizer.ar(inSound)), inSound);
 				}
 			],
 		]
@@ -80,21 +80,21 @@ init {arg argInstName;
 	};
 	this.buildGuiSpecArray;
 	arrActionSpecs = this.buildActionSpecs([
-		["SynthOptionPopup", "Shaping type", arrOptionData, 0], 
+		["SynthOptionPopup", "Shaping type", arrOptionData, 0],
 		["EZslider", "In Gain", ControlSpec(0, 10), "inGain"],
-		["TXCurveDraw", "Curve", {arrCurveValues}, 
-			{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData; 
-				this.bufferStore(view.value);}, 
-			{arrSlotData}, "Waveshaper"], 
+		["TXCurveDraw", "Curve", {arrCurveValues},
+			{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
+				this.bufferStore(view.value);},
+			{arrSlotData}, "Waveshaper"],
 		["EZslider", "Out Gain", ControlSpec(0, 1), "outGain"],
-		["WetDryMixSlider"], 
+		["WetDryMixSlider"],
 	]);
-	//	use base class initialise 
+	//	use base class initialise
 	this.baseInit(this, argInstName);
 	//	make buffers, load the synthdef and create the synth
 	this.makeBuffersAndSynth(arrBufferSpecs);
 	//	initialise buffer to linear curve
-	arrCurveValues = Array.newClear(257).seriesFill(0, 1/256);
+	arrCurveValues = Array.newClear(256).seriesFill(0, 1/255);
 	Routine.run {
 		var holdModCondition;
 		// add condition to load queue
@@ -113,58 +113,58 @@ init {arg argInstName;
 
 buildGuiSpecArray {
 	guiSpecArray = [
-		["ActionButton", "Settings", {displayOption = "showSettings"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showSettings")], 
-		["Spacer", 3], 
-		["ActionButton", "Harmonics", {displayOption = "showHarmonics"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showHarmonics")], 
-		["Spacer", 3], 
-		["ActionButton", "Noise", {displayOption = "showNoise"; 
-			this.buildGuiSpecArray; system.showView;}, 130, 
-			TXColor.white, this.getButtonColour(displayOption == "showNoise")], 
-		["Spacer", 3], 
-		["SpacerLine", 1], 
+		["ActionButton", "Settings", {displayOption = "showSettings";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showSettings")],
+		["Spacer", 3],
+		["ActionButton", "Harmonics", {displayOption = "showHarmonics";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showHarmonics")],
+		["Spacer", 3],
+		["ActionButton", "Noise", {displayOption = "showNoise";
+			this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showNoise")],
+		["Spacer", 3],
+		["SpacerLine", 1],
 	];
 	if (displayOption == "showSettings", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopup", "Shaping type", arrOptionData, 0], 
+			["SynthOptionPopup", "Shaping type", arrOptionData, 0],
 			["SpacerLine", 4],
-			["TXCurveDraw", "Curve", {arrCurveValues}, 
-				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData; 
-					this.bufferStore(view.value);}, 
-				{arrSlotData}, "Waveshaper"], 
-			["ActionButton", "Rebuild curve by mirroring & inverting", {this.runMirror}, 400],
+			["TXCurveDraw", "Curve", {arrCurveValues},
+				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
+					this.bufferStore(view.value);},
+				{arrSlotData}, "Waveshaper"],
+			// ["ActionButton", "Rebuild curve by mirroring & inverting", {this.runMirror}, 400],
 			["SpacerLine", 4],
 			["EZslider", "In Gain", ControlSpec(0, 10), "inGain"],
 			["SpacerLine", 4],
 			["EZslider", "Out Gain", ControlSpec(0, 1), "outGain"],
 			["SpacerLine", 4],
-			["WetDryMixSlider"], 
+			["WetDryMixSlider"],
 		];
 	});
 	if (displayOption == "showHarmonics", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopup", "Shaping type", arrOptionData, 0], 
+			//["SynthOptionPopup", "Shaping type", arrOptionData, 0],
 			["SpacerLine", 4],
-			["TXCurveDraw", "Curve", {arrCurveValues}, 
-				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData; 
-					this.bufferStore(view.value);}, 
-				{arrSlotData}, "Waveshaper"], 
-			["TXMultiSlider", "Harmonics", ControlSpec(0, 1), "arrHarmonics", 16, 0, 100],
+			["TXCurveDraw", "Curve", {arrCurveValues},
+				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
+					this.bufferStore(view.value);},
+				{arrSlotData}, "Waveshaper"],
+			["TXMultiSlider", "Harmonics", ControlSpec(0, 1), "arrHarmonics", 16, 0, 80],
 			["EZslider", "Harm mix", ControlSpec(0, 100), "harmonicsMix"],
 			["ActionButton", "Add harmonics to the curve", {this.addHarmonics}, 400],
 		];
 	});
 	if (displayOption == "showNoise", {
 		guiSpecArray = guiSpecArray ++[
-			["SynthOptionPopup", "Shaping type", arrOptionData, 0], 
+			//["SynthOptionPopup", "Shaping type", arrOptionData, 0],
 			["SpacerLine", 4],
-			["TXCurveDraw", "Curve", {arrCurveValues}, 
-				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData; 
-					this.bufferStore(view.value);}, 
-				{arrSlotData}, "Waveshaper"], 
+			["TXCurveDraw", "Curve", {arrCurveValues},
+				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
+					this.bufferStore(view.value);},
+				{arrSlotData}, "Waveshaper"],
 			["SpacerLine", 4],
 			["EZslider", "Noise mix", ControlSpec(0, 100), "noiseMix"],
 			["SpacerLine", 4],
@@ -174,7 +174,7 @@ buildGuiSpecArray {
 		];
 	});
 }
-	
+
 getButtonColour { arg colour2Boolean;
 	if (colour2Boolean == true, {
 		^TXColor.sysGuiCol4;
@@ -191,7 +191,7 @@ bufferStore { arg argArray;
 	// make sure centre of array is 0 to stop DC offset
 	holdArray[128] = 0;
 	holdSignal = Signal.newFrom(holdArray);
-	buffers.at(0).sendCollection(holdSignal.asWavetableNoWrap); 
+	buffers.at(0).sendCollection(holdSignal.asWavetableNoWrap);
 }
 
 addHarmonics {

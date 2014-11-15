@@ -366,8 +366,7 @@ classvar <classData;
 
 *loadScreenTemplate {
 	var newPath, newFile, newData;
-	CocoaDialog.getPaths({ arg paths;
-		newPath = paths.at(0);
+	Dialog.openPanel({ arg newPath;
 		newFile = File(newPath,"r");
 		newData = thisProcess.interpreter.executeFile(newPath);
 		newFile.close;
@@ -379,7 +378,7 @@ classvar <classData;
 
 *saveScreenTemplate {
 	var newPath, newFile, newData;
-	CocoaDialog.savePanel({ arg path;
+	Dialog.savePanel({ arg path;
 		newPath = path;
 		newData = this.templateSaveData;
 		newFile = File(newPath,"w");

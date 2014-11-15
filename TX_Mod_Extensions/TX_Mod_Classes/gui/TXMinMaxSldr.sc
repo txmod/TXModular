@@ -13,14 +13,16 @@ TXMinMaxSlider {
 	}
 	init { arg window, dimensions, label, argControlSpec, argAction, initVal,
 		initAction, labelWidth, numberWidth, arrRangePresets;
-		var height, spacingX, spacingY;
+		var height, spacingX, spacingY, indent;
 
 		if (window.class == Window, {
 			spacingX = window.view.decorator.gap.x;
 			spacingY = window.view.decorator.gap.y;
+			indent = window.view.decorator.left;
 		}, {
 			spacingX = window.decorator.gap.x;
 			spacingY = window.decorator.gap.y;
+			indent = window.decorator.left;
 		});
 		height = ( (dimensions.y - spacingY) / 2).asInteger;
 
@@ -68,12 +70,14 @@ TXMinMaxSlider {
 		// decorator next line & shift
 		if (window.class == Window, {
 			window.view.decorator.nextLine;
+			window.view.decorator.shift(indent, 0);
 		}, {
 			window.decorator.nextLine;
+			window.decorator.shift(indent, 0);
 		});
 
 		labelView2 = StaticText(window, labelWidth @ height);
-		labelView2.string = "Min - Max";
+		labelView2.string = "min - max";
 		labelView2.align = \right;
 
 		rangeView = RangeSlider(window,

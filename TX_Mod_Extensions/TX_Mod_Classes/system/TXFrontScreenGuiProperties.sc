@@ -454,7 +454,7 @@ if (totalHighlighted == 1, {
 	// copy properties button
 	copyPropertiesButton = Button(propertiesBox, Rect(0, 0, 180, 20))
 		.states_([["Copy all widget properties",
-			TXColor.white, TXColor.bluegreen]]);
+			TXColor.white, TXColor.sysGuiCol2]]);
 	copyPropertiesButton.action = {arg view;
 		classData.holdWidgetClass =
 			holdCurrentWidget.class.asSymbol;
@@ -464,7 +464,7 @@ if (totalHighlighted == 1, {
 	// paste properties button
 	pastePropertiesButton = Button(propertiesBox, Rect(0, 0, 180, 20))
 		.states_([["Paste all widget properties",
-			TXColor.white, TXColor.bluegreen]]);
+			TXColor.white, TXColor.sysGuiCol2]]);
 	pastePropertiesButton.action = {arg view;
 		var selectedPropertyList;
 		// only paste relevent properties
@@ -557,7 +557,7 @@ if (totalHighlighted == 1, {
 	// button swap width and height
 	rotateButton = Button(propertiesBox, Rect(0, 0, 120, 20))
 		.states_([["Swap width & height",
-			TXColor.white, TXColor.blue]]);
+			TXColor.white, TXColor.sysGuiCol1]]);
 	rotateButton.action = {arg view;
 		var holdHeight, holdWidth;
 		holdHeight = holdCurrentWidget.width;
@@ -874,7 +874,7 @@ if (totalHighlighted == 1, {
 		// colour swap button
 		colourSwapButton = Button(propertiesBox, Rect(0, 0, 240, 20))
 			.states_([["Swap knob colour and box colour",
-				TXColor.white, TXColor.blue]]);
+				TXColor.white, TXColor.sysGuiCol1]]);
 		colourSwapButton.action = {arg view;
 			var holdKnobColor2, holdBackground2;
 			holdKnobColor2 = holdCurrentWidget.background;
@@ -1092,7 +1092,7 @@ if (totalHighlighted == 1, {
 		// colour swap button
 		colourSwapButton = Button(propertiesBox, Rect(0, 0, 240, 20))
 			.states_([["Swap text colour and box colour",
-				TXColor.white, TXColor.blue]]);
+				TXColor.white, TXColor.sysGuiCol2]]);
 		colourSwapButton.action = {arg view;
 			var holdStringColor2, holdBackground2;
 			holdStringColor2 = holdCurrentWidget.background;
@@ -1107,8 +1107,8 @@ if (totalHighlighted == 1, {
 			// checkbox reverse colours
 			colourRevCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 240, 20),
 				"Reverse colours when switched on",
-				TXColour.blue, TXColor.white,
-				TXColour.white, TXColor.blue);
+				TXColor.sysGuiCol1, TXColor.white,
+				TXColour.white, TXColor.sysGuiCol2);
 			colourRevCheckbox.action = {arg view;
 				holdCurrentWidget.colourReverse = view.value;
 			};
@@ -1244,8 +1244,8 @@ if (totalHighlighted == 1, {
 
 		// checkbox Midi Note Learn
 		midiLearnCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 100, 20),
-			"MIDI Learn", TXColour.blue, TXColor.white,
-			TXColour.white, TXColor.blue, 0);
+			"MIDI Learn", TXColor.sysGuiCol1, TXColor.white,
+			TXColour.white, TXColor.sysGuiCol1, 0);
 		midiLearnCheckbox.action = {arg view;
 			var midiNoteResponder;
 			if (view.value == 1, {
@@ -1424,8 +1424,8 @@ if (totalHighlighted == 1, {
 
 		// checkbox Midi CC Learn
 		midiLearnCheckbox = TXCheckBox(propertiesBox, Rect(0, 0, 120, 20),
-			"MIDI Learn", TXColour.blue, TXColor.white,
-			TXColour.white, TXColor.blue, 0);
+			"MIDI Learn", TXColor.sysGuiCol1, TXColor.white,
+			TXColour.white, TXColor.sysGuiCol1, 0);
 		midiLearnCheckbox.action = {arg view;
 			var midiCCNoResponder;
 			if (view.value == 1, {
@@ -1691,7 +1691,7 @@ if (totalHighlighted == 1, {
 			// popup - module
 			modulePopup = PopUpMenu(propertiesBox, Rect(0, 0, 150, 20))
 				.background_(TXColor.white).stringColor_(TXColor.black)
-				.items_(arrModules.collect({arg item, i; item.instName;}))
+				.items_(arrModules.collect({arg item, i; item.instDisplayName;}))
 				.action_({arg view;
 					var holdAction;
 					holdArrActions.at(i).put(0, arrModules.at(view.value).moduleID);

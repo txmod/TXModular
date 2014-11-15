@@ -74,7 +74,7 @@ TXNetAddress {
 			arrPresets = [
 				["Do... ", {}],
 				["Reset address: 0.0.0.0 ", {this.string_("0.0.0.0");}],
-				["Loopback address to this computer: 127.0.0.1 ", {this.string_("127.0.0.1");}],
+				["Loopback to this computer: 127.0.0.1 ", {this.string_("127.0.0.1");}],
 				["Copy to IP address clipboard 1", {ipAddressClipboard = string;}],
 				["Paste from IP address clipboard 1",
 					{if (ipAddressClipboard.notNil, {this.string_(ipAddressClipboard); }); }],

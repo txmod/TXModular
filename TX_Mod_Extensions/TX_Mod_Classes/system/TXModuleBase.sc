@@ -115,8 +115,8 @@ TXModuleBase {		// Base Class for all modules
 
 	classvar <>defLagTime = 0.01;	// default lag time for controls - this value can be changed
 	classvar <>system;				// system class
-	classvar	<>group = 1;			// default group for adding  synths to
-	classvar	<defSampleRate = 44100;	//	default sample rate. (also set in TXSystem1)
+	classvar <>group = 1;			// default group for adding  synths to
+	classvar <defSampleRate = 44100;	//	default sample rate. (also set in TXSystem1)
 
 	var <arrSynthArgSpecs;		// synth arguments spec
 	var <synthDefFunc; 		// synthdef function
@@ -390,7 +390,7 @@ loadData { arg arrData;
 		holdArrCtlSCInBusSpecs.do({arg item, i;
 			var holdIndex;
 			holdIndex = holdArrCtlSCInBusSpecs.collect({arg spec; spec[0]}).indexOfEqual(item[0]);
-			if (holdIndex.notNil, {
+			if (holdIndex.notNil && (holdIndex < this.myArrCtlSCInBusSpecs.size), {
 				this.myArrCtlSCInBusSpecs[holdIndex] = item;
 			});
 		});
@@ -470,8 +470,10 @@ overwritePreset { arg argModule, presetNameString, presetNo;
 
 loadPreset { arg argModule, presetnoNo = 0;
 	var holdPresetData;
-	holdPresetData = arrPresets[presetnoNo];
-	argModule.loadData(holdPresetData[1]);
+	if (presetnoNo < arrPresets.size, {
+		holdPresetData = arrPresets[presetnoNo];
+		argModule.loadData(holdPresetData[1]);
+	});
 }
 
 savePresetFile {
@@ -548,8 +550,11 @@ loadSynthDef {
 		synthDefRates = arrSynthArgSpecs.collect({arg item, i; item.at(2)});
 	 	synthDefRates = synthDefRates ++ [0, 0, 0, 0, 0, 0, 0];   // add dummy values for safety
 
-		//	send the SynthDef
-		SynthDef(instName, synthDefFunc, synthDefRates).send(system.server);
+		// testing xxx - try using add instead of send
+			//	send the SynthDef
+		// SynthDef(instName, synthDefFunc, synthDefRates).send(system.server);
+		//	add the SynthDef
+		SynthDef(instName, synthDefFunc, synthDefRates).add;
 	});
 }
 
@@ -894,8 +899,15 @@ pauseAction {
 }
 
 allNotesOff {
+	// clear all held notes
+	arrHeldMidiNotes.do ({arg item, i;
+		this.releaseSynthGate(item);
+	});
 	//	release all synths at node.
 	moduleNode.set(\gate, 0);
+	arrHeldMidiNotes = [];
+	// reset pedal
+	midiSustainPedalState = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -1048,9 +1060,7 @@ createSynthNote { arg argNote=60, argVeloc=100, argEnvTime=1, seqLatencyOn=1, ar
 		if (argEnvTime > 0, {
 			if (seqLatencyOn == 1, {latencyTime = system.latency});
 			SystemClock.sched(argEnvTime + latencyTime, { // allow for latency
-				if (holdSynth.notNil, {
-					if (holdSynth.isPlaying, {holdSynth.release; });
-				});
+				this.releaseSynthGate(argNote);
 				nil
 			});
 		});
@@ -1097,7 +1107,6 @@ checkPolyphony {
 setMonophonic {
 	groupPolyphony = 1;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////
 

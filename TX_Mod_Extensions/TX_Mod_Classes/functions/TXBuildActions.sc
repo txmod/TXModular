@@ -5,28 +5,29 @@ TXBuildActions {		// Action Builder
 // this class builds actions from an array of specs which are mostly specific types of guiSpec
 // the only exception is the type "commandAction" which acts as the equivalent of guiSpec's actionButton
 
-*from { arg argModule, argArray;
+*from { arg argModule, argArrSpecs;
 	var arrActionSpecs, holdAction, holdActionFunc, holdGetItemsFunction, holdControlSpecFunc, actionCounter;
 
 	// add initial dummy action
-	argArray = [["commandAction", "..."]] ++ argArray;
-	// add title items (or defaults if nil) to argArray
+	argArrSpecs = [["commandAction", "..."]] ++ argArrSpecs;
+	// add title items (or defaults if nil) to argArrSpecs
 	if (argModule.guiSpecTitleArray.notNil, {
-		argArray = argArray ++ argModule.guiSpecTitleArray;
+		argArrSpecs = argArrSpecs ++ argModule.guiSpecTitleArray;
 	}, {
 		// add defaults
-		argArray = argArray ++ [
+		argArrSpecs = argArrSpecs ++ [
 			["RunPauseButton"],
 			["RebuildModuleButton"],
 			["ModuleInfoTxt"],
 		];
 	});
+
 	// if not the system module, add presets
-	if (argModule.moduleID.notNil and: {argModule.moduleID > 99}, {
-		argArray = argArray ++ [
+	if (argModule.moduleID != 99, {
+		argArrSpecs = argArrSpecs ++ [
 			["TXPopupAction", "Load Preset :",
-				{["Load Preset..."]
-					++ argModule.arrPresets.collect ({ arg item, i; (i+1).asString +": "+ item[0]; })},
+				//OLD {["Load Preset..."] ++ argModule.arrPresets.collect ({ arg item, i; (i+1).asString +": "+ item[0]; })},
+				{["Load Preset..."] ++ 99.collect ({ arg i; (i).asString; })},
 				"dummyName",
 				{ arg view; if (view.value > 0, {argModule.loadPreset(argModule, view.value-1); }); }
 			],
@@ -36,8 +37,8 @@ TXBuildActions {		// Action Builder
 	// initialise variable
 	actionCounter = 0;
 
-	// build array of TXActions based on argArray
-	argArray.do({ arg item, i;
+	// build array of TXActions based on argArrSpecs
+	argArrSpecs.do({ arg item, i;
 
 	// Note: legacyType is a variable that is used as a fix for systems saved in version 0.10.6,
 	//    where action text was not saved for widgets. Only older actions are set "legacyType = 1"
@@ -1130,6 +1131,16 @@ TXBuildActions {		// Action Builder
 			arrActionSpecs = arrActionSpecs.add(holdAction);
 		});
 
+	// LoadModulePreset
+		if (item.at(0) == "LoadModulePreset", {
+			// add commandAction to LoadModulePreset
+			holdActionFunc = {
+				argModule.rebuildSynth;
+			};
+			holdAction = TXAction.new(\commandAction, "Load preset", holdActionFunc);
+			arrActionSpecs = arrActionSpecs.add(holdAction);
+		});
+
 	// Add a final dummy commandAction that acts as a line separator in action popups
 		if (arrActionSpecs.size > actionCounter, {
 			holdActionFunc = {};
@@ -1139,7 +1150,7 @@ TXBuildActions {		// Action Builder
 		// set variable
 		actionCounter = arrActionSpecs.size;
 
-	}); // end of argArray.do
+	}); // end of argArrSpecs.do
 
 	// return built array
 	^arrActionSpecs;

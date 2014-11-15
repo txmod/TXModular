@@ -18,6 +18,7 @@ TXInterfaceLayoutView {
 		dimensions = dimensions.bounds;
 		layoutHeight = dimensions.height;
 		layoutWidth = dimensions.width;
+		indent = 0 @ 0;
 		// make UserView
 		userView = UserView(window, dimensions);
 		userView.acceptsMouseOver = true;

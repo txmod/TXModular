@@ -11,8 +11,8 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
 	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=950;
-	classvar	<arrBufferSpecs;
+	classvar <guiWidth=950;
+	classvar <arrBufferSpecs;
 
 	var arrCurveValues;
 	var arrSlotData;
@@ -98,10 +98,10 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 					this.bufferStore(view.value);},
 				{arrSlotData}, "LFO", 706, 340, nil, "gridRows", "gridCols",
 				"time", "output level"],
-			["ActionButton", "Rebuild curve by mirroring ", {this.runMirror}, 250],
-			["Spacer", 10],
-			["ActionButton", "Rebuild curve by mirroring & inverting",
-				{this.runMirrorInvert}, 250],
+			// ["ActionButton", "Rebuild curve by mirroring ", {this.runMirror}, 250],
+			// ["Spacer", 10],
+			// ["ActionButton", "Rebuild curve by mirroring & inverting",
+			// {this.runMirrorInvert}, 250],
 			["NextLine"],
 			["TXNumberPlusMinus", "Grid rows", ControlSpec(1, 99), "gridRows", {system.showView}],
 			["Spacer", 10],
@@ -175,7 +175,6 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 
 		cols.do({arg item, i;
 			var jump, startRange, endRange, meanVal;
-			// jump = (maxVal / cols);
 			jump = cols.reciprocal;
 			startRange = (item * jump * maxVal).round(1);
 			endRange = ((item + 1) * jump * maxVal).round(1) - 1;

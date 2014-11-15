@@ -297,7 +297,6 @@ TXMeter {
 		w.alwaysOnTop = value;
 	}
 
-
 	free {
 		respfunc = nil;
 		resetfunc = nil;

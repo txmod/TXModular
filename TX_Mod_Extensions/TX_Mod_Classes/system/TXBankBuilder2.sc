@@ -2,10 +2,10 @@
 
 TXBankBuilder2 {	// Channel Routing
 
-classvar	<>system;	    			// system
-classvar	<>arrSampleBanks, <>arrLoopBanks;
-classvar	currentSampleBankNo, currentLoopBankNo;
-classvar	displayBankType, holdArray, holdArrBankNames, holdCurrentBankNo, holdCurrentBankName, showWaveform;
+classvar <>system;    // system
+classvar <>arrSampleBanks, <>arrLoopBanks;
+classvar currentSampleBankNo, currentLoopBankNo;
+classvar displayBankType, holdArray, holdArrBankNames, holdCurrentBankNo, holdCurrentBankName, showWaveform;
 classvar path, txtQuestion, errorScreen;
 classvar strBankType, strNoElements, strNo, btnChangeBank;
 classvar strBankNo, popBank, numBankNo, btnBankMinus, btnBankPlus, strBankNameLabel, textBankName;
@@ -128,13 +128,16 @@ classvar classData; //event dict for data
 		.stringColor_(TXColor.sysGuiCol1);
 	strBankNo.string = "Bank No.";
 
-	popBank = PopUpMenu (parent, 14 @ 24).value_(holdCurrentBankNo)
+	//numBankNo = NumberBox (parent, 30 @ 24).scroll_(false).value_(holdCurrentBankNo);
+
+	popBank = PopUpMenu (parent, 200 @ 24)
+		.value_(holdCurrentBankNo)
 		.background_(TXColor.white)
 		.stringColor_(TXColor.sysGuiCol1);
+
 	popBank.items = holdArrBankNames;
 	popBank.value = holdCurrentBankNo;
 
-	numBankNo = NumberBox (parent, 30 @ 24).scroll_(false).value_(holdCurrentBankNo);
 	btnBankMinus = Button(parent, 20 @ 24)
 		.states = [["-", TXColor.white, TXColor.sysGuiCol1]];
 	btnBankPlus = Button(parent, 20 @ 24)
@@ -299,8 +302,10 @@ classvar classData; //event dict for data
 	// show soundfile
 	soundFileView = SoundFileView.new(parent, 1020 @ 100)
 		.gridOn_(false).timeCursorOn_(false)
-		.waveColors_(Color.blue(alpha: 1.0) ! 8)
-		.background_(Color(0.65,0.65,0.95));
+		// .waveColors_(Color.blue(alpha: 1.0) ! 8)
+		.waveColors_(TXColor.sysGuiCol1(alpha: 1.0) ! 8)
+		// .background_(Color(0.65,0.65,0.95));
+		.background_(TXColor.white);
 
 	// spacing
 	parent.decorator.shift(0, 10);
@@ -463,7 +468,36 @@ classvar classData; //event dict for data
 	////////////////////////////////////////////////////////////////////////////////////////
 	// DEFINE GUI ACTIONS
 
-	numBankNo.action =
+		// REMOVED FOR NOW
+		// numBankNo.action =
+		// {arg view;
+		// 	holdCurrentBankNo = view.value.min(99).max(0);
+		// 	if (displayBankType == "Sample", {
+		// 		currentSampleBankNo = holdCurrentBankNo;
+		// 		classData.samplesVisibleOrigin = Point.new;
+		// 		}, {
+		// 			currentLoopBankNo = holdCurrentBankNo;
+		// 			classData.loopsVisibleOrigin = Point.new;
+		// 	});
+		// 	// reset sampleno
+		// 	this.setSampleNo(0);
+		// 	// recreate view
+		// 	system.showView;
+		// };
+
+	btnBankPlus.action =
+		{
+		popBank.value = (popBank.value + 1);
+		popBank.doAction;
+		};
+
+	btnBankMinus.action =
+		{
+		popBank.value = (popBank.value - 1);
+		popBank.doAction;
+		};
+
+	popBank.action =
 		{arg view;
 			holdCurrentBankNo = view.value.min(99).max(0);
 			if (displayBankType == "Sample", {
@@ -479,28 +513,11 @@ classvar classData; //event dict for data
 			system.showView;
 		};
 
-	btnBankPlus.action =
-		{
-		numBankNo.value = (numBankNo.value + 1);
-		numBankNo.doAction;
-		};
-
-	btnBankMinus.action =
-		{
-		numBankNo.value = (numBankNo.value - 1);
-		numBankNo.doAction;
-		};
-
-	popBank.action =
-		{arg view;
-		numBankNo.value = view.value;
-		numBankNo.doAction;
-		};
-
 	textBankName.action =
 		{arg view;
 			holdCurrentBankName = view.string;
 			this.updateBank;
+			this.updatePopBankItems;
 		};
 
 	btnOpenBank.action =
@@ -701,6 +718,16 @@ classvar classData; //event dict for data
 		arrLoopBanks[currentLoopBankNo][1] = holdCurrentBankName.copy;
 	});
 } // end of class method updateBank
+
+*updatePopBankItems { // method to be run whenever holdArray is updated
+		if (displayBankType == "Sample", {
+			holdArrBankNames = arrSampleBanks.collect({arg item, i; i.asString ++ " - " ++ item[1]});
+		}, {
+			holdArrBankNames = arrLoopBanks.collect({arg item, i; i.asString ++ " - " ++ item[1]});
+		});
+		popBank.items = holdArrBankNames;
+		popBank.value_(holdCurrentBankNo);
+	}
 
 *sizeChange { 	// method to be run whenever size changes
 	var holdSampleNo;

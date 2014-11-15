@@ -27,7 +27,7 @@ TXColour : Color {		// TX system colours
 	*initClass {
 		arrColourSlots = Color.white ! 11;
 		sysAlpha = 1;
-		this.sysColourSet1;
+		this.sysColourSet2;
 	}
 	*sysColourSet1 {  arg argAlpha = 1;
 		sysAlpha = argAlpha;
@@ -65,46 +65,76 @@ TXColour : Color {		// TX system colours
 		//		sysViewHighlight =   Color.new255(76, 21, 165).alpha_(argAlpha);
 		sysViewHighlight =   Color.new255(76, 168, 5).alpha_(argAlpha);
 	}
-	*sysColourSet2 {
-		sysMainWindow = Color.new255(90, 90, 255);
-		sysInterface = Color.new255(99.5, 130, 250, 255);
-		sysChannelAudio = Color.new255(150, 150, 255);
-		sysChannelControl = this.green;
-		sysChannelHighlight = Color.new255(195, 225, 255);
-		sysModuleWindow = sysChannelAudio;
-		sysModuleName =  Color.new255(245, 255, 200) ;
-		sysSelectedModString =  Color.new255(245, 255, 100) ;
-		sysDeleteCol = Color.new255(255, 80, 80);
-		sysEditCol = this.orange2;
-		sysHelpCol = this.purple;
-		sysGuiCol1 = this.blue;
-		sysGuiCol2 = this.green1;
-		sysGuiCol3 = this.orange;
-		sysGuiCol4 = Color.new255(70, 120, 200);
-		sysInterfaceButton = Color.new255(70, 120, 200);
-		sysLabelBackground =  Color.new255(140, 190, 235);
-		sysViewHighlight =   Color.new255(76, 21, 165);
+	*sysColourSet2 {  arg argAlpha = 1;
+		sysAlpha = argAlpha;
+		sysMainWindow = Color.gray(0.86).alpha_(argAlpha);
+		sysInterface = Color.new255(99.5, 130, 250, 255).alpha_(argAlpha);
+		sysChannelAudio = Color.gray(0.8).alpha_(argAlpha);
+		sysChannelControl = Color.gray(0.83).alpha_(argAlpha);
+		sysChannelHighlight = Color.gray(0.94).alpha_(argAlpha);
+		sysModuleWindow = sysChannelAudio.alpha_(argAlpha);
+		sysModuleName =  Color.new255(245, 255, 240) .alpha_(argAlpha);
+		sysSelectedModString =  Color.new255(250, 255, 120) .alpha_(argAlpha);
+		sysDeleteCol = Color.new255(100, 100, 100).alpha_(argAlpha);
+		sysEditCol = Color.new255(255, 169, 100).alpha_(argAlpha);
+		sysHelpCol = this.purple.blend(Color.gray(0.8), 0.5).alpha_(argAlpha);
+		// sysGuiCol1 = Color.new255(0, 0, 220).alpha_(argAlpha);
+		//sysGuiCol1 = Color.new255(150, 150, 190).alpha_(argAlpha);
+		//sysGuiCol1 = Color.new255(70, 160, 200).alpha_(argAlpha);
+		//sysGuiCol1 = Color.new255(70, 120, 200).alpha_(argAlpha);
+		sysGuiCol1 = Color.new255(70, 120, 200).blend(Color.gray(0.75), 0.5).alpha_(argAlpha);
+		// sysGuiCol2 = Color.new255(0, 110, 140).alpha_(argAlpha);
+		//sysGuiCol2 = Color.new255(140, 180, 180).alpha_(argAlpha);
+		//sysGuiCol2 = Color.new255(90, 140, 160).alpha_(argAlpha);
+		sysGuiCol2 = Color.new255(90, 140, 160).blend(Color.gray(0.75), 0.5).alpha_(argAlpha);
+		sysGuiCol3 = sysEditCol;
+		sysGuiCol4 = Color.new255(150, 200, 250).blend(Color.gray(0.85), 0.5).alpha_(argAlpha);
+		sysInterfaceButton = Color.new255(70, 120, 200).alpha_(argAlpha);
+		// sysLabelBackground =  Color.new255(140, 190, 235).alpha_(argAlpha);
+		sysLabelBackground =  Color.gray(0.8).alpha_(argAlpha);
+		sysViewHighlight =   Color.new255(76, 168, 5).alpha_(argAlpha);
 	}
-	*sysColourSet3 {
-		sysMainWindow = Color.new255(90, 140, 255);
-		sysInterface = Color.new255(99.5, 130, 250, 255);
-		sysChannelAudio = Color.new255(150, 190, 255);
-		sysChannelControl = this.green;
-		sysChannelHighlight = Color.new255(195, 225, 255);
-		sysModuleWindow = sysChannelAudio;
-		sysModuleName =  Color.new255(245, 255, 200) ;
-		sysSelectedModString =  Color.new255(245, 255, 100) ;
-		sysDeleteCol = Color.new255(255, 80, 80);
-		sysEditCol = this.orange2;
-		sysHelpCol = this.purple;
-		sysGuiCol1 = this.blue;
-		sysGuiCol2 = this.green1;
-		sysGuiCol3 = this.orange;
-		sysGuiCol4 = Color.new255(70, 120, 200);
-		sysInterfaceButton = Color.new255(70, 120, 200);
-		sysLabelBackground =  Color.new255(140, 190, 235);
-		sysViewHighlight =   Color.new255(76, 21, 165);
-	}
+	// OLD:
+	// *sysColourSet3 {
+	// 	sysMainWindow = Color.new255(90, 90, 255);
+	// 	sysInterface = Color.new255(99.5, 130, 250, 255);
+	// 	sysChannelAudio = Color.new255(150, 150, 255);
+	// 	sysChannelControl = this.green;
+	// 	sysChannelHighlight = Color.new255(195, 225, 255);
+	// 	sysModuleWindow = sysChannelAudio;
+	// 	sysModuleName =  Color.new255(245, 255, 200) ;
+	// 	sysSelectedModString =  Color.new255(245, 255, 100) ;
+	// 	sysDeleteCol = Color.new255(255, 80, 80);
+	// 	sysEditCol = this.orange2;
+	// 	sysHelpCol = this.purple;
+	// 	sysGuiCol1 = this.blue;
+	// 	sysGuiCol2 = this.green1;
+	// 	sysGuiCol3 = this.orange;
+	// 	sysGuiCol4 = Color.new255(70, 120, 200);
+	// 	sysInterfaceButton = Color.new255(70, 120, 200);
+	// 	sysLabelBackground =  Color.new255(140, 190, 235);
+	// 	sysViewHighlight =   Color.new255(76, 21, 165);
+	// }
+	// *sysColourSet4 {
+	// 	sysMainWindow = Color.new255(90, 140, 255);
+	// 	sysInterface = Color.new255(99.5, 130, 250, 255);
+	// 	sysChannelAudio = Color.new255(150, 190, 255);
+	// 	sysChannelControl = this.green;
+	// 	sysChannelHighlight = Color.new255(195, 225, 255);
+	// 	sysModuleWindow = sysChannelAudio;
+	// 	sysModuleName =  Color.new255(245, 255, 200) ;
+	// 	sysSelectedModString =  Color.new255(245, 255, 100) ;
+	// 	sysDeleteCol = Color.new255(255, 80, 80);
+	// 	sysEditCol = this.orange2;
+	// 	sysHelpCol = this.purple;
+	// 	sysGuiCol1 = this.blue;
+	// 	sysGuiCol2 = this.green1;
+	// 	sysGuiCol3 = this.orange;
+	// 	sysGuiCol4 = Color.new255(70, 120, 200);
+	// 	sysInterfaceButton = Color.new255(70, 120, 200);
+	// 	sysLabelBackground =  Color.new255(140, 190, 235);
+	// 	sysViewHighlight =   Color.new255(76, 21, 165);
+	// }
 
 	*blank { ^Color.new255(0, 0, 0, 0) }
 
@@ -142,6 +172,7 @@ TXColour : Color {		// TX system colours
 	*paleBlue { ^Color.new255(180, 180, 250).alpha_(sysAlpha) }
 	*paleBlue2 { ^Color.new255(228, 240, 255).alpha_(sysAlpha) }
 	*paleGreen { ^Color.new255(152, 251, 152).alpha_(sysAlpha) }
+	*paleGreen2 { ^Color.new255(192, 255, 192).alpha_(sysAlpha) }
 	*paleTurquoise { ^Color.new255(175, 238, 238).alpha_(sysAlpha) }
 	*paleVioletRed { ^Color.new255(219, 112, 147).alpha_(sysAlpha) }
 	*paleYellow { ^Color.new255(250, 250, 190).alpha_(sysAlpha) }

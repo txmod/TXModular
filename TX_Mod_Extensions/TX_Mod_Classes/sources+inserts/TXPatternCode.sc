@@ -155,7 +155,7 @@ TXPatternCode : TXModuleBase {
 
 		if (displayOption == "showInitialiseCode", {
 			guiSpecArray = guiSpecArray ++ [
-				["TextViewDisplay", "Enter Supercollider code in the window below. This needs to be a function which initialises any data needed for the pattern code to run. The function is passed 2 arguments: arrTXEvents - all available numerical events, dataEvent - where any data can be stored and shared between functions. Click the Store & compile code button after editing.", 650, 50, "Notes"],
+				["TextViewDisplay", "Enter Supercollider code in the window below. Click the 'Store & compile code' button after editing. The code needs to be a function which initialises any data needed for the pattern code to run. The function is passed 2 arguments: arrTXEvents - all available numerical events, dataEvent - where any data can be stored and shared between functions. ", 650, 50, "Notes"],
 				["TextViewCompile", {initFunctionString}, {arg argText; this.initFuncCompile(argText);}, 650, codeHeight, "Store & compile code",
 					120, {arg view; codeTextView = view; codeTextView.select(initFunctionCursorPos, 0); }],
 				["TXStaticText", "Status", {initFuncCompileStatus}, {arg view; initFuncCompileStatusView = view.textView}, 320, 50],

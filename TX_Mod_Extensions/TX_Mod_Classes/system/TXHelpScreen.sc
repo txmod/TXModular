@@ -3,7 +3,7 @@
 TXHelpScreen {
 	classvar v,w, keepOnTop = false;
 
-	*open{ arg winColour=Color(0.6,0.8,0.8), inLeft=50, inTop=500;
+	*open{ arg winColour=Color(0.8,0.8,0.8), inLeft=50, inTop=500;
 		var button, arrInfoLinesHeight, b,c,d,e,f,g, t, u;
 
 		{

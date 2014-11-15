@@ -385,7 +385,7 @@ init {arg argInstName;
 				system.showViewIfModDisplay(this);}, 50, nil, TXColor.sysGuiCol2],
 		["Spacer", 3],
 		["TXStaticText", "Status", {this.runningStatus},
-			{arg view; runningStatusView = view.textView}, 110, 40, TXColor.paleYellow2],
+			{arg view; runningStatusView = view.textView}, 110, 40, TXColor.paleYellow],
 			["Spacer", 3],
 		["SeqSyncStartCheckBox"],
 			["Spacer", 3],
@@ -784,11 +784,11 @@ buildGuiSpecArray {
 		guiSpecArray = guiSpecArray ++[
 			["SpacerLine", 8],
 			["TextBar", "NOTE: Sequencer steps cannot be edited while Sequencer is playing a Pattern Chain.",
-				780, 30, nil, TXColour.paleYellow2],
+				780, 30, nil, TXColour.paleYellow],
 			["TextBar", "You can still edit controls on the 'Outputs' and 'BPM & Options' screens. ",
-				780, 30, nil, TXColour.paleYellow2],
+				780, 30, nil, TXColour.paleYellow],
 			["TextBar", "To edit a Pattern while playing it, stop the Sequencer & set 'Next pattern' (on the 'Patterns' screen) to 'None' or 'Repeat current pattern'.",
-				780, 30, nil, TXColour.paleYellow2],
+				780, 30, nil, TXColour.paleYellow],
 		];
 	},{
 	// showSteps
@@ -975,7 +975,7 @@ buildGuiSpecArray {
 				nil,
 				nil,
 				false,  // don't allow scrolling
-				TXColor.paleYellow2;
+				TXColor.paleYellow;
 			],
 			["ActionButton", "Copy pattern", {slotClipboard = this.getSlotData.deepCopy;}, 80],
 			["ActionButton", "Paste pattern", {if (slotClipboard.notNil,
@@ -1051,7 +1051,7 @@ openGui{ arg argParent; 			 // override base class
 	this.resetScrollViewArrays;
 	//	use base class initialise
 	this.baseOpenGui(this, argParent);
-	//this.updateScrollOrigin(nil, holdVisibleOrigin);
+		{this.updateScrollOrigin(nil, holdVisibleOrigin)}.defer(0.05);
 }
 
 //////////////////////////////////// scroll view syncing
@@ -1176,32 +1176,38 @@ initMidiPort { arg portInd = 0;
 	});
 }
 
-sendMIDIMessage { arg outNote, outVel, gateTime, outControl1, outControl2, outControl3;
+sendMIDIMessage { arg outNote, outVel, gateTime, outControl1, outControl2, outControl3, delay = 0;
 	var portInd, channel;
 	portInd = this.getSynthArgSpec("midiPort");
 	channel = this.getSynthArgSpec("midiChannel") - 1;
 	if ( portInd > 0, {
 		// "Note On & Off"
 		if (this.getSynthArgSpec("midiNoteOn") == 1, {
-			SystemClock.schedAbs( 0,{
+			SystemClock.sched( delay,{
 				holdMIDIOutPort.noteOn(channel, outNote, outVel);
 			});
-			SystemClock.sched( gateTime,{
+			SystemClock.sched( delay + gateTime,{
 				holdMIDIOutPort.noteOff(channel, outNote, 0);
 				nil;
 			});
 		});
 		// "Controller 1"
 		if (this.getSynthArgSpec("midiControl1On") == 1, {
-			holdMIDIOutPort.control(channel, this.getSynthArgSpec("midiControlNo1"), outControl1 );
+			SystemClock.sched( delay,{
+				holdMIDIOutPort.control(channel, this.getSynthArgSpec("midiControlNo1"), outControl1 );
+			});
 		});
 		// "Controller 2"
 		if (this.getSynthArgSpec("midiControl2On") == 1, {
-			holdMIDIOutPort.control(channel, this.getSynthArgSpec("midiControlNo2"), outControl2);
+			SystemClock.sched( delay,{
+				holdMIDIOutPort.control(channel, this.getSynthArgSpec("midiControlNo2"), outControl2);
+			});
 		});
 		// "Controller 3"
 		if (this.getSynthArgSpec("midiControl3On") == 1, {
-			holdMIDIOutPort.control(channel, this.getSynthArgSpec("midiControlNo3"), outControl3);
+			SystemClock.sched( delay,{
+				holdMIDIOutPort.control(channel, this.getSynthArgSpec("midiControlNo3"), outControl3);
+			});
 		});
 	});
 }
@@ -1401,14 +1407,14 @@ playNextStep { arg argMuteStep = 0;
 			// write note & velocity as control values to output busses
 			outBus.setn([(outNote/127).max(0).min(1), outVel/127, outControl1/100,
 				outControl2/100, outControl3/100, 1]);
-			// output midi
-			this.sendMIDIMessage(outNote, outVel, outEnvTime,
-				outControl1 * 127 / 100, outControl2 * 127 / 100, outControl3 * 127 / 100);
 		});
 		system.server.makeBundle(seqLatency + outDelay + 0.01, {
 			// write note & velocity as control values to output busses
 			outBus.setAt(5, 0);
 		});
+		// output midi with delay
+		this.sendMIDIMessage(outNote, outVel, outEnvTime,
+			outControl1 * 127 / 100, outControl2 * 127 / 100, outControl3 * 127 / 100, seqLatency + outDelay);
 	});
 	// go to next step
 	seqCurrentStep = (seqCurrentStep + 1);

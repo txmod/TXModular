@@ -33,6 +33,7 @@ TXSystem1 {		// system module 1
 	classvar <>latency = 0.1;		// general latency time in seconds to allow server to do something
 	classvar <arrScreenUpdFuncs;	// for gui
 	classvar <instName = "System";	// system name
+	classvar <instDisplayName = "System";	// system name
 	classvar <arrActionSpecs;		// specs for system actions available to widgets
 	classvar <guiSpecTitleArray;
 	classvar <>showFrontScreen;
@@ -82,16 +83,18 @@ TXSystem1 {		// system module 1
 		holdBootSeconds = Main.elapsedTime;
 		// create event and set variable:
 		dataBank = ();
-		dataBank.modulesVisibleOrigin = Point.new(0,0);
+		//dataBank.modulesVisibleOrigin = Point.new(0,0);
+		dataBank.windowVisibleOrigin = Point.new(0,0);
 	}
 	// start the system
 
-	*startCocoa {
-		this.start;
-	}
-
 	*start { arg argStandAlone = 0, argFileNameString, showAudioOptions = true;
 		var holdString;
+		var classError = "";
+
+		// init
+		dataBank.windowVisibleOrigin = Point.new(0,0);
+
 		if (argStandAlone == 1, {
 			txStandAlone = 1; // for running TX system as a standalone
 			// removed for now
@@ -103,6 +106,18 @@ TXSystem1 {		// system module 1
 			.format( (String.scDir +/+ "plugins").shellQuote )
 			.unixCmd;
 
+		});
+
+		//check for relevant plugins/quarks
+		if ('FM7'.asClass.isNil, {
+			classError = classError ++ "Error - SC3 Plugins not installed.  ";
+		});
+		if ('SimpleMIDIFile'.asClass.isNil, {
+			classError = classError ++ "Error - wslib quark not installed.  ";
+		});
+		if (classError != "", {
+			TXInfoScreen.new("Error - unable to start TX Modular System due to the following:  " ++ classError);
+			^0;
 		});
 
 		// removed for now
@@ -293,6 +308,7 @@ TXSystem1 {		// system module 1
 			TXTransientShape,
 			TXTransientShapeSt,
 			TXTrigImpulse,
+			// TXV_System,
 			TXVocoder2,
 			TXVocoderFX2,
 			TXVosim,
@@ -320,8 +336,8 @@ TXSystem1 {		// system module 1
 			["Audio: Drone", "Waveform ", TXWaveform5],
 			["Audio: Drone", "Waveform St", TXWaveform5St],
 			["Audio: Drone", "Wave Terrain", TXWaveTerrain],
-			["Audio: File", "File Player ", TXFilePlayer6],
-			["Audio: File", "File Player St", TXFilePlayer6St],
+			["Audio: File Player", "File Player ", TXFilePlayer6],
+			["Audio: File Player", "File Player St", TXFilePlayer6St],
 			["Audio: Inputs", "Audio Inputs", TXAudioIn4],
 			["Audio: Mid-Side Encoding", "M-S Decoder", TXMidSideDecoder],
 			["Audio: Mid-Side Encoding", "M-S Encoder", TXMidSideEncoder],
@@ -384,13 +400,14 @@ TXSystem1 {		// system module 1
 			["Control: SC Code", "Pattern Code", TXPatternCode],
 			// ["Control: Visual", "QC Particles", TXQCParticles2],
 			// ["Control: Visual", "Quartz Player", TXQCPlayer4],
+			// ["Control: TXV System", "TXV System", TXV_System],
 			["Control: Wii", "Wii Ctrl Darwiin", TXWiiController],
 			["Control: Wii", "Wii Ctrl OSC", TXWiiControllerOSC2],
 			["Control: Wii", "Wii Trig Darwiin", TXWiiTrigger],
 			["Control: Wii", "Wii Trig OSC", TXWiiTrigOSC2],
 		];
 		dataBank.arrSourceModulesByCategoryWithAlpha = dataBank.arrSourceModulesByCategory.collect({arg item, i;
-			["Alphabetical Order: ", item[1], item[2]];
+			["All modules ", item[1], item[2]];
 		})
 		.sort({ arg a, b; a[1] < b[1] })
 		++ dataBank.arrSourceModulesByCategory;
@@ -812,54 +829,59 @@ TXSystem1 {		// system module 1
 	*loadSystemSettings {
 		var validData, holdPath, holdFile, holdFileData;
 
-		holdPath = PathName.new(Platform.userAppSupportDir +/+ "TXModular");
-		//OLD holdFile = PathName.new(holdPath.pathOnly ++ "TxModSettings.tx");
-		//NEW:
-		holdFile = PathName.new(holdPath.pathOnly ++ "TXModSettings.tx");
+		// FIXME: this won't work on Windows
+		if (thisProcess.platform.name != \windows, {
 
-		// if TXModular directory doesn't exist, create it.
-		if (holdPath.isFolder.not, {
-			// OLD CODE
-			// FIXME: this won't work on Windows
-			// ("mkdir" + holdPath.fullPath).unixCmd;
-			// NEW CODE
-			holdPath.fullPath.makeDir;
-		});
+			holdPath = PathName.new(Platform.userAppSupportDir +/+ "TXModular");
+			//OLD holdFile = PathName.new(holdPath.pathOnly ++ "TxModSettings.tx");
+			//NEW:
+			holdFile = PathName.new(Platform.userAppSupportDir +/+ "TXModular" +/+ "TXModSettings.tx");
 
-		if (File.exists(holdFile.fullPath),  {
-			// if file TXMODSettings.tx  exists, update values.
-			holdFileData = thisProcess.interpreter.executeFile(holdFile.fullPath);
-			if (holdFileData.class == Array, {
-				if (dataBank.showAudioOptions == true, {
-					dataBank.audioDevice = holdFileData[1][0];
-					dataBank.bufferSize = holdFileData[1][1];
-					dataBank.sampleRate = holdFileData[1][2];
-					dataBank.audioInDevice = holdFileData[1][11];
-					dataBank.audioOutDevice = holdFileData[1][12];
+			// if TXModular directory doesn't exist, create it.
+			if (holdPath.isFolder.not, {
+				// OLD CODE
+				// FIXME: this won't work on Windows
+				// ("mkdir" + holdPath.fullPath).unixCmd;
+				// NEW CODE
+				holdPath.fullPath.makeDir;
+			});
+
+			if (File.exists(holdFile.fullPath),  {
+				// if file TXMODSettings.tx  exists, update values.
+				holdFileData = thisProcess.interpreter.executeFile(holdFile.fullPath);
+				if (holdFileData.class == Array, {
+					if (dataBank.showAudioOptions == true, {
+						dataBank.audioDevice = holdFileData[1][0];
+						dataBank.bufferSize = holdFileData[1][1];
+						dataBank.sampleRate = holdFileData[1][2];
+						dataBank.audioInDevice = holdFileData[1][11];
+						dataBank.audioOutDevice = holdFileData[1][12];
+					});
+					if (holdFileData[1][3].notNil, {
+						dataBank.confirmDeletions = holdFileData[1][3];
+					});
+					if (holdFileData[1][4].notNil, {
+						dataBank.windowAlpha = holdFileData[1][4];
+						this.showView;
+					});
+					if (holdFileData[1][5].notNil, {
+						dataBank.windowColour = Color(holdFileData[1][5], holdFileData[1][6],
+							holdFileData[1][7], holdFileData[1][8]);
+					});
+					dataBank.imageFileName =  holdFileData[1][9];
+					dataBank.holdImage = nil;
+					if (holdFileData[1][10].notNil, {
+						dataBank.displayModeIndex = holdFileData[1][10];
+					});
+					validData = true;
 				});
-				if (holdFileData[1][3].notNil, {
-					dataBank.confirmDeletions = holdFileData[1][3];
-				});
-				if (holdFileData[1][4].notNil, {
-					dataBank.windowAlpha = holdFileData[1][4];
-					this.showView;
-				});
-				if (holdFileData[1][5].notNil, {
-					dataBank.windowColour = Color(holdFileData[1][5], holdFileData[1][6],
-						holdFileData[1][7], holdFileData[1][8]);
-				});
-				dataBank.imageFileName =  holdFileData[1][9];
-				dataBank.holdImage = nil;
-				if (holdFileData[1][10].notNil, {
-					dataBank.displayModeIndex = holdFileData[1][10];
-				});
-				validData = true;
+			});
+			if (validData != true,  {
+				// if file TXMODSettings.tx  doesn't exist, create it.
+				this.saveSystemSettings;
 			});
 		});
-		if (validData != true,  {
-			// if file TXMODSettings.tx  doesn't exist, create it.
-			this.saveSystemSettings;
-		});
+
 	}
 
 	///  SYNC START AND STOP SYSTEM /////////////////////////////////////
@@ -1191,6 +1213,8 @@ TXSystem1 {		// system module 1
 		w.front;
 		w.view.decorator = FlowLayout(w.view.bounds);
 		w.view.background = dataBank.windowColour;
+		w.view.action = {arg view; dataBank.windowVisibleOrigin = view.visibleOrigin;};
+		w.view.mouseWheelAction = {arg view; dataBank.windowVisibleOrigin = view.visibleOrigin;};
 		w.alpha = dataBank.windowAlpha;
 		w.acceptsMouseOver = true;
 		this.setWindowImage;
@@ -1382,7 +1406,7 @@ TXSystem1 {		// system module 1
 				newModule.loadModuleID(item);
 				newModule.loadData(item);
 				// flag if legacy module
-				if (arrAllPossModules.indexOf(holdModuleClass).isNil, {
+				if (arrAllPossModules.indexOf(holdModuleClass).isNil && (holdModuleClass.asString.keep(4) != "TXV_"), {
 					//("Info: Opening " ++ holdModuleClass.name.asString ++ " - this is an older TX module.").postln;
 					newModule.legacyModule = true;
 				});
@@ -1583,7 +1607,7 @@ TXSystem1 {		// system module 1
 		// delete all channels in  arrChannels in TXChannelRouting
 		TXChannelRouting.deleteAllChannels;
 		// delete all current modules in system
-		arrSystemModules.size.do({ arg item, i; arrSystemModules[0].deleteModule;});
+		arrSystemModules.do({ arg item, i; item.deleteModule;});
 		// run inits
 		TXBankBuilder2.initClass;
 		TXWidget.initClass;
@@ -1622,8 +1646,8 @@ TXSystem1 {		// system module 1
 			// set position
 			TXSignalFlow.setPosition(newModule);
 		});
-		// post message
-		//	("Adding Module: " ++ newModule.instName).postln;
+		// testing xxx - post message
+		// ("Adding Module: " ++ newModule.instName).postln;
 		^newModule;
 	}
 
@@ -2253,6 +2277,7 @@ TXSystem1 {		// system module 1
 
 						if (arrBusses.size > 0, {
 							case
+							// freqscopes
 							{ view.value > (17 + arrModulesForMeters.size + arrAudioAuxBusses.size
 								+ arrFXSendBusses.size + arrControlAuxBusses.size) } {
 								holdValue = view.value;
@@ -2269,6 +2294,7 @@ TXSystem1 {		// system module 1
 								}.fork(AppClock);
 								holdMeter = nil; // not used in case of FreqScope
 							}
+							// meters
 							{ view.value > (17 + arrModulesForMeters.size) } {
 								holdMeter = TXMeter.perform(
 									'new', arrBusses-1, nil, nil, 10 @ 80,
@@ -2293,10 +2319,18 @@ TXSystem1 {		// system module 1
 									popMeters.items.at(view.value), meterRate
 								);
 							}
-							;
+							; // end of case
 							// defer to allow meter synth to be built:
 							if (holdMeter.notNil, {
-								{holdMeter.autoreset = 3.0; holdMeter.rate = 20;}.defer(0.5); });
+								{
+									if (holdMeter.meterRate == \audio, {
+										holdMeter.decay = 240;
+									}, {
+										holdMeter.decay = 240;
+									});
+									holdMeter.autoreset = 3.00;
+									holdMeter.rate = 20;
+								}.defer(0.5); });
 							arrMeters = arrMeters.add(holdMeter);
 						});
 						popMeters.value = 0;
@@ -2318,8 +2352,8 @@ TXSystem1 {		// system module 1
 					buttonLabels.do({arg item, i;
 						var holdButton, holdBoxColour, holdTextColour;
 						if (showWindow == item, {
-							holdBoxColour = TXColor.white;
-							holdTextColour = TXColor.sysGuiCol1;
+							holdBoxColour = TXColor.sysGuiCol4;
+							holdTextColour = TXColor.white;
 						},{
 							holdBoxColour = TXColor.sysGuiCol1;
 							holdTextColour = TXColor.white;
@@ -2348,10 +2382,10 @@ TXSystem1 {		// system module 1
 					buttonLabels.do({arg item, i;
 						var holdButton, holdBoxColour, holdTextColour;
 						if (showWindow == item, {
-							holdBoxColour = TXColor.white;
-							holdTextColour = TXColor.sysInterfaceButton;
+							holdBoxColour = TXColor.sysGuiCol4;
+							holdTextColour = TXColor.white;
 						},{
-							holdBoxColour = TXColor.sysInterfaceButton;
+							holdBoxColour = TXColor.sysGuiCol1;
 							holdTextColour = TXColor.white;
 						});
 						holdButton = Button(headerBox, 122 @ 24);
@@ -2523,6 +2557,8 @@ TXSystem1 {		// system module 1
 				w.front;
 			}, clock: AppClock); // end of Routine.run
 		}); // end of if
+		// update visibleOrigin
+		{w.view.visibleOrigin = dataBank.windowVisibleOrigin;}.defer(0.05);
 	} // end of method showViewAction
 
 	*deferRemoveView {arg holdView;
@@ -2542,7 +2578,7 @@ TXSystem1 {		// system module 1
 			holdFile = SCImage.open(paths[0]);
 			if (holdFile.isNil, {
 				TXInfoScreen.new(
-					"Error: the following is not a valid image files:",
+					"Error: the following is not a valid image file:",
 					arrInfoLines: [paths[0]]
 				);
 			},{
@@ -2637,7 +2673,7 @@ TXSystem1 {		// system module 1
 		noteView.decorator.nextLine;
 		noteView.decorator.shift(0, 10);
 
-		/* IMMAGE REMOVED FOR NOW
+		/* IMAGE REMOVED FOR NOW
 		// label - background image
 		StaticText(noteView, Rect(0, 0, 120, 20))
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)

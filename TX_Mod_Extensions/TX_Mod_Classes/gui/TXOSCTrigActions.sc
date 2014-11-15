@@ -267,7 +267,7 @@ TXOSCTrigActions {
 				// update view
 				system.showView;
 			});
-			popupFirstArg.value =  holdOSCTrigAction[12];
+			popupFirstArg.value =  holdOSCTrigAction[12] + 1;
 
 			// popup - module
 			modulePopup = PopUpMenu(holdParent, Rect(0, 0, 130, 20))
