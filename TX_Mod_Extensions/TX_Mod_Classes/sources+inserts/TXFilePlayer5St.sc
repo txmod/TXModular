@@ -2,61 +2,61 @@
 
 TXFilePlayer5St : TXModuleBase {	// Disk File Player - stereo
 
-	classvar <>arrInstances;	
+	classvar <>arrInstances;
 	classvar <defaultName;  		// default module name
 	classvar <moduleRate;			// "audio" or "control"
 	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels 
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs 
+	classvar <noInChannels;			// no of input channels
+	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
 	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels 
+	classvar <noOutChannels;		// no of output channels
 	classvar <arrOutBusSpecs; 		// output bus specs
 	classvar	<arrBufferSpecs;
 	classvar	<guiWidth=500;
-	
+
 	var	<>sampleFileNameView;
 	var	<>sampleFileName = "";
 	var sampleNumChannels = 0;
 
 *initClass{
-	arrInstances = [];		
+	arrInstances = [];
 	//	set class specific variables
 	defaultName = "File Player St";
 	moduleRate = "audio";
 	moduleType = "source";
-	arrCtlSCInBusSpecs = [ 		
+	arrCtlSCInBusSpecs = [
 		["Level", 1, "modLevel", 0],
-	];	
+	];
 	noOutChannels = 2;
-	arrOutBusSpecs = [ 
-		["Out L + R", [0,1]], 
-		["Out L only", [0]], 
-		["Out R only", [1]] 
-	];	
+	arrOutBusSpecs = [
+		["Out L + R", [0,1]],
+		["Out L only", [0]],
+		["Out R only", [1]]
+	];
 	arrBufferSpecs = [ ["bufnumLoop", 32768, 2] ];
 } // end of method initClass
 
 *new{ arg argInstName;
 	 ^super.new.init(argInstName);
-} 
+}
 
 *syncStartAllPlayers {
 	 arrInstances.do({ arg item, i;
 	 	item.syncStartPlayer;
 	 });
-} 
+}
 
 *syncStopAllPlayers {
 	 arrInstances.do({ arg item, i;
 	 	item.syncStopPlayer;
 	 });
-} 
+}
 
 *stopAllPlayers {
 	 arrInstances.do({ arg item, i;
 	 	item.stopPlayer;
 	 });
-} 
+}
 
 init {arg argInstName;
 	//	set  class specific instance variables
@@ -75,14 +75,14 @@ init {arg argInstName;
 		["syncStop", 0, \ir],
 		["loop", 0, 0],
 		["modLevel", 0, defLagTime],
-  	]; 
-	synthDefFunc = { 
+  	];
+	synthDefFunc = {
 		arg out, gate, note, velocity, bufnumSound, level, attack, release, syncStart, syncStop, loop, modLevel;
 		var outEnv, outSound, outLevel;
-		
+
 		outEnv = EnvGen.kr(
 			Env.new([0,1,1,0],[attack, 1, release],'sine', 2),
-			gate, 
+			gate,
 			doneAction: 2
 		);
 		outLevel = (level + modLevel).max(0).min(1);
@@ -90,72 +90,72 @@ init {arg argInstName;
 		Out.ar(out, outEnv * outSound);
 	};
 	guiSpecArray = [
-		["ActionButtonBig", "Open new file", {this.openNewFile}], 
-		["NextLine"], 
-		["TXStaticText", "File name", {this.sampleFileName.keep(-50)}, {arg view; sampleFileNameView = view.textView}], 
-		["DividingLine"], 
-		["NextLine"], 
-		["NextLine"], 
-		["EZslider", "Fade-in time", ControlSpec(0, 20), "attack"], 
-		["EZslider", "Fade-out time", ControlSpec(0, 20), "release"], 
-		["DividingLine"], 
-		["NextLine"], 
-		["NextLine"], 
-		["EZslider", "Level", ControlSpec(0, 1), "level"], 
-		["DividingLine"], 
-		["NextLine"], 
-		["NextLine"], 
-		["TXCheckBox", "Loop file", "loop"], 
-		["DividingLine"], 
-		["NextLine"], 
-		["NextLine"], 
-		["SeqSyncStartCheckBox"], 
-		["SeqSyncStopCheckBox"], 
-		["NextLine"], 
-		["NextLine"], 
+		["ActionButtonBig", "Open new file", {this.openNewFile}],
+		["NextLine"],
+		["TXStaticText", "File name", {this.sampleFileName.keep(-50)}, {arg view; sampleFileNameView = view.textView}],
+		["DividingLine"],
+		["NextLine"],
+		["NextLine"],
+		["EZslider", "Fade-in time", ControlSpec(0, 20), "attack"],
+		["EZslider", "Fade-out time", ControlSpec(0, 20), "release"],
+		["DividingLine"],
+		["NextLine"],
+		["NextLine"],
+		["EZslider", "Level", ControlSpec(0, 1), "level"],
+		["DividingLine"],
+		["NextLine"],
+		["NextLine"],
+		["TXCheckBox", "Loop file", "loop"],
+		["DividingLine"],
+		["NextLine"],
+		["NextLine"],
+		["SeqSyncStartCheckBox"],
+		["SeqSyncStopCheckBox"],
+		["NextLine"],
+		["NextLine"],
 		["ActionButtonBig", "Rewind", {
-			moduleNode.release(0); 
+			moduleNode.release(0);
 			this.reCueSample;
-		}], 
-		["Spacer", 3], 
-		["ActionButtonBig", "Play", {moduleNode.release(0); this.createSynthNote(60, 127, 0); }], 
-		["Spacer", 3], 
-		["ActionButtonBig", "Play from start", 
-			{moduleNode.release(0); this.reCueSample; this.createSynthNote(60, 127, 0); }, 90], 
-		["Spacer", 3], 
-		["ActionButtonBig", "Fade out", {moduleNode.release; }], 
-		["Spacer", 3], 
-		["ActionButtonBig", "Stop", {moduleNode.release(0); }], 
-		["DividingLine"], 
+		}],
+		["Spacer", 3],
+		["ActionButtonBig", "Play", {moduleNode.release(0); this.createSynthNote(60, 127, 0); }],
+		["Spacer", 3],
+		["ActionButtonBig", "Play from start",
+			{moduleNode.release(0); this.reCueSample; this.createSynthNote(60, 127, 0); }, 90],
+		["Spacer", 3],
+		["ActionButtonBig", "Fade out", {moduleNode.release; }],
+		["Spacer", 3],
+		["ActionButtonBig", "Stop", {moduleNode.release(0); }],
+		["DividingLine"],
 	];
 	arrActionSpecs = this.buildActionSpecs([
-		["commandAction", "Open new file", {this.openNewFile}], 
-		["NextLine"], 
-		["TXStaticText", "File name", {this.sampleFileName}, {arg view; sampleFileNameView = view}], 
+		["commandAction", "Open new file", {this.openNewFile}],
+		["NextLine"],
+		["TXStaticText", "File name", {this.sampleFileName}, {arg view; sampleFileNameView = view}],
 		["commandAction", "Play", {
-			moduleNode.release(0); 
+			moduleNode.release(0);
 			this.createSynthNote(60, 127, 0); }],
 		["commandAction", "Play from start", {
-			moduleNode.release(0); 
+			moduleNode.release(0);
 			this.reCueSample;
 			this.createSynthNote(60, 127, 0);
 		}],
 		["commandAction", "Stop with fade out", {moduleNode.release; }],
-		["commandAction", "Stop immediately", {moduleNode.release(0); }], 
+		["commandAction", "Stop immediately", {moduleNode.release(0); }],
 		["commandAction", "Rewind", {
-			moduleNode.release(0); 
+			moduleNode.release(0);
 			this.reCueSample;
 		}],
-		["SeqSyncStartCheckBox"], 
-		["SeqSyncStopCheckBox"], 
-		["EZslider", "Fade-in time", ControlSpec(0, 20), "attack"], 
-		["EZslider", "Fade-out time", ControlSpec(0, 20), "release"], 
-		["TXCheckBox", "Loop", "loop"], 
-		["EZslider", "Level", ControlSpec(0, 1), "level"], 
-		["TXCheckBox", "Loop file", "loop"], 
-	]);	
+		["SeqSyncStartCheckBox"],
+		["SeqSyncStopCheckBox"],
+		["EZslider", "Fade-in time", ControlSpec(0, 20), "attack"],
+		["EZslider", "Fade-out time", ControlSpec(0, 20), "release"],
+		["TXCheckBox", "Loop", "loop"],
+		["EZslider", "Level", ControlSpec(0, 1), "level"],
+		["TXCheckBox", "Loop file", "loop"],
+	]);
 
-	// use base class initialise 
+	// use base class initialise
 	this.baseInit(this, argInstName);
 	this.midiNoteInit;
 	//	make buffers, load the synthdef and create the Group for synths to belong to
@@ -185,15 +185,15 @@ loadExtraData {arg argData;  // override default method
 	});
 }
 
-allNotesOff { 
-	//	override superclass method 
+allNotesOff {
+	//	override superclass method
 	// take no action
 }
 
-openNewFile { 
+openNewFile {
 	var firstPath;
 	// get path/filename
-	CocoaDialog.getPaths({ arg paths;
+	Dialog.getPaths({ arg paths;
 		firstPath = paths.at(0);
 		// check for valid file
 		if (this.isValidSoundFile(firstPath), {
@@ -204,9 +204,9 @@ openNewFile {
 			});
 			// cue file
 			this.cueSample(firstPath)
-		}); 
+		});
 	});
-} 
+}
 
 isValidSoundFile {arg argPath;  // check argument is a valide stereo path
 	var holdFile, errorMessage;
@@ -220,7 +220,7 @@ isValidSoundFile {arg argPath;  // check argument is a valide stereo path
 	});
 	holdFile.close;
 	if (errorMessage.notNil, {
-		TXInfoScreen(errorMessage); 
+		TXInfoScreen(errorMessage);
 		^false;
 	});
 	^true;
@@ -246,8 +246,8 @@ cueSample { arg argFileName; // method to cue sample into buffer
 				buffers.at(0).zero;
 			},{
 				// otherwise,  try to cue file.  if it fails, display error message and clear
-				holdBuffer = Buffer.cueSoundFile(system.server, argFileName, 0, 2, 32768, { 
-					arg argBuffer; 
+				holdBuffer = Buffer.cueSoundFile(system.server, argFileName, 0, 2, 32768, {
+					arg argBuffer;
 					//	if file loaded ok
 					if (argBuffer.notNil, {
 						sampleFileName = argFileName;
@@ -280,27 +280,27 @@ reCueSample { // method to re-cue sample into buffer from start of file
 	});
 } // end of method reCueSample
 
-syncStartPlayer { 
+syncStartPlayer {
 	// if syncStart is 1 then start Player
 	if (this.getSynthArgSpec("syncStart") == 1, {
-		moduleNode.release(0); 
+		moduleNode.release(0);
 		this.reCueSample;
-		this.createSynthNote(60, 127, 0); 
+		this.createSynthNote(60, 127, 0);
 	});
-} 
+}
 
-syncStopPlayer { 
+syncStopPlayer {
 	// if syncStop is 1 then stop Player
 	if (this.getSynthArgSpec("syncStop") == 1, {
 		moduleNode.release;
 	});
-} 
+}
 
-stopPlayer { 
+stopPlayer {
 		moduleNode.release;
-} 
+}
 
-rebuildSynth { 
+rebuildSynth {
 	// override base class method
 }
 
