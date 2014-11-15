@@ -1,8 +1,8 @@
-// Copyright (C) 2013  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
+// Copyright (C) 2014  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 The TX Modular System - Adding TX Classes to SuperCollider  3
 
-The TX Modular system uses various classes which SuperCollider needs to know about in order to run the system. 
+The TX Modular system uses various classes which SuperCollider needs to know about in order to run the system.
 
 To add these, copy the supplied folder TX Mod Extensions (or an alias of it) your Extensions folder (see SC help file Using Extensions for more details).
 

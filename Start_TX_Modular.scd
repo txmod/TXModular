@@ -1,7 +1,7 @@
-// Copyright (C) 2013  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
+// Copyright (C) 2014  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 // PLEASE NOTE - make sure you have added the TX Modular extensions to SuperCollider before starting
-// See the help file:   Adding_TX_Classes_To_SC3.rtf
+// See the help file:   Adding_TX_Classes_To_SC3
 
 // To start the TX Modular system:
 TXSystem1.start;
