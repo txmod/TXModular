@@ -20,10 +20,10 @@
   </style>
 </head>
 <body>
-<p class="p1">// Copyright (C) 2013 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <A href="LICENSE.html"> LICENSE<A>).</p>
+<p class="p1">// Copyright (C) 2014 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <A href="LICENSE.html"> LICENSE<A>).</p>
 <p class="p2"><br></p>
 <p class="p3"><b>The TX Modular System - Building a System</b></p>
-<p class="p4"><span class="Apple-converted-space">  </span></p>
+<p class="p4"> </p>
 <p class="p3"><b>INDEX:</b></p>
 <p class="p3"><b>1.0 Basic concepts in the TX Modular System</b></p>
 <p class="p3"><b><span class="Apple-tab-span">	</span>1.1 Signals</b></p>
@@ -35,10 +35,10 @@
 <p class="p3"><b><span class="Apple-tab-span">	</span>2.2 The System and the Interface</b></p>
 <p class="p3"><b><span class="Apple-tab-span">	</span>2.3 System buttons</b></p>
 <p class="p3"><b><span class="Apple-tab-span">	</span>2.4 Interface buttons</b></p>
-<p class="p3"><b><span class="Apple-tab-span">	</span>2.5 History buttons &lt; &amp;<span class="Apple-converted-space">  </span>&gt;</b><span class="Apple-converted-space"> </span></p>
+<p class="p3"><b><span class="Apple-tab-span">	</span>2.5 History buttons &lt; &amp; &gt;</b> </p>
 <p class="p3"><b>3.0 Building a system in the Modules &amp; Channels Window<i> [with </i></b><span class="s1"><b><i>Example</i></b></span><b><i>]</i></b></p>
 <p class="p3"><b><span class="Apple-tab-span">	</span>3.1 Adding a new module and channel</b></p>
-<p class="p3"><b><span class="Apple-tab-span">	</span>3.2 Naming a channel<span class="Apple-converted-space"> </span></b></p>
+<p class="p3"><b><span class="Apple-tab-span">	</span>3.2 Naming a channel </b></p>
 <p class="p3"><b><span class="Apple-tab-span">	</span>3.3 Hiding the controls for a module</b></p>
 <p class="p3"><b><span class="Apple-tab-span">	</span>3.4 Displaying the controls for a module</b></p>
 <p class="p3"><b><span class="Apple-tab-span">	</span>3.5 Editing the controls for a module</b></p>
@@ -47,7 +47,7 @@
 <p class="p3"><b><span class="Apple-tab-span">	</span>3.8 Setting a destination for a channel</b></p>
 <p class="p3"><b><span class="Apple-tab-span">	</span>3.9 Modulating the controls of a module</b></p>
 <p class="p3"><b>4.0 Using FX send busses in audio channels</b></p>
-<p class="p3"><b><span class="Apple-tab-span">	</span>4.1 Creating a channel for an<span class="Apple-converted-space">  </span>FX send bus</b></p>
+<p class="p3"><b><span class="Apple-tab-span">	</span>4.1 Creating a channel for an FX send bus</b></p>
 <p class="p3"><b>5.0 Connecting a module to more than one destination</b></p>
 <p class="p2"><br></p>
 <p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
@@ -55,26 +55,26 @@
 <p class="p3"><b>1.0 Basic concepts in the TX Modular System</b></p>
 <p class="p2"><br></p>
 <p class="p3"><b>1.1 Signals</b></p>
-<p class="p3">There are 2 type of signals flowing around a TX system:<span class="Apple-converted-space">  </span><b>audio</b> <b>signals</b> can be heard through loudspeakers, whereas <b>control</b> <b>signals</b> can't be heard but are used to control things within the system - such as the loudness of a synth.</p>
+<p class="p3">There are 2 type of signals flowing around a TX system: <b>audio</b> <b>signals</b> can be heard through loudspeakers, whereas <b>control</b> <b>signals</b> can't be heard but are used to control things within the system - such as the loudness of a synth.</p>
 <p class="p2"><br></p>
 <p class="p3"><b>1.2 Modules</b></p>
-<p class="p3">A <b>module</b> is a basic unit in the system which does something, such as generate a waveform, play a sample or filter a sound.<span class="Apple-converted-space">  </span>A <b>source module</b> (such as a waveform or sample player) generates a signal from scratch, whereas an <b>insert module</b> (such as filter or delay) takes a signal and processes it in some way before outputting a new signal.<span class="Apple-converted-space"> </span></p>
+<p class="p3">A <b>module</b> is a basic unit in the system which does something, such as generate a waveform, play a sample or filter a sound. A <b>source module</b> (such as a waveform or sample player) generates a signal from scratch, whereas an <b>insert module</b> (such as filter or delay) takes a signal and processes it in some way before outputting a new signal. </p>
 <p class="p3">Different modules output different kinds of signals, so there are <b>audio </b>and<b> control</b> <b>source modules, </b>as well as<b> audio </b>and<b> control</b> <b>insert modules</b>.</p>
 <p class="p3">There are also <b>action</b> modules, which don't use signals at all. They usually just give commands or instructions to other modules.</p>
 <p class="p2"><br></p>
 <p class="p3"><b>1.3 Channels</b></p>
 <p class="p3">Think of a channel like the channels on a mixing desk. It is where a signal coming from a source gets connected to a destination. For example, you may want to take a sample player output put it through a flanger and connect it to your soundcard output. You would use a <b>channel</b> to make the connections.</p>
-<p class="p3">When a new <b>source module</b> is created, a <b>channel</b> is created automatically.<span class="Apple-converted-space"> </span></p>
-<p class="p3">Inside the channel, you can add up to 5 <b>insert modules</b> to process the signal, as well as setting<span class="Apple-converted-space">  </span>a <b>destination</b>, ie. where you want the signal to be sent.</p>
-<p class="p3">There are <b>audio</b> and <b>control</b> <b>channels</b>.<span class="Apple-converted-space"> </span></p>
+<p class="p3">When a new <b>source module</b> is created, a <b>channel</b> is created automatically. </p>
+<p class="p3">Inside the channel, you can add up to 5 <b>insert modules</b> to process the signal, as well as setting a <b>destination</b>, ie. where you want the signal to be sent.</p>
+<p class="p3">There are <b>audio</b> and <b>control</b> <b>channels</b>. </p>
 <p class="p2"><br></p>
 <p class="p3"><b>1.4 Busses</b></p>
-<p class="p3">Within the system, there are also <b>audio</b> and <b>control busses</b> carrying various signals. <span class="Apple-converted-space"> </span></p>
-<p class="p3"><b>Busses</b> are used by <b>channels</b> to connect <b>modules</b> to each other or to the <b>audio outputs</b>. <span class="Apple-converted-space"> </span></p>
-<p class="p3"><b>Insert</b> <b>modules</b> have one or more <b>input busses</b> going into them.<span class="Apple-converted-space"> </span></p>
-<p class="p3"><b>Source</b> and <b>insert</b><span class="Apple-converted-space">  </span><b>modules</b> have one or more <b>output busses</b> coming out of them.<span class="Apple-converted-space"> </span></p>
-<p class="p3">There are <b>16</b> <b>main out busses</b> which send the audio signals to your <b>audio outputs</b> on your computer or audio interface.<span class="Apple-converted-space"> </span></p>
-<p class="p3">There are <b>4 FX send busses</b> which, just like in mixing desk, are used for sending signals from <b>audio channels</b> to a shared bus to then be processed in some way - e.g. for adding reverb.<span class="Apple-converted-space"> </span></p>
+<p class="p3">Within the system, there are also <b>audio</b> and <b>control busses</b> carrying various signals.  </p>
+<p class="p3"><b>Busses</b> are used by <b>channels</b> to connect <b>modules</b> to each other or to the <b>audio outputs</b>.  </p>
+<p class="p3"><b>Insert</b> <b>modules</b> have one or more <b>input busses</b> going into them. </p>
+<p class="p3"><b>Source</b> and <b>insert</b> <b>modules</b> have one or more <b>output busses</b> coming out of them. </p>
+<p class="p3">There are <b>16</b> <b>main out busses</b> which send the audio signals to your <b>audio outputs</b> on your computer or audio interface. </p>
+<p class="p3">There are <b>4 FX send busses</b> which, just like in mixing desk, are used for sending signals from <b>audio channels</b> to a shared bus to then be processed in some way - e.g. for adding reverb. </p>
 <p class="p3">Finally, there are <b>10</b> <b>audio</b> <b>aux busses </b>and <b>10</b> <b>control aux busses</b>. These are for mixing and routing audio and control signals within the system.</p>
 <p class="p2"><br></p>
 <p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
@@ -82,14 +82,14 @@
 <p class="p3"><b>2.0 Using the TX Modular System</b></p>
 <p class="p2"><br></p>
 <p class="p3"><b>2.1 The TX Modular Window</b></p>
-<p class="p3">The top 2 rows of buttons are visible on all windows in the system.<span class="Apple-converted-space"> </span></p>
-<p class="p3">The <b>Help</b> button opens the main help file with links to all other help files.<span class="Apple-converted-space"> </span></p>
-<p class="p3">Next are buttons to <b>open </b>a file of previously saved system, and <b>save</b> the current system to a file.<span class="Apple-converted-space">  </span>If you save or open a file, its name will appear on the line below these buttons.<span class="Apple-converted-space"> </span></p>
-<p class="p3">Next are buttons to <b>rebuild system</b>,<b> clear system</b> or <b>quit</b>. You occasionally need to <b>rebuild</b> a system if one of the modules crashes, but it shouldn't be needed often. <b>Clearing</b> a system means removing all the modules and channels. Use <b>quit</b> to close down the TX Modular system.<span class="Apple-converted-space">  </span>Another way to quit is to close the TX Modular System window by clicking on the red x button at the top left of the window.</p>
+<p class="p3">The top 2 rows of buttons are visible on all windows in the system. </p>
+<p class="p3">The <b>Help</b> button opens the main help file with links to all other help files. </p>
+<p class="p3">Next are buttons to <b>open </b>a file of previously saved system, and <b>save</b> the current system to a file. If you save or open a file, its name will appear on the line below these buttons. </p>
+<p class="p3">Next are buttons to <b>rebuild system</b>,<b> clear system</b> or <b>quit</b>. You occasionally need to <b>rebuild</b> a system if one of the modules crashes, but it shouldn't be needed often. <b>Clearing</b> a system means removing all the modules and channels. Use <b>quit</b> to close down the TX Modular system. Another way to quit is to close the TX Modular System window by clicking on the red x button at the top left of the window.</p>
 <p class="p3">The <b>Sync Start button</b> is for starting any modules in the system that have their sync start option selected. Certain modules - Action Sequencers<b>,</b> Step Sequencers<b>, </b>File Players and File Recorders have a Sync Start option so that multi layered sequences can be started together.</p>
 <p class="p3">The <b>Sync Stop button</b> is for stopping any modules in the system that have their sync stop option selected.</p>
 <p class="p3">The<b> Stop All button</b> is for stopping all modules in the system regardless of any sync options.</p>
-<p class="p3"><b>Sync Start</b>, <b>Sync Stop</b> &amp; <b>Stop All </b>- these 3 buttons<span class="Apple-converted-space">  </span>allow Action Sequencers<b>,</b> Step Sequencers, Fle Players and File Recorders to be started and stopped together. Each one can be set<span class="Apple-converted-space">  </span>to respond to Sync Start and Sync Stop instructions. Stop All will cause all modules to stop regardless of their sync start and stop settings.</p>
+<p class="p3"><b>Sync Start</b>, <b>Sync Stop</b> &amp; <b>Stop All </b>- these 3 buttons allow Action Sequencers<b>,</b> Step Sequencers, Fle Players and File Recorders to be started and stopped together. Each one can be set to respond to Sync Start and Sync Stop instructions. Stop All will cause all modules to stop regardless of their sync start and stop settings.</p>
 <p class="p3">The <b>Panic! All Notes Off button</b> stops any notes still playing in the system. This is useful if you ever get a stuck note from a midi keyboard. Please note that any notes with a slow decay envelope setting will take their own time to end after the panic button is pressed.</p>
 <p class="p3">The <b>Play Test Note</b> button will play a short note on all audio outputs. This is useful for testing that all audio is working and connected properly.</p>
 <p class="p3"><b><i>N.B. </i></b><i>If you don't hear a note when you press the Play Test Note button, then please see previous help file: <A href="TX_2 Audio Setup.html">2 Audio Setup<A></p>
@@ -98,158 +98,157 @@
 <p class="p2"><br></p>
 <p class="p3"><b>2.2 The System and the Interface</b></p>
 <p class="p3">The <b>system </b>and the <b>interface</b> are like the engine and cockpit, the back and front of the TX Modular System.</p>
-<p class="p3">The <b>system </b>is where you create <b>modules</b> and connect them together using <b>channels</b>.<span class="Apple-converted-space"> </span></p>
-<p class="p3">The <b>interface</b> is where you can design up to 20 screen layouts, with"widgets" such as knobs, sliders, buttons, and text boxes which are used to control the modules in the system.<span class="Apple-converted-space"> </span></p>
-<p class="p3">MIDI control is also available. For example, you could create a screen with 8 sliders and 8 buttons. These "widgets" can then be connected by MIDI to an external midi controller with 8 sliders and buttons.<span class="Apple-converted-space"> </span></p>
+<p class="p3">The <b>system </b>is where you create <b>modules</b> and connect them together using <b>channels</b>. </p>
+<p class="p3">The <b>interface</b> is where you can design up to 20 screen layouts, with"widgets" such as knobs, sliders, buttons, and text boxes which are used to control the modules in the system. </p>
+<p class="p3">MIDI control is also available. For example, you could create a screen with 8 sliders and 8 buttons. These "widgets" can then be connected by MIDI to an external midi controller with 8 sliders and buttons. </p>
 <p class="p2"><b></b><br></p>
 <p class="p3"><b>2.3 System buttons</b></p>
 <p class="p3">The <b>Modules &amp; Channels </b>window is opened when the system starts. It is where you can add new modules to the system and connect them using channels to other modules or outputs or aux busses. This window is explained more fully below.</p>
-<p class="p3">The <b>Signal Flow </b>window is designed to make it easier to see how a whole system works. It shows how audio and control signals flow around the system between modules, channels and busses. As you add modules and connect them together in the Modules &amp; Channels window, they will automatically be added to the Signal Flow window. Blue lines show audio signals and green lines show control signals. The layout of the Signal Flow window can be easily changed (by clicking and dragging).<span class="Apple-converted-space"> </span></p>
-<p class="p3">The <b>Sample Bank</b> and <b>Loop Bank</b> windows are for adding individual samples or loops into the system. They can then be used by Sample Player, Loop Player and other modules.<span class="Apple-converted-space"> </span></p>
-<p class="p3">You can set the frequency of samples and the total number of beats in loops.<span class="Apple-converted-space"> </span></p>
+<p class="p3">The <b>Signal Flow </b>window is designed to make it easier to see how a whole system works. It shows how audio and control signals flow around the system between modules, channels and busses. As you add modules and connect them together in the Modules &amp; Channels window, they will automatically be added to the Signal Flow window. Blue lines show audio signals and green lines show control signals. The layout of the Signal Flow window can be easily changed (by clicking and dragging). </p>
+<p class="p3">The <b>Sample Bank</b> and <b>Loop Bank</b> windows are for adding individual samples or loops into the system. They can then be used by Sample Player, Loop Player and other modules. </p>
+<p class="p3">You can set the frequency of samples and the total number of beats in loops. </p>
 <p class="p3">Groups of samples or loops can also be saved separately as a bank. You can also load one or more whole banks that have been previously created into your current system.</p>
-<p class="p3">The <b>Notes &amp; Options </b>window is where you can set a background image for the main window (with various image modes for stretching and tiling), change the window colour and transparency, and set "Ask for confirmation before deleting Modules and Channels", which is YES by default. There is also space for adding notes about a built system.<span class="Apple-converted-space"> </span></p>
+<p class="p3">The <b>Notes &amp; Options </b>window is where you can set a background image for the main window (with various image modes for stretching and tiling), change the window colour and transparency, and set "Ask for confirmation before deleting Modules and Channels", which is YES by default. There is also space for adding notes about a built system. </p>
 <p class="p2"><b></b><br></p>
 <p class="p3"><b>2.4 Interface buttons</b></p>
-<p class="p3">The <b>Run Interface </b>window is for running the interface - once it's been built.<span class="Apple-converted-space"> </span></p>
+<p class="p3">The <b>Run Interface </b>window is for running the interface - once it's been built. </p>
 <p class="p3">The <b>Design Layout </b>window is for adding or deleting widgets - such as sliders or buttons.</p>
 <p class="p3">The <b>Gui Properties </b>floating window, which can be opened from the Design Layout window, is for setting what each widget looks like and what it controls.</p>
 <p class="p3">For further details on the Interface windows, see help file: <A href="TX_5 Building an Interface.html">5 Building an Interface<A></p>
 <p class="p2"><br></p>
-<p class="p3"><b>2.5 History buttons &lt; &amp;<span class="Apple-converted-space">  </span>&gt;</b><span class="Apple-converted-space"> </span></p>
-<p class="p3">These move backwards and forwards (&lt; &amp;<span class="Apple-converted-space">  </span>&gt; ) through the history of previously viewed windows.</p>
+<p class="p3"><b>2.5 History buttons &lt; &amp; &gt;</b> </p>
+<p class="p3">These move backwards and forwards (&lt; &amp; &gt; ) through the history of previously viewed windows.</p>
 <p class="p2"><br></p>
 <p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
 <p class="p2"><br></p>
 <p class="p3"><b>3.0 Building a system in the Modules &amp; Channels Window<i> with </i></b><span class="s1"><b><i>[Example]</i></b></span></p>
-<p class="p3">Since the<b> Modules &amp; Channels Window</b> is the window you will initally be working with some detailed notes follow.<span class="Apple-converted-space"> </span></p>
-<p class="p5"><i>[</i><b><i>Note</i></b><i>: </i>To make the explanation easier to understand, I've added some notes for building an example system in <i>blue italics. <span class="Apple-converted-space"> </span></i></p>
+<p class="p3">Since the<b> Modules &amp; Channels Window</b> is the window you will initally be working with some detailed notes follow. </p>
+<p class="p5"><i>[</i><b><i>Note</i></b><i>: </i>To make the explanation easier to understand, I've added some notes for building an example system in <i>blue italics.  </i></p>
 <p class="p5"><b><i>Example</i></b><i>: First press the </i><b><i>Modules &amp; Channels</i></b><i> button.]</i></p>
 <p class="p2"><br></p>
 <p class="p3"><b>3.1 Adding a new module and channel</b></p>
-<p class="p3">Select the module you want to add in the popup box which says "Select module<span class="Apple-converted-space">  </span>...".<span class="Apple-converted-space"> </span></p>
-<p class="p3">Modules are separated under different subheadings, which are shown in grey.<span class="Apple-converted-space"> </span></p>
-<p class="p3">The type of module - <b>[control]</b> or <b>[audio]</b> or <b>[action]</b> - is shown in brackets after the module name.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>In the "Select module<span class="Apple-converted-space">  </span>..." box select the module called </i><b><i>Waveform [audio]</i></b><i> under the subheading</i><b><i> [Drones, not triggered]</i></b><i>. Waveform is a mono synthesiser.]</i></p>
+<p class="p3">Select the type of module you want in the popup box which says "Select category ...". To see all modules, select the first option.</p>
+<p class="p3">Select the module you want to add in the popup box which says "Select module ...". </p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: In the "Select category ..." box select </i><b><i>All modules </i></b><i>. In the "Select module ..." box select the module called </i><b><i>Waveform </i></b><i>. Waveform is a mono synthesiser.]</i></p>
 <p class="p3">Set <b>copies X 1</b> to the number you want - maximum 20.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Leave it set to </i><b><i>copies X 1</i></b><i>.]</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Select </i><b><i>copies X 1</i></b><i>.]</i></p>
 <p class="p3">When you press the <b>Add new module(s)</b> button, the module gets created. Also an <b>audio </b>or<b> control</b> <b>channel</b> is automatically created with it, depending on the type of module you selected. (If you add an <b>action</b> module, then a channel won't be needed.)</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Press the </i><b><i>Add new module(s)</i></b><i> button. </i><b><i>N.B.</i></b><i> You won't hear any sound until later on in the example.]</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Press the </i><b><i>Add new module(s)</i></b><i> button. </i><b><i>N.B.</i></b><i> You won't hear any sound until later on in the example.]</i></p>
 <p class="p3">On the left of the window, you will see the System Modules list showing all modules in the current system.</p>
 <p class="p3">To the right of this, you will see all the controls for the module you've just added.</p>
 <p class="p3">To the right of this are the Channels in the current system.</p>
-<p class="p3">The <b>new module</b> you have just created is shown in the channel's <b>source</b> .<span class="Apple-converted-space"> </span></p>
-<p class="p3">Note that once you have added a new module, a <b>number</b> appears in square brackets next to the module's name within the channel column. This makes it easier to know which module you are dealing with if you create lots of modules of the same type in your system.<span class="Apple-converted-space"> </span></p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>See the button labelled </i><b><i>Waveform [1]</i></b><i> in the new channel, </i><b><i>Channel 1</i></b><i>, which you just created].<span class="Apple-converted-space"> </span></i></p>
+<p class="p3">The <b>new module</b> you have just created is shown in the channel's <b>source</b> . </p>
+<p class="p3">Note that once you have added a new module, a <b>number</b> appears in square brackets next to the module's name within the channel column. This makes it easier to know which module you are dealing with if you create lots of modules of the same type in your system. </p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: See the button labelled </i><b><i>Waveform [1]</i></b><i> in the new channel, </i><b><i>Channel 1</i></b><i>, which you just created]. </i></p>
 <p class="p3">Directly on the right of the channel source is a small white triangle on a thin blue column. If you click on it, you can change the <b>channel source</b> to something else.</p>
 <p class="p2"><br></p>
-<p class="p3"><b>3.2 Naming a channel<span class="Apple-converted-space"> </span></b></p>
-<p class="p3">A white space is provided to the right of the word <b>Name</b> for you to enter a name for the channel.<span class="Apple-converted-space"> </span></p>
-<p class="p3"><b>Note</b> - When you are adding text or numbers onto the screen, once you have finished typing, always make sure to press the <b>Enter</b> or <b>Carraige Return</b> button on your computer keyboard to tell the system to update itself. Otherwise, the system will ignore what you have typed in.<span class="Apple-converted-space"> </span></p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Type "</i><b><i>Synth</i></b><i>" into the channel name, and press the </i><b><i>Enter</i></b><i> button on your computer keyboard.]</i></p>
+<p class="p3"><b>3.2 Naming a channel </b></p>
+<p class="p3">A white space is provided to the right of the word <b>Name</b> for you to enter a name for the channel. </p>
+<p class="p3"><b>Note</b> - When you are adding text or numbers onto the screen, once you have finished typing, always make sure to press the <b>Enter</b> or <b>Carraige Return</b> button on your computer keyboard to tell the system to update itself. Otherwise, the system will ignore what you have typed in. </p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Type "</i><b><i>Synth</i></b><i>" into the channel name, and press the </i><b><i>Enter</i></b><i> button on your computer keyboard.]</i></p>
 <p class="p2"><br></p>
 <p class="p3"><b>3.3 Hiding the controls for a module</b></p>
 <p class="p3">To hide the controls for a module, press the blue <b>Hide module box</b> button.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Press the </i><b><i>Hide module box</i></b><i> button now.]</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Press the </i><b><i>Hide module box</i></b><i> button now.]</i></p>
 <p class="p2"><br></p>
 <p class="p3"><b>3.4 Displaying the controls for a module</b></p>
 <p class="p3">This can be done in 2 ways:</p>
-<p class="p3">1- By clicking on the module you want from the System Modules list on the left hand side of the window.<span class="Apple-converted-space"> </span></p>
+<p class="p3">1- By clicking on the module you want from the System Modules list on the left hand side of the window. </p>
 <p class="p3">2- By clicking on the module name in a Channel that it's part of.</p>
 <p class="p2"><br></p>
 <p class="p3"><b>3.5 Editing the controls for a module</b></p>
-<p class="p3">Once the controls for the new module are shown in a box on the middle of the window, you can<span class="Apple-converted-space">  </span>edit them.</p>
+<p class="p3">Once the controls for the new module are shown in a box on the middle of the window, you can edit them.</p>
 <p class="p3">Any numbers in the controls of a module can be changed quite quickly by clicking on the number and dragging your mouse.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Click on<span class="Apple-converted-space">  </span></i><b><i>Waveform [1]</i></b><i> in </i><b><i>Channel 1</i></b><i> to display the controls.<span class="Apple-converted-space"> </span></i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Click on </i><b><i>Waveform [1]</i></b><i> in </i><b><i>Channel 1</i></b><i> to display the controls. </i></p>
 <p class="p5"><i>Change the waveform from a </i><b><i>Sine wave</i></b><i> to a </i><b><i>Sawtooth wave</i></b><i> using the </i><b><i>Waveform</i></b><i> popup button.</i></p>
 <p class="p5"><i>Then click on the </i><b><i>Frequency</i></b><i> button first, and change the Frequency to </i><b><i>200</i></b><i> using the </i><b><i>Freq</i></b><i> slider or by clicking and dragging over the number itself.]</i></p>
-<p class="p3"><b>Note:<span class="Apple-converted-space">  </span>Help, Pause, Delete, Rebuild and Presets buttons:</b></p>
+<p class="p3"><b>Note: Help, Pause, Delete, Rebuild and Presets buttons:</b></p>
 <p class="p3">All modules have a <b>Help</b> button which opens a help window specifically for that module.</p>
 <p class="p3">Most modules also have a <b>Pause</b> button (which stops it running temporarily until pressed again). All output from the module will stop if it is paused.</p>
 <p class="p3">They also have a <b>Delete</b> button. If you delete a source module, the channels that it is in will also get deleted, along with any insert modules in the channel.</p>
-<p class="p3">Most modules also have a <b>Rebuild</b> button. This rebuilds a<span class="Apple-converted-space">  </span>module in case for any reason it has stopped running or crashed (this is rarely needed!).</p>
+<p class="p3">Most modules also have a <b>Rebuild</b> button. This rebuilds a module in case for any reason it has stopped running or crashed (this is rarely needed!).</p>
 <p class="p3">There is also a <b>Presets</b> popup button with options for:</p>
 <p class="p3">- storing and loading module settings as Presets.</p>
-<p class="p3">- copying and pasting all the settings from one module to another using a clipboard - both modules will need to be the same module type for settings to be copied.<span class="Apple-converted-space"> </span></p>
-<p class="p3">- saving and loading all the settings to or from a<span class="Apple-converted-space">  </span>file (useful for using the same settings in a different TX Modular system). <span class="Apple-converted-space"> </span></p>
-<p class="p3">A <b>comments</b> space is provided at the top of each module for you to add any notes. When a Preset is created, the comments<b> </b>text will be displayed next to the Preset no,<span class="Apple-converted-space">  </span>so it can be used to give each Preset a name.</p>
+<p class="p3">- copying and pasting all the settings from one module to another using a clipboard - both modules will need to be the same module type for settings to be copied. </p>
+<p class="p3">- saving and loading all the settings to or from a file (useful for using the same settings in a different TX Modular system).  </p>
+<p class="p3">A <b>comments</b> space is provided at the top of each module for you to add any notes. When a Preset is created, the comments<b> </b>text will be displayed next to the Preset no, so it can be used to give each Preset a name.</p>
 <p class="p2"><br></p>
 <p class="p3"><b>3.6 Selecting a source bus in a channel</b></p>
-<p class="p3">Some modules, such as the Audio In module, will have more than one output bus that you can select in the popup box next to the words <b>Source Bus</b> .<span class="Apple-converted-space"> </span></p>
+<p class="p3">Some modules, such as the Audio In module, will have more than one output bus that you can select in the popup box next to the words <b>Source Bus</b> . </p>
 <p class="p5"><i>[</i><b><i>Example</i></b><i>: The </i><b><i>Waveform [1]</i></b><i> module has only one option for source bus: </i><b><i>Out </i></b><i>]</i></p>
 <p class="p2"><br></p>
 <p class="p3"><b>3.7 Adding insert modules to a channel</b></p>
-<p class="p3">You have the option of adding insert modules into the 5 slots provided in each channel. Audio and control channels have different options for insert modules.<span class="Apple-converted-space"> </span></p>
+<p class="p3">You have the option of adding insert modules into the 5 slots provided in each channel. Audio and control channels have different options for insert modules. </p>
 <p class="p3">Once you have selected an insert module, it's controls appear on the left side of the window.</p>
 <p class="p3"><b>Note</b> - If you add an incorrect insert module, you can use the <b>d</b> (delete) button which appears next to it to remove it from the channel.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>In the popup box next to the </i>words <b><i>Insert 1</i></b><i> select </i><b><i>Flanger</i></b><i> and you will see the controls for the flanger appear on the left of the window.</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: In the popup box next to the </i>words <b><i>Insert 1</i></b><i> select </i><b><i>Flanger</i></b><i> and you will see the controls for the flanger appear on the left of the window.</i></p>
 <p class="p5"><i>Change the </i><b><i>Dry-Wet Mix</i></b><i> of the </i><b><i>Flanger</i></b><i> to </i><b><i>0.2</i></b><i> for a more subtle effect.]</i></p>
 <p class="p2"><br></p>
 <p class="p3"><b>3.8 Setting a destination for a channel</b></p>
-<p class="p3">To the right of the word <b>Destination</b>,<b> </b>the destination popup box selects where the signal in a channel will be sent.<span class="Apple-converted-space"> </span></p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Select </i><b><i>Main Outs</i></b><i> as the destination]</i></p>
+<p class="p3">To the right of the word <b>Destination</b>,<b> </b>the destination popup box selects where the signal in a channel will be sent. </p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Select </i><b><i>Main Outs</i></b><i> as the destination]</i></p>
 <p class="p3"><b>Note</b> - If you add an incorrect destination module, you can use the <b>d</b> (delete) button which appears next to it to remove it from the channel.</p>
-<p class="p3">If the destination has more than one destination bus, a different one can be selected in the popup button to the right of the word <b>Dest. Bus</b>.<span class="Apple-converted-space"> </span></p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span></i><b><i>Main Outs</i></b><i> has 8 options for Dest. Bus:<span class="Apple-converted-space">  </span></i><b><i>Out 1 + 2, Out 3 + 4, ...</i></b><i> </i><b><i>Out 15 + 16</i></b><i>.<span class="Apple-converted-space"> </span></i></p>
+<p class="p3">If the destination has more than one destination bus, a different one can be selected in the popup button to the right of the word <b>Dest. Bus</b>. </p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: </i><b><i>Main Outs</i></b><i> has 8 options for Dest. Bus: </i><b><i>Out 1 + 2, Out 3 + 4, ...</i></b><i> </i><b><i>Out 15 + 16</i></b><i>. </i></p>
 <p class="p5"><i>Set it to </i><b><i>Out 1 + 2</i></b><i>.</i></p>
 <p class="p5"><i>You should now hear the synth playing.</i></p>
 <p class="p5"><i>Adjust the volume using the </i><b><i>Level</i></b><i> slider for </i><b><i>Channel 1</i></b><i>.]</i></p>
 <p class="p2"><i></i><br></p>
 <p class="p3"><b>3.9 Modulating the controls of a module</b></p>
 <p class="p3">Once you've added a module, if you want to modulate any of its controls, you can add a new control source module (such as an LFO) to the system, and set the channel destination and destination bus to the module control you want to modulate. This is best understood by seeing the example below.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Add a new </i><b><i>LFO [control] </i></b><i>module by first selecting it from the popup box to the left of the </i><b><i>Add new module(s) </i></b><i>button; and then pressing the </i><b><i>Add new<span class="Apple-converted-space">  </span>module<span class="Apple-converted-space">  </span></i></b><i>button.</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Add a new </i><b><i>LFO [control] </i></b><i>module by first selecting it from the popup box to the left of the </i><b><i>Add new module(s) </i></b><i>button; and then pressing the </i><b><i>Add new module </i></b><i>button.</i></p>
 <p class="p5"><i>Set the </i><b><i>Frequency</i></b><i> of LFO [1] to </i><b><i>0.25</i></b><i>.</i></p>
 <p class="p5"><i>You will see a new control channel , </i><b><i>Channel 2</i></b><i>, with </i><b><i>LFO [1]</i></b><i> as the source.</i></p>
 <p class="p5"><i>Set the </i><b><i>destination</i></b><i> of this channel to </i><b><i>Waveform [1]</i></b><i>.</i></p>
-<p class="p5"><i>Set the </i><b><i>dest. bus</i></b><i> of this channel to<span class="Apple-converted-space">  </span></i><b><i>Frequency</i></b><i>.<span class="Apple-converted-space"> </span></i></p>
-<p class="p5"><i>You will hear the LFO affecting the frequency of the </i><b><i>Waveform [1]</i></b><i> module.]<span class="Apple-converted-space"> </span></i></p>
+<p class="p5"><i>Set the </i><b><i>dest. bus</i></b><i> of this channel to </i><b><i>Frequency</i></b><i>. </i></p>
+<p class="p5"><i>You will hear the LFO affecting the frequency of the </i><b><i>Waveform [1]</i></b><i> module.] </i></p>
 <p class="p3">You can use the <b>level</b> slider to control how much modulation is applied. N.B. However much modulation you add, the control that you are modulating will stay within the limits of its minimum and maximum values.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Use the </i><b><i>level</i></b><i> slider on the channel of LFO [1] to change the amount of modulation. Notice that on the maximum level, the frequency reaches a ceiling level which it cannot go above. This ceiling is set by the </i><b><i>Min-Max</i></b><i> controls below the </i><b><i>Frequency</i></b><i> slider in the </i><b><i>Waveform [1] </i></b><i>module. By changing these, you can change how high or low the </i><b><i>Frequency</i></b><i> is allowed to go.]<span class="Apple-converted-space"> </span></i></p>
-<p class="p3">The <b>invert</b> checkbox will invert the modulation meaning that the control signal will be subtracted instead of added.<span class="Apple-converted-space"> </span></p>
-<p class="p3">The <b>off </b>checkbox in the channel will stop the modulation.<span class="Apple-converted-space"> </span></p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Press the </i><b><i>Invert</i></b><i> checkbox and you will hear the LFO reducing the frequency of the </i><b><i>Waveform [1]</i></b><i> module, instead of increasing it. Press it again to go back to the increasing frequency.</i></p>
-<p class="p5"><i>Press the </i><b><i>Off</i></b><i> checkbox and the modulation will stop. Press again and the modulation will start again.]<span class="Apple-converted-space"> </span></i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Use the </i><b><i>level</i></b><i> slider on the channel of LFO [1] to change the amount of modulation. Notice that on the maximum level, the frequency reaches a ceiling level which it cannot go above. This ceiling is set by the </i><b><i>Min-Max</i></b><i> controls below the </i><b><i>Frequency</i></b><i> slider in the </i><b><i>Waveform [1] </i></b><i>module. By changing these, you can change how high or low the </i><b><i>Frequency</i></b><i> is allowed to go.] </i></p>
+<p class="p3">The <b>invert</b> checkbox will invert the modulation meaning that the control signal will be subtracted instead of added. </p>
+<p class="p3">The <b>off </b>checkbox in the channel will stop the modulation. </p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Press the </i><b><i>Invert</i></b><i> checkbox and you will hear the LFO reducing the frequency of the </i><b><i>Waveform [1]</i></b><i> module, instead of increasing it. Press it again to go back to the increasing frequency.</i></p>
+<p class="p5"><i>Press the </i><b><i>Off</i></b><i> checkbox and the modulation will stop. Press again and the modulation will start again.] </i></p>
 <p class="p2"><i></i><br></p>
 <p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
 <p class="p2"><br></p>
 <p class="p3"><b>4.0 Using FX send busses in audio channels</b></p>
-<p class="p3">Once you've activated an audio channel, you can send the signal to an FX Send bus by pressing the <b>white FX send buttons</b> to the right of the words<span class="Apple-converted-space">  </span><b>FX Send 1-4</b>.<span class="Apple-converted-space"> </span></p>
+<p class="p3">Once you've activated an audio channel, you can send the signal to an FX Send bus by pressing the <b>white FX send buttons</b> to the right of the words <b>FX Send 1-4</b>. </p>
 <p class="p3">Once they have been pressed the buttons will show the <b>number</b> of the <b>FX Send bus</b> selected (1/2/3/4).</p>
 <p class="p3">To the right of each FX send button is a <b>slider</b> to set the signal <b>level</b> sent to the FX send bus.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Turn on the </i><b><i>FX send 1</i></b><i> button in </i><b><i>Channel 1</i></b><i> for the<span class="Apple-converted-space">  </span></i><b><i>Waveform [1] </i></b><i>module.</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Turn on the </i><b><i>FX send 1</i></b><i> button in </i><b><i>Channel 1</i></b><i> for the </i><b><i>Waveform [1] </i></b><i>module.</i></p>
 <p class="p5"><i>Then set the </i><b><i>FX send 1 slider</i></b><i> of </i><b><i>Channel 1 </i></b><i>to half way.</i></p>
 <p class="p5"><i>You won't hear any changes yet.]</i></p>
-<p class="p3"><b>Note -<span class="Apple-converted-space"> </span></b> these are <b>post-fader FX sends</b>, meaning that the <b>channel level</b> slider affects the level of the signal sent to the FX send bus as well as the <b>FX send </b>slider. If the channel level is 0, or if the channel is muted, then no signal will be sent to the FX send bus even if the FX send slider is turned up high.</p>
+<p class="p3"><b>Note - </b> these are <b>post-fader FX sends</b>, meaning that the <b>channel level</b> slider affects the level of the signal sent to the FX send bus as well as the <b>FX send </b>slider. If the channel level is 0, or if the channel is muted, then no signal will be sent to the FX send bus even if the FX send slider is turned up high.</p>
 <p class="p2"><b></b><br></p>
-<p class="p3"><b>4.1 Creating a channel for an<span class="Apple-converted-space">  </span>FX send bus</b></p>
-<p class="p3">In the top right section of the window, you will see the <b>Add new channel(s) </b>button.<span class="Apple-converted-space"> </span></p>
+<p class="p3"><b>4.1 Creating a channel for an FX send bus</b></p>
+<p class="p3">In the top right section of the window, you will see the <b>Add new channel(s) </b>button. </p>
 <p class="p3">To the left of this is a <b>popup</b> box to select the channel source. This should be displaying the text "Select channel source ...".</p>
 <p class="p3">The required <b>FX send bus</b> should be selected from this popup. Leave <b>copies X 1</b> as it is and press the button <b>Add new channel(s)</b>.</p>
 <p class="p3">Once the new channel has been created, insert modules and a destination can then be set.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Select </i><b><i>FX send 1</i></b><i> in the </i><b><i>Select channel source...</i></b><i> popup box before pressing the </i><b><i>Add new channel(s)</i></b><i> button.</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Select </i><b><i>FX send 1</i></b><i> in the </i><b><i>Select channel source...</i></b><i> popup box before pressing the </i><b><i>Add new channel(s)</i></b><i> button.</i></p>
 <p class="p5"><i>Select </i><b><i>ReverbG</i></b><i> in the popup box for </i><b><i>Insert 1 </i></b><i>in the new</i><b><i> Channel 3</i></b><i>.</i></p>
 <p class="p5"><i>Select </i><b><i>Main Outs</i></b><i> as the </i><b><i>destination</i></b><i>.</i></p>
 <p class="p5"><i>You should now hear the </i><b><i>ReverbG</i></b><i> added to the audio signal.</i></p>
-<p class="p5"><i>On the </i><b><i>ReverbG [1]</i></b><i> settings, try changing the </i><b><i>Room size</i></b><i> or </i><b><i>Reverb</i></b><i> </i><b><i>time</i></b><i>.<span class="Apple-converted-space"> </span></i></p>
+<p class="p5"><i>On the </i><b><i>ReverbG [1]</i></b><i> settings, try changing the </i><b><i>Room size</i></b><i> or </i><b><i>Reverb</i></b><i> </i><b><i>time</i></b><i>. </i></p>
 <p class="p5"><i>Select one of the reverb </i><b><i>Presets</i></b><i> that is marked "</i><b><i>as send effect</i></b><i>".</i></p>
 <p class="p5"><i>Adjust the ReverbG volume using channel 3's </i><b><i>Level</i></b><i> slider.]</i></p>
 <p class="p2"><i></i><br></p>
 <p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
 <p class="p2"><br></p>
 <p class="p3"><b>5.0 Connecting a module to more than one destination</b></p>
-<p class="p3">You can use the<span class="Apple-converted-space">  </span><b>Add new channel(s)</b> button, and popup box to the left of it, to select any module that you have already created and make a new channel for it.</p>
-<p class="p3">The popup box also shows all the busses which are built into the system, such as Aux and FX Send busses. These can be used as a source for a new channel.<span class="Apple-converted-space"> </span></p>
+<p class="p3">You can use the <b>Add new channel(s)</b> button, and popup box to the left of it, to select any module that you have already created and make a new channel for it.</p>
+<p class="p3">The popup box also shows all the busses which are built into the system, such as Aux and FX Send busses. These can be used as a source for a new channel. </p>
 <p class="p3">This can be very useful, for example to enable an LFO to modulate more than one destination.</p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>Select the </i><b><i>LFO [1]</i></b><i> module in the popup box before pressing the </i><b><i>Add new channel(s) </i></b><i>button.</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: Select the </i><b><i>LFO [1]</i></b><i> module in the popup box before pressing the </i><b><i>Add new channel(s) </i></b><i>button.</i></p>
 <p class="p5"><i>You will see a new </i><b><i>channel 4</i></b><i> created with the </i><b><i>LFO [1]</i></b><i> module as the </i><b><i>source</i></b><i>.</i></p>
 <p class="p5"><i>Select </i><b><i>Flanger [1]</i></b><i> as the </i><b><i>destination</i></b><i> and </i><b><i>LFO rate</i></b><i> as the </i><b><i>dest. bus</i></b><i>.</i></p>
-<p class="p5"><i>Gradually bring up the </i><b><i>Level</i></b><i> of the new channel 4 and you will hear the LFO affecting the speed of<span class="Apple-converted-space">  </span></i><b><i>Flanger [1]</i></b><i> .</i></p>
+<p class="p5"><i>Gradually bring up the </i><b><i>Level</i></b><i> of the new channel 4 and you will hear the LFO affecting the speed of </i><b><i>Flanger [1]</i></b><i> .</i></p>
 <p class="p5"><i>Click on the </i><b><i>LFO [1]</i></b><i> button to display the LFO settings. Try changing the </i><b><i>Frequency</i></b><i> or </i><b><i>Waveform</i></b><i> of the LFO to hear how they affect the sound.]</i></p>
 <p class="p3"><i>Note</i> - you can also use the <b>Dup</b> button at the top of each channel. This will duplicate the channel, creating a new channel next the current channel and with the same source module.</p>
 <p class="p2"><i></i><br></p>
 <p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
 <p class="p2"><b></b><br></p>
-<p class="p5"><i>[</i><b><i>Example</i></b><i>:<span class="Apple-converted-space">  </span>To see a prebuilt version of the example, use the </i><b><i>Open File</i></b><i> button on the top left of the main window to open the </i><b><i>TX Mod Examples</i></b><i> folder and open the file:<span class="Apple-converted-space">  </span></i><b><i>BuildingASystem</i></b><i> .]</i></p>
+<p class="p5"><i>[</i><b><i>Example</i></b><i>: To see a prebuilt version of the example, use the </i><b><i>Open File</i></b><i> button on the top left of the main window to open the </i><b><i>TX Mod Examples</i></b><i> folder and open the file: </i><b><i>BuildingASystem</i></b><i> .]</i></p>
 <p class="p2"><b></b><br></p>
 <p class="p3">Next help file: <A href="TX_4 General Notes.html">4 General Notes<A></p>
 <p class="p4"><span class="s1"></span><br></p>

@@ -16,8 +16,8 @@
   </style>
 </head>
 <body>
-<p class="p1">// Copyright (C) 2013 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <A href="LICENSE.html"> LICENSE<A>).</p>
-<p class="p2"><span class="Apple-converted-space"> </span></p>
+<p class="p1">// Copyright (C) 2014 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <A href="LICENSE.html"> LICENSE<A>).</p>
+<p class="p2"> </p>
 <p class="p3"><b>The TX Modular System - Audio Setup Window</b></p>
 <p class="p4"><br></p>
 <p class="p3">When the TX Modular System is started, the <b>Audio Setup</b> window is displayed first. This is where you configure your audio settings, before starting the audio engine.</p>
@@ -27,24 +27,24 @@
 <p class="p4"><br></p>
 <p class="p3"><b>Quit button</b> - This quits the TX Modular System completely.</p>
 <p class="p4"><br></p>
-<p class="p3"><b>Audio Device For Input and Output</b> - This sets the audio device that will be used for audio input &amp; output to &amp; from the the TX Modular System.<span class="Apple-converted-space"> </span></p>
+<p class="p3"><b>Audio Device For Input and Output</b> - This sets the audio device that will be used for audio input &amp; output to &amp; from the the TX Modular System. </p>
 <p class="p3">- If you set this to Use Default, it will use the default device for your computer. To check or change the default audio device, run <b>Audio MIDI Setup</b> which can be found in the folder: <b>Applications/ Utilities</b>. Select on the <b>Audio Devices</b> window and see which device is marked with symbols for sound input and output.</p>
-<p class="p3"><b><i>Note:<span class="Apple-converted-space"> </span></i></b> You won't be able to start the audio engine if you select <i>built-in microphone</i>, <i>built-in input</i>, or <i>built-in output</i> as the Audio Device because they aren't valid as inputs <i>and</i> outputs (they are just one or the other). To use your built-in microphone or built-in input for input and your built-in output for output, you need to first create a virtual "aggregate" device using <b>Audio MIDI Setup</b>. (See notes below).</p>
+<p class="p3"><b><i>Note for Mac OSX: </i></b> You won't be able to start the audio engine if you select <i>built-in microphone</i>, <i>built-in input</i>, or <i>built-in output</i> as the Audio Device because they aren't valid as inputs <i>and</i> outputs (they are just one or the other). To use your built-in microphone or built-in input for input and your built-in output for output, you need to first create a virtual "aggregate" device using <b>Audio MIDI Setup</b>. (See notes below).</p>
 <p class="p4"><br></p>
 <p class="p3"><b>Audio Device Sample Rate</b> - If you set this to Use Default, it will use the default settings for the device. If you change it to another value, make sure it is valid for that device.</p>
 <p class="p4"><br></p>
-<p class="p3"><b>Audio Device Buffer Size</b> - If you set this to Use Default, it will use the default settings for the device. If you change it to another value, make sure it is valid for that device.<span class="Apple-converted-space"> </span></p>
+<p class="p3"><b>Audio Device Buffer Size</b> - If you set this to Use Default, it will use the default settings for the device. If you change it to another value, make sure it is valid for that device. </p>
 <p class="p4"><br></p>
 <p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
 <p class="p4"><b><i></i></b><br></p>
-<p class="p3"><b><i>Notes: Creating an Aggregate Device in Audio MIDI Setup</i></b></p>
-<p class="p3">To use your built-in microphone and/or built-in input for input and your built-in output for output, you need to create a virtual "aggregate" device (a virtual device that wraps two or more other devices).<span class="Apple-converted-space"> </span></p>
+<p class="p3"><b><i>Note for Mac OSX: Creating an Aggregate Device in Audio MIDI Setup</i></b></p>
+<p class="p3">To use your built-in microphone and/or built-in input for input and your built-in output for output, you need to create a virtual "aggregate" device (a virtual device that wraps two or more other devices). </p>
 <p class="p4"><br></p>
 <p class="p3">If you create an aggregate of your built-in microphone, built-in input and built-in output, you can use this single aggregate device as the Audio Device for the TX Modular System. You need to set up this aggregate device only once.</p>
 <p class="p4"><br></p>
-<p class="p3">To do so, you have to open the <b>Audio MIDI Setup</b> application (in <b>/Applications/Utilities</b>) – you should do this from an user account with administrator privileges.<span class="Apple-converted-space"> </span></p>
-<p class="p3">On the <b>Audio Devices</b> window click on the plus [<b>+</b>] button in the bottom left corner to add a new aggregate device.<span class="Apple-converted-space"> </span></p>
-<p class="p3">Double click on its name in the list (by default "Aggregate Device") and change it to a more specific name, for example "Built-in Audio". Then check the Use column for the devices you want to combine, that is your microphone and/or line input and the built-in output.<span class="Apple-converted-space"> </span></p>
+<p class="p3">To do so, you have to open the <b>Audio MIDI Setup</b> application (in <b>/Applications/Utilities</b>) – you should do this from an user account with administrator privileges. </p>
+<p class="p3">On the <b>Audio Devices</b> window click on the plus [<b>+</b>] button in the bottom left corner to add a new aggregate device. </p>
+<p class="p3">Double click on its name in the list (by default "Aggregate Device") and change it to a more specific name, for example "Built-in Audio". Then check the Use column for the devices you want to combine, that is your microphone and/or line input and the built-in output. </p>
 <p class="p3">Right click on the new aggregate device and select both "<i>use this device for sound input</i>" and "<i>use this device for sound output</i>".</p>
 <p class="p4"><br></p>
 <p class="p3">Then close <b>Audio MIDI Setup.</b></p>

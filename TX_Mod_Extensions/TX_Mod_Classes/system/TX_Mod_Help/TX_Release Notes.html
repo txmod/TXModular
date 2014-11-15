@@ -10,17 +10,16 @@
     p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
     p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
     p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Gill Sans'}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; color: #ff1213; min-height: 18.0px}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; color: #ff1213; min-height: 18.0px}
     span.s1 {text-decoration: underline ; color: #0000ee}
   </style>
 </head>
 <body>
-<p class="p1">// Copyright (C) 2013 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <a href="file:///Users/paul/TX_Modular_086c/TX_Mod_Extensions/TX_Mod_Classes/system/TX_Mod_Help/LICENSE.html"><span class="s1">LICENSE</span></a>).</p>
+<p class="p1">// Copyright (C) 2014 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <a href="file:///Users/paul/TX_Modular_086c/TX_Mod_Extensions/TX_Mod_Classes/system/TX_Mod_Help/LICENSE.html"><span class="s1">LICENSE</span></a>).</p>
 <p class="p2"><br></p>
 <p class="p3"><b>The TX Modular System - Release Notes</b></p>
 <p class="p2"><br></p>
-<p class="p3"><b>Release 086 (September 2013)</b></p>
+<p class="p3"><b>Release 086 (November 2014)</b></p>
 <p class="p3"><b>Release 082 (January 2012)</b></p>
 <p class="p3"><b>Release 081 (August 2010)</b></p>
 <p class="p3"><b>Release 079 (December 2008)</b></p>
@@ -33,14 +32,14 @@
 <p class="p2"><br></p>
 <p class="p3"><b>-----------------------------------------------------</b></p>
 <p class="p2"><br></p>
-<p class="p3"><b>Release 086 (September 2013)</b></p>
+<p class="p3"><b>Release 086 (November 2014)</b></p>
 <p class="p2"><br></p>
-<p class="p3"><b><i>Highlights:</i></b></p>
-<p class="p3">This release uses the new GUI system in SuperCollider which uses Qt, a cross-platform toolkit.<span class="Apple-converted-space"> </span></p>
-<p class="p3">Although it has only been tested on Mac OSX 10.8, it will hopefully work on Windows and Linux as well - user feedback welcome.</p>
+<p class="p3">This release uses the new GUI system in SuperCollider which uses Qt, a cross-platform toolkit.
+At the time of release, it has so far only been tested on Mac OSX 10.8.</p>
 <p class="p2"><br></p>
-<p class="p3">One new module has been built:</p>
-<p class="p4"><b>Pattern Code</b> - allows you to use SuperCollider Pattern code within the TX Modular system, to control any modules in the current system.<span class="Apple-converted-space"> </span></p>
+<p class="p3">There are various bug fixes (including midi notes sometimes sticking); metering now includes options for frequency analysis; and one new module has been added:</p>
+<p class="p2"><br></p>
+<p class="p3"><b>Pattern Code</b> - allows you to use SuperCollider Pattern code to control any modules in the system.</p>
 <p class="p2"><br></p>
 <p class="p3"><b>-----------------------------------------------------</b></p>
 <p class="p2"><br></p>
@@ -92,7 +91,7 @@
 <p class="p3"><b>-----------------------------------------------------</b></p>
 <p class="p2"><br></p>
 <p class="p3"><b>Release 081 (August 2010)</b></p>
-<p class="p5"><br></p>
+<p class="p4"><br></p>
 <p class="p3"><b><i>Main changes in this release:</i></b></p>
 <p class="p3"><b>New Signal Flow window -</b> this window is designed to make it easier to see how a whole system works. It shows how audio and control signals flow around the system between modules, channels and busses. As you add modules and connect them together in the Modules window, they will automatically be added to the Signal Flow window. Blue lines show audio signals and green lines show control signals. The layout of the Signal Flow window can be easily changed (by clicking and dragging).</p>
 <p class="p3"><b>Interface improvements</b> - The Design Layout window has been improved so you can easily resize widgets by dragging their corners and you can select multiple widgets for moving or cloning. This makes it much faster to design an interface. It is now possible to change the size of the Inteface so more controls can be displayed on larger monitors.</p>
@@ -136,7 +135,7 @@
 <p class="p3"><b>-----------------------------------------------------</b></p>
 <p class="p2"><br></p>
 <p class="p3"><b>Release 079 (December 2008)</b></p>
-<p class="p5"><br></p>
+<p class="p4"><br></p>
 <p class="p3"><b><i>Main changes in this release include:</i></b></p>
 <p class="p3"><b>Cleaner Audio</b> - glitching could occasionally happen in certain modules (e.g. Waveform module when using Pulse waveform, Filter, Delay, Flanger modules.). This glitching is now filtered out.</p>
 <p class="p3"><b>Meters</b> - this new popup, on the top right of the window, allows you to select any module or bus in the system and display its output(s) on a meter. Meters are on separate movable windows. Audio signals are shown in loudness units (-90dB to 0dB); Control signals are shown directly (range -1 to +1).</p>
