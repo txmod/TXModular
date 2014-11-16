@@ -1,4 +1,4 @@
-// Copyright (C) 2010  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
+// Copyright (C) 2014  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXSystem1 {		// system module 1
 
@@ -109,7 +109,7 @@ TXSystem1 {		// system module 1
 		});
 
 		//check for relevant plugins/quarks
-		if ('FM7'.asClass.isNil, {
+		if ('VOSIM'.asClass.isNil, {
 			classError = classError ++ "Error - SC3 Plugins not installed.  ";
 		});
 		if ('SimpleMIDIFile'.asClass.isNil, {
@@ -829,9 +829,6 @@ TXSystem1 {		// system module 1
 	*loadSystemSettings {
 		var validData, holdPath, holdFile, holdFileData;
 
-		// FIXME: this won't work on Windows
-		if (thisProcess.platform.name != \windows, {
-
 			holdPath = PathName.new(Platform.userAppSupportDir +/+ "TXModular");
 			//OLD holdFile = PathName.new(holdPath.pathOnly ++ "TxModSettings.tx");
 			//NEW:
@@ -880,7 +877,6 @@ TXSystem1 {		// system module 1
 				// if file TXMODSettings.tx  doesn't exist, create it.
 				this.saveSystemSettings;
 			});
-		});
 
 	}
 
@@ -1208,7 +1204,7 @@ TXSystem1 {		// system module 1
 		holdScreenWidth = Window.screenBounds.width;
 
 		w = Window("TX Modular System",
-			Rect(0, holdScreenHeight - mainWindowHeight - 10, mainWindowWidth, mainWindowHeight),
+			Rect(0, holdScreenHeight - mainWindowHeight - 30, mainWindowWidth, mainWindowHeight),
 			scroll: true);
 		w.front;
 		w.view.decorator = FlowLayout(w.view.bounds);
