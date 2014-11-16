@@ -442,12 +442,18 @@ TXChannelRouting {	// Channel Routing
 		btnAddModule = Button(colourBox1, 140 @ 24);
 		btnAddModule.states = [["Add new module(s)", TXColor.white, TXColor.sysGuiCol1]];
 		btnAddModule.action = {
-			var holdClasses, newModuleClass, newModule;
+			var holdClasses, newModuleClass, newModule, validClass;
 			// set new module class
 			holdClasses = this.getSourceModulesForCurrentCategory.collect({arg item; item[2]});
 			newModuleClass = holdClasses.at(popNewModule.value - 1);
+			if ( (newModuleClass == TXFMSynth4) and: ('FM7'.asClass.isNil), {
+				validClass = false;
+				TXInfoScreen.new("Error - unable to find FM7 Plugin. Cannot create FM Synth module  ");
+			},{
+				validClass = true;
+			});
 			// first item has no effect
-			if ( (popNewModule.value > 0) and: (newModuleClass.notNil), {
+			if ( (popNewModule.value > 0) and: (newModuleClass.notNil) and: validClass, {
 				Routine.run {
 					var holdCondition;
 					// create multiple copies
