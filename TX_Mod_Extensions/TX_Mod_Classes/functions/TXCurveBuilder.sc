@@ -114,7 +114,9 @@ TXCurveBuilder {
 			classData.gridColsView.value_(classData.gridCols);
 		});
 		classData.curveView1.setGridRowsCols(classData.gridRows, classData.gridCols);
-		classData.curveView2.setGridRowsCols(classData.gridRows, classData.gridCols);
+		if (classData.showCurve1And2FX, {
+			classData.curveView2.setGridRowsCols(classData.gridRows, classData.gridCols);
+		});
 		classData.curveView3.setGridRowsCols(classData.gridRows, classData.gridCols);
 	}
 
