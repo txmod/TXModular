@@ -23,7 +23,10 @@ TXSlider {
 		action = argAction;
 
 		labelView = StaticText.new(window, labelWidth @ dimensions.y);
+
 		sliderView = Slider.new(window, (dimensions.x - labelWidth - numberWidth) @ dimensions.y);
+		sliderView.thumbSize_(8).knobColor_(TXColour.white);
+
 		numberView = TXScrollNumBox(window, numberWidth @ dimensions.y, controlSpec).maxDecimals_(4);
 		labelView.string = label;
 		labelView.align = \right;
@@ -84,6 +87,10 @@ TXSlider {
 	enabled_ { |bool| [sliderView, numberView].do(_.enabled_(bool)) }
 
 	remove { [labelView, sliderView, numberView].do(_.remove) }
+
+	hasFocus {
+		^sliderView.hasFocus || numberView.hasFocus;
+	}
 }
 
 

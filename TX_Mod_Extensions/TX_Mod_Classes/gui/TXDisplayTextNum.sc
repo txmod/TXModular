@@ -4,73 +4,76 @@
 // useful as display-only replacement that still responds to value and string in a similar way to editable views
 
 TXDisplayTextNum {
-	var <>staticTextView, <value, background;
+	var <>textView, <value, background;
 	var <>round = 0.001;
-	
+
 	*new { arg window, dimensions;
 		^super.new.init(window, dimensions);
 	}
 	init { arg window, dimensions;
 
-		staticTextView = StaticText.new(window, dimensions);
+		textView = StaticText.new(window, dimensions);
 	}
-	value_ { arg val; 
-		staticTextView.string = val.round(round).asString;
-	}	
+	value_ { arg val;
+		textView.string = val.round(round).asString;
+	}
 	action{
 		// dummy method
-	}	
+	}
 	action_{
 		// dummy method
-	}	
+	}
+	valueAction_{ arg val;
+		textView.string = val.round(round).asString;
+	}
 
 	stringColor {
-		^staticTextView.getProperty(\stringColor, Color.new)
+		^textView.stringColor;
 	}
 	stringColor_ { arg color;
-		staticTextView.setProperty(\stringColor, color)
+		textView.stringColor_(color);
 	}
 
 	string{
-		staticTextView.string;
+		textView.string;
 	}
 	string_{arg str;
-		staticTextView.string_(str);
+		textView.string_(str);
 	}
 
 	font{
-		staticTextView.font;
+		textView.font;
 	}
 	font_{arg f;
-		staticTextView.font_(f);
+		textView.font_(f);
 	}
 
 	background_ {arg bg;
-		staticTextView.background_(bg);
+		textView.background_(bg);
 	}
 	background {
-		^staticTextView.background;
+		^textView.background;
 	}
 
-	visible { ^staticTextView.visible }
-	visible_ { |bool| staticTextView.visible_(bool) }
-	
-	enabled {  ^staticTextView.enabled } 
-	enabled_ { |bool| staticTextView.enabled_(bool) }
-	
-	remove { staticTextView.remove }
+	visible { ^textView.visible }
+	visible_ { |bool| textView.visible_(bool) }
+
+	enabled {  ^textView.enabled }
+	enabled_ { |bool| textView.enabled_(bool) }
+
+	remove { textView.remove }
 
 	canFocus {
 		^false;
-	} 
+	}
 	canFocus_ {
 		// dummy method
 	}
 
 	isClosed {
-		^staticTextView.isClosed;
+		^textView.isClosed;
 	}
 	notClosed {
-		^staticTextView.notClosed;
+		^textView.notClosed;
 	}
 }

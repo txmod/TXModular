@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s3 {text-decoration: underline ; font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Note Multiply</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Action</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This triggered module makes no sound itself but instead triggers notes in other polyphonic modules. Up to 6  modules can be triggered. It can also output MIDI notes.</span></p>
+<p class="p1"><span class="s1">When it is triggered, it plays a number of repeated notes. E</span><span class="s1">ach note can </span><span class="s1">be tranposed and has its own velocity, probability and gate time</span><span class="s1"> settings, allowing randomness to be introduced in various ways.</span><span class="s1"> </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Active</b> - if off then no notes will be triggered<br>
+</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>MIDI &amp; Outputs button</b></span></p>
+<p class="p1"><span class="s1"><b>MIDI Listen</b> - this allows the module to be triggered by midi Notes, and to respond to midi Pitchbend. </span></p>
+<p class="p1"><span class="s1"><b>Note</b>: If Midi Listen is turned on make sure none of the individual output modules has their Midi Listen turned on, or there will be double triggering. </span></p>
+<p class="p1"><span class="s1"><b>MIDI Channels</b> - which midi channels the module will listen to. </span></p>
+<p class="p1"><span class="s1"><b>Modules </b>- up to 6 polyphonic source modules, such as wave synths, samplers or polyphonic envelopes, can be triggered. All valid modules will appear in the modules list. See the <a href="file:../TX_0%20TX%20Modular%20Help.html"><span class="s3">Help Index</span></a> for details of which modules are polyphonic.</span></p>
+<p class="p1"><span class="s1"><b>Output MIDI notes for each step</b> - on/off.</span></p>
+<p class="p1"><span class="s1"><b>MIDI Port </b>- select from available ports</span></p>
+<p class="p1"><span class="s1"><b>MIDI Loop-Back </b>- sends MIDI notes back into the TX Modular system on the selected channel, so other modules can respond. </span></p>
+<p class="p1"><span class="s1"><b>Note</b>:<b> </b>Take care not to output MIDI loop-back to a channel that the module itself is listening to - otherwise the system will crash with a MIDI feedback loop.</span></p>
+<p class="p1"><span class="s1"><b>MIDI Channel</b> - output channel.</span></p>
+<p class="p1"><span class="s1"><b>MIDI keyboard</b>- this can be played by clicking with a mouse.The midi velocity of the note played is set by the Velocity slider. Middle C is tinted red. </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Step Parameters</b></span><span class="s1"><b> button</b></span></p>
+<p class="p2"><span class="s1"><b>Step beats</b></span><span class="s1"> - the length is beats of each step</span></p>
+<p class="p2"><span class="s1"><b>BPM</b> - beats per minute</span></p>
+<p class="p2"><span class="s1"><b>Swing</b> - shifts the start of every 2nd step forwards or backwards</span></p>
+<p class="p2"><span class="s1"><b>Jitter</b> - add random changes to the BPM</span></p>
+<p class="p2"><span class="s1"><b>Transp. range</b> - the range in semitones of each step’s transpose settings </span></p>
+<p class="p1"><span class="s1"><b>Quantise transpose to semitones</b> - sets all transpose values to nearest MIDI note</span></p>
+<p class="p2"><span class="s1"><b>Randomise vel</b> - adds random variation the </span><span class="s1">all </span><span class="s1">velocities.</span></p>
+<p class="p2"><span class="s1"><b>Velocity</b> <b>scale</b> - if less than 1, notes will have their velocity scaled down.</span></p>
+<p class="p2"><span class="s1"><b>Scale note velocities to played velocity</b> - this will scale all notes using the played note’s velocity.</span></p>
+<p class="p1"><span class="s1"><b>Gate range</b> - </span><span class="s1"> the range in beats of each step’s gate settings</span><span class="s1"> </span></p>
+<p class="p1"><span class="s1"><b>Gate </b></span><span class="s1"><b>quantise</b> - if more than 0, this sets the minimum step gate time and quantises it</span></p>
+<p class="p2"><span class="s1"><b>Ignore transpose for start step </b>- this overrides the </span><span class="s1">step</span><span class="s1"> settings. (This might be useful for example, if “Randomise transpose </span><span class="s1">step</span><span class="s1"> order” is on, to make sure that the first note is as played.)</span></p>
+<p class="p1"><span class="s1"><b>Use played velocity for start step</b></span><span class="s1"> - <b> </b>- this overrides the step settings. (This might be useful for example, if “Randomise velocity step order” is on, to make sure that the first note is as played.) </span></p>
+<p class="p1"><span class="s1"><b>Use probability 100% for start step</b></span><span class="s1"> - <b> </b>- this overrides the step settings. (This might be useful for example, if “Randomise probability step order” is on, to make sure that the first note is always played.) </span></p>
+<p class="p1"><span class="s1"><b>Randomise transpose step order</b></span><span class="s1"><b> </b>- this randomly orders the transpose of all the steps.</span></p>
+<p class="p2"><span class="s1"><b>Randomise velocity </b></span><span class="s1"><b>step</b></span><span class="s1"><b> order </b>- this randomly orders the velocity of all the steps.</span></p>
+<p class="p2"><span class="s1"><b>Randomise probability </b></span><span class="s1"><b>step</b></span><span class="s1"><b> order </b>- this randomly orders the probability of all the </span><span class="s1">steps</span><span class="s1">.</span></p>
+<p class="p1"><span class="s1"><b>Randomise gate beats step order</b></span><span class="s1"><b> </b>- this randomly orders the gate time of all the steps.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Steps</b></span><span class="s1"><b> button</b></span></p>
+<p class="p2"><span class="s1"><b>Start step </b></span><span class="s1">- which step to start playing from.</span></p>
+<p class="p1"><span class="s1"><b>Play steps </b></span><span class="s1">- the number of steps to play. </span><span class="s1"> This will wrap around to the first step if high enough. For example, if the start step is 16 and number of play steps is 4, the steps played will be 16, 1, 2, 3. </span></p>
+<p class="p1"><span class="s1"><b>Step 1-16 Transpose</b> - transpose semitones for each step </span></p>
+<p class="p2"><span class="s1"><b>Step 1-16 </b></span><span class="s1"><b>Velocity</b> - </span><span class="s1"> for each step</span><span class="s1"> </span></p>
+<p class="p2"><span class="s1"><b>Step 1-16 Probability</b></span><span class="s1"> - </span><span class="s1"> for each step</span><span class="s1"> </span></p>
+<p class="p2"><span class="s1"><b>Step 1-16 Gate beats</b></span><span class="s1"> - </span><span class="s1"> for each step</span><span class="s1"> </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Active</b></span></p>
+<p class="p1"><span class="s1"><b>BPM</b></span></p>
+<p class="p1"><span class="s1"><b>Step beats</b></span></p>
+<p class="p1"><span class="s1"><b>Swing</b></span></p>
+<p class="p1"><span class="s1"><b>Jitter</b></span></p>
+<p class="p1"><span class="s1"><b>Start step</b></span></p>
+<p class="p1"><span class="s1"><b>Play steps</b></span></p>
+<p class="p1"><span class="s1"><b>Velocity scale</b></span></p>
+<p class="p1"><span class="s1"><b>Randomise vel</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>

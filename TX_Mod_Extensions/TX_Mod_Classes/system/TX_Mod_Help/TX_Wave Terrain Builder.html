@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {font-kerning: none; color: #000000; -webkit-text-stroke: 0px #000000}
+    span.s3 {font-kerning: none; color: #000000}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Wave Terrain Builder</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">The </span><span class="s2">Wave Terrain</span><span class="s1"> Builder is an experimental tool to create and visualise wave terrains using maths &amp; code - but without necessarily having to (fully!) understand all the maths or write any code. </span></p>
+<p class="p1"><span class="s1">Because you can see the terrain produced as a colourful image, you can simply experiment - changing values and seeing what happens to the terrain. There are history buttons to undo/redo any changes.</span></p>
+<p class="p1"><span class="s1">Once a terrain is built it can be saved as a preset or imported, using drag and drop, into a <b>Wave Terrain</b> module which will turn it into an audio signal - see help file: </span><span class="s3"><a href="file:Modules/TX_Wave%20Terrain.html">Wave Terrain</a></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Basic idea:</i></b></span></p>
+<p class="p1"><span class="s1">The Wave Terrain Builder uses up to 4 layers of mathematical functions to create a terrain (see SuperCollider help files for explanations of any mathematical functions).</span></p>
+<p class="p1"><span class="s1">A range of X (horizontal position) and Y (vertical position) values are passed as inputs to the functions.</span></p>
+<p class="p1"><span class="s1">Each layer has a central generative function - e.g. sin(x) - which can use numbers as well as X  and Y position values to generate terrain values. </span></p>
+<p class="p1"><span class="s1">After the generative function, up to 5 further 'post' functions  can then be applied to the terrain value.<br>
+Finally the layer is multiplied by itself (power), a constant number, X &amp; Y position values, and then it is offset.</span></p>
+<p class="p1"><span class="s1">The layers can be joined in various orders, and using various join functions.</span></p>
+<p class="p1"><span class="s1">When you have set the parameters and are ready to build, press the Build button, or use Auto-Build to automatically rebuild the terrain whenever any of the parameters is changed.</span></p>
+<p class="p1"><span class="s1"><b>Note: </b>It can take several seconds to build the Wave Terrain, depending on how complex it is.</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p3"><span class="s1"><b>&lt; &gt;</b> history buttons to go back to previous control settings.</span></p>
+<p class="p3"><span class="s1"><b>Help</b> - opens the help file</span></p>
+<p class="p3"><span class="s1"><b>Build Terrain</b> - for manually building. The window colour will become orange during the building process. Once the terrain is built it will be displayed in a separate window.</span></p>
+<p class="p3"><span class="s1"><b>Auto-Build</b> - if set on, this will automatically rebuild the terrain whenever any of the parameters is changed.</span></p>
+<p class="p1"><span class="s1"><b>drag &amp; drop</b> - to import/export a wave terrain into a Wave Terrain module </span></p>
+<p class="p1"><span class="s1"><b>window on top</b> - to keep the window visible, even when it is not selected.</span></p>
+<p class="p1"><span class="s1"><b>Wave Terrain presets</b> - controls for saving and loading presets. Type in the name box to save a preset - a save or overwrite button will appear when some text has been added. X removes the current text in the box. When you load a preset, it's name appears in the name box so you can overwrite it or save a different version.</span></p>
+<p class="p1"><span class="s1"><b>Layers Structure</b> - The structure name shows how many and which layers are used, If it has more than 2 layers, the brackets shows the order that layers will be joined - layers in the inner-most brackets will be joined first.</span></p>
+<p class="p1"><span class="s1"><b>Output range function</b> - if the generated values of a terrain are outside the range -1/+1, they will be kept inside the range using the selected function.</span></p>
+<p class="p1"><span class="s1"><b>Display</b> - buttons to select which global or layer controls will be displayed below the line (see below). </span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><b><i>Global Button:</i></b></span></p>
+<p class="p1"><span class="s1"><b>xMin/xMax/yMin/yMax</b> - set the ranges of X &amp; Y values that will be used for the generated terrain.</span></p>
+<p class="p1"><span class="s1"><b>Color 1/2/3 HSB</b> - these 3 colors are for terrain values of -1, 0 and 1. Terrain values in between these values will have a proportional mix of nearest colors. </span></p>
+<p class="p1"><span class="s1"><b><i>Note:</i></b> The colors are only used to help with visualisation of the terrain. They make no difference to the sound the terrain will produce when used in a Wave Terrain audio module.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Layer A/ B/ C/ D Buttons:</i></b></span></p>
+<p class="p1"><span class="s1"><b>xOffset/yOffset</b> - offsets the x/y value just for this layer</span></p>
+<p class="p1"><span class="s1"><b>xInvert/yInvert</b> - inverts the x/y value just for this layer</span></p>
+<p class="p1"><span class="s1"><b>Layer presets</b> - controls for saving/loading layer presets.</span></p>
+<p class="p1"><span class="s1"><b>layerJoinFuncIndex</b> - only <b>Layers</b> <b>B</b>, <b>C</b> &amp; <b>D</b> have this control which chooses how the layer will be joined to the preceding layer.</span></p>
+<p class="p1"><span class="s1"><b>layerGenFuncIndex</b> - >Generative function for the layer which uses the other “gen” controls: </span></p>
+<p class="p1"><span class="s1"><b>genMult</b> - a multiplier for >the generative function input</span></p>
+<p class="p1"><span class="s1"><b>genXYFuncIndex</b> - this function controls how X &amp; Y are joined.</span></p>
+<p class="p1"><span class="s1"><b>genXPower</b>/ <b>genYPower</b> - the power for x/y values</span></p>
+<p class="p1"><span class="s1"><b>genOffset</b> >- offset to the generative function input</span></p>
+<p class="p1"><span class="s1"><b>layerPost1FuncIndex…layerPost5FuncIndex</b> - Post functions 1- 5 </span></p>
+<p class="p1"><span class="s1"><b>layerPost1YVal…layerPost5YVal</b> - If the post function is a binary function (e.g. “x + y”), this control sets the y value used in the function.</span></p>
+<p class="p1"><span class="s1"><b>power, mult, multXPower, multYPower, offset </b> - The layer is multiplied by itself (using <b>power</b>), a number (using <b>mult</b>), X &amp; Y position values (using <b>multXPower</b> &amp; <b>multYPower</b>), and then <b>offset</b>.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Layers Mix Button:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Layers Mix</b> shows only <b>layerJoinFuncIndex, power, mult & offset</b> for each layer in the chosen structure - this is only useful if you are using more than 1 layer.</span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"></span><br></p>
+</body>
+</html>

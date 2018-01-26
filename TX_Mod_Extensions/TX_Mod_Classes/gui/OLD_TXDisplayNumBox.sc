@@ -6,7 +6,7 @@
 TXDisplayNumBox {
 	var <>staticTextView, <value, background;
 	var <>round = 0.001;
-	
+
 	*new { arg window, dimensions;
 		^super.new.init(window, dimensions);
 	}
@@ -14,21 +14,21 @@ TXDisplayNumBox {
 
 		staticTextView = StaticText.new(window, dimensions);
 	}
-	value_ { arg val; 
+	value_ { arg val;
 		staticTextView.string = val.round(round).asString;
-	}	
+	}
 	action{
 		// dummy method
-	}	
+	}
 	action_{
 		// dummy method
-	}	
+	}
 
 	stringColor {
-		^staticTextView.getProperty(\stringColor, Color.new)
+		^staticTextView.stringColor;
 	}
 	stringColor_ { arg color;
-		staticTextView.setProperty(\stringColor, color)
+		staticTextView.stringColor = color;
 	}
 
 	string{
@@ -54,15 +54,15 @@ TXDisplayNumBox {
 
 	visible { ^staticTextView.visible }
 	visible_ { |bool| staticTextView.visible_(bool) }
-	
-	enabled {  ^staticTextView.enabled } 
+
+	enabled {  ^staticTextView.enabled }
 	enabled_ { |bool| staticTextView.enabled_(bool) }
-	
+
 	remove { staticTextView.remove }
 
 	canFocus {
 		^false;
-	} 
+	}
 	canFocus_ {
 		// dummy method
 	}

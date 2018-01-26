@@ -33,7 +33,7 @@ TXCheckBox {
 		// create on and off text
 		onOffTextType = type.asInt;
 		[
-			{offText = "[  ]  "; onText =  "[X] "; }, // 0
+			{offText = "[  ] "; onText =  "[X] "; }, // 0
 			{offText = " "; onText = "X"; }, // 1
 			{offText = "[OFF] "; onText = "[ON] "; }, // 2
 			{offText = "[Off] "; onText = "[On] "; }, // 3
@@ -54,4 +54,7 @@ TXCheckBox {
 		buttonView.performList(selector, args);
 	}
 
+	hasFocus {
+		^buttonView.hasFocus;
+	}
 }

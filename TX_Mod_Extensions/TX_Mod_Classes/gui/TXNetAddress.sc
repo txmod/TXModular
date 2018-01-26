@@ -22,8 +22,12 @@ TXNetAddress {
 			/ 4).max(25);
 
 		labelView = StaticText(holdBox, labelWidth @ dimensions.height);
-		labelView.string = label;
-		labelView.align = \right;
+		if (labelWidth == 0, {
+			labelView.visible = false;
+		},{
+			labelView.string = label;
+			labelView.align = \right;
+		});
 
 		if (initVal == "", {initVal = "0.0.0.0"});
 		if (initVal == " ", {initVal = "0.0.0.0"});
@@ -33,11 +37,11 @@ TXNetAddress {
 
 		if (displayOnly == true, {
 			numberView1 = TXDisplayNumBox(holdBox, numWidth @ dimensions.height);
-			StaticText(holdBox, 10 @ dimensions.height).string_(" .");
+			StaticText(holdBox, 8 @ dimensions.height).string_(" .").background_(Color.grey(0.8));
 			numberView2 = TXDisplayNumBox(holdBox, numWidth @ dimensions.height);
-			StaticText(holdBox, 10 @ dimensions.height).string_(" .");
+			StaticText(holdBox, 8 @ dimensions.height).string_(" .").background_(Color.grey(0.8));
 			numberView3 = TXDisplayNumBox(holdBox, numWidth @ dimensions.height);
-			StaticText(holdBox, 10 @ dimensions.height).string_(" .");
+			StaticText(holdBox, 8 @ dimensions.height).string_(" .").background_(Color.grey(0.8));
 			numberView4 = TXDisplayNumBox(holdBox, numWidth @ dimensions.height);
 		},{
 			numberView1 = TXScrollNumBox(holdBox, numWidth @ dimensions.height);
@@ -46,21 +50,21 @@ TXNetAddress {
 				this.makeString;
 				action.value(this);
 			};
-			StaticText(holdBox, 10 @ dimensions.height).string_(" .");
+			StaticText(holdBox, 8 @ dimensions.height).string_(" .").background_(Color.grey(0.8));
 			numberView2 = TXScrollNumBox(holdBox, numWidth @ dimensions.height);
 			numberView2.action = {
 				numberView2.value = controlSpec.constrain(numberView2.value);
 				this.makeString;
 				action.value(this);
 			};
-			StaticText(holdBox, 10 @ dimensions.height).string_(" .");
+			StaticText(holdBox, 8 @ dimensions.height).string_(" .").background_(Color.grey(0.8));
 			numberView3 = TXScrollNumBox(holdBox, numWidth @ dimensions.height);
 			numberView3.action = {
 				numberView3.value = controlSpec.constrain(numberView3.value);
 				this.makeString;
 				action.value(this);
 			};
-			StaticText(holdBox, 10 @ dimensions.height).string_(" .");
+			StaticText(holdBox, 8 @ dimensions.height).string_(" .").background_(Color.grey(0.8));
 			numberView4 = TXScrollNumBox(holdBox, numWidth @ dimensions.height);
 			numberView4.action = {
 				numberView4.value = controlSpec.constrain(numberView4.value);
@@ -141,6 +145,13 @@ TXNetAddress {
 		numberView2.stringColor = argColor;
 		numberView3.stringColor = argColor;
 		numberView4.stringColor = argColor;
+		labelView.stringColor = argColor;
+		if (numberView1.class != TXDisplayNumBox, {
+			numberView1.normalColor = argColor;
+			numberView2.normalColor = argColor;
+			numberView3.normalColor = argColor;
+			numberView4.normalColor = argColor;
+		});
 	}
 
 	font{
@@ -162,6 +173,7 @@ TXNetAddress {
 		numberView2.background = argColor;
 		numberView3.background = argColor;
 		numberView4.background = argColor;
+		labelView.background = argColor;
 	}
 
 	remove{
@@ -169,5 +181,10 @@ TXNetAddress {
 		numberView2.remove;
 		numberView3.remove;
 		numberView4.remove;
+		labelView.remove;
+	}
+
+	hasFocus {
+		^numberView1.hasFocus || numberView2.hasFocus || numberView3.hasFocus || numberView4.hasFocus;
 	}
 }

@@ -1,26 +1,33 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
-		
+
 TXMultiSliderNo {	// MultiSlider & MultiNumber module with label
 	var <>labelView, <>scrollView, <>scrollView2, <>multiSliderView, <>multiNumberView,
 		<>controlSpec, <>action, <value;
-	
-	*new { arg window, dimensions, label, controlSpec, action, initVal, 
+
+	*new { arg window, dimensions, label, controlSpec, action, initVal,
 			initAction=false, labelWidth=80, scrollViewWidth;
-		^super.new.init(window, dimensions, label, controlSpec, action, initVal, 
+		^super.new.init(window, dimensions, label, controlSpec, action, initVal,
 			initAction, labelWidth, scrollViewWidth);
 	}
-	init { arg window, dimensions, label, argControlSpec, argAction, initVal, 
+	init { arg window, dimensions, label, argControlSpec, argAction, initVal,
 			initAction, labelWidth, scrollViewWidth;
 		var holdMSVWidth, scrollBox, holdNumberWidth;
 		StaticText(window, labelWidth @ dimensions.y);
 //		labelView.string = label;
 //		labelView.align = \right;
-		
+
 		controlSpec = argControlSpec.asSpec;
 		initVal = initVal ? Array.fill(8, controlSpec.default);
 		action = argAction;
 		holdMSVWidth = dimensions.x - labelWidth;
-		
+
+		// decorator shift
+			if (window.class == Window, {
+			window.view.decorator.shift(-2, 0);
+			}, {
+				window.decorator.shift(-2, 0);
+			});
+
 		if (scrollViewWidth.notNil, {
 			scrollView = ScrollView(window, Rect(0, 0, scrollViewWidth, dimensions.y))
 				.hasBorder_(false);
@@ -43,7 +50,7 @@ TXMultiSliderNo {	// MultiSlider & MultiNumber module with label
 			action.value(this);
 		};
 
-		// decorator next line & shift 
+		// decorator next line & shift
 			if (window.class == Window, {
 				window.view.decorator.nextLine;
 			}, {
@@ -51,12 +58,12 @@ TXMultiSliderNo {	// MultiSlider & MultiNumber module with label
 			});
 
 		holdNumberWidth = ((dimensions.x-labelWidth) / initVal.size ) - 4;
-		multiNumberView = TXMultiNumber(window, (dimensions.x-labelWidth) @ 20, label, controlSpec, nil, 
+		multiNumberView = TXMultiNumber(window, (dimensions.x-labelWidth) @ 20, label, controlSpec, nil,
 			initVal, numberWidth: holdNumberWidth, scrollViewWidth: scrollViewWidth);
 		multiNumberView.action = {
 			value = controlSpec.constrain(multiNumberView.value);
 			multiSliderView.value = controlSpec.unmap(value);
-			action.value(this); 
+			action.value(this);
 		};
 		scrollView2 = multiNumberView.scrollView;
 		labelView = multiNumberView.labelView;
@@ -69,11 +76,14 @@ TXMultiSliderNo {	// MultiSlider & MultiNumber module with label
 			multiSliderView.value = controlSpec.unmap(value);
 		};
 	}
+
 	value_ { arg value; multiNumberView.valueAction_(value) }
-	valueNoAction_  { arg value; 
+
+	valueNoAction_  { arg value;
 		multiNumberView.value = value = controlSpec.constrain(value);
 		multiSliderView.value = controlSpec.unmap(value);
 	}
+
 	set { arg label, spec, argAction, initVal, initAction=false;
 		labelView.string = label;
 		controlSpec = spec.asSpec;
@@ -86,5 +96,9 @@ TXMultiSliderNo {	// MultiSlider & MultiNumber module with label
 			multiNumberView.value = value;
 			multiSliderView.value = controlSpec.unmap(value);
 		};
+	}
+
+	hasFocus {
+		^multiSliderView.hasFocus || multiNumberView.hasFocus;
 	}
 }

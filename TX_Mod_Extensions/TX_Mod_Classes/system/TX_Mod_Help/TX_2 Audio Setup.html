@@ -5,56 +5,73 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
   <title></title>
   <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1138.47">
+  <meta name="CocoaVersion" content="1404.13">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; color: #ff1213; min-height: 18.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
-    span.s1 {text-decoration: underline}
-    span.s2 {color: #971f8e}
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #ff1213; -webkit-text-stroke: #ff1213; min-height: 18.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #0000ee; -webkit-text-stroke: #0000ee}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none; color: #0000ee; -webkit-text-stroke: 0px #0000ee}
+    span.s3 {font-kerning: none; color: #000000; -webkit-text-stroke: 0px #000000}
+    span.s4 {font: 15.0px Helvetica; text-decoration: underline ; font-kerning: none; color: #0000ee; -webkit-text-stroke: 0px #0000ee}
   </style>
 </head>
 <body>
-<p class="p1">// Copyright (C) 2014 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <A href="LICENSE.html"> LICENSE<A>).</p>
-<p class="p2"> </p>
-<p class="p3"><b>The TX Modular System - Audio Setup Window</b></p>
-<p class="p4"><br></p>
-<p class="p3">When the TX Modular System is started, the <b>Audio Setup</b> window is displayed first. This is where you configure your audio settings, before starting the audio engine.</p>
-<p class="p3">The controls are as follows:</p>
-<p class="p4"><br></p>
-<p class="p3"><b>Start Audio Engine button</b> - this will start the engine and display the main TX Modular System window. Only press this once you have set the options for your audio device - see below.</p>
-<p class="p4"><br></p>
-<p class="p3"><b>Quit button</b> - This quits the TX Modular System completely.</p>
-<p class="p4"><br></p>
-<p class="p3"><b>Audio Device For Input and Output</b> - This sets the audio device that will be used for audio input &amp; output to &amp; from the the TX Modular System. </p>
-<p class="p3">- If you set this to Use Default, it will use the default device for your computer. To check or change the default audio device, run <b>Audio MIDI Setup</b> which can be found in the folder: <b>Applications/ Utilities</b>. Select on the <b>Audio Devices</b> window and see which device is marked with symbols for sound input and output.</p>
-<p class="p3"><b><i>Note for Mac OSX: </i></b> You won't be able to start the audio engine if you select <i>built-in microphone</i>, <i>built-in input</i>, or <i>built-in output</i> as the Audio Device because they aren't valid as inputs <i>and</i> outputs (they are just one or the other). To use your built-in microphone or built-in input for input and your built-in output for output, you need to first create a virtual "aggregate" device using <b>Audio MIDI Setup</b>. (See notes below).</p>
-<p class="p4"><br></p>
-<p class="p3"><b>Audio Device Sample Rate</b> - If you set this to Use Default, it will use the default settings for the device. If you change it to another value, make sure it is valid for that device.</p>
-<p class="p4"><br></p>
-<p class="p3"><b>Audio Device Buffer Size</b> - If you set this to Use Default, it will use the default settings for the device. If you change it to another value, make sure it is valid for that device. </p>
-<p class="p4"><br></p>
-<p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
-<p class="p4"><b><i></i></b><br></p>
-<p class="p3"><b><i>Note for Mac OSX: Creating an Aggregate Device in Audio MIDI Setup</i></b></p>
-<p class="p3">To use your built-in microphone and/or built-in input for input and your built-in output for output, you need to create a virtual "aggregate" device (a virtual device that wraps two or more other devices). </p>
-<p class="p4"><br></p>
-<p class="p3">If you create an aggregate of your built-in microphone, built-in input and built-in output, you can use this single aggregate device as the Audio Device for the TX Modular System. You need to set up this aggregate device only once.</p>
-<p class="p4"><br></p>
-<p class="p3">To do so, you have to open the <b>Audio MIDI Setup</b> application (in <b>/Applications/Utilities</b>) – you should do this from an user account with administrator privileges. </p>
-<p class="p3">On the <b>Audio Devices</b> window click on the plus [<b>+</b>] button in the bottom left corner to add a new aggregate device. </p>
-<p class="p3">Double click on its name in the list (by default "Aggregate Device") and change it to a more specific name, for example "Built-in Audio". Then check the Use column for the devices you want to combine, that is your microphone and/or line input and the built-in output. </p>
-<p class="p3">Right click on the new aggregate device and select both "<i>use this device for sound input</i>" and "<i>use this device for sound output</i>".</p>
-<p class="p4"><br></p>
-<p class="p3">Then close <b>Audio MIDI Setup.</b></p>
-<p class="p4"><br></p>
-<p class="p3">[Based on notes from the SuperCollider swiki.]</p>
-<p class="p4"><b></b><br></p>
-<p class="p3"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
-<p class="p4"><br></p>
-<p class="p3">Next help file: <A href="TX_3 Building a System.html">3 Building a System<A></p>
-<p class="p4"><span class="s1"></span><br></p>
-<p class="p3">Previous help file: <A href="TX_1 Introduction.html">1 Introduction<A></p>
+<p class="p1"><span class="s1">// Copyright (C) 2016 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <a href="file:LICENSE.html"><span class="s2">LICENSE</span></a>).</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p3"><span class="s1"><b>The TX Modular System - Audio Setup Window</b></span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1">When the TX Modular System is started, the <b>Audio Setup</b> window is displayed first. This is where you configure your audio settings, before starting the audio engine.</span></p>
+<p class="p3"><span class="s1">The controls are as follows:</span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b>Start Audio Engine button</b> - this will start the engine and display the main TX Modular System window. Only press this once you have set the options for your audio device - see below.</span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b>Quit button</b> - This quits the TX Modular System completely.</span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b>Audio Device For Input and Output</b> - This sets the audio device that will be used for audio input &amp; output to &amp; from the the TX Modular System.<span class="Apple-converted-space"> </span></span></p>
+<p class="p3"><span class="s1">- If you set this to Use Default, it will use the default device for your computer. To check or change the default audio device, run <b>Audio MIDI Setup</b> which can be found in the folder: <b>Applications/ Utilities</b>. Select on the <b>Audio Devices</b> window and see which device is marked with symbols for sound input and output.</span></p>
+<p class="p3"><span class="s1"><b><i>Note for Mac OSX: </i></b>You won't be able to start the audio engine if you select <i>built-in microphone</i>, <i>built-in input</i>, or <i>built-in output</i> as the Audio Device because they aren't valid as inputs <i>and</i> outputs (they are just one or the other). To use your built-in microphone or built-in input for input and your built-in output for output, you need to first create a virtual "aggregate" device using <b>Audio MIDI Setup</b>. (See notes below).</span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b>Audio Device Sample Rate</b> - If you set this to Use Default, it will use the default settings for the device. If you change it to another value, make sure it is valid for that device.</span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b>Audio Device Buffer Size</b> - If you set this to Use Default, it will use the default settings for the device. If you change it to another value, make sure it is valid for that device.<span class="Apple-converted-space"> </span></span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b>++++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b><i>Note for Mac OSX: Creating an Aggregate Device in Audio MIDI Setup</i></b></span></p>
+<p class="p3"><span class="s1">To use your built-in microphone and/or built-in input for input and your built-in output for output, you need to create a virtual "aggregate" device (a virtual device that wraps two or more other devices).<span class="Apple-converted-space"> </span></span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1">If you create an aggregate of your built-in microphone, built-in input and built-in output, you can use this single aggregate device as the Audio Device for the TX Modular System. You need to set up this aggregate device only once.</span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1">To do so, you have to open the <b>Audio MIDI Setup</b> application (in <b>/Applications/Utilities</b>) – you should do this from an user account with administrator privileges.<span class="Apple-converted-space"> </span></span></p>
+<p class="p3"><span class="s1">On the <b>Audio Devices</b> window click on the plus [<b>+</b>] button in the bottom left corner to add a new aggregate device.<span class="Apple-converted-space"> </span></span></p>
+<p class="p3"><span class="s1">Double click on its name in the list (by default "Aggregate Device") and change it to a more specific name, for example "Built-in Audio". Then check the Use column for the devices you want to combine, that is your microphone and/or line input and the built-in output.<span class="Apple-converted-space"> </span></span></p>
+<p class="p3"><span class="s1">Right click on the new aggregate device and select both "<i>use this device for sound input</i>" and "<i>use this device for sound output</i>".</span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1">Then close <b>Audio MIDI Setup.</b></span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1">[Based on notes from the SuperCollider swiki.]</span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1"><b>++++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p4"><span class="s3">Next help file: <a href="file:TX_3%20Building%20a%20System.html"><span class="s2">3 Building a System</span></a></span></p>
+<p class="p3"><span class="s1"><br>
+</span></p>
+<p class="p3"><span class="s1">Previous help file: <a href="file:TX_1%20Introduction.html"><span class="s4">1 Introduction</span></a></span></p>
 </body>
 </html>

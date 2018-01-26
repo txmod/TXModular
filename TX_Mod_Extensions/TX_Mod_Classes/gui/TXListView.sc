@@ -1,56 +1,44 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
-		
-TXListView {	// listview module with label
-	var <>labelView, <>listView, <>action, <value;
-	
-	*new { arg argParent, dimensions, label, items, action, initVal, 
-			initAction=false, labelWidth=80;
-		^super.new.init(argParent, dimensions, label, items, action, initVal, 
-			initAction, labelWidth);
-	}
-	init { arg argParent, dimensions, label, items, argAction, initVal, 
-			initAction, labelWidth;
-		labelView = StaticText(argParent, labelWidth @ dimensions.y);
-		labelView.string = label;
-		labelView.align = \right;
-		
-		initVal = initVal ? 0;
-		action = argAction;
-		
-		listView = ListView(argParent, (dimensions.x - labelWidth+4) @ dimensions.y);
-		listView.items = items;
-		listView.action = {
-			value = listView.value;
-			action.value(this);
+
+TXListView : ListView {	// modified ListView
+
+	// this version reverts the changes in ListViewto mouseDownEvent & mouseMoveEvent because they can cause crashes
+
+	// ListView version
+	// mouseDownEvent { arg x, y, modifiers, buttonNumber, clickCount;
+	// 	// Override View:mouseDownEvent: postpone drag start to move event
+	// 	modifiers = QKeyModifiers.toCocoa(modifiers);
+	// 	^this.mouseDown( x, y, modifiers, buttonNumber, clickCount );
+	// }
+	//
+	// mouseMoveEvent { arg x, y, modifiers, buttons;
+	// 	// Override View:mouseMoveEvent: start drag
+	// 	if( buttons != 0 and: ((modifiers & QKeyModifiers.control) > 0) ) {
+	// 		if( this.beginDrag( x, y ) ) { ^true };
+	// 	};
+	//
+	// 	^super.mouseMoveEvent(x, y, modifiers, buttons);
+	// }
+
+	// revert to View version:
+	mouseDownEvent { arg x, y, modifiers, buttonNumber, clickCount;
+		if( (modifiers & QKeyModifiers.control) > 0 ) { // if Ctrl / Cmd mod
+			// Try to get drag obj and start a drag.
+			// If successful, block further processing of this event.
+			if( this.beginDrag( x, y ) ) { ^true };
 		};
-		
-		if (initAction) {
-			this.value = initVal;
+		// else continue to handle mouse down event
+		modifiers = QKeyModifiers.toCocoa(modifiers);
+		^this.mouseDown( x, y, modifiers, buttonNumber, clickCount );
+	}
+
+	mouseMoveEvent { arg x, y, modifiers, buttons;
+		if( buttons != 0 ) {
+			modifiers = QKeyModifiers.toCocoa(modifiers);
+			^this.mouseMove( x, y, modifiers );
 		}{
-			value = initVal;
-			listView.value = value;
-		};
-	}
-	value_ { arg argVal;
-		listView.valueAction = argVal;
-	}
-	
-	valueAction_  { arg argVal;
-		listView.valueAction = argVal;
-	}
-	valueNoAction_  { arg argVal;
-		listView.value = argVal;
-	}
-	set { arg label, argAction, initVal, initAction=false;
-		labelView.string = label;
-		action = argAction;
-		initVal = initVal ? 0;
-		if (initAction) {
-			this.value = initVal;
-		}{
-			value = initVal;
-			listView.value = value;
-		};
+			^this.mouseOver( x, y )
+		}
 	}
 }
 

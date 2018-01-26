@@ -3,22 +3,33 @@
 TXInfoScreen {		// Information Screen module
 	var w;
 
-	*new{ arg message = "ERROR", showCloseBtn=1 , winColour, inLeft=10, inTop=500, arrInfoLines;
+	*new{ arg message = "ERROR", showCloseBtn=1 , winColour, inLeft, inTop, arrInfoLines;
 		^super.new.makeWindow(message, showCloseBtn, winColour, inLeft, inTop, arrInfoLines);
 	}
 
-	*newConfirmWindow {arg argConfirmedAction, message = "Confirm", winColour, inLeft=20, inTop=500;
+	*newConfirmWindow {arg argConfirmedAction, message = "Confirm", winColour, inLeft, inTop;
 		^super.new.makeConfirmWindow(argConfirmedAction, message, winColour, inLeft, inTop);
 	}
 
 	makeWindow{ arg message, showCloseBtn, winColour, inLeft, inTop, arrInfoLines;
-		var button, arrInfoLinesHeight;
-
+		var button, arrInfoLinesHeight, holdHeight, windowPoint;
 		{
 			arrInfoLinesHeight = arrInfoLines.size * 24;
+			holdHeight = 150 + arrInfoLinesHeight;
+			if (inLeft == nil or: (inTop == nil), {
+				if (TXSystem1GUI.w.notNil and: {TXSystem1GUI.w.view.notClosed}, {
+					windowPoint = TXSystem1GUI.w.view.mapToGlobal(0 @ 40);
+					inLeft = windowPoint.x;
+					inTop = Window.screenBounds.height - holdHeight - windowPoint.y ;
+				},{
+					inLeft = 20;
+					inTop = 500;
+				});
+			});
 			winColour = winColour ? TXColour.red;
-			w = Window("Information", Rect(inLeft, inTop, 900, 150 + arrInfoLinesHeight));
+			w = Window("Information", Rect(inLeft, inTop, 900, holdHeight));
 			w.front;
+			w.alwaysOnTop_(true);
 			w.view.decorator = FlowLayout(w.view.bounds);
 			w.view.background = winColour;
 			w.view.decorator.shift(30,30);
@@ -40,7 +51,7 @@ TXInfoScreen {		// Information Screen module
 				.states = [["Close", TXColor.white, TXColor.black]];
 				button.action = {this.close};
 			});
-		}.defer;
+		}.defer(0.1);
 	}
 
 	close {		//	close window
@@ -50,8 +61,18 @@ TXInfoScreen {		// Information Screen module
 	}
 
 	makeConfirmWindow{ arg argConfirmedAction, message, winColour, inLeft, inTop;
-		var btnConfirm, btnCancel;
+		var btnConfirm, btnCancel, windowPoint;
 		{
+			if (inLeft == nil or: (inTop == nil), {
+				if (TXSystem1GUI.w.notNil and: {TXSystem1GUI.w.view.notClosed}, {
+					windowPoint = TXSystem1GUI.w.view.mapToGlobal(0 @ 40);
+					inLeft = windowPoint.x;
+					inTop = Window.screenBounds.height - 150 - windowPoint.y;
+				},{
+					inLeft = 20;
+					inTop = 500;
+				});
+			});
 			winColour = winColour ? TXColour.sysGuiCol3;
 			w = Window("Information", Rect(inLeft, inTop, 900, 150));
 			w.front;
@@ -75,7 +96,7 @@ TXInfoScreen {		// Information Screen module
 			btnCancel = Button(w, 80 @ 30)
 			.states = [["Cancel", TXColor.white, TXColor.grey]];
 			btnCancel.action = {this.close;};
-		}.defer;
+		}.defer(0.1);
 	}
 
 }

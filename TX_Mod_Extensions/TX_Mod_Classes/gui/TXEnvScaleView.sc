@@ -1,7 +1,7 @@
 // this class is based on code from Michael Dzjaparidze downloaded from github.com/michaeldzjap/EnvScaleView
 
 TXEnvScaleView {
-	var <view,<background,<font,<drawFunc,<horzGridDist,<maxHorzGridDist,<minHorzGridDist,numVertGridLines,<gridBackgroundColor,<gridColor,<gridWidth,<showHorzAxis,<showVertAxis,<breakPointSize,<curvePointRadius,<domainMode,<minRange,<maxRange,<unitMode,<scaleResponsiveness,<env,envData,envView,rangeView,topSettingsView,bottomSettingsView,numGridLinesPerUnit,vhorzGridDist,selGridLineCoord,loopStartNode,loopEndNode,timeIncr,timeStep,uI,vertGridDist;
+	var <view,<background,<font,<drawFunc,<horzGridDist,<maxHorzGridDist,<minHorzGridDist,numVertGridLines,<gridBackgroundColor,<gridColor,<gridWidth,<showHorzAxis,<showVertAxis,<breakPointSize,<curvePointRadius,<domainMode,<minRange,<maxRange,<lockZoom,<showTopRow,<showBottomRow,<unitMode,<scaleResponsiveness,<env,envData,envView,rangeView,topSettingsView,bottomSettingsView,numGridLinesPerUnit,vhorzGridDist,selGridLineCoord,loopStartNode,loopEndNode,timeIncr,timeStep,uI,vertGridDist;
 	classvar unitStep;
 
 	*initClass {
@@ -17,7 +17,7 @@ TXEnvScaleView {
 
 	*new { arg parent,bounds,env;
 		//bounds = bounds ? (parent.notNil.if { parent.view.bounds } { nil } ? Rect(100,300,620,300));
-		env = env ? Env([0,1,1,0],[0,0.5,0],[0,0,0],nil,nil);
+		env = env ? Env([0,1,1,0],[0,0.3,0],[0,0,0],nil,nil);
 		env.curves.respondsTo(\at).not.if { env.curves = { env.curves } ! env.times.size };
 		^super.new.init(parent,bounds,env)
 	}
@@ -41,7 +41,7 @@ TXEnvScaleView {
 		this.gridWidth_(0.125,false);
 		this.gridColor_(Color.grey,false);
 		this.gridBackgroundColor_(Color(218/255,232/255,238/255,1),false);
-		this.horzGridDist_(20,false);
+		this.horzGridDist_(10,false);
 		this.maxHorzGridDist_(horzGridDist*1.8,false);
 		this.minHorzGridDist_(horzGridDist*0.5,false);
 		/*selGridLineCoord = ((bounds.width/horzGridDist).div(2)*horzGridDist)@(bounds.width/horzGridDist/numGridLinesPerUnit*0.5*unitStep[uI][\time]);
@@ -65,6 +65,9 @@ TXEnvScaleView {
 		this.minRange_(0,false);
 		this.maxRange_(1,false);
 		this.scaleResponsiveness_(3);
+		this.lockZoom_(false);
+		showTopRow = true;
+		showBottomRow = true;
 
 		prevHeight = 244;
 		envData.height = 244;   // set height var to correct initial height of envView
@@ -148,16 +151,19 @@ TXEnvScaleView {
 					// then draw breakpoints, curvepoints (if in visible part of the view)
 					Pen.strokeColor = Color.red;
 					envData.breakPointCoords do: { |brPtCoord,i|
-						(i == loopStartNode or: { i == loopEndNode }).if {
-							Pen.width = 0.25;
-							Pen.moveTo(brPtCoord.x@0);
-							Pen.lineTo(brPtCoord.x@me.bounds.height);
-							(i == loopEndNode).if {
-								Pen.moveTo(brPtCoord);
-								Pen.lineTo((envData.breakPointCoords[loopStartNode].x - 2.5)@brPtCoord.y)
+
+						if (env.loopNode.notNil, {
+							(i == loopStartNode or: { i == loopEndNode }).if {
+								Pen.width = 0.25;
+								Pen.moveTo(brPtCoord.x@0);
+								Pen.lineTo(brPtCoord.x@me.bounds.height);
+								(i == loopEndNode).if {
+									Pen.moveTo(brPtCoord);
+									Pen.lineTo((envData.breakPointCoords[loopStartNode].x - 2.5)@brPtCoord.y)
+								};
+								Pen.stroke
 							};
-							Pen.stroke
-						};
+						});
 
 						Pen.width = 0.5;
 						Pen.fillColor = (envData.selBreakPoint == i
@@ -472,55 +478,60 @@ TXEnvScaleView {
 						} {
 							// if the mouse cursor is not on a selected break point or a curve point, scale or translate the view
 
-							// translate view
-							this.prSelGridLineCoordX_(selGridLineCoord.x + dx);
 
-							// zoom in / out at currently selected grid line
-							(scaleRespCount == 0).if {
+							if (lockZoom == false, {
+								// translate view
+								this.prSelGridLineCoordX_(selGridLineCoord.x + dx);
 
-								(dy < 0 and: { uI < (unitStep[\time].lastIndex - 1) } or: { dy > 0 and: { uI > 1 } }).if {
-									this.prVhorzGridDist_(vhorzGridDist - dy)
-								};
 
-								(dy < 0).if {
-									// mouse is dragged up -> zoom in
-									(vhorzGridDist > maxHorzGridDist).if {
-										this.prVhorzGridDist_(minHorzGridDist);
-										uI = uI + 1;
-										this.prTimeStep_(
-											switch(unitMode,
-												\time, { unitStep[\time][uI] },
-												\tempo, { unitStep[\tempo][uI][\time] }
-											)
-										);
-										timeIncr = timeStep/numGridLinesPerUnit;
-										remNumGridLines = this.prCalcRemNumGridLines
+								// zoom in / out at currently selected grid line
+								(scaleRespCount == 0).if {
+
+									(dy < 0 and: { uI < (unitStep[\time].lastIndex - 1) } or: { dy > 0 and: { uI > 1 } }).if {
+										this.prVhorzGridDist_(vhorzGridDist - dy)
+									};
+
+									(dy < 0).if {
+										// mouse is dragged up -> zoom in
+										(vhorzGridDist > maxHorzGridDist).if {
+											this.prVhorzGridDist_(minHorzGridDist);
+											uI = uI + 1;
+											this.prTimeStep_(
+												switch(unitMode,
+													\time, { unitStep[\time][uI] },
+													\tempo, { unitStep[\tempo][uI][\time] }
+												)
+											);
+											timeIncr = timeStep/numGridLinesPerUnit;
+											remNumGridLines = this.prCalcRemNumGridLines
+										}
+									};
+									(dy > 0).if {
+										// mouse is dragged down -> zoom out
+										(vhorzGridDist < minHorzGridDist).if {
+											this.prVhorzGridDist_(maxHorzGridDist);
+											uI = uI - 1;
+											this.prTimeStep_(
+												switch(unitMode,
+													\time, { unitStep[\time][uI] },
+													\tempo, { unitStep[\tempo][uI][\time] }
+												)
+											);
+											timeIncr = timeStep/numGridLinesPerUnit;
+											remNumGridLines = this.prCalcRemNumGridLines;
+											// quantize previous selected grid coordinate to nearest current selected grid coordinate
+											this.prSelGridLineCoordY_((selGridLineCoord.y/timeStep).asInteger*timeStep + (remNumGridLines*timeIncr))
+										}
 									}
 								};
-								(dy > 0).if {
-									// mouse is dragged down -> zoom out
-									(vhorzGridDist < minHorzGridDist).if {
-										this.prVhorzGridDist_(maxHorzGridDist);
-										uI = uI - 1;
-										this.prTimeStep_(
-											switch(unitMode,
-												\time, { unitStep[\time][uI] },
-												\tempo, { unitStep[\tempo][uI][\time] }
-											)
-										);
-										timeIncr = timeStep/numGridLinesPerUnit;
-										remNumGridLines = this.prCalcRemNumGridLines;
-										// quantize previous selected grid coordinate to nearest current selected grid coordinate
-										this.prSelGridLineCoordY_((selGridLineCoord.y/timeStep).asInteger*timeStep + (remNumGridLines*timeIncr))
-									}
-								}
-							};
 
-							// lock left side of view to 0
-							(domainMode == \unipolar).if { this.prAdjustZeroPos };
+								// lock left side of view to 0
+								(domainMode == \unipolar).if { this.prAdjustZeroPos };
 
-							// rescale envelope when grid is rescaled
-							envData.updateEnvPlotData
+								// rescale envelope when grid is rescaled
+								envData.updateEnvPlotData
+
+							});
 						}
 
 					};
@@ -781,6 +792,20 @@ TXEnvScaleView {
 		maxRange = newMaxRange;
 		envData.maxLevel = newMaxRange;
 		refreshFlag.if { rangeView.refresh }
+	}
+
+	lockZoom_ { arg newLockZoom = true;
+		lockZoom = newLockZoom;
+	}
+
+	showTopRow_ { arg newshowTopRow = true;
+		showTopRow = newshowTopRow;
+		topSettingsView.visible_(showTopRow);
+	}
+
+	showBottomRow_ { arg newshowBottomRow = true;
+		showBottomRow = newshowBottomRow;
+		bottomSettingsView.visible_(showBottomRow);
 	}
 
 	scaleResponsiveness_ { arg newScaleResponsiveness;

@@ -55,11 +55,17 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 		// create midiKeyboard
 		midiKeyboard = TXMIDIKeyboard.new(scrollBox?window, Rect(0, 0, 78, holdMidiKeyHeight), numKeybOctaves, 48, horizontal: false);
 
+		// adjust spacing
+		if (window.class == Window, {
+			window.view.decorator.shift(-2, 0);
+		}, {
+			window.decorator.shift(-2, 0);
+		});
 
 		if (scrollViewAction.notNil, {
 			// add note numbers to keyboard
 			10.do({ arg item;
-				StaticText(scrollBox, Rect(0, ((item+1) * heightPerOctave)-(heightPerOctave/8), 70, 20))
+				StaticText(scrollBox, Rect(0, ((item+1) * heightPerOctave)-(heightPerOctave/8)-2, 70, 20))
 					.align_(\right)
 					.string_("C " ++ (7-item).asString);
 			});
@@ -67,7 +73,7 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 			holdGridHeight = heightPerOctave * 10;
 			holdGridWidth = 384 * 4;
 			scrollView2 = ScrollView(window,
-				Rect(0, 0, scrollViewWidth, dimensions.y+12)).hasBorder_(false);
+				Rect(0, 0, scrollViewWidth, dimensions.y)).hasBorder_(false);
 			if (GUI.current.asSymbol == \cocoa, {
 				scrollView2.autoScrolls_(false);
 			});
@@ -189,7 +195,7 @@ TXMidiNoteKeybGrid {	// midi note keyboard and selection grid module
 			size.do({arg item, argCol;
 				arrBlackNotes.do({arg argRow, i;
 					noteGrid.setState_(argCol, ((numKeybOctaves * 12) - 1 - argRow), 1);
-					noteGrid.setBoxColor_(argCol, ((numKeybOctaves * 12) - 1 - argRow), TXColor.grey(0.5));
+					noteGrid.setBoxColor_(argCol, ((numKeybOctaves * 12) - 1 - argRow), TXColor.grey(0.9).blend(TXColor.blue, 0.1));
 				});
 			});
 			// show playable notes on grid

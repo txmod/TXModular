@@ -1,7 +1,7 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXMinMaxFreqNoteSldr {
-	var <>labelView, labelView2, <>sliderView, <>numberView, <>notePopup, <>rangeView, <>minNumberView, <>maxNumberView, <>presetPopupView;
+	var <>labelView, <>labelView2, <>sliderView, <>numberView, <>notePopup, <>rangeView, <>minNumberView, <>maxNumberView, <>presetPopupView;
 	var <>controlSpec, controlSpec2, <>action, viewValue, <>round = 0.001;
 
 	// controlSpec2 is only used internally and it's min & max are decided by minNumberView & maxNumberView
@@ -35,6 +35,7 @@ TXMinMaxFreqNoteSldr {
 		action = argAction;
 
 		sliderView = Slider(window, (dimensions.x - labelWidth - numberWidth - (2 * spacingX)) @ height);
+		sliderView.thumbSize_(8).knobColor_(TXColour.white);
 		sliderView.action = {
 			viewValue = controlSpec2.map(sliderView.value);
 			numberView.value = viewValue.round(round);
@@ -94,7 +95,8 @@ TXMinMaxFreqNoteSldr {
 			controlSpec2.minval = minNumberView.value;
 			maxNumberView.value = controlSpec.map(rangeView.hi).round(round);
 			controlSpec2.maxval = maxNumberView.value;
-			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);			sliderView.doAction;
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
+			sliderView.valueAction = controlSpec2.unmap(viewValue);
 		};
 		if (controlSpec.step != 0) {
 			rangeView.step = (controlSpec.step / (controlSpec.maxval - controlSpec.minval));
@@ -135,10 +137,10 @@ TXMinMaxFreqNoteSldr {
 			// decorator next line & shift
 			if (window.class == Window, {
 				window.view.decorator.nextLine;
-				window.view.decorator.shift(labelWidth + spacingX, 0);
+				window.view.decorator.shift(labelWidth + spacingX, -2);
 			}, {
 				window.decorator.nextLine;
-				window.decorator.shift(labelWidth + spacingX, 0);
+				window.decorator.shift(labelWidth + spacingX, -2);
 			});
 
 			presetPopupView = PopUpMenu(window, (dimensions.x - labelWidth - spacingX) @ (height * 0.8))
@@ -219,5 +221,10 @@ TXMinMaxFreqNoteSldr {
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
 		};
+	}
+
+	hasFocus {
+		^numberView.hasFocus || notePopup.hasFocus || rangeView.hasFocus || minNumberView.hasFocus
+		|| maxNumberView.hasFocus;
 	}
 }

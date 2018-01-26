@@ -24,11 +24,11 @@ TXMultiKnob {
 		size.do({ arg item, i;
 			holdKnob = Knob(window, knobWidth @ knobWidth);
 			holdKnob.action = { arg view;
-				value = arrKnobViews.collect({ arg item, i; controlSpec.map(item.value)});
+				value[i] = controlSpec.map(view.value);
 				action.value(this);
 			};
 			arrKnobViews = arrKnobViews.add(holdKnob);
-			holdKnob.value = initVal.at(i);
+			holdKnob.value = controlSpec.unmap(initVal.at(i));
 		});
 
 		if (initAction) {
@@ -36,6 +36,7 @@ TXMultiKnob {
 		};
 	}
 	value_ { arg argValue;
+		value = argValue;
 		arrKnobViews.do({ arg item, i;
 			if (argValue.at(i).notNil, {
 				item.value = controlSpec.unmap(argValue.at(i));
@@ -43,11 +44,17 @@ TXMultiKnob {
 		});
 	}
 	valueAction_ { arg argValue;
-		arrKnobViews.do({ arg item, i;
-			if (argValue.at(i).notNil, {
-				item.value = controlSpec.unmap(argValue.at(i));
-			});
-		});
+		this.value_(argValue);
 		action.value(this);
 	}
+
+	hasFocus {
+		arrKnobViews.do({arg item;
+			if (item.hasFocus, {
+				^true;
+			});
+		});
+		^false;
+	}
+
 }

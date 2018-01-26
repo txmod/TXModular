@@ -2,31 +2,24 @@
 
 TXOSCController : TXModuleBase {
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=500;
+	classvar <>classData;
 
 	var	oscControlRoutine;
 	var	<>oscString;
 	var	oscResponder;
 	var oscFunction;
+	var data;
 
 	*initClass{
-		arrInstances = [];
 		//	set class specific variables
-		defaultName = "OSC Controller";
-		moduleRate = "control";
-		moduleType = "source";
-		arrCtlSCInBusSpecs = [];
-		noOutChannels = 1;
-		arrOutBusSpecs = [
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "OSC Controller";
+		classData.moduleRate = "control";
+		classData.moduleType = "source";
+		classData.arrCtlSCInBusSpecs = [];
+		classData.noOutChannels = 1;
+		classData.arrOutBusSpecs = [
 			["Out", [0]]
 		];
 	}
@@ -36,22 +29,45 @@ TXOSCController : TXModuleBase {
 	}
 
 	init {arg argInstName;
+		data = ();
+		data.minVal = -1;
+		data.maxVal = 1;
+		data.outputMin = -1;
+		data.outputMax = 1;
 		//	set  class specific instance variables
 		arrSynthArgSpecs = [
 			["out", 0, 0],
 			["OSCString", "/example/text", 0],
 			["detectOSCString", 0],
+			["minVal", -1],
+			["maxVal", 1],
+			["outputMin", -1],
+			["outputMax", 1],
 		];
 		guiSpecArray = [
+			["TXStaticText", "Please note:",
+				"The Network Port for receiving OSC messages is  " ++ NetAddr.langPort.asString],
+			["SpacerLine", 20],
 			["TXCheckBox", "OSC Learn - to automatically detect the OSC string",
 				"detectOSCString",
 				{arg view; if (view.value == 1, {this.oscStringDetectActivate;},
 					{this.oscStringDetectDeactivate;}); }, 350],
 			["SpacerLine", 4],
 			["OSCString"],
-			["SpacerLine", 4],
-			["TXStaticText", "Please note:",
-				"The Network Port for receiving OSC messages is  " ++ NetAddr.langPort.asString],
+			["SpacerLine", 20],
+			["EZNumber", "Min value", ControlSpec(-10000000, 10000000, 'lin'), "minVal",
+				{arg view; data.minVal = view.value;}, 80, 80],
+			["Spacer", 10],
+			["EZNumber", "Max value", ControlSpec(-10000000, 10000000, 'lin'), "maxVal",
+				{arg view; data.maxVal = view.value;}, 80, 80],
+			["Spacer", 10],
+			["ActionPopup", ["Presets:", "-1 : 1", "0 : 1", "0 : 127", "0 : 255"],
+				{arg holdView; this.valueRangePresetLoad(holdView.value);}, 80],
+			["SpacerLine", 20],
+			["TXRangeSlider", "Output range", ControlSpec(-1, 1), "outputMin", "outputMax",
+				{this.updateMinMaxVal},
+				[["Presets:", []], ["0 : 1", [0,1]], ["-1 : 1", [-1,1]], ["-0.5 : 0.5", [-0.5,0.5]], ["-1 : 0", [-1,0]]],
+			],
 		];
 		arrActionSpecs = this.buildActionSpecs([
 			["OSCString"],
@@ -61,16 +77,23 @@ TXOSCController : TXModuleBase {
 		this.oscControlActivate;
 	}
 
-	runAction {this.oscControlActivate}   //	override base class
-
-	pauseAction {this.oscControlDeactivate}   //	override base class
-
-	extraSaveData {
-		^oscString;
+	valueRangePresetLoad {arg index;
+		var arrVals;
+		if (index > 0, {
+			arrVals = [[], [-1, 1], [0, 1], [0, 127], [0, 255]][index];
+			data.minVal = arrVals[0];
+			data.maxVal = arrVals[1];
+			this.setSynthArgSpec( "minVal", arrVals[0]);
+			this.setSynthArgSpec( "maxVal", arrVals[1]);
+			system.flagGuiUpd;
+		});
 	}
-	loadExtraData {arg argData;  // override default method
-		oscString = argData;
-		this.oscControlActivate;
+
+	updateMinMaxVal {
+		var min = this.getSynthArgSpec( "outputMin");
+		var max = this.getSynthArgSpec( "outputMax");
+		data.outputMin = min;
+		data.outputMax = max;
 	}
 
 	oscControlActivate {
@@ -78,6 +101,7 @@ TXOSCController : TXModuleBase {
 		this.oscControlDeactivate;
 
 		oscResponder = OSCFunc({ arg msg, time, addr, recvPort;
+			var outVal;
 
 			//	For testing  - post details
 			//	"TXOSCController : ".postln;
@@ -85,7 +109,8 @@ TXOSCController : TXModuleBase {
 
 			// set the Bus value
 			if ( (outBus.class == Bus) and: (msg.at(1).isNumber), {
-				outBus.value_(msg.at(1).max(-1).min(1));
+				outVal = msg.at(1).linlin(data.minVal, data.maxVal, data.outputMin, data.outputMax);
+				outBus.set(outVal);
 			});
 		}, oscString.asSymbol);
 	}
@@ -125,6 +150,22 @@ TXOSCController : TXModuleBase {
 		if (oscFunction.notNil, {
 			thisProcess.removeOSCRecvFunc(oscFunction);
 		});
+	}
+
+	// base class overrides
+
+	rebuildSynth { }	// override base class method
+
+	runAction {this.oscControlActivate}   //	override base class
+
+	pauseAction {this.oscControlDeactivate}   //	override base class
+
+	extraSaveData {
+		^oscString;
+	}
+	loadExtraData {arg argData;  // override default method
+		oscString = argData;
+		this.oscControlActivate;
 	}
 
 	deleteModuleExtraActions {

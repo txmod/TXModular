@@ -2,16 +2,7 @@
 
 TXPatternCode : TXModuleBase {
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel" or "action"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=700;
+	classvar <>classData;
 
 	var <>testMIDINote = 69;
 	var <>testMIDIVel = 100;
@@ -27,13 +18,15 @@ TXPatternCode : TXModuleBase {
 	var initFunctionHasRun = false;
 
 	*initClass{
-		arrInstances = [];
 		//	set class specific variables
-		defaultName = "Pattern Code";
-		moduleRate = "control";
-		moduleType = "action";
-		noInChannels = 0;
-		noOutChannels = 0;
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "Pattern Code";
+		classData.moduleRate = "control";
+		classData.moduleType = "action";
+		classData.noInChannels = 0;
+		classData.noOutChannels = 0;
+		classData.guiWidth = 700;
 	}
 
 	*new{ arg argInstName;
@@ -41,18 +34,18 @@ TXPatternCode : TXModuleBase {
 	}
 
 	*syncStartAll {
-		arrInstances.do({ arg item, i;
+		classData.arrInstances.do({ arg item, i;
 			item.syncStart;
 		});
 	}
 
 	*syncStopAll {
-		arrInstances.do({ arg item, i;
+		classData.arrInstances.do({ arg item, i;
 			item.syncStop;
 		});
 	}
 	*stopAll {
-		arrInstances.do({ arg item, i;
+		classData.arrInstances.do({ arg item, i;
 			item.runStopFunction;
 		});
 	}
@@ -85,9 +78,10 @@ TXPatternCode : TXModuleBase {
 		//	it is only for convenience, since no synths are used by this module - unlike most others
 		arrSynthArgSpecs = [
 			["showMidiKeyboard", 0],
-			["showDurations", 0],
+			["showDurations", 1],
 			["showPatterns", 0],
 			["showEvents", 0],
+			["hideTools", 0],
 			["displayModuleInd", 0],
 			["syncStart", 0],
 			["syncStop", 0],
@@ -97,11 +91,11 @@ TXPatternCode : TXModuleBase {
 			["HelpButton"],
 			["DeleteModuleButton"],
 			["ActionButton", "Initialise",
-			{this.runInitFunction;}, 60, nil, TXColor.sysGuiCol2],
+				{this.runInitFunction;}, 60, nil, TXColor.sysGuiCol2],
 			["ActionButton", "Start",
-			{this.runStartFunction;}, 50, nil, TXColor.sysGuiCol2],
+				{this.runStartFunction;}, 50, nil, TXColor.sysGuiCol2],
 			["ActionButton", "Stop",
-			{this.runStopFunction; }, 50, nil, TXColor.sysGuiCol2],
+				{this.runStopFunction; }, 50, nil, TXColor.sysGuiCol2],
 			// ["TXStaticText", "Status", {this.runningStatus},
 			// {arg view; runningStatusView = view.textView}, 110, 40, TXColor.paleYellow2],
 			["SeqSyncStartCheckBox"],
@@ -122,41 +116,44 @@ TXPatternCode : TXModuleBase {
 	}
 
 	buildGuiSpecArray {
-		var holdArray, holdModuleID, holdSystemEvents, holdModuleEvents, showTools;
+		var holdArray, holdModule, holdModuleID, holdSystemEvents, holdModuleEvents, showTools;
 		holdSystemEvents = system.arrTXEvents;
 
 		guiSpecArray = [
 			["ActionButton", "Edit Initialise Code", {displayOption = "showInitialiseCode";
 				this.buildGuiSpecArray; system.showView;}, 130,
-				TXColor.white, this.getButtonColour(displayOption == "showInitialiseCode")],
+			TXColor.white, this.getButtonColour(displayOption == "showInitialiseCode")],
 			["Spacer", 3],
 			["ActionButton", "Edit Start Code", {displayOption = "showStartCode";
 				this.buildGuiSpecArray; system.showView;}, 130,
-				TXColor.white, this.getButtonColour(displayOption == "showStartCode")],
+			TXColor.white, this.getButtonColour(displayOption == "showStartCode")],
 			["Spacer", 3],
 			["ActionButton", "Edit Stop Code", {displayOption = "showStopCode";
 				this.buildGuiSpecArray; system.showView;}, 130,
-				TXColor.white, this.getButtonColour(displayOption == "showStopCode")],
+			TXColor.white, this.getButtonColour(displayOption == "showStopCode")],
 			["NextLine"],
 		];
-		if ((this.getSynthArgSpec("showDurations") == 1) or:
-				(this.getSynthArgSpec("showMidiKeyboard") == 1),
-			{
-				codeHeight = 282;
-			},
-			{if ((this.getSynthArgSpec("showPatterns") == 1) or:
-				(this.getSynthArgSpec("showEvents") == 1),
-				{
-					codeHeight = 210;
-				},{
-					codeHeight = 370;
+		if (this.getSynthArgSpec("showDurations") == 1, {
+			codeHeight = 342;
+		}, {
+			if (this.getSynthArgSpec("showMidiKeyboard") == 1,{
+				codeHeight = 318;
+			}, {
+				if ((this.getSynthArgSpec("showPatterns") == 1)
+					or: (this.getSynthArgSpec("showEvents") == 1),
+					{
+						codeHeight = 216;
+					},{
+						codeHeight = 418;
 				});
+			});
 		});
 
 		if (displayOption == "showInitialiseCode", {
 			guiSpecArray = guiSpecArray ++ [
 				["TextViewDisplay", "Enter Supercollider code in the window below. Click the 'Store & compile code' button after editing. The code needs to be a function which initialises any data needed for the pattern code to run. The function is passed 2 arguments: arrTXEvents - all available numerical events, dataEvent - where any data can be stored and shared between functions. ", 650, 50, "Notes"],
-				["TextViewCompile", {initFunctionString}, {arg argText; this.initFuncCompile(argText);}, 650, codeHeight, "Store & compile code",
+				["TextViewCompile", {initFunctionString},
+					{arg argText; this.initFuncCompile(argText);}, 650, codeHeight, "Store & compile code",
 					120, {arg view; codeTextView = view; codeTextView.select(initFunctionCursorPos, 0); }],
 				["TXStaticText", "Status", {initFuncCompileStatus}, {arg view; initFuncCompileStatusView = view.textView}, 320, 50],
 				// ["ActionButton", "Run code now", {this.runInitFunction;},
@@ -185,37 +182,48 @@ TXPatternCode : TXModuleBase {
 		});
 		showTools = false;
 		guiSpecArray = guiSpecArray ++ [
+			["NextLine"],
 			["DividingLine"],
+			["NextLine"],
 			["TextBar", "Text Insert Tools:", 120],
 			["TXCheckBox", "Durations", "showDurations",
 				{this.storeCurrentFunctionString;
 					this.setSynthArgSpec("showMidiKeyboard",0); this.setSynthArgSpec("showPatterns",0);
-					this.setSynthArgSpec("showEvents",0); this.buildGuiSpecArray; system.showView;}, 80, 20, 12],
+					this.setSynthArgSpec("showEvents",0); this.setSynthArgSpec("hideTools",0);
+					this.buildGuiSpecArray; system.showView;}, 80, 20, 12],
 			["TXCheckBox", "Midi Keyboard", "showMidiKeyboard",
 				{this.storeCurrentFunctionString;
 					this.setSynthArgSpec("showDurations",0); this.setSynthArgSpec("showPatterns",0);
-					this.setSynthArgSpec("showEvents",0); this.buildGuiSpecArray; system.showView;}, 100, 20, 12],
+					this.setSynthArgSpec("showEvents",0); this.setSynthArgSpec("hideTools",0);
+					this.buildGuiSpecArray; system.showView;}, 100, 20, 12],
 			["TXCheckBox", "Patterns", "showPatterns",
 				{this.storeCurrentFunctionString;
 					this.setSynthArgSpec("showMidiKeyboard",0); this.setSynthArgSpec("showDurations",0);
-					this.setSynthArgSpec("showEvents",0); this.buildGuiSpecArray; system.showView;}, 80, 20, 12],
+					this.setSynthArgSpec("showEvents",0); this.setSynthArgSpec("hideTools",0);
+					this.buildGuiSpecArray; system.showView;}, 80, 20, 12],
 			["TXCheckBox", "TX Events", "showEvents",
 				{this.storeCurrentFunctionString;
 					this.setSynthArgSpec("showMidiKeyboard",0); this.setSynthArgSpec("showDurations",0);
-					this.setSynthArgSpec("showPatterns",0); this.buildGuiSpecArray; system.showView;}, 80, 20, 12],
+					this.setSynthArgSpec("showPatterns",0); this.setSynthArgSpec("hideTools",0);
+					this.buildGuiSpecArray; system.showView;}, 80, 20, 12],
+			["TXCheckBox", "Hide", "hideTools",
+				{this.storeCurrentFunctionString;
+					this.setSynthArgSpec("showMidiKeyboard",0); this.setSynthArgSpec("showDurations",0);
+					this.setSynthArgSpec("showPatterns",0); this.setSynthArgSpec("showEvents",0);
+					this.buildGuiSpecArray; system.showView;}, 80, 20, 12],
 			["NextLine"],
 		];
 		if (this.getSynthArgSpec("showMidiKeyboard") == 1, {
 			showTools = true;
-	// MIDIKeyboard
-	// index1 is note play function to be valued with note as argument
-	// index2 is the optional number of octaves to be shown on the keyboard
-	// index3 is the optional height of the keyboard
-	// index4 is the optional width of the keyboard
-	// index5 is the optional lowest midi note of the keyboard
-	// index6 is the optional note stop function to be valued with note as argument
-	// index7 is the optional label string default: "Notes: C1 - B6"
-	// index8 is the optional boolean: Show velocity slider, default: true
+			// MIDIKeyboard
+			// index1 is note play function to be valued with note as argument
+			// index2 is the optional number of octaves to be shown on the keyboard
+			// index3 is the optional height of the keyboard
+			// index4 is the optional width of the keyboard
+			// index5 is the optional lowest midi note of the keyboard
+			// index6 is the optional note stop function to be valued with note as argument
+			// index7 is the optional label string default: "Notes: C1 - B6"
+			// index8 is the optional boolean: Show velocity slider, default: true
 			guiSpecArray = guiSpecArray ++ [
 				["MIDIKeyboard", {arg note; this.insertNoteInCode(note);},
 					7, 50, nil, 24, {arg note; /*no off function needed*/}, "Notes: C0 - B6", false]
@@ -249,8 +257,11 @@ TXPatternCode : TXModuleBase {
 		});
 		if (this.getSynthArgSpec("showEvents") == 1, {
 			showTools = true;
-			holdModuleID = system.arrWidgetActionModules[this.getSynthArgSpec("displayModuleInd")].moduleID;
-			if (system.getModuleFromID(holdModuleID) == 0, {
+			holdModule = system.arrWidgetActionModules[this.getSynthArgSpec("displayModuleInd")];
+			if (holdModule.notNil, {
+				holdModuleID = holdModule.moduleID;
+			});
+			if (holdModuleID.isNil or: {system.getModuleFromID(holdModuleID) == 0}, {
 				this.setSynthArgSpec("displayModuleInd", 0);
 				holdModuleID = system.arrWidgetActionModules[0].moduleID;
 			});
@@ -281,19 +292,32 @@ TXPatternCode : TXModuleBase {
 		if (showTools == true, {
 			guiSpecArray = guiSpecArray ++ [
 				["NextLine"],
-				["ActionButton", "Rest", {this.insertStringInCode("Rest");codeTextView.focus(true);}, 44, TXColor.black, TXColor.white],
-				["ActionButton", "inf", {this.insertStringInCode("inf"); codeTextView.focus(true);}, 30, TXColor.black, TXColor.white],
-				["ActionButton", "(", {this.insertStringInCode("("); codeTextView.focus(true);}, 24, TXColor.black, TXColor.white],
-				["ActionButton", ")", {this.insertStringInCode(")"); codeTextView.focus(true);}, 24, TXColor.black, TXColor.white],
-				["ActionButton", "[", {this.insertStringInCode("["); codeTextView.focus(true);}, 24, TXColor.black, TXColor.white],
-				["ActionButton", "]", {this.insertStringInCode("]"); codeTextView.focus(true);}, 24, TXColor.black, TXColor.white],
-				["ActionButton", ".", {this.insertStringInCode("."); codeTextView.focus(true);}, 24, TXColor.black, TXColor.white],
-				["ActionButton", ",", {this.insertStringInCode(","); codeTextView.focus(true);}, 24, TXColor.black, TXColor.white],
-				["ActionButton", ";", {this.insertStringInCode(";"); codeTextView.focus(true);}, 24, TXColor.black, TXColor.white],
-				["ActionButton", "< space >", {this.insertStringInCode(" "); codeTextView.focus(true);}, 68, TXColor.black, TXColor.white],
-				["ActionButton", "< tab >", {this.insertStringInCode("\t"); codeTextView.focus(true);}, 54, TXColor.black, TXColor.white],
-				["ActionButton", "< new line >", {this.insertStringInCode("\n"); codeTextView.focus(true);}, 80, TXColor.black, TXColor.white],
-				["ActionButton", "<- delete last character", {this.removeLastChar; codeTextView.focus(true);}, 140, TXColor.white, TXColor.sysDeleteCol],
+				["ActionButton", "Rest", {this.insertStringInCode("Rest");codeTextView.focus(true);},
+					44, TXColor.black, TXColor.white],
+				["ActionButton", "inf", {this.insertStringInCode("inf"); codeTextView.focus(true);},
+					30, TXColor.black, TXColor.white],
+				["ActionButton", "(", {this.insertStringInCode("("); codeTextView.focus(true);},
+					24, TXColor.black, TXColor.white],
+				["ActionButton", ")", {this.insertStringInCode(")"); codeTextView.focus(true);},
+					24, TXColor.black, TXColor.white],
+				["ActionButton", "[", {this.insertStringInCode("["); codeTextView.focus(true);},
+					24, TXColor.black, TXColor.white],
+				["ActionButton", "]", {this.insertStringInCode("]"); codeTextView.focus(true);},
+					24, TXColor.black, TXColor.white],
+				["ActionButton", ".", {this.insertStringInCode("."); codeTextView.focus(true);},
+					24, TXColor.black, TXColor.white],
+				["ActionButton", ",", {this.insertStringInCode(","); codeTextView.focus(true);},
+					24, TXColor.black, TXColor.white],
+				["ActionButton", ";", {this.insertStringInCode(";"); codeTextView.focus(true);},
+					24, TXColor.black, TXColor.white],
+				["ActionButton", "< space >", {this.insertStringInCode(" "); codeTextView.focus(true);},
+					68, TXColor.black, TXColor.white],
+				["ActionButton", "< tab >", {this.insertStringInCode("\t"); codeTextView.focus(true);},
+					54, TXColor.black, TXColor.white],
+				["ActionButton", "< new line >", {this.insertStringInCode("\n"); codeTextView.focus(true);},
+					80, TXColor.black, TXColor.white],
+				["ActionButton", "<- delete last character", {this.removeLastChar; codeTextView.focus(true);},
+					140, TXColor.white, TXColor.sysDeleteCol],
 			];
 		});
 	}
@@ -301,8 +325,8 @@ TXPatternCode : TXModuleBase {
 	getButtonColour { arg colour2Boolean;
 		if (colour2Boolean == true, {
 			^TXColor.sysGuiCol4;
-			},{
-				^TXColor.sysGuiCol1;
+		},{
+			^TXColor.sysGuiCol1;
 		});
 	}
 
@@ -367,9 +391,9 @@ TXPatternCode : TXModuleBase {
 		if (initFunctionCompResult.isNil, {
 			initFuncCompileStatus = "ERROR: Code cannot compile - see post window";
 			if (updateViews, {initFuncCompileStatusView.string = initFuncCompileStatus;});
-			},{
-				initFuncCompileStatus = "Compiled OK.";
-				if (updateViews, {initFuncCompileStatusView.string = initFuncCompileStatus});
+		},{
+			initFuncCompileStatus = "Compiled OK.";
+			if (updateViews, {initFuncCompileStatusView.string = initFuncCompileStatus});
 		});
 	}
 
@@ -379,9 +403,9 @@ TXPatternCode : TXModuleBase {
 		if (startFunctionCompResult.isNil, {
 			startFuncCompileStatus = "ERROR: Code cannot compile - see post window.";
 			if (updateViews, {startFuncCompileStatusView.string = startFuncCompileStatus;});
-			},{
-				startFuncCompileStatus = "Compiled OK.";
-				if (updateViews, {startFuncCompileStatusView.string = startFuncCompileStatus;});
+		},{
+			startFuncCompileStatus = "Compiled OK.";
+			if (updateViews, {startFuncCompileStatusView.string = startFuncCompileStatus;});
 		});
 	}
 
@@ -391,9 +415,9 @@ TXPatternCode : TXModuleBase {
 		if (stopFunctionCompResult.isNil, {
 			stopFuncCompileStatus = "ERROR: Code cannot compile - see post window.";
 			if (updateViews, {stopFuncCompileStatusView.string = stopFuncCompileStatus;});
-			},{
-				stopFuncCompileStatus = "Compiled OK.";
-				if (updateViews, {stopFuncCompileStatusView.string = stopFuncCompileStatus;});
+		},{
+			stopFuncCompileStatus = "Compiled OK.";
+			if (updateViews, {stopFuncCompileStatusView.string = stopFuncCompileStatus;});
 		});
 	}
 
@@ -445,6 +469,12 @@ TXPatternCode : TXModuleBase {
 		this.runInitFunction;
 		this.startFuncCompile(argData.at(1), false);
 		this.stopFuncCompile(argData.at(2), false);
+		// reset gui
+		this.setSynthArgSpec("showMidiKeyboard",0);
+		this.setSynthArgSpec("showDurations",0);
+		this.setSynthArgSpec("showPatterns",0);
+		this.setSynthArgSpec("showEvents",0);
+		this.buildGuiSpecArray;
 	}
 
 	rebuildSynth {
@@ -530,7 +560,7 @@ TXPatternCode : TXModuleBase {
 		["Penvir(envir, pattern, independent)", "Run pattern inside a given environment."],
 		["Pfset(func, pattern)", "Assign default values into input event before getting event out of given pattern."],
 		["Plambda(pattern, scope)", "See help file."],
-		];
+	];
 	}
 }
 

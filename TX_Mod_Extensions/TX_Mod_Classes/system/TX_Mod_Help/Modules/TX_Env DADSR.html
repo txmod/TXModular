@@ -7,38 +7,39 @@
   <meta name="Generator" content="Cocoa HTML Writer">
   <meta name="CocoaVersion" content="1138.47">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
   </style>
 </head>
 <body>
 <p class="p1"><b>Env DADSR</b></p>
 <p class="p2"><br></p>
-<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Control Source (triggered)</b></p>
+<p class="p1"><b>Module type: Control Source (triggered)</b></p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Introduction:</i></b></p>
-<p class="p1">This module creates DADSR (Delay Attack Decay Sustain Release) envelopes as control signals.<span class="Apple-converted-space"> </span></p>
-<p class="p1">They can be triggered in various ways such as by MIDI notes, by other modules (such as <b>Step Sequencer</b>,<span class="Apple-converted-space">  </span><b>Audio Trigger</b>) or by action buttons on an interface screen.<span class="Apple-converted-space"> </span></p>
+<p class="p1">This module creates DADSR (Delay Attack Decay Sustain Release) envelopes as control signals. </p>
+<p class="p1">They can be triggered in various ways such as by MIDI notes, by other modules (such as <b>Step Sequencer</b>, <b>Audio Trigger</b>) or by action buttons on an interface screen. </p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Controls:</i></b></p>
 <p class="p2"><br></p>
 <p class="p1"><b>Envelope button:</b></p>
-<p class="p1"><b>Env presets</b> - presets for various standard envelope shapes.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Envelope display box</b> - this shows each stage of the envelope by level (up-down) and time (left-right). For a more detailed display of the envelope, use the plot button (see below).</p>
+<p class="p1"><b>Env presets</b> - presets for various standard envelope shapes. </p>
+<p class="p1"><b>Envelope display box</b> - this shows each stage of the envelope by level (up-down) and time (left-right)..</p>
 <p class="p1"><b>Pre-Delay</b> - the delay time before the envelope begins.</p>
 <p class="p1"><b>Attack</b> - the attack time of the envelope</p>
 <p class="p1"><b>Decay</b> - the decay time of the envelope</p>
-<p class="p1"><b>Sustain level</b> - the level which the sustain part of the envelope is at.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Sustain time</b> - this is only relevant if the Envelope type is fixed length.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Sustain level</b> - the level which the sustain part of the envelope is at. </p>
+<p class="p1"><b>Sustain time</b> - this is only relevant if the Envelope type is fixed length. </p>
 <p class="p1"><b>Release</b> - the release time of the envelope</p>
-<p class="p1"><b>Curve</b> - this sets the shape of the curve for all parts of the envelope. Use the plot button to see the effect of the curve setting.</p>
-<p class="p1"><b>Env. Type</b> - this can be sustain or fixed length.<span class="Apple-converted-space">  </span>A sustain envelope will remain at the sustain level until the end of the trigger or midi note.<span class="Apple-converted-space">  </span>A fixed length envelope will remain at the sustain level according to the Sustain time slider.</p>
-<p class="p1"><b>Plot</b> - this will plot an envelope<span class="Apple-converted-space">  </span>in a new window, based on the current envelope settings.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Scale level to velocity</b> - if this is set on, then the maximum level of the envelope will depend on the velocity of the trigger or midi note; if this is set off,<span class="Apple-converted-space">  </span>the maximum level will always be100%.</p>
+<p class="p1"><b>Curve</b> - this sets the shape of the curve. <br>
+Some options are for one curve that applies to all parts of the envelope.<br>
+Other options give an upwards curve for the attack stage, and a downwards curve for the decay and release stages.</p>
+<p class="p1"><b>Env. Type</b> - this can be Sustain or Fixed Length. A Sustain envelope will remain at the sustain level until the end of the trigger or midi note. A Fixed Length envelope will remain at the sustain level according to the Sustain time slider.</p>
+<p class="p1"><b>Scale level to velocity</b> - if this is set on, then the maximum level of the envelope will depend on the velocity of the trigger or midi note; if this is set off, the maximum level will always be100%.</p>
 <p class="p2"><br></p>
-<p class="p1"><b>MIDI/ Trigger button:</b></p>
-<p class="p1"><b>Midi Listen</b> - this allows the module to be triggered by a midi note.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Midi Chan.</b> - set the midi channels the module will listen to.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>MIDI button:</b></p>
+<p class="p1"><b>Midi Listen</b> - this allows the module to be triggered by a midi note. </p>
+<p class="p1"><b>Midi Chan.</b> - set the midi channels the module will listen to. </p>
 <p class="p1"><b>Note range</b> - which notes will trigger the module.</p>
 <p class="p1"><b>Vel range</b> - which velocities will trigger the module.</p>
 <p class="p1"><b>Polyphony</b> - maximum number of simultaneous envelopes.</p>
@@ -46,12 +47,12 @@
 <p class="p1"><b>Trigger Envelope button</b> - this will trigger an envelope for 1 second whenever it is pressed.</p>
 <p class="p2"><b><i></i></b><br></p>
 <p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
-<p class="p1"><b>Pre-Delay</b> <span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Attack</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Pre-Delay</b>  </p>
+<p class="p1"><b>Attack</b>  </p>
 <p class="p1"><b>Decay</b></p>
 <p class="p1"><b>Sustain level</b></p>
 <p class="p1"><b>Sustain time</b></p>
-<p class="p1"><b>Release</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Release</b>  </p>
 <p class="p2"><b><i></i></b><br></p>
 </body>
 </html>

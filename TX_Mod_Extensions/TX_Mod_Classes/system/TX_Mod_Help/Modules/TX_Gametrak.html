@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Gametrak </b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type: Control</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Note:</i></b> Only one Gametrak USB controller can connect with the system at a time, so only one Gametrak TX module should be added.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module is for use with a connected a Gametrak USB controller (originally made for a golf game, but useful as a 2-hand gestural controller with much higher resolution than midi - 10-bit vs. 7-bit).</p>
+<p class="p1">The controller has 2 strings connected to ball sockets on one end and gloves on the other that go on the user's hands. The position of each hand can be measured at quiet a fine resolution by measuring the rotation angles (X is left-right rotation, Y is front-back) and extension (up to 3 meters) of each string.</p>
+<p class="p1">All output names begin with "Left" or "Right" which assumes that the user stands in front of the controller with the footswitch on the nearest edge and the USB cable furthest away.</p>
+<p class="p1">The outputs from each hand include the rotation angle and string extension measurements [Angle X, Angle Y and Extend Z] and the calculated position in 3D space [Position X/Y/Z], with left-right, front-back & up-down as the the X/Y/Z axes.</p>
+<p class="p1">Note: Position is calculated within a 3-meter high cone-shaped space. So at the bottom tip of the cone, when the string is not extended at all, the Position X & Y values are both 0.5 (centered). As the string is extended, Position X & Y values can move further from the centre, and at the maximum extension they can be anywhere in their full output ranges (0-1).</p>
+<p class="p1">Range controls adjust the measurement space. For example, the 3 meter extension may not be needed & it may more useful to measure a narrower range.</p>
+<p class="p1">An easy way to set the measurement ranges is to use the callibration buttons (see below) which allows the user to set all the ranges at once by moving between all the minimum and maximum hand positions in all dimensions. This defines a performance space within which all movements will be measured.</p>
+<p class="p1">The foot-switch can be used to trigger Actions - it triggers up to 2 Actions each way when it is pressed down or lifted up.</p>
+<p class="p1">For more detials on Actions in the TX Modular system, see help file <A href="../TX_What_Are_Actions.html">What_Are_Actions<A></p><br>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Reconnect</b> - this tries to reconnect the Gametrak controller if the connection was not found, or after reconnecting the USB cable.</p>
+<p class="p1"><b>Reset All Outputs</b> - sets all outputs to zero.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Active Ranges button</b></p>
+<p class="p1"><b>Calibrate</b> - This will start the calibration process which constantly adjusts the measurement ranges based on the user's movements.</p>
+<p class="p1"><b>Use Foot Switch to Calibrate</b> - This will start the calibration process which constantly adjusts the measurement ranges based on the user's movements, but ONLY when the foot switch is pressed. This is easier if you need to get into a certain position before calibrating.</p>
+<p class="p1"><b>Calibrate Off</b> - this stops the calibration process.</p>
+<p class="p1"><b>Restore Maximum Ranges</b> - resets all measurement ranges to their full range.</p>
+<p class="p1"><b>Left Angle X/ Left Angle Y/ Left Extend Z/ </b> - measurement ranges.</p>
+<p class="p1"><b>Right Angle X/ Right Angle Y/ Right Extend Z/ </b>.</p>
+<p class="p1"><b>Left Position X/ Left Position Y/ Left Position Z/ </b>.</p>
+<p class="p1"><b>Right Position X/ Right Position Y/ Right Position Z/ </b>.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Foot-Switch Down Actions/ Foot-Switch Up Actions buttons</b></p>
+<p class="p1">Each action has the following:</p>
+<p class="p1"><b>Module 1</b> - selects which module will be used.</p>
+<p class="p1"><b>Reset</b> - resets the Action to the default Action (which does nothing).</p>
+<p class="p1"><b>Action 1</b> - selects Action will be run out of all the possible Actions for that module.</p>
+<p class="p1"><b>Settings 1</b> - depending on which Action is run, values can be set for the Action. </p>
+<p class="p1">For example, if the Action selected was to set the Frequency of a Waveform module, then a slider would be displayed for setting the frequency.</p>
+<p class="p1">The arguments can either be numbers or text strings.</p>
+<p class="p1">For example, if the Action selected was to set the frequency of a filter, or the BPM of a sequencer, then a number could be passed to set the value.</p>
+<p class="p1">If the Action selected had a checkbox to change settings (such as the Reverse checkbox in a Sample Player module), the OSC argument can be: (a) a text string with "ON" or "OFF", or (b) a number with 1 meaning "ON", and 0 meaning "OFF".</p>
+<p class="p1">If the Action selected had a popup to change settings (such as the type of Waveform in a Wave Synth module), the OSC argument can be: (a) a text string of the popup value, or (b) a number representing the index of the popup. (N.B. Index numbers start from 0, so 0 would be the index of the first item in the popup, 1 would be the index of the second item, 2 would be the index of the third item, etc.)</p>
+</body>
+</html>

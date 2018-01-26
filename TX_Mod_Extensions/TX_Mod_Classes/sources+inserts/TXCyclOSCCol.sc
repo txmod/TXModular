@@ -2,23 +2,14 @@
 
 TXCyclOSCCol : TXModuleBase {
 
-//	Based on CyclOSC by Steve Symons:  http://muio.org
+	//	Based on CyclOSC by Steve Symons:  http://muio.org
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=500;
-	classvar arrRunActionNames;
+	classvar <>classData;
 
+	var arrRunActionNames;
 	var	displayOption;
 	var  arrActions;
-	var	oscResponder;
+	var	oscResponder, oscResponder2, oscResponder3;
 	var	analyseRoutine;
 	var	gridColour;
 	var	<noGridRows;
@@ -27,337 +18,335 @@ TXCyclOSCCol : TXModuleBase {
 	var holduseZone, holdtolerance, holdtargetColour, holdarrActiveGridCells, holdminTargetCount;
 	var holdTargetFound, holdXTarget, holdYTarget, holdSubArrayX, holdSubArrayY, holdTargetFoundState;
 
-*initClass{
-	arrInstances = [];
-	//	set class specific variables
-	defaultName = "CyclOSC Colour";
-	moduleRate = "control";
-	moduleType = "source";
-	arrCtlSCInBusSpecs = [];
-	noOutChannels = 3;
-	arrOutBusSpecs = [
-		["Out X", [0]],
-		["Out Y", [1]],
-		["Target Found", [2]]
-	];
-	arrRunActionNames = ["runAction1", "runAction2", "runAction3", "runAction4", "runAction5", "runAction6",
-		"runAction7", "runAction8", "runAction9", "runAction10"];
-}
+	*initClass{
+		//	set class specific variables
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "CyclOSC Colour";
+		classData.moduleRate = "control";
+		classData.moduleType = "source";
+		classData.arrCtlSCInBusSpecs = [];
+		classData.noOutChannels = 3;
+		classData.arrOutBusSpecs = [
+			["Out X", [0]],
+			["Out Y", [1]],
+			["Target Found", [2]]
+		];
+	}
 
-*new{ arg argInstName;
-	 ^super.new.init(argInstName);
-}
+	*new{ arg argInstName;
+		^super.new.init(argInstName);
+	}
 
-init {arg argInstName;
-	//	set  class specific instance variables
-	displayOption = "showTarget";
-	arrActions = [99,0,0,0,0,0,0, nil].dup(10);
-	arrSynthArgSpecs = [
-		["useZone",  0], // gives the option not to use zone
-		["tolerance",  5],
-		["resolution",  1],
-		["arrActiveGridCells",  Array.fill2D(32, 32, 0.6)],
-		["targetColour",  [0.5, 0.5, 0.5]],
-		["analysisRate",  10],
-		["minTargetCount",  1],
-		["runAction1", 0],
-		["runAction2", 0],
-		["runAction3", 0],
-		["runAction4", 0],
-		["runAction5", 0],
-		["runAction6", 0],
-		["runAction7", 0],
-		["runAction8", 0],
-		["runAction9", 0],
-		["runAction10", 0],
-	];
-	this.buildGuiSpecArray;
-	arrActionSpecs = this.buildActionSpecs([
-		["TXCheckBox", "Use Zone", "useZone"], // gives the option not to use zone
-		["EZslider", "Tolerance %", ControlSpec(0,100), "tolerance"],
-		["EZslider", "Min Target Count", ControlSpec(1,20, step:1), "minTargetCount"],
-		["EZslider", "Analysis rate", ControlSpec(1,10), "analysisRate"],
-//		["EZslider", "Target grey (0-1)", ControlSpec(0,1), "targetGrey"],
-	]);
-	//	use base class initialise
-	this.baseInit(this, argInstName);
-	// other inits
-	this.setResolution(this.getSynthArgSpec("resolution"));
-	this.initGridColour(32, 32);
-	this.oscActivate;
-	this.startRoutine;
-}
+	init {arg argInstName;
+		//	set  class specific instance variables
+		displayOption = "showTarget";
+		arrRunActionNames = ["runAction1", "runAction2", "runAction3", "runAction4", "runAction5", "runAction6",
+			"runAction7", "runAction8", "runAction9", "runAction10"];
+		arrActions = [99,0,0,0,0,0,0, nil].dup(10);
+		arrSynthArgSpecs = [
+			["useZone",  0], // gives the option not to use zone
+			["tolerance",  5],
+			["resolution",  1],
+			["arrActiveGridCells",  Array.fill2D(32, 32, 0.6)],
+			["targetColour",  [0.5, 0.5, 0.5]],
+			["analysisRate",  10],
+			["minTargetCount",  1],
+			["runAction1", 0],
+			["runAction2", 0],
+			["runAction3", 0],
+			["runAction4", 0],
+			["runAction5", 0],
+			["runAction6", 0],
+			["runAction7", 0],
+			["runAction8", 0],
+			["runAction9", 0],
+			["runAction10", 0],
+		];
+		this.buildGuiSpecArray;
+		arrActionSpecs = this.buildActionSpecs([
+			["TXCheckBox", "Use Zone", "useZone"], // gives the option not to use zone
+			["EZslider", "Tolerance %", ControlSpec(0,100), "tolerance"],
+			["EZslider", "Min Target Count", ControlSpec(1,20, step:1), "minTargetCount"],
+			["EZslider", "Analysis rate", ControlSpec(1,10), "analysisRate"],
+			//		["EZslider", "Target grey (0-1)", ControlSpec(0,1), "targetGrey"],
+		]);
+		//	use base class initialise
+		this.baseInit(this, argInstName);
+		// other inits
+		this.setResolution(this.getSynthArgSpec("resolution"));
+		this.initGridColour(32, 32);
+		this.oscActivate;
+		this.startRoutine;
+	}
 
-buildGuiSpecArray {
-	var arrActionTypes, arrResolutions;
-	arrActionTypes = ["Never run action", "Run action when target is found", "Run action when target no longer found"];
-	arrResolutions = ["8 X 8", "16 X 16", "32 X 32", ];
-	guiSpecArray = [
-		["ActionButton", "Target settings", {displayOption = "showTarget";
-			this.buildGuiSpecArray; system.showView;}, 130,
+	buildGuiSpecArray {
+		var arrActionTypes, arrResolutions;
+		arrActionTypes = ["Never run action", "Run action when target is found", "Run action when target no longer found"];
+		arrResolutions = ["8 X 8", "16 X 16", "32 X 32", ];
+		guiSpecArray = [
+			["ActionButton", "Target settings", {displayOption = "showTarget";
+				this.buildGuiSpecArray; system.showView;}, 130,
 			TXColor.white, this.getButtonColour(displayOption == "showTarget")],
-		["Spacer", 3],
-		["ActionButton", "Zone settings", {displayOption = "showZone";
-			this.buildGuiSpecArray; system.showView;}, 130,
+			["Spacer", 3],
+			["ActionButton", "Zone settings", {displayOption = "showZone";
+				this.buildGuiSpecArray; system.showView;}, 130,
 			TXColor.white, this.getButtonColour(displayOption == "showZone")],
-		["Spacer", 3],
-		["ActionButton", "Actions 1-4", {displayOption = "showActions1-4";
-			this.buildGuiSpecArray; system.showView;}, 130,
+			["Spacer", 3],
+			["ActionButton", "Actions 1-4", {displayOption = "showActions1-4";
+				this.buildGuiSpecArray; system.showView;}, 130,
 			TXColor.white, this.getButtonColour(displayOption == "showActions1-4")],
-		["Spacer", 3],
-		["ActionButton", "Actions 5-8", {displayOption = "showActions5-8";
-			this.buildGuiSpecArray; system.showView;}, 130,
+			["Spacer", 3],
+			["ActionButton", "Actions 5-8", {displayOption = "showActions5-8";
+				this.buildGuiSpecArray; system.showView;}, 130,
 			TXColor.white, this.getButtonColour(displayOption == "showActions5-8")],
-		["Spacer", 3],
-		["ActionButton", "Actions 9-10", {displayOption = "showActions9-10";
-			this.buildGuiSpecArray; system.showView;}, 130,
+			["Spacer", 3],
+			["ActionButton", "Actions 9-10", {displayOption = "showActions9-10";
+				this.buildGuiSpecArray; system.showView;}, 130,
 			TXColor.white, this.getButtonColour(displayOption == "showActions9-10")],
-//		["Spacer", 3],
-//		["ActionButton", "Test Actions", {this.performActions},
-//			130, TXColor.white, TXColor.sysGuiCol2],
-		["DividingLine"],
-		["SpacerLine", 6],
-	];
-	if (displayOption == "showTarget", {
-		guiSpecArray = guiSpecArray ++[
-		["TXPopupAction", "Grid size", arrResolutions, "resolution", {arg view; this.setResolution(view.value); system.showView}, 180],
-		["TXGridColourTarget", "Video Grid", {gridColour.deepCopy}, "targetColour", noGridRows, noGridCols],
-		["DividingLine"],
-		["EZslider", "Tolerance %", ControlSpec(0,20), "tolerance"],
-		["EZslider", "Min Target", ControlSpec(1,20, step:1), "minTargetCount"],
-		["EZslider", "Analysis rate", ControlSpec(1,10), "analysisRate"],
-		["DividingLine"],
+			//		["Spacer", 3],
+			//		["ActionButton", "Test Actions", {this.performActions},
+			//			130, TXColor.white, TXColor.sysGuiCol2],
+			["DividingLine"],
+			["SpacerLine", 6],
 		];
-	});
-	if (displayOption == "showZone", {
-		guiSpecArray = guiSpecArray ++[
-		["TextBar", "If Zone is used, the target colour will be looked for only in the zone", 450],
-		["TXCheckBox", "Use Zone", "useZone"],
-		["DividingLine"],
-		["TXGridColourZone", "Video Grid", {gridColour.deepCopy}, "arrActiveGridCells", noGridRows, noGridCols],
-		["DividingLine"],
-		];
-	});
-	if (displayOption == "showActions1-4", {
-		guiSpecArray = guiSpecArray ++[
-		["TXActionView", arrActions, 0],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction1", nil, 350],
-		["DividingLine"],
-		["TXActionView", arrActions, 1],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction2", nil, 350],
-		["DividingLine"],
-		["TXActionView", arrActions, 2],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction3", nil, 350],
-		["DividingLine"],
-		["TXActionView", arrActions, 3],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction4", nil, 350],
-		["DividingLine"],
-		];
-	});
-	if (displayOption == "showActions5-8", {
-		guiSpecArray = guiSpecArray ++[
-		["TXActionView", arrActions, 4],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction5", nil, 350],
-		["DividingLine"],
-		["TXActionView", arrActions, 5],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction6", nil, 350],
-		["DividingLine"],
-		["TXActionView", arrActions, 6],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction7", nil, 350],
-		["DividingLine"],
-		["TXActionView", arrActions, 7],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction8", nil, 350],
-		["DividingLine"],
-		];
-	});
-	if (displayOption == "showActions9-10", {
-		guiSpecArray = guiSpecArray ++[
-		["TXActionView", arrActions, 8],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction9", nil, 350],
-		["DividingLine"],
-		["TXActionView", arrActions, 9],
-		["NextLine"],
-		["TXPopupAction", "Action type", arrActionTypes, "runAction10", nil, 350],
-		["DividingLine"],
-		];
-	});
-}
-
-getButtonColour { arg colour2Boolean;
-	if (colour2Boolean == true, {
-		^TXColor.sysGuiCol4;
-	},{
-		^TXColor.sysGuiCol1;
-	});
-}
-
-setResolution{arg res;
-	if (res == 0, {
-		noGridRows = 8;
-		noGridCols = 8;
-	});
-	if (res == 1, {
-		noGridRows = 16;
-		noGridCols = 16;
-	});
-	if (res == 2, {
-		noGridRows = 32;
-		noGridCols = 32;
-	});
-	this.buildGuiSpecArray;
-}
-
-runAction {   //	override base class
-	this.oscActivate;
-	this.startRoutine;
-}
-
-pauseAction {   //	override base class
-	this.oscDeactivate;
-	this.stopRoutine;
-}
-
-extraSaveData {
-	^arrActions;
-}
-loadExtraData {arg argData;  // override default method
-	arrActions = argData;
-	this.setResolution(this.getSynthArgSpec("resolution"));
-}
-
-initGridColour{arg arg_gridX, arg_gridY;
-	var col;
-	gridColour = Array.new(arg_gridX);
-	arg_gridY.do{arg j;
-		col =  Array.new(arg_gridY);
-		arg_gridX.do{arg i;col.add([0,0,0]);};
-		gridColour.add(col);
-	};
-}
-
-getGridColourCell{arg i,j;
-	^gridColour[i][j];
+		if (displayOption == "showTarget", {
+			guiSpecArray = guiSpecArray ++[
+				["TXPopupAction", "Grid size", arrResolutions, "resolution", {arg view; this.setResolution(view.value); system.showView}, 180],
+				["TXGridColourTarget", "Video Grid", {gridColour.deepCopy}, "targetColour", noGridRows, noGridCols],
+				["DividingLine"],
+				["EZslider", "Tolerance %", ControlSpec(0,20), "tolerance"],
+				["EZslider", "Min Target", ControlSpec(1,20, step:1), "minTargetCount"],
+				["EZslider", "Analysis rate", ControlSpec(1,10), "analysisRate"],
+				["DividingLine"],
+			];
+		});
+		if (displayOption == "showZone", {
+			guiSpecArray = guiSpecArray ++[
+				["TextBar", "If Zone is used, the target colour will be looked for only in the zone", 450],
+				["TXCheckBox", "Use Zone", "useZone"],
+				["DividingLine"],
+				["TXGridColourZone", "Video Grid", {gridColour.deepCopy}, "arrActiveGridCells", noGridRows, noGridCols],
+				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions1-4", {
+			guiSpecArray = guiSpecArray ++[
+				["TXActionView", arrActions, 0],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction1", nil, 350],
+				["DividingLine"],
+				["TXActionView", arrActions, 1],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction2", nil, 350],
+				["DividingLine"],
+				["TXActionView", arrActions, 2],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction3", nil, 350],
+				["DividingLine"],
+				["TXActionView", arrActions, 3],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction4", nil, 350],
+				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions5-8", {
+			guiSpecArray = guiSpecArray ++[
+				["TXActionView", arrActions, 4],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction5", nil, 350],
+				["DividingLine"],
+				["TXActionView", arrActions, 5],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction6", nil, 350],
+				["DividingLine"],
+				["TXActionView", arrActions, 6],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction7", nil, 350],
+				["DividingLine"],
+				["TXActionView", arrActions, 7],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction8", nil, 350],
+				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions9-10", {
+			guiSpecArray = guiSpecArray ++[
+				["TXActionView", arrActions, 8],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction9", nil, 350],
+				["DividingLine"],
+				["TXActionView", arrActions, 9],
+				["NextLine"],
+				["TXPopupAction", "Action type", arrActionTypes, "runAction10", nil, 350],
+				["DividingLine"],
+			];
+		});
 	}
 
-setActiveCell{arg i,j, val;
-	gridColour[i][j] = val;
+	getButtonColour { arg colour2Boolean;
+		if (colour2Boolean == true, {
+			^TXColor.sysGuiCol4;
+		},{
+			^TXColor.sysGuiCol1;
+		});
 	}
 
-getGridColourRow{arg i;
-	^gridColour[i];
+	setResolution{arg res;
+		if (res == 0, {
+			noGridRows = 8;
+			noGridCols = 8;
+		});
+		if (res == 1, {
+			noGridRows = 16;
+			noGridCols = 16;
+		});
+		if (res == 2, {
+			noGridRows = 32;
+			noGridCols = 32;
+		});
+		this.buildGuiSpecArray;
 	}
 
-oscActivate {
-	//	stop any previous responder
-	this.oscDeactivate;
-	oscResponder = OSCresponderNode(nil, '/txcyclosc/redrow', { arg time, responder, msg;
-		var row = msg[1];
-		noGridRows.do{arg j; gridColour[row][j].put(0, msg[j+2] ? 0);};
-//
-//	// For testing  - post details
-//	("TXCyclOSC : ").postln;
-//	[time, responder, msg].postln;
-//
-	}).add;
-	oscResponder = OSCresponderNode(nil, '/txcyclosc/greenrow', { arg time, responder, msg;
-		var row = msg[1];
-		noGridRows.do{arg j; gridColour[row][j].put(1, msg[j+2] ? 0);};
-	}).add;
-	oscResponder = OSCresponderNode(nil, '/txcyclosc/bluerow', { arg time, responder, msg;
-		var row = msg[1];
-		noGridRows.do{arg j; gridColour[row][j].put(2, msg[j+2] ? 0);};
-	}).add;
-}
+	runAction {   //	override base class
+		this.oscActivate;
+		this.startRoutine;
+	}
 
-oscDeactivate {
-	if (oscResponder.notNil, {
-		oscResponder.remove;
-	});
-}
+	pauseAction {   //	override base class
+		this.oscDeactivate;
+		this.stopRoutine;
+	}
 
-startRoutine{
-	analyseRoutine = Routine { arg inval;
-		loop {
-			holdtolerance = this.getSynthArgSpec("tolerance") * 2.55;
-			holdtargetColour = this.getSynthArgSpec("targetColour") * 255;
-			holdarrActiveGridCells = this.getSynthArgSpec("arrActiveGridCells");
-			holdminTargetCount = this.getSynthArgSpec("minTargetCount");
-			arrMatches = [];
+	extraSaveData {
+		^arrActions;
+	}
+	loadExtraData {arg argData;  // override default method
+		arrActions = argData;
+		this.setResolution(this.getSynthArgSpec("resolution"));
+	}
 
-			if (this.getSynthArgSpec("useZone") == 1, {
-				noGridRows.do({ arg row, i;
-					noGridCols.do({arg col, j;
-						// if value matches target within tolerance and cell is active
-						if ( ((gridColour.at(i).at(j) - holdtargetColour).abs.sort.last < holdtolerance)
-							and: (holdarrActiveGridCells.at(i).at(j) == 1),
-						{
-							// add to array of matches
-							arrMatches = arrMatches.add([i, j]);
+	initGridColour{arg arg_gridX, arg_gridY;
+		var col;
+		gridColour = Array.new(arg_gridX);
+		arg_gridY.do{arg j;
+			col =  Array.new(arg_gridY);
+			arg_gridX.do{arg i;col.add([0,0,0]);};
+			gridColour.add(col);
+		};
+	}
+
+	getGridColourCell{arg i,j;
+		^gridColour[i][j];
+	}
+
+	setActiveCell{arg i,j, val;
+		gridColour[i][j] = val;
+	}
+
+	getGridColourRow{arg i;
+		^gridColour[i];
+	}
+
+	oscActivate {
+		//	stop any previous responder
+		this.oscDeactivate;
+		oscResponder = OSCFunc({arg msg, time, addr,  recvPort;
+			var row = msg[1];
+			noGridRows.do{arg j; gridColour[row][j].put(0, msg[j+2] ? 0);};
+		}, '/txcyclosc/redrow', nil);
+		oscResponder2 = OSCFunc({arg msg, time, addr,  recvPort;
+			var row = msg[1];
+			noGridRows.do{arg j; gridColour[row][j].put(1, msg[j+2] ? 0);};
+		}, '/txcyclosc/greenrow', system.server.addr);
+		oscResponder3 = OSCFunc({arg msg, time, addr,  recvPort;
+			var row = msg[1];
+			noGridRows.do{arg j; gridColour[row][j].put(2, msg[j+2] ? 0);};
+		}, '/txcyclosc/bluerow', system.server.addr);
+	}
+
+	oscDeactivate {
+		if (oscResponder.notNil, {
+			oscResponder.free;
+			oscResponder2.free;
+			oscResponder3.free;
+		});
+	}
+
+	startRoutine{
+		analyseRoutine = Routine { arg inval;
+			loop {
+				holdtolerance = this.getSynthArgSpec("tolerance") * 2.55;
+				holdtargetColour = this.getSynthArgSpec("targetColour") * 255;
+				holdarrActiveGridCells = this.getSynthArgSpec("arrActiveGridCells");
+				holdminTargetCount = this.getSynthArgSpec("minTargetCount");
+				arrMatches = [];
+
+				if (this.getSynthArgSpec("useZone") == 1, {
+					noGridRows.do({ arg row, i;
+						noGridCols.do({arg col, j;
+							// if value matches target within tolerance and cell is active
+							if ( ((gridColour.at(i).at(j) - holdtargetColour).abs.sort.last < holdtolerance)
+								and: (holdarrActiveGridCells.at(i).at(j) == 1),
+								{
+									// add to array of matches
+									arrMatches = arrMatches.add([i, j]);
+							});
+						});
+					});
+				},{
+					noGridRows.do({ arg row, i;
+						noGridCols.do({arg col, j;
+							// if value matches target within tolerance
+							if ((gridColour.at(i).at(j) - holdtargetColour).abs.sort.last < holdtolerance, {
+								// add to array of matches
+								arrMatches = arrMatches.add([i, j]);
+							});
 						});
 					});
 				});
-			},{
-				noGridRows.do({ arg row, i;
-					noGridCols.do({arg col, j;
-						// if value matches target within tolerance
-						if ((gridColour.at(i).at(j) - holdtargetColour).abs.sort.last < holdtolerance, {
-							// add to array of matches
-							arrMatches = arrMatches.add([i, j]);
-						});
-					});
+				// get output values
+				if (arrMatches.size >= holdminTargetCount, {
+					holdTargetFound = 1;
+					holdSubArrayX = arrMatches.collect({arg item, i; item.at(0)});
+					holdSubArrayY = arrMatches.collect({arg item, i; item.at(1)});
+					holdXTarget = (holdSubArrayX.sum/ holdSubArrayX.size)/ noGridRows;
+					holdYTarget = (holdSubArrayY.sum/ holdSubArrayY.size) / noGridCols;
+				}, {
+					holdTargetFound = 0;
 				});
-			});
-			// get output values
-			if (arrMatches.size >= holdminTargetCount, {
-				holdTargetFound = 1;
-				holdSubArrayX = arrMatches.collect({arg item, i; item.at(0)});
-				holdSubArrayY = arrMatches.collect({arg item, i; item.at(1)});
-				holdXTarget = (holdSubArrayX.sum/ holdSubArrayX.size)/ noGridRows;
-				holdYTarget = (holdSubArrayY.sum/ holdSubArrayY.size) / noGridCols;
-			}, {
-				holdTargetFound = 0;
-			});
-			// set the Bus values
-		 	if ( outBus.class == Bus, {
-		 		outBus.setn([holdXTarget, holdYTarget, holdTargetFound]);
-		 	});
-			// run actions depending of if target found
-			this.onOffStateChange(holdTargetFound);
-			// pause time based on 1/anaylsis rate
-			this.getSynthArgSpec("analysisRate").reciprocal.yield;
-		}
-	}.play;
-}
+				// set the Bus values
+				if ( outBus.class == Bus, {
+					outBus.setn([holdXTarget, holdYTarget, holdTargetFound]);
+				});
+				// run actions depending of if target found
+				this.onOffStateChange(holdTargetFound);
+				// pause time based on 1/anaylsis rate
+				this.getSynthArgSpec("analysisRate").reciprocal.yield;
+			}
+		}.play;
+	}
 
-stopRoutine{
-	analyseRoutine.stop;
+	stopRoutine{
+		analyseRoutine.stop;
 
-}
-deleteModuleExtraActions {
-	this.oscDeactivate;
-	this.stopRoutine;
-}
+	}
+	deleteModuleExtraActions {
+		this.oscDeactivate;
+		this.stopRoutine;
+	}
 
-onOffStateChange { arg newState;
-	// If state has changed, then run actions
-	if ((newState == 1) and: (holdTargetFoundState == 0), {this.performActions(1)});
-	if ((newState == 0) and: (holdTargetFoundState == 1), {this.performActions(0)});
-	holdTargetFoundState = newState;
-}
+	onOffStateChange { arg newState;
+		// If state has changed, then run actions
+		if ((newState == 1) and: (holdTargetFoundState == 0), {this.performActions(1)});
+		if ((newState == 0) and: (holdTargetFoundState == 1), {this.performActions(0)});
+		holdTargetFoundState = newState;
+	}
 
-performActions {arg argTargetFound;
+	performActions {arg argTargetFound;
 		arrActions.do({ arg item, i;
 			var holdModuleID, holdModule, holdActionInd, holdArrActionItems, holdActionText,
-				holdAction, holdVal1, holdVal2, holdVal3;
+			holdAction, holdVal1, holdVal2, holdVal3;
 			// if action should be run
 			if ([9, 1, 0].at(this.getSynthArgSpec(arrRunActionNames.at(i))) == argTargetFound, {
 				holdModuleID = item.at(0);
@@ -370,14 +359,14 @@ performActions {arg argTargetFound;
 				if (holdModule != 0, {
 					holdArrActionItems = holdModule.arrActionSpecs.collect({arg item, i; item.actionName;});
 					// if text found, match action string with text, else use numerical value
-						if (holdActionText.notNil, {
-							holdActionInd = holdArrActionItems.indexOfEqual(holdActionText) ? holdActionInd;
-							holdAction = holdModule.arrActionSpecs.at(holdActionInd);
-						},{
-							// if text not found, use number but only select older actions with legacyType == 1
-							holdAction = holdModule.arrActionSpecs
-								.select({arg item, i; item.legacyType == 1}).at(holdActionInd);
-						});
+					if (holdActionText.notNil, {
+						holdActionInd = holdArrActionItems.indexOfEqual(holdActionText) ? holdActionInd;
+						holdAction = holdModule.arrActionSpecs.at(holdActionInd);
+					},{
+						// if text not found, use number but only select older actions with legacyType == 1
+						holdAction = holdModule.arrActionSpecs
+						.select({arg item, i; item.legacyType == 1}).at(holdActionInd);
+					});
 					// if action type is commandAction then value it with arguments
 					if (holdAction.actionType == \commandAction, {
 						holdAction.actionFunction.value(holdVal1, holdVal2, holdVal3);
@@ -390,7 +379,7 @@ performActions {arg argTargetFound;
 			});
 		});
 		//	gui update
-//		system.flagGuiUpd;
+		//		system.flagGuiUpd;
 	}	// end of performActions
 
 

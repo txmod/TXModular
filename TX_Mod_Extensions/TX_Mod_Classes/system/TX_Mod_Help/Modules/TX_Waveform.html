@@ -7,9 +7,9 @@
   <meta name="Generator" content="Cocoa HTML Writer">
   <meta name="CocoaVersion" content="1138.47">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
     span.s1 {font: 12.0px Helvetica}
     span.s2 {text-decoration: underline}
     span.s3 {font: 15.0px Helvetica}
@@ -19,38 +19,56 @@
 <body>
 <p class="p1"><b>Waveform</b></p>
 <p class="p2"><br></p>
-<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Source (mono output)</b></p>
+<p class="p1"><b>Module type: Audio Source (mono output)</b></p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Introduction:</i></b></p>
-<p class="p1">This module outputs a synthesised waveform as a mono audio signal.<span class="Apple-converted-space"> </span></p>
+<p class="p1">This module outputs a synthesised waveform as a mono audio signal. </p>
+<p class="p1">Many types of synthesis can be used - see full list in this help file <A href="../TX_Waveform Synthesis.html">Waveform Synthesis<A></p>
+<p class="p1">Frequency modulation can be used to add complexity to the sound. The modulation can come from another module using the FM input, or from  an internal sine wave. </p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Controls:</i></b></p>
 <p class="p2"><b></b><br></p>
 <p class="p1"><b>Waveform button</b></p>
 <p class="p1"><b>Waveform/Modify 1/ Modify 2</b> -  see help file <A href="../TX_Waveform Synthesis.html">Waveform Synthesis<A></p>
-<p class="p1"><b>Level</b> - sets the output level<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Level</b> - sets the output level.</p>
+<p class="p1"><b>Amp Comp</b> - select a preset for the type of amplitude compensation to use - see help file <A href="TX_Amp Comp.html">Amp Comp<A> for details. Can be set to off when not needed.</p>
 <p class="p2"><b></b><br></p>
 <p class="p1"><b>Frequency button</b></p>
-<p class="p1"><b>Freq</b> - sets the pitch or frequency of the waveform<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Freq</b> - sets the pitch or frequency of the waveform </p>
 <p class="p1"><b>notes</b> - this popup allows you to select a midi note name (e.g. D3) to set the frequency.</p>
 <p class="p1"><b>OFF/ON Use note list instead of variable frequency </b>- if set on, this uses a specific note list which the waveform's frequency is chosen from. The controls below allow you to specify the which notes will be in the note list.</p>
 <p class="p1"><b>Scale type </b>- sets the interval, scale, mode or chord used for the note list.</p>
 <p class="p1"><b>Key / root </b>- sets the key or root of the above scale.</p>
 <p class="p1"><b>Note range </b>- sets the min and max of notes in the note list using midi note numbers.</p>
-<p class="p1"><b>Note list </b>- shows the total number of notes in the current note list.</p>
+<p class="p1"><b>Note count </b>- shows the total number of notes in the current note list.</p>
 <p class="p1"><b>Note select </b>- this slider selects one of the notes in the current note list. The lowest note is with the slider set to 0, with the highest at 1, and all others in between.The more notes there are in the note list, the more closely they will be packed along the length of the slider. This can be modulated, for example with an lfo or midi controller.</p>
 <p class="p2"><br></p>
 <p class="p1"><b>Freq Smoothing button</b></p>
 <p class="p1">This allows you to add smoothing to the frequency parameter.</p>
-<p class="p3"><span class="s3">S</span>ee help file <span class="s4">[TX_Smooth]</span></p>
+<p class="p1">See help file <a href="file:../Modules/TX_Smooth.html">Smooth</a></p>
+<p class="p2"><br></p>
+<p class="p1"><b>FM button</b></p>
+<p class="p1"><b>Frequency modulation</b> - sets the frequency modulation mode which can be:<br>
+Off - no Frequency Modulation (FM)<br>
+External- use FM audio input & FM depth<br>
+Internal - use sine wave, FM freq & FM depth<br>
+Internal - use sine wave, [FM ratio x main frequency] & FM depth</p>
+<p class="p1"><b>FM freq</b> - sets the frequency of the internal sine wave</p>
+<p class="p1"><b>FM ratio</b> - sets the ratio of the internal sine wave frequency relative to the main waveform's frequency</p>
+<p class="p1"><b>FM depth</b> - sets the depth of the frequency modulation</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Audio Input Bus:</i></b></p>
+<p class="p1"><b>FM input</b> - the incoming mono audio signal used for frequency modulation (if switched on).</p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
 <p class="p1"><b>Modify 1</b></p>
-<p class="p1"><b>Modify 2</b> <span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Frequency</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Modify 2</b> </p>
+<p class="p1"><b>Frequency</b> </p>
 <p class="p1"><b>Note select</b></p>
 <p class="p1"><b>Smooth time 1</b></p>
 <p class="p1"><b>Smooth time 2</b></p>
-<p class="p2"><br></p>
+<p class="p1"><b>FM depth</b></p>
+<p class="p1"><b>FM freq</b></p>
+<p class="p1"><b>FM ratio</b></p>
 </body>
 </html>

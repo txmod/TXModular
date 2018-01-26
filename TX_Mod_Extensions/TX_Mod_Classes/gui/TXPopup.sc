@@ -10,7 +10,7 @@ TXPopup {	// popup module with label
 	}
 	init { arg argParent, dimensions, label, items, argAction, initVal,
 			initAction, labelWidth;
-		var spacingX, spacingY;
+		var spacingX, spacingY, labelWidthPlusSpace;
 		if (argParent.class == Window, {
 			spacingX = argParent.view.decorator.gap.x;
 			spacingY = argParent.view.decorator.gap.y;
@@ -18,23 +18,30 @@ TXPopup {	// popup module with label
 			spacingX = argParent.decorator.gap.x;
 			spacingY = argParent.decorator.gap.y;
 		});
+		labelWidth = labelWidth ? 0;
 		if (labelWidth > 0, {
 			labelView = StaticText(argParent, labelWidth @ dimensions.y);
 			labelView.string = label;
 			labelView.align = \right;
+			labelWidthPlusSpace = labelWidth + spacingX;
+		},{
+			labelWidthPlusSpace = 0;
 		});
 
 		initVal = initVal ? 0;
+		if (initVal > (items.size - 1), {
+			initVal = 0;
+		});
 		action = argAction;
 
-		popupMenuView = PopUpMenu(argParent, (dimensions.x - labelWidth - spacingX) @ dimensions.y);
+		popupMenuView = PopUpMenu(argParent, (dimensions.x - labelWidthPlusSpace) @ dimensions.y);
 		popupMenuView.items = items;
 		popupMenuView.action = {
 			value = popupMenuView.value;
 			action.value(this);
 		};
 
-		if (initAction) {
+		if (initAction ? false) {
 			this.value = initVal;
 		}{
 			value = initVal;
@@ -42,14 +49,14 @@ TXPopup {	// popup module with label
 		};
 	}
 	value_ { arg argVal;
-		popupMenuView.valueAction = argVal;
+		popupMenuView.valueAction = argVal.min(popupMenuView.items.size-1);
 	}
 
 	valueAction_  { arg argVal;
-		popupMenuView.valueAction = argVal;
+		popupMenuView.valueAction = argVal.min(popupMenuView.items.size-1);
 	}
 	valueNoAction_  { arg argVal;
-		popupMenuView.value = argVal;
+		popupMenuView.value = argVal.min(popupMenuView.items.size-1);
 	}
 	set { arg label, argAction, initVal, initAction=false;
 		labelView.string = label;
@@ -61,6 +68,10 @@ TXPopup {	// popup module with label
 			value = initVal;
 			popupMenuView.value = value;
 		};
+	}
+
+	hasFocus {
+		^popupMenuView.hasFocus;
 	}
 }
 

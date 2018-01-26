@@ -1,4 +1,4 @@
-// Copyright (C) 2010  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
+// Copyright (C) 2015  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
@@ -28,15 +28,18 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// allNotesOffButton
 	// DeleteModuleButton
 	// DragSink
+	// DragDrop
 	// DividingLine
 	// EZNumber
-	// EZNumberUnmapped
+	// EZNumberMapped
 	// TXScrollNumBox
+	// TXScrollNumBoxUnmapped
 	// EZslider
 	// EZSlider
 	// EZsliderUnmapped
 	// HelpButton
 	// HideModuleButton
+	// ImageBox
 	// LegacyModuleText
 	// MIDIChannelSelector
 	// MIDIKeyboard
@@ -74,6 +77,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// Spacer
 	// SpacerLine
 	// SynthOptionCheckBox
+	// SynthOptionList
+	// SynthOptionListPlusMinus
 	// SynthOptionPopup
 	// SynthOptionPopupPlusMinus
 	// TapTempoButton
@@ -89,27 +94,37 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// TXActionSteps
 	// TXActionView
 	// TXCheckBox
+	// TXCompactSlider
+	// TXCompactSliderUnmapped
 	// TXCurveDraw
 	// TXDoubleSlider
 	// TXEnvDisplay
+	// TXEnvPlot
 	// TXEnvGui
 	// TXEQCurveDraw
 	// TXFraction
+	// TXFractionSlider
+	// TXFreqBpmMinMaxSldr
 	// TXGridColourTarget
 	// TXGridColourZone
 	// TXGridGreyTarget
 	// TXGridGreyZone
 	// TXListViewAction
+	// TXListViewActionPlusMinus
 	// TXMidiNoteKeybGrid
 	// TXMinMaxSlider
 	// TXMinMaxSliderSplit
 	// TXMultiButton
 	// TXMultiCheckBox
 	// TXMultiKnob
+	// TXMultiKnobMidiNote
+	// TXMultiKnobNo
+	// TXMultiKnobNoUnmap
 	// TXMultiNumber
 	// TXMultiSlider
 	// TXMultiSliderNo
 	// TXMultiSwitch
+	// TXMultiTrackView
 	// TXNetAddress
 	// TXNoteRangeSlider
 	// TXNumberPlusMinus
@@ -128,88 +143,96 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// TXTextBox
 	// TXTimeBeatsBpmNumber
 	// TXTimeBpmMinMaxSldr
+	// TXTrackView
 	// TXV_GuiScroller
 	// TXWaveTableSpecs
 	// WetDryMixSlider
 
 	// define class variables
 	classvar <>system;
-	classvar w, guiSpecArray, arrGroupModules, viewWidth, firstLine;
-	classvar argModule, holdView, holdView2, holdView3, holdVal, holdVal2, labelView, holdInitVal, holdStartIndex;
-	classvar holdNoteBase, holdNoteNo, holdNoteString, holdNoteShiftRow, holdNoteTexts;
-	classvar holdSFView, holdRangeView, holdTXFraction1, holdTXFraction2, holdSeqRangeView;
+	classvar <>classData;
+	classvar argModule;
+
+	*initClass{
+		//	set class specific variables
+		classData = ();
+	}
 
 	*new{ arg inModule, argParent;
+		var rateColour;
 
 		// set variables
 		argModule = inModule;
-		arrGroupModules = system.arrSystemModules
+		if (argModule.class.moduleRate == "control", {
+			rateColour = TXColor.sysChannelControl;
+		},{
+			rateColour = TXColor.sysChannelAudio;
+		});
+		classData.arrGroupModules = system.arrSystemModules
 		.select({ arg item, i; item.class.moduleType == "groupsource" or: (item.class.moduleType == "groupaction"); });
 		argModule.arrControls = [];
-		viewWidth = argModule.class.guiWidth-50;
+		classData.viewWidth = argModule.class.guiWidth-50;
 		// if parent is passed, then view gets created on parent's window. else make own window
 		if (argParent.notNil) {
 			// ignore module's height & use channel height
-			w =  CompositeView(argParent,Rect(0,0, argModule.class.guiWidth.max(500), 595));
-			w.decorator = FlowLayout(w.bounds);
-			w.decorator.shift(6,10);
-			w.decorator.margin = Point(10,10);
-			w.background = TXColor.sysModuleWindow;
+			classData.win =  CompositeView(argParent,Rect(0,0, argModule.class.guiWidth.max(500), 595));
+			classData.win.decorator = FlowLayout(classData.win.bounds);
+			//classData.win.decorator.shift(6,10);
+			//classData.win.decorator.margin = Point(10,10);
+			classData.win.background = rateColour;
+
+
 		}{
 			// if window not passed as arg make new one
-			w = Window(argModule.instName, Rect(100, 100, argModule.class.guiWidth, 570));
-			w.front;
-			w.view.decorator = FlowLayout(w.view.bounds);
-			w.view.background = TXColor.sysModuleWindow;
+			classData.win = Window(argModule.instName, Rect(100, 100, argModule.class.guiWidth, 570));
+			classData.win.front;
+			classData.win.view.decorator = FlowLayout(classData.win.view.bounds);
+			classData.win.view.background = rateColour;
 		};
 
-		// add title items (or defaults if nil) to guiSpecArray
+		// add title items (or defaults if nil) to classData.guiSpecArray
 		if (argModule.guiSpecTitleArray.notNil, {
-			guiSpecArray = argModule.guiSpecTitleArray ++ argModule.guiSpecArray;
-			}, {
-				// add defaults
-				guiSpecArray = [
-					["TitleBar"],
-					["HelpButton"],
-					["RunPauseButton"],
-					["DeleteModuleButton"],
-					["RebuildModuleButton"],
-					["HideModuleButton"],
-					["LegacyModuleText"],
-					["NextLine"],
-					["ModuleActionPopup"],
-					["NextLine"],
-					["ModuleInfoTxt"],
-					["SpacerLine", 2],
-				]
-				++ argModule.guiSpecArray;
+			classData.guiSpecArray = argModule.guiSpecTitleArray ++ argModule.guiSpecArray;
+		}, {
+			// add defaults
+			classData.guiSpecArray = [
+				["TitleBar"],
+				["HelpButton"],
+				["RunPauseButton"],
+				["DeleteModuleButton"],
+				["RebuildModuleButton"],
+				["HideModuleButton"],
+				["LegacyModuleText"],
+				["NextLine"],
+				["ModuleActionPopup"],
+				["NextLine"],
+				["ModuleInfoTxt"],
+				["SpacerLine", 2],
+			]
+			++ argModule.guiSpecArray;
 		});
 		// check whether to add "ModulationOptions"
-		holdVal = argModule.myArrCtlSCInBusSpecs
+		classData.holdVal = argModule.myArrCtlSCInBusSpecs
 		.select({ arg item, i; item.at(3).notNil; });  // select items with optional controls
-		if ((argModule.autoModOptions == true) and: (holdVal.size > 0), {
-			guiSpecArray = guiSpecArray
+		if ((argModule.autoModOptions == true) and: (classData.holdVal.size > 0), {
+			classData.guiSpecArray = classData.guiSpecArray
 			++ [
 				["ModulationOptions"]
 			];
 		});
 
-		// Build GUI from guiSpecArray
-		guiSpecArray.do({ arg item, i;
+		// Build GUI from classData.guiSpecArray
+		classData.guiSpecArray.do({ arg item, i;
 			var holdMethod;
 			holdMethod = ("gui" ++ item.at(0)).asSymbol;
-			this.perform(holdMethod, item, w);
-		});    // end of guiSpecArray.do
+			this.perform(holdMethod, item, classData.win);
+		});    // end of classData.guiSpecArray.do
 
-		^w;	// return w
+		^classData.win;	// return classData.win
 	}
 
 	*nextline { arg w;
-		if (w.class == Window, {
-			w.view.decorator.nextLine;
-			}, {
-				w.decorator.nextLine;
-		});
+		classData.win.asView.decorator.nextLine;
 	}
 
 	// NextLine
@@ -221,36 +244,24 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 	// Spacer	 - defaults to width 40 if item.at(1) is nil
 	*guiSpacer { arg item, w;
-		holdVal = item.at(1) ? 40;
-		StaticText(w, holdVal @ 20);
+		classData.holdVal = item.at(1) ? 40;
+		StaticText(w, classData.holdVal @ 20);
 	}
 
 	// SpacerLine	 - defaults to height 10 if item.at(1) is nil
 	*guiSpacerLine { arg item, w;
-		holdVal = item.at(1) ? 10;
-		if (w.class == Window, {
-			w.view.decorator.nextLine;
-			}, {
-				w.decorator.nextLine;
-		});
-		StaticText(w, 20 @ holdVal);
-		if (w.class == Window, {
-			w.view.decorator.nextLine;
-			}, {
-				w.decorator.nextLine;
-		});
+		classData.holdVal = item.at(1) ? 10;
+		classData.win.asView.decorator.nextLine;
+		StaticText(w, 20 @ classData.holdVal);
+		classData.win.asView.decorator.nextLine;
 	}
 
 	// DividingLine	 - defaults Width , and height
 	*guiDividingLine { arg item, w;
-		holdVal = item.at(1) ? viewWidth.max(480);
-		holdVal2 = item.at(2) ? 1;
-		if (w.class == Window, {
-			w.view.decorator.nextLine;
-			}, {
-				w.decorator.nextLine;
-		});
-		StaticText(w, holdVal @ holdVal2).background_(TXColor.white);
+		classData.holdVal = item.at(1) ? classData.viewWidth.max(480);
+		classData.holdVal2 = item.at(2) ? 1;
+		classData.win.asView.decorator.nextLine;
+		StaticText(w, classData.holdVal @ classData.holdVal2).background_(TXColor.white);
 	}
 
 	// DragSink
@@ -258,42 +269,92 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index2 is canReceiveDragHandler function
 	// 	index3 is receiveDragHandler function
 	// index 4 is optional showDraggedContent (default false)
-	// index 5 is optional width (default viewWidth)
+	// index 5 is optional width (default 200)
+	// index 6 is optional height (default 20)
+	// index 7 is optional background color
+	// index 8 is optional string color
+	// index 9 is optional string alignment (default \center)
 	*guiDragSink { arg item, w;
 		// if (w.class == Window, {
-		// 	w.view.decorator.nextLine;
+		// 	classData.win.view.decorator.nextLine;
 		// 	}, {
-		// 		w.decorator.nextLine;
+		// 		classData.win.decorator.nextLine;
 		// });
-		holdVal = item[5] ? 200;
-		holdView = DragSink(w, Rect(10, 70, holdVal, 20)).align_(\center);
-		holdView.string = item[1];
-		holdView.canReceiveDragHandler = item[2];
-		holdView.receiveDragHandler = item[3];
-		holdView.setBoth = item[4] ? false;
+		classData.holdView = DragSink(w, Rect(10, 70, (item[5] ? 200), (item[6] ? 20))).align_(item[9] ? \center);
+		classData.holdView.string = item[1];
+		classData.holdView.canReceiveDragHandler = item[2];
+		classData.holdView.receiveDragHandler = item[3];
+		classData.holdView.setBoth = item[4] ? false;
+		classData.holdView.background_(item[7] ? TXColor.paleYellow);
+		classData.holdView.stringColor_(item[8] ? TXColor.black);
+	}
+
+	// DragDrop
+	// arguments- index1 is string to display,
+	// index2 is canReceiveDragHandler function
+	// 	index3 is receiveDragHandler function
+	// index 4 is optional showDraggedContent (default false)
+	// index 5 is optional width (default 100)
+	// index 6 is optional height (default 20)
+	// index 7 is optional begin drag action function
+	// index 8 is optional drag label
+	// index 9 is optional background color
+	// index 10 is optional string color
+	// index 11 is optional string alignment
+	*guiDragDrop { arg item, w;
+		classData.holdView = DragBoth(w, (item[5] ? 100) @ (item[6] ? 20));
+		classData.holdView.string = item[1];
+		classData.holdView.canReceiveDragHandler = item[2];
+		classData.holdView.receiveDragHandler = item[3];
+		classData.holdView.setBoth = item[4] ? false;
+		classData.holdView.beginDragAction = item[7];
+		classData.holdView.dragLabel = item[8];
+		classData.holdView.background_(item[9] ? TXColor.paleYellow);
+		classData.holdView.stringColor_(item[10] ? TXColor.black);
+		classData.holdView.align = item[11] ? \center;
+	}
+
+	// ImageBox
+	// arguments- index1 is string to display,
+	// index 1 is image function
+	// index 2 is optional width function (default 200)
+	// index 3 is optional height function (default 200)
+	*guiImageBox { arg item, w;
+		// if (w.class == Window, {
+		// 	classData.win.view.decorator.nextLine;
+		// 	}, {
+		// 		classData.win.decorator.nextLine;
+		// });
+		classData.holdView = UserView(w, Rect(0, 0, (item[2].value ? 200), (item[3].value ? 200)));
+		classData.holdView.drawFunc = {arg view;
+			var img = item[1].value;
+			img.drawInRect(Rect(0, 0, (item[2].value ? 200), (item[3].value ? 200)));
+		};
+		classData.holdView.refresh;
 	}
 
 	// TitleBar
 	*guiTitleBar { arg item, w;
-		//		holdView = StaticText(w, 150 @ 30);
-		//		holdView.string = argModule.instName;
-		//		holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColour.sysModuleName);
-		//		holdView.setProperty(\align,\center);
+		//		classData.holdView = StaticText(w, 150 @ 30);
+		//		classData.holdView.string = argModule.instName;
+		//		classData.holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColour.sysModuleName);
+		//		classData.holdView.setProperty(\align,\center);
 
-		holdView = PopUpMenu(w, 170 @ 30);
-		holdView.items = system.arrSystemModules.copy
+		classData.holdView = PopUpMenu(w, 170 @ 27);
+		classData.holdView.items = system.arrSystemModules.copy
 		.sort({ arg a, b; a.instSortingName < b.instSortingName })
 		.collect({arg item, i; item.instDisplayName;});
-		holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColour.sysModuleName);
-		holdView.action = { arg view;
+		classData.holdView.stringColor_(TXColour.black).background_(TXColour.sysModuleName);
+		classData.holdView.action = { arg view;
 			// change current display module to new one
 			TXChannelRouting.displayModule =
 			system.arrSystemModules.copy
 			.sort({ arg a, b; a.instSortingName < b.instSortingName }).at(view.value);
+			system.addHistoryEvent; // add to history
 			// refresh screen
 			system.showView;
 		};
-		holdView.value = system.arrSystemModules.copy
+		classData.holdView.value = system.arrSystemModules.copy
 		.sort({ arg a, b; a.instSortingName < b.instSortingName })
 		.indexOf(TXChannelRouting.displayModule)
 		? 0;
@@ -306,51 +367,51 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index 6 is optional alignment (e.g. \left, \right)
 	// e.g. ["TextBar", "Note - delay times shown in ms and bpm", 250]
 	*guiTextBar { arg item, w;
-		holdView = StaticText(w, (item.at(2) ? 80) @ (item.at(3) ? 20));
-		holdView.string = item.at(1).value;
-		holdView.stringColor_(item.at(4) ? TXColour.sysGuiCol1)
+		classData.holdView = StaticText(w, (item.at(2) ? 80) @ (item.at(3) ? 20));
+		classData.holdView.string = item.at(1).value;
+		classData.holdView.stringColor_(item.at(4) ? TXColour.sysGuiCol1)
 		.background_(item.at(5) ? TXColor.white);
-		holdView.align_(item.at(6) ? \center);
+		classData.holdView.align_(item.at(6) ? \center);
 	}
 
 	// TextBarLeft
-	// left justified version of TextBar with default width set to viewWidth
+	// left justified version of TextBar with default width set to classData.viewWidth
 	// arguments- index1 is text, index2 is optional width, index3 is optional height
 	// index 4 is optional background colour
 	// e.g. ["TextBarLeft", "Note - delay times shown in ms and bpm", 250]
 	*guiTextBarLeft { arg item, w;
-		holdView = StaticText(w, (item.at(2) ? viewWidth) @ (item.at(3) ? 20));
-		holdView.string = item.at(1).value;
-		holdView.stringColor_(TXColour.sysGuiCol1).background_(item.at(4) ? TXColor.white);
-		holdView.setProperty(\align,\left);
+		classData.holdView = StaticText(w, (item.at(2) ? classData.viewWidth) @ (item.at(3) ? 20));
+		classData.holdView.string = item.at(1).value;
+		classData.holdView.stringColor_(TXColour.sysGuiCol1).background_(item.at(4) ? TXColor.white);
+		classData.holdView.setProperty(\align,\left);
 	}
 
 	// TextViewDisplay
 	//  for displaying text only - not editable
-	// uneditable textview with default width set to viewWidth and height to 100
+	// uneditable textview with default width set to classData.viewWidth and height to 100
 	// arguments- index1 is text, index2 is optional width
 	// index3 is optional height
 	// index4 is optional label (this is used only by TXBuildActions)
 	// e.g. ["TextViewDisplay", "This module is sdfjdsklfkjk", 300, 100, "Notes"]
 	*guiTextViewDisplay { arg item, w;
-		holdView = TextView(w, (item.at(2) ? viewWidth) @ (item.at(3) ? 100));
-		holdView.string = item.at(1).value;
-		holdView.stringColor_(TXColour.sysGuiCol1);
-		holdView.background_(TXColor.white);
-		holdView.font_(Font.new("Helvetica",12));
-		holdView.canFocus = false;
+		classData.holdView = TextView(w, (item.at(2) ? classData.viewWidth) @ (item.at(3) ? 100));
+		classData.holdView.string = item.at(1).value;
+		classData.holdView.stringColor_(TXColour.black);
+		classData.holdView.background_(TXColor.white);
+		classData.holdView.font_(Font.new("Helvetica",12));
+		classData.holdView.canFocus = false;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0);
 				argView.string = item.at(1).value;
 			}
 		);
 	}
 
 	// TextViewCompile
-	//  for editing text with default width set to viewWidth and height to 100
+	//  for editing text with default width set to classData.viewWidth and height to 100
 	// index1 is text function,
 	// index2 is function to run when code is edited
 	// index3 is optional width
@@ -361,9 +422,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// e.g. ["TextViewCompile", getTextFunc, setTextFunc, 300, 200]
 	*guiTextViewCompile { arg item, w;
 		var holdView;
-		holdView = TextView(w, (item.at(3) ? viewWidth) @ (item.at(4)-24 ? 100));
+		holdView = TextView(w, (item.at(3) ? classData.viewWidth) @ (item.at(4)-24 ? 100));
 		holdView.string = item.at(1).value;
-		holdView.stringColor_(TXColour.sysGuiCol1);
+		holdView.stringColor_(TXColour.black);
 		holdView.background_(TXColor.white);
 		holdView.font_(Font.new("Helvetica",12));
 		holdView.usesTabToFocusNextView = false;
@@ -375,14 +436,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		holdView.tabWidth = 20;
 		holdView.action_({|view|
 			holdView.syntaxColorize;
-			"testing xxx - in TXGuiBuild2.guiTextViewCompile: ----".postln;
+			//"testing xxx - in TXGuiBuild2.guiTextViewCompile: ----".postln;
 		});
 		// value function
 		if (item.at(7).notNil, {
 			item.at(7).value(holdView);
 		});
 		// button to evaluate text
-		Button(w, item.at(6) ? 120 @ 20)
+		Button(w, item.at(6) ? 130 @ 20)
 		.states_([
 			[item.at(5) ? "Evaluate text", TXColor.white, TXColor.sysGuiCol1]
 		])
@@ -394,7 +455,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		system.addScreenUpdFunc(
 			[holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0), argMod = argArray.at(1);
 				argView.string = item.at(1).value;
 			}
 		);
@@ -407,29 +468,34 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			["Help", TXColor.white, TXColor.sysHelpCol]
 		])
 		.action_({|view|
-			argModule.openHelp;
+			var windowPoint = view.mapToGlobal(36 @ 27);
+			// adjust height relative to window size, 600 is height of help screen
+			argModule.openHelp(inLeft: windowPoint.x, inTop: Window.screenBounds.height - 600 - windowPoint.y);
 		})
 	}
 
 	// HideModuleButton
 	*guiHideModuleButton { arg item, w;
+
+		/* REMOVED FOR NOW
 		Button(w, 40 @ 20)
 		.states_([
-			["Hide", TXColor.white, TXColor.sysGuiCol1]
+		["Hide", TXColor.white, TXColor.sysGuiCol1]
 		])
 		.action_({|view|
-			TXChannelRouting.hideModuleBox;
+		TXChannelRouting.hideModuleBox;
 		})
+		*/
 	}
 
 	// LegacyModuleText
 	*guiLegacyModuleText { arg item, w;
 		if (argModule.legacyModule == true, {
-			holdView = StaticText(w, 280 @ 18);
-			holdView.string = " * this is an earlier version of this type of module";
-			holdView.stringColor_(TXColour.sysGuiCol1)
+			classData.holdView = StaticText(w, 280 @ 18);
+			classData.holdView.string = " * this is an earlier version of this type of module";
+			classData.holdView.stringColor_(TXColour.sysGuiCol1)
 			.background_(TXColor.white);
-			holdView.align_(\left);
+			classData.holdView.align_(\left);
 		});
 	}
 
@@ -440,7 +506,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			["Delete", TXColor.white, TXColor.sysDeleteCol]
 		])
 		.action_({|view|
-			argModule.confirmDeleteModule;
+			var windowPoint = view.mapToGlobal(50 @ 20);
+			argModule.confirmDeleteModule(windowPoint.x,
+				Window.screenBounds.height - 150 - windowPoint.y);
 			// recreate view
 			system.showView;
 		})
@@ -465,8 +533,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiModuleActionPopup { arg item, w;
 		var totPresets;
 		totPresets = argModule.arrPresets.size;
-		holdView = PopUpMenu(w, (item[1] ? viewWidth) @ 20);
-		holdView.items = [
+		classData.holdView = PopUpMenu(w, (item[1] ? classData.viewWidth) @ 20);
+		classData.holdView.items = [
 			"Presets",
 			"-",
 		]
@@ -490,16 +558,18 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			"Save settings to a file",
 			"Load settings from a file",
 			"Load settings from a file, excluding presets",
+			"-",
+			"Delete ALL stored presets",
 		]
 		;
-		holdView.stringColor_(TXColour.black).background_(TXColor.white);
-		holdView.action = { arg view;
+		classData.holdView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.action = { arg view;
 			if (view.value > 1 and: (view.value <= (1 + totPresets)), {
 				argModule.loadPreset(argModule, view.value - 2);
 			});
 			if (view.value == (3 + totPresets),
 				{argModule.storePreset(argModule, argModule.moduleInfoTxt);});
-			if (view.value > (4 + totPresets) and: (view.value <= (4 + (totPresets * 2))), {
+			if (view.value > (4 + totPresets) and: (view.value <= (3 + (totPresets * 2))), {
 				argModule.overwritePreset(argModule, argModule.moduleInfoTxt,
 					view.value - (4 + totPresets));
 			});
@@ -509,6 +579,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			if (view.value == (9 + (totPresets * 2)), {argModule.savePresetFile;});
 			if (view.value == (10 + (totPresets * 2)), {argModule.openPresetFile;});
 			if (view.value == (11 + (totPresets * 2)), {argModule.openPresetFile(false);});
+			if (view.value == (13 + (totPresets * 2)), {argModule.deleteAllStoredPresets;});
 			view.value = 0;	// reset
 			// recreate view
 			system.showView;
@@ -522,13 +593,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index4 is optional text color,
 	// index5 is optional background color,
 	// index6 is optional initial value function
-	// e.g. ["ActionPopup", arrItems, {arg holdView; this.runAction(holdView.value);}, 200]
+	// e.g. ["ActionPopup", arrItems, {arg view; this.runAction(view.value);}, 200]
 	*guiActionPopup { arg item, w;
-		holdView = PopUpMenu(w, (item.at(3) ?? viewWidth) @ 20);
-		holdView.items = item.at(1);
-		holdView.stringColor_(item.at(4) ?? TXColour.black).background_(item.at(5) ?? TXColor.white);
-		holdView.value = item.at(6) ? 0;
-		holdView.action = { arg view;
+		classData.holdView = PopUpMenu(w, (item.at(3) ?? classData.viewWidth) @ 20);
+		classData.holdView.items = item.at(1);
+		classData.holdView.stringColor_(item.at(4) ?? TXColour.black).background_(item.at(5) ?? TXColor.white);
+		classData.holdView.value = item.at(6) ? 0;
+		classData.holdView.action = { arg view;
 			// run action function passing it view as arg
 			item.at(2).value(view);
 			view.value = 0;	// reset
@@ -597,8 +668,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// arguments- index1 is action function, index2 is initial filename function
 	// e.g. ["OpenFileButton", {arg argPath;  argPath.postln;  argPath;}, {sampleFileName}]
 	*guiOpenFileButton { arg item, w;
-		holdView = TXFileOpen(w, viewWidth @ 20, "Open new file", item.at(1), item.at(2).value);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		classData.holdView = TXFileOpen(w, classData.viewWidth @ 20, "Open new file", item.at(1), item.at(2).value);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 	}
 
 	// RunPauseButton
@@ -606,10 +677,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		var holdStatus;
 		if (argModule.moduleNodeStatus == "running", {
 			holdStatus = 1;
-			}, {
-				holdStatus = 0;
+		}, {
+			holdStatus = 0;
 		});
-		holdView = Button(w, 50 @ 20)
+		classData.holdView = Button(w, 50 @ 20)
 		.states_([
 			["Run", TXColor.white, TXColor.sysGuiCol1],
 			["Pause", TXColor.white, TXColor.sysDeleteCol]
@@ -624,7 +695,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		})
 		//			.value_(argModule.class.system.autoRun.binaryValue );
 		.value_(holdStatus);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 	}
 
 	// allNotesOffButton
@@ -671,36 +742,81 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 	// TapTempoButton
 	// arguments- index1 is optional action function that is passed the measured tempo
+	// index2 is optional width
 	*guiTapTempoButton { arg item, w;
-		var holdTime, newTime, holdBPM;
-		Button(w, 160 @ 20)
+		var currentTime, meanBPM;
+		Button(w, (item.at(2) ? 160) @ 20)
 		.states_([
 			["Tap tempo: ", TXColor.white, TXColor.sysGuiCol1]
 		])
-		.action_({|view|
-			if (newTime.isNil, {
-				newTime = Main.elapsedTime
+		.mouseDownAction_({|view|
+			var timeDiff, currBPM;
+			currentTime = Main.elapsedTime;
+			if (classData.lastTapTime.isNil, {
+				view.states_([["Tap tempo: ", TXColor.white, TXColor.sysGuiCol1]]);
+			}, {
+				timeDiff = currentTime - classData.lastTapTime;
+				if (timeDiff > 5, {    // reset if gap is longer than 5 seconds
+					classData.arrBPMs = [];
+					view.states_([["Tap tempo: ", TXColor.white, TXColor.sysGuiCol1]]);
 				}, {
-					holdTime = Main.elapsedTime;
-					holdBPM = 60 / (holdTime - newTime);
-					newTime = holdTime;
+					currBPM = (60 / timeDiff);
+					classData.arrBPMs = classData.arrBPMs.asArray.add(currBPM).keep(-7);  // use last 7 bpms (= 8 taps)
+					meanBPM = (classData.arrBPMs.sum * classData.arrBPMs.size.reciprocal).round(0.01);
 					view.states_([
-						["Tap tempo:   " ++ holdBPM.round(0.01) ++ "  bpm",
+						["Tempo: " ++ meanBPM ++ "  bpm",
 							TXColor.white, TXColor.sysGuiCol1]
 					]);
-					view.beginDragAction = { view.dragLabel ="BPM"; holdBPM.round(0.01) };
+					view.beginDragAction = { view.dragLabel ="BPM: " ++ meanBPM; meanBPM};
 					// if action function passed then value it
 					if (item.at(1).notNil, {
 						// run action function passing it tap tempo as arg
-						item.at(1).value(holdBPM);
+						item.at(1).value(meanBPM);
 					});
+				});
 			});
+			classData.lastTapTime = currentTime;
 		});
 	}
+
+	// TXTrackView
+	// arguments- index1 is track value function,
+	//	index2 is module
+	//	index3 is optional ScrollView init action
+	// 	index4 is optional ScrollView update action
+	// 	index5 is initial action function
+	// e.g. ["TXTrackView", currentTrack, currentModule,
+	//		{arg view; holdScrollView = view;},
+	//		{arg view; holdVisibleOrigin = view.visibleOrigin; }
+	//	],
+	// 	TXTrackView *new {arg argSystem, argParent, dimensions, argTrack, argModule, scrollViewAction;
+
+	*guiTXTrackView { arg item, w;
+		var extraWidth = 0;
+		if (item.at(7).notNil, {extraWidth = 40;});
+		classData.holdView = TXTrackView(system, w, (classData.viewWidth + extraWidth) @ 425, item.at(1).value, item.at(2),
+			item.at(4));
+		if (item.at(3).notNil, {
+			item.at(3).value(classData.holdView.scrollView);
+		});
+		if (item.at(5).notNil, {
+			item.at(5).value(classData.holdView);
+		});
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				// not used currently
+			}
+		);
+	}	// end of TXTrackView
+
 	// Transpose
 	// no arguments - assumes synth has argument "transpose"
 	*guiTranspose { arg item, w;
-		holdView = TXTransposeKey(w, viewWidth @ 20, "Transpose",
+		classData.holdView = TXTransposeKey(w, classData.viewWidth @ 20, "Transpose",
 			{|view|
 				// set current value on synth
 				if (argModule.moduleNode.notNil, {
@@ -712,13 +828,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec("transpose")  // get starting value
 		);
 		// set controlspec variables
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0), argMod = argArray.at(1);
 				argView.value_(argModule.getSynthArgSpec("transpose"));
 			}
 		);
@@ -727,9 +845,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// ModulationOptions
 	*guiModulationOptions { arg item, w;
 		// initialise variable
-		holdVal = (viewWidth - 10) /2;
+		classData.holdVal = (classData.viewWidth - 10) /2;
 		// add title
-		StaticText(w, holdVal @ 18)
+		StaticText(w, classData.holdVal @ 18)
 		.string_("Modulation options:")
 		.align_(\centre)
 		.stringColor_(TXColour.white).background_(TXColor.sysGuiCol2);
@@ -743,10 +861,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			if (item.at(3).notNil, {
 				// TXCheckBox: arg argParent, bounds, text, offStringColor, offBackground,
 				// onStringColor, onBackground, onOffTextType=0;
-				holdView = TXCheckBox(w, holdVal @ 18, item.at(0), TXColor.sysGuiCol1, TXColour.white,
+				classData.holdView = TXCheckBox(w, classData.holdVal @ 18, item.at(0), TXColor.sysGuiCol1, TXColour.white,
 					TXColor.white, TXColor.sysGuiCol1);
-				holdView.value =  item.at(3);
-				holdView.action = {|view|
+				classData.holdView.value =  item.at(3);
+				classData.holdView.action = {|view|
 					// store current data to myArrCtlSCInBusSpecs
 					argModule.myArrCtlSCInBusSpecs.at (i).put(3, view.value);
 					// if option turned off, check for invalid channels
@@ -756,19 +874,19 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 					// rebuild synth
 					argModule.rebuildSynth;
 				};
-				argModule.arrControls = argModule.arrControls.add(holdView);
+				argModule.arrControls = argModule.arrControls.add(classData.holdView);
 			});
 		});
 	}
 
 	// EZNumber
-	// arguments- index1 is slider text, index2 is controlSpec, index3 is synth arg name to be updated,
+	// arguments- index1 is text, index2 is controlSpec, index3 is synth arg name to be updated,
 	// 	index4 is an optional ACTION function to be valued in views action
 	// index 5/6 are the text and number widths
 	// index 7 is an optional scroll step size
-	// e.g. ["EZNumber", "Speed factor", ControlSpec(-5, 5, 'lin', 1, 0), "speedFactor"]
+	// e.g. ["EZNumber", "Speed factor", ControlSpec(-5, 5, 'lin', 1, 0), "speedFactor", {"Action".postln;}]
 	*guiEZNumber { arg item, w;
-		holdView = TXNumber(w, viewWidth @ 20, item.at(1), item.at(2).value,
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, item.at(1), item.at(2).value,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -787,16 +905,16 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, item.at(5) ? 80, item.at(6) ? 60, item.at(7)
 		)
 		.round_(0.001);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.numberView.scroll_step = holdView.numberView.step = item.at(7) ? 1;
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.numberView.scroll_step = classData.holdView.numberView.step = item.at(7) ? 1;
 
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.getSynthArgSpec(item.at(3)).round(0.001););
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.getSynthArgSpec(item.at(3)).round(0.001););
 			}
 		);
 	}
@@ -810,7 +928,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiEZNumberMapped { arg item, w;
 		var holdControlSpec;
 		holdControlSpec = item.at(2).value;
-		holdView = TXNumber(w, viewWidth @ 20, item.at(1), holdControlSpec,
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, item.at(1), holdControlSpec,
 			{|view|
 				// set unmapped value value on node
 				if (argModule.moduleNode.notNil, {
@@ -829,16 +947,16 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, item.at(5) ? 80, item.at(6) ? 60, item.at(7)
 		)
 		.round_(0.001);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.numberView.scroll_step = holdView.numberView.step = item.at(7) ? 1;
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.numberView.scroll_step = classData.holdView.numberView.step = item.at(7) ? 1;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0), argMod = argArray.at(1);
 				argView.numberView.value_(
-					holdControlSpec.map(argModule.getSynthArgSpec(item.at(3))).round(0.001);
+					holdControlSpec.map(argMod.getSynthArgSpec(item.at(3))).round(0.001);
 				);
 			}
 		);
@@ -851,7 +969,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index 5 is an optional scroll step size (default 1)
 	// e.g. ["TXScrollNumBox", ControlSpec(-5, 5, 'lin', 1, 0), "speedFactor"]
 	*guiTXScrollNumBox { arg item, w;
-		holdView = TXNumber(w, viewWidth @ 20, "", item.at(1).value,
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, "", item.at(1).value,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -870,14 +988,54 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 0, item.at(4) ? 60
 		)
 		.round_(0.001);
-		holdView.numberView.scroll_step = holdView.numberView.step = item.at(5) ? 1;
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		classData.holdView.numberView.scroll_step = classData.holdView.numberView.step = item.at(5) ? 1;
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.getSynthArgSpec(item.at(2)).round(0.001););
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.getSynthArgSpec(item.at(2)).round(0.001););
+			}
+		);
+	}
+
+	// TXScrollNumBoxUnmapped - same as TXScrollNumBox but uses ControlSpec to map/unmapped value so stored range is 0-1.
+	// arguments- index1 is controlSpec, index2 is synth arg name to be updated,
+	// 	index3 is an optional ACTION function to be valued in views action
+	// index 4 is an optional number width
+	// index 5 is an optional scroll step size (default 1)
+	// e.g. ["TXScrollNumBox", ControlSpec(-5, 5, 'lin', 1, 0), "speedFactor"]
+	*guiTXScrollNumBoxUnmapped { arg item, w;
+		var holdControlSpec;
+		holdControlSpec = item.at(1).value;
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, "", holdControlSpec,
+			{|view|
+				// set current value on node
+				if (argModule.moduleNode.notNil, {
+					argModule.moduleNode.set(item.at(2), holdControlSpec.unmap(view.value));
+				});
+				// store current data to synthArgSpecs
+				argModule.setSynthArgSpec(item.at(2), holdControlSpec.unmap(view.value));
+				// if action function passed then value it
+				if (item.at(3).notNil, {
+					// run action function passing it view as arg
+					item.at(3).value(view);
+				});
+			},
+			// get starting value
+			holdControlSpec.map(argModule.getSynthArgSpec(item.at(2))),
+			false, 0, item.at(4) ? 60
+		)
+		.round_(0.001);
+		classData.holdView.numberView.scroll_step = classData.holdView.numberView.step = item.at(5) ? 1;
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(holdControlSpec.map(argMod.getSynthArgSpec(item.at(2))).round(0.001));
 			}
 		);
 	}
@@ -892,7 +1050,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index9 is an optional colour of text and numberbox backgound
 	// e.g. ["TXNumberPlusMinus", "Speed factor", ControlSpec(-5, 5, 'lin', 1, 0), "speedFactor"]
 	*guiTXNumberPlusMinus { arg item, w;
-		holdView = TXNumberPlusMinus2(w, viewWidth @ 20, item.at(1), item.at(2),
+		classData.holdView = TXNumberPlusMinus2(w, classData.viewWidth @ 20, item.at(1), item.at(2),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -914,17 +1072,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(5),
 			item.at(8)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1)
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1)
 		.background_(item.at(9) ? TXColor.white);
-		holdView.numberView.background_(item.at(9) ? TXColor.white);
-		holdView.round_(0.001);
+		classData.holdView.numberView.background_(item.at(9) ? TXColor.white);
+		classData.holdView.round_(0.001);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.getSynthArgSpec(item.at(3)).round(0.001););
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.getSynthArgSpec(item.at(3)).round(0.001););
 			}
 		);
 	}
@@ -937,7 +1095,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index7 is an optional number width
 	// e.g. ["EZslider", "Volume", \amp, "vol"]
 	*guiEZslider { arg item, w;
-		holdView = TXSlider(w, (item.at(5) ?? viewWidth) @ 20, item.at(1),item.at(2),
+		classData.holdView = TXSlider(w, (item.at(5) ?? classData.viewWidth) @ 20, item.at(1), item.at(2).value,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -956,15 +1114,16 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, item.at(6) ? 80, item.at(7) ? 60
 		)
 		.round_(0.001);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.getSynthArgSpec(item.at(3)).round(0.001););
-				argView.sliderView.value = argView.controlSpec.unmap(argModule.getSynthArgSpec(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.getSynthArgSpec(item.at(3)).round(0.001););
+				argView.sliderView.value = argView.controlSpec.unmap(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
@@ -976,9 +1135,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// EZsliderUnmapped - same as EZslider but returns unmapped value (range 0-1) of slider
 	// arguments- index1 is slider text, index2 is controlSpec function, index3 is synth arg name to be updated,
 	// 	index4 is an optional ACTION function to be valued in views action
+	// 	index5 is an optional view width
 	// e.g. ["EZsliderUnmapped", "Attack", ControlSpec(0, 5), "attack"]
 	*guiEZsliderUnmapped { arg item, w;
-		holdView = TXSlider(w, (item.at(5) ?? viewWidth) @ 20, item.at(1),item.at(2).value,
+		var holdControlSpec;
+		holdControlSpec = item.at(2).value ? [0, 1].asSpec;
+		classData.holdView = TXSlider(w, (item.at(5) ?? classData.viewWidth) @ 20, item.at(1), holdControlSpec,
 			{|view|
 				// set unmapped sliderView.value on node
 				if (argModule.moduleNode.notNil, {
@@ -986,7 +1148,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 					argModule.moduleNode.set(item.at(3), view.sliderView.value);
 				});
 				// store current data to synthArgSpecs
-				argModule.setSynthArgSpec(item.at(3), view.value);
+				argModule.setSynthArgSpec(item.at(3), view.sliderView.value);
 				// if action function passed then value it
 				if (item.at(4).notNil, {
 					// run action function passing it view as arg
@@ -994,19 +1156,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 			},
 			// get starting value
-			argModule.getSynthArgSpec(item.at(3)),
+			holdControlSpec.map(argModule.getSynthArgSpec(item.at(3))),
 			false, 80, 60
 		)
 		.round_(0.001);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.getSynthArgSpec(item.at(3)).round(0.001););
-				argView.sliderView.value = argView.controlSpec.unmap(item.at(3));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(holdControlSpec.map(argMod.getSynthArgSpec(item.at(3))).round(0.001););
+				argView.sliderView.value = item.at(3);
 			}
 		);
 	}
@@ -1018,7 +1181,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index6 is an optional view height
 	// e.g. ["MixerLevel", "Level1", \amp, "level1"]
 	*guiMixerLevel { arg item, w;
-		holdView = TXMixerLevel(w, (item.at(5) ? 70) @ (item.at(6) ? 200), item.at(1),item.at(2),
+		classData.holdView = TXMixerLevel(w, (item.at(5) ? 70) @ (item.at(6) ? 200), item.at(1),item.at(2),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1037,16 +1200,16 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false
 		)
 		.round_(0.001);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.getSynthArgSpec(item.at(3)).round(0.001););
-				argView.sliderView.value =
-				argView.controlSpec.unmap(argModule.getSynthArgSpec(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.getSynthArgSpec(item.at(3)).round(0.001););
+				argView.sliderView.value = argView.controlSpec.unmap(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
@@ -1058,7 +1221,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index6 is an optional view height
 	// e.g. ["MixerPan", "Level1", \amp, "level1"]
 	*guiMixerPan { arg item, w;
-		holdView = TXMixerPan(w, (item.at(5) ? 70) @ (item.at(6) ? 80), item.at(1),item.at(2),
+		classData.holdView = TXMixerPan(w, (item.at(5) ? 70) @ (item.at(6) ? 80), item.at(1),item.at(2),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1077,24 +1240,25 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false
 		)
 		.round_(0.001);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.getSynthArgSpec(item.at(3)).round(0.001););
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.getSynthArgSpec(item.at(3)).round(0.001););
 				argView.sliderView.value =
-				argView.controlSpec.unmap(argModule.getSynthArgSpec(item.at(3)));
+				argView.controlSpec.unmap(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
 
-	// WetDryMixSlider
-	// N.B. no arguments - assumes synth has argument "wetDryMix"
+	// WetDryMixSlider - assumes synth has argument "wetDryMix"
+	// arguments- index1 is optional width
 	*guiWetDryMixSlider { arg item, w;
-		holdView = TXSlider(w, viewWidth @ 20, "Dry-Wet Mix",  \unipolar,
+		classData.holdView = TXSlider(w, (item[1] ? classData.viewWidth) @ 20, "Dry-Wet Mix",  \unipolar,
 			{|view|
 				// set current value on synth
 				if (argModule.moduleNode.notNil, {
@@ -1107,14 +1271,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec("wetDryMix"),
 			false, 80, 60
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.value_(argModule.getSynthArgSpec("wetDryMix"));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(argMod.getSynthArgSpec("wetDryMix"));
 			}
 		);
 	}
@@ -1125,12 +1290,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index 4 is optional width (default 150),
 	// index 5 is optional height (default 20),
 	// index 6 is optional checkbox Text Type (default 0)
+	// index 7 is an optional stringColor
+	// index 8 is an optional background
 	// e.g. ["TXCheckBox", "Loop", "loop", {some action}, 150, 20]
 	*guiTXCheckBox { arg item, w;
-		holdView = TXCheckBox(w, (item.at(4) ? 150) @ (item.at(5) ? 20),
-			item.at(1), TXColor.sysGuiCol1, TXColour.grey(0.8),
-			TXColor.white, TXColor.sysGuiCol1, item.at(6) ? 0);
-		holdView.action = {|view|
+		classData.holdView = TXCheckBox(w, (item.at(4) ? 150) @ (item.at(5) ? 20),
+			item.at(1), item.at(8) ? TXColor.sysGuiCol1, TXColour.grey(0.9),
+			item.at(7) ? TXColor.white, item.at(8) ? TXColor.sysGuiCol1, item.at(6) ? 0);
+		classData.holdView.action = {|view|
 			// set current value on node
 			if (argModule.moduleNode.notNil, {
 				argModule.moduleNode.set(item.at(2), view.value);
@@ -1143,25 +1310,25 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				item.at(3).value(view);
 			});
 		};
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// get starting value
-		holdView.value =  argModule.getSynthArgSpec(item.at(2));
+		classData.holdView.value =  argModule.getSynthArgSpec(item.at(2));
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.value_(argModule.getSynthArgSpec(item.at(2)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(argMod.getSynthArgSpec(item.at(2)));
 			}
 		);
 	}
 
 	// TXFraction
-	// arguments- index1 is slider text, index2 is controlSpec, index3 is synth arg name to be updated,
+	// arguments- index1 is  text, index2 is controlSpec, index3 is synth arg name to be updated,
 	// 	index4 is an optional ACTION function to be valued in views action
 	// e.g. ["TXFraction", "Start", ControlSpec(0, 1), "start"],
 	*guiTXFraction { arg item, w;
-		holdView = TXFraction(w, viewWidth @ 20, item.at(1),item.at(2),
+		classData.holdView = TXFraction(w, classData.viewWidth @ 20, item.at(1),item.at(2),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1178,26 +1345,64 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.getSynthArgSpec(item.at(3))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueNoAction_(argModule.getSynthArgSpec(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3)));
+			}
+		);
+	}
+
+	// TXFractionSlider
+	// arguments- index1 is  text, index2 is controlSpec, index3 is synth arg name to be updated,
+	// 	index4 is an optional ACTION function to be valued in views action, index5 is slider width
+	// e.g. ["TXFractionSlider", "Start", ControlSpec(0, 1), "start"],
+	*guiTXFractionSlider { arg item, w;
+		classData.holdView = TXFractionSlider(w, classData.viewWidth @ 20, item.at(1),item.at(2),
+			{|view|
+				// set current value on node
+				if (argModule.moduleNode.notNil, {
+					argModule.moduleNode.set(item.at(3), view.value);
+				});
+				// store current data to synthArgSpecs
+				argModule.setSynthArgSpec(item.at(3), view.value);
+				// if action function passed then value it
+				if (item.at(4).notNil, {
+					// run action function passing it view as arg
+					item.at(4).value(view);
+				});
+			},
+			// get starting value
+			argModule.getSynthArgSpec(item.at(3)),
+			sliderWidth: item[5] ? 230;
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
 
 	// TXTimeBeatsBpmNumber
-	// arguments- index1 is slider text, index2 is controlSpec, index3 is synth arg name to be updated,
+	// arguments- index1 is text, index2 is controlSpec, index3 is synth arg name to be updated,
 	// 	index4 is an optional ACTION function to be valued in views action
 	// e.g. ["TXTimeBeatsBpmNumber", "Record Time", ControlSpec(0, 100000), "recordTime"],
 	*guiTXTimeBeatsBpmNumber { arg item, w;
-		holdView = TXTimeBeatsBpmNumber(w, viewWidth @ 20, item.at(1), item.at(2),
+		classData.holdView = TXTimeBeatsBpmNumber(w, classData.viewWidth @ 20, item.at(1), item.at(2),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1214,17 +1419,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.getSynthArgSpec(item.at(3))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView4.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView4.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueNoAction_(argModule.getSynthArgSpec(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
@@ -1233,9 +1438,11 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// arguments- index1 is slider text, index2 is controlSpec function, index3/4 are synth arg names to be updated,
 	// 	index5 is an optional ACTION function to be valued in views action
 	// 	index6 is an optional range preset array in the form: [["Presets:", []], ["1-16", [1,16]], ["17-32", [17,32]], ]
+	// 	index7 is an optional width
+	// 	index8 is an optional background color
 	// e.g. ["TXRangeSlider", "Volume", \amp, "volMin", "volMax"]
 	*guiTXRangeSlider { arg item, w;
-		holdView = TXRangeSlider(w, viewWidth @ 20, item.at(1).value, item.at(2),
+		classData.holdView = TXRangeSlider(w, item.at(7) ? classData.viewWidth @ 20, item.at(1).value, item.at(2).value,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1257,14 +1464,16 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 120,
 			item.at(6) // presets
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.rangeView.background_(item.at(8) ? TXColour.sysGuiCol1);
+
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueBothNoAction_([argModule.getSynthArgSpec(item.at(3)), argModule.getSynthArgSpec(item.at(4))]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueBothNoAction_([argMod.getSynthArgSpec(item.at(3)), argMod.getSynthArgSpec(item.at(4))]);
 			}
 		);
 	}
@@ -1273,9 +1482,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// arguments- index1 is slider text, index2/3 are synth arg names to be updated,
 	// 	index4 is an optional ACTION function to be valued in views action
 	// 	index5 is an optional true/false to indicate whether to show buttons on view
+	// 	index6 is an optional width
 	// e.g. ["TXNoteRangeSlider", "Note range", "procRandNoteMin", "procRandNoteMax"]
 	*guiTXNoteRangeSlider { arg item, w;
-		holdView = TXMidiNoteRange(w, viewWidth @ 20, item.at(1).value,  ControlSpec(0, 127, step: 1),
+		classData.holdView = TXMidiNoteRange(w, (item.at(6) ? classData.viewWidth) @ 20, item.at(1).value,  ControlSpec(0, 127, step: 1),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1296,15 +1506,88 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3)),
 			showButtons: item.at(5) ? false
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.rangeView.background_(TXColor.sysGuiCol1).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueBothNoAction_([argModule.getSynthArgSpec(item.at(2)),
-					argModule.getSynthArgSpec(item.at(3))]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueBothNoAction_([argMod.getSynthArgSpec(item.at(2)),
+					argMod.getSynthArgSpec(item.at(3))]);
+			}
+		);
+	}
+
+	// TXCompactSlider
+	// arguments- index1 is controlSpec, index2 is synth arg name to be updated,
+	// 	index3 is an optional ACTION function to be valued in views action
+	// 	index4 is an optional width
+	// 	index5 is an optional thumbSize
+	// e.g. ["TXCompactSlider", \amp, "vol"]
+	*guiTXCompactSlider { arg item, w;
+		var spec = item.at(1);
+		classData.holdView = Slider(w, (item.at(4) ?? classData.viewWidth) @ 20)
+		.action_({|view|
+			// set current value on node
+			if (argModule.moduleNode.notNil, {
+				argModule.moduleNode.set(item.at(2), spec.map(view.value));
+			});
+			// store current data to synthArgSpecs
+			argModule.setSynthArgSpec(item.at(2), spec.map(view.value));
+			// if action function passed then value it
+			if (item.at(3).notNil, {
+				// run action function passing it view as arg
+				item.at(3).value(view);
+			});
+		})
+		.background_(TXColour.sysGuiCol1)
+		.knobColor_(TXColour.white)
+		.thumbSize_(item.at(5) ? 5)
+		.value_(spec.unmap(argModule.getSynthArgSpec(item.at(2))));
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value = spec.unmap(argMod.getSynthArgSpec(item.at(2)));
+			}
+		);
+	}
+
+	// TXCompactSliderUnmapped - same as TXCompactSlider but stored range is 0-1.
+	// arguments- index1 is controlSpec, index2 is synth arg name to be updated,
+	// 	index3 is an optional ACTION function to be valued in views action
+	// 	index4 is an optional width
+	// 	index5 is an optional thumbSize
+	// e.g. ["TXCompactSliderUnmapped", \amp, "vol"]
+	*guiTXCompactSliderUnmapped { arg item, w;
+		var spec = item.at(1);
+		classData.holdView = Slider(w, (item.at(4) ?? classData.viewWidth) @ 20)
+		.action_({|view|
+			// set current value on node
+			if (argModule.moduleNode.notNil, {
+				argModule.moduleNode.set(item.at(2), view.value);
+			});
+			// store current data to synthArgSpecs
+			argModule.setSynthArgSpec(item.at(2), view.value);
+			// if action function passed then value it
+			if (item.at(3).notNil, {
+				// run action function passing it view as arg
+				item.at(3).value(view);
+			});
+		})
+		.background_(TXColour.sysGuiCol1)
+		.knobColor_(TXColour.white)
+		.thumbSize_(item.at(5) ? 5)
+		.value_(argModule.getSynthArgSpec(item.at(2)));
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value = (argMod.getSynthArgSpec(item.at(2)));
 			}
 		);
 	}
@@ -1314,7 +1597,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index5 is an optional ACTION function to be valued in views action
 	// e.g. ["TXDoubleSlider", "Volume", \amp, "volMin", "volMax"]
 	*guiTXDoubleSlider { arg item, w;
-		holdView = TXDoubleSlider(w, viewWidth @ 20, item.at(1).value, item.at(2),
+		classData.holdView = TXDoubleSlider(w, classData.viewWidth @ 20, item.at(1).value, item.at(2),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1334,14 +1617,16 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3)),
 			argModule.getSynthArgSpec(item.at(4))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView1.background_(TXColour.sysGuiCol1);
+		classData.holdView.sliderView2.background_(TXColour.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueBothNoAction_([argModule.getSynthArgSpec(item.at(3)), argModule.getSynthArgSpec(item.at(4))]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueBothNoAction_([argMod.getSynthArgSpec(item.at(3)), argMod.getSynthArgSpec(item.at(4))]);
 			}
 		);
 	}
@@ -1351,9 +1636,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index5 is an optional ACTION function to be valued in views action
 	//   index 6 is an optional height
 	//   index 7 is an optional width
+	//   index 8 is an optional true/false show X & Y sliders
 	// e.g. ["TX2DSlider", "X-Y Morph", ControlSpec(0, 1), "sliderXVal", "sliderYVal", nil, 200]
 	*guiTX2DSlider { arg item, w;
-		holdView = TX2DSlider(w, item.at(7) ? viewWidth @ (item.at(6) ? 100), item.at(1), item.at(2),
+		classData.holdView = TX2DSlider(w, item.at(7) ? classData.viewWidth @ (item.at(6) ? 100), item.at(1), item.at(2),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1372,24 +1658,29 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting values
 			argModule.getSynthArgSpec(item.at(3)),
 			argModule.getSynthArgSpec(item.at(4)),
-			nil, 80, 80
+			nil, 80, 80,
+			item.at(8) ? false
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.hold2DSlider.background_(TXColour.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.value_([argModule.getSynthArgSpec(item.at(3)), argModule.getSynthArgSpec(item.at(4))]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_([argMod.getSynthArgSpec(item.at(3)), argMod.getSynthArgSpec(item.at(4))]);
 			}
 		);
 	}
 
 	// MIDIChannelSelector
-	// N.B. no arguments
+	//  arguments- index1 1 is an optional width
 	*guiMIDIChannelSelector { arg item, w;
-		holdView = TXRangeSlider(w, viewWidth @ 20, "Midi channels",  ControlSpec(1, 16, step: 1),
+		classData.holdView = TXRangeSlider(w, item.at(1) ? classData.viewWidth @ 20, "Midi channels",
+			ControlSpec(1, 16, step: 1),
 			{|view|
 				// set current value on synth
 				argModule.midiMinChannel = view.lo;
@@ -1399,22 +1690,24 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiMinChannel,
 			argModule.midiMaxChannel
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueBothNoAction_([argModule.midiMinChannel, argModule.midiMaxChannel]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueBothNoAction_([argMod.midiMinChannel, argMod.midiMaxChannel]);
 			}
 		);
 	}
 
 	// NoteRangeSelector
 	// arguments- index1 is title text, index2/3 are synth arg names to be updated for min and max values,
+	//  index4 is an optional width
 	*guiNoteRangeSelector { arg item, w;
-		holdView = TXMidiNoteRange(w, viewWidth @ 20, item.at(1),  ControlSpec(0, 127, step: 1),
+		classData.holdView = TXMidiNoteRange(w, item.at(4) ? classData.viewWidth @ 20, item.at(1),
+			ControlSpec(0, 127, step: 1),
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), view.lo);
@@ -1424,22 +1717,23 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(2)),
 			argModule.getSynthArgSpec(item.at(3))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueBothNoAction_([argModule.getSynthArgSpec(item.at(2)), argModule.getSynthArgSpec(item.at(3))]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueBothNoAction_([argMod.getSynthArgSpec(item.at(2)), argMod.getSynthArgSpec(item.at(3))]);
 			}
 		);
 	}
 
 	// MIDINoteSelector
-	// N.B. no arguments
+	//  arguments- index1 1 is an optional width
 	*guiMIDINoteSelector { arg item, w;
-		holdView = TXMidiNoteRange(w, viewWidth @ 20, "Note range",  ControlSpec(0, 127, step: 1),
+		classData.holdView = TXMidiNoteRange(w, item.at(1) ? classData.viewWidth @ 20, "Note range",
+			ControlSpec(0, 127, step: 1),
 			{|view|
 				// set current value on synth
 				argModule.midiMinNoteNo = view.lo;
@@ -1449,22 +1743,23 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiMinNoteNo,
 			argModule.midiMaxNoteNo
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueBothNoAction_([argModule.midiMinNoteNo, argModule.midiMaxNoteNo]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueBothNoAction_([argMod.midiMinNoteNo, argMod.midiMaxNoteNo]);
 			}
 		);
 	}
 
 	// MIDIVelSelector
-	// N.B. no arguments
+	//  arguments- index1 1 is an optional width
 	*guiMIDIVelSelector { arg item, w;
-		holdView = TXRangeSlider(w, viewWidth @ 20, "Vel range",  ControlSpec(0, 127, step: 1),
+		classData.holdView = TXRangeSlider(w, item.at(1) ? classData.viewWidth @ 20, "Vel range",
+			ControlSpec(0, 127, step: 1),
 			{|view|
 				// set current value on synth
 				argModule.midiMinVel = view.lo;
@@ -1474,14 +1769,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiMinVel,
 			argModule.midiMaxVel
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueBothNoAction_([argModule.midiMinVel, argModule.midiMaxVel]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueBothNoAction_([argMod.midiMinVel, argMod.midiMaxVel]);
 			}
 		);
 	}
@@ -1489,21 +1784,21 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// MIDIListenCheckBox
 	// N.B. no arguments
 	*guiMIDIListenCheckBox { arg item, w;
-		holdView = TXCheckBox(w, (150) @ 20, "Midi listen", TXColor.sysGuiCol1, TXColour.grey(0.8),
+		classData.holdView = TXCheckBox(w, (150) @ 20, "Midi listen", TXColor.sysGuiCol1, TXColour.grey(0.9),
 			TXColor.white, TXColor.sysGuiCol1);
-		holdView.action = {|view|
+		classData.holdView.action = {|view|
 			// set current value
 			argModule.setMidiListen(view.value);
 		};
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// get starting value
-		holdView.value =  argModule.midiListen;
+		classData.holdView.value =  argModule.midiListen;
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.value_(argModule.midiListen);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(argMod.midiListen);
 			}
 		);
 	}
@@ -1511,7 +1806,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// MIDISoloControllerSelector
 	// N.B. no arguments
 	*guiMIDISoloControllerSelector { arg item, w;
-		holdView = TXNumber(w, viewWidth @ 20, "Controller no.",  ControlSpec(0, 127, step: 1),
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, "Controller no.",  ControlSpec(0, 127, step: 1),
 			{|view|
 				// set current value
 				argModule.midiMinControlNo = view.value;
@@ -1520,14 +1815,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.midiMinControlNo
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.midiMinControlNo);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.midiMinControlNo);
 			}
 		);
 	}
@@ -1535,7 +1830,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// MIDISoloChannelSelector
 	// N.B. no arguments
 	*guiMIDISoloChannelSelector { arg item, w;
-		holdView = TXNumber(w, viewWidth @ 20, "Channel",  ControlSpec(0, 16, step: 1),
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, "Channel",  ControlSpec(0, 16, step: 1),
 			{|view|
 				// set current value
 				argModule.midiMinChannel = view.value;
@@ -1544,14 +1839,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.midiMinChannel
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.midiMinChannel);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.midiMinChannel);
 			}
 		);
 	}
@@ -1559,7 +1854,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// MIDIOutPortSelector
 	// N.B. no arguments
 	*guiMIDIOutPortSelector { arg item, w;
-		holdView = TXNumber(w, viewWidth @ 20, "Midi Port",  ControlSpec(0, MIDIClient.destinations.size-1, step: 1),
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, "Midi Port",  ControlSpec(0, MIDIClient.destinations.size-1, step: 1),
 			{|view|
 				// set current value
 				argModule.midiOutPort = view.value;
@@ -1569,14 +1864,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.midiOutPort
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.midiOutPort);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.midiOutPort);
 			}
 		);
 	}
@@ -1584,7 +1879,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// PolyphonySelector
 	// N.B. no arguments
 	*guiPolyphonySelector { arg item, w;
-		holdView = TXNumber(w, viewWidth @ 20, "Polyphony",  ControlSpec(1, 64, step: 1),
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, "Polyphony",  ControlSpec(1, 64, step: 1),
 			{|view|
 				// set current value
 				argModule.groupPolyphony = view.value;
@@ -1592,14 +1887,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.groupPolyphony
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.groupPolyphony);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.groupPolyphony);
 			}
 		);
 	}
@@ -1610,16 +1905,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index 4 is optional width of the text+label (defaults to view width)
 	// index 5 is optional width of the label only
 	// index 6 is optional background colour
+	// index 7 is optional height of text
 	// e.g. ["TXStaticText", "Record status", {recordStatus}, {arg view; recordStatusView = view}]
 	*guiTXStaticText { arg item, w;
-		holdView = TXStaticText(w, (item.at(4) ? viewWidth) @ 20, item.at(1), item.at(2).value,
+		classData.holdView = TXStaticText(w, (item.at(4) ? classData.viewWidth) @ (item.at(7) ? 20), item.at(1), item.at(2).value,
 			item.at(5) ? 80 );
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(item.at(6) ? TXColor.white);
-		holdView.textView.stringColor_(TXColour.black).background_(item.at(6) ? TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(item.at(6) ? TXColor.white);
+		classData.holdView.textView.stringColor_(TXColour.black).background_(item.at(6) ? TXColor.white);
 		// value function
 		if (item.at(3).notNil, {
-			item.at(3).value(holdView);
+			item.at(3).value(classData.holdView);
 		});
 	}
 
@@ -1631,7 +1927,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTXTextBox { arg item, w;
 		var holdWidth;
 		holdWidth = (item.at(5) ? 80) + 4 + (item.at(4) ? 100);
-		holdView = TXTextBox(w, holdWidth @ 20, item.at(1),
+		classData.holdView = TXTextBox(w, holdWidth @ 20, item.at(1),
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), view.string);
@@ -1645,16 +1941,16 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(2)),
 			false, item.at(5) ? 80, item.at(4)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		if (holdView.labelView.notNil, {
-			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		if (classData.holdView.labelView.notNil, {
+			classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		});
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.string_(argModule.getSynthArgSpec(item.at(2)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.string_(argMod.getSynthArgSpec(item.at(2)));
 			}
 		);
 	}
@@ -1662,7 +1958,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// OSCString
 	// N.B. no arguments
 	*guiOSCString { arg item, w;
-		holdView = TXTextBox(w, viewWidth @ 20, "OSC String.",
+		classData.holdView = TXTextBox(w, classData.viewWidth @ 20, "OSC String.",
 			{|view|
 				// set current value in module
 				argModule.oscString = view.string;
@@ -1674,14 +1970,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.getSynthArgSpec("OSCString")
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.string_(argModule.getSynthArgSpec("OSCString"));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.string_(argMod.getSynthArgSpec("OSCString"));
 			}
 		);
 	}
@@ -1689,7 +1985,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// ModuleInfoTxt
 	// arguments- index1 is width of text
 	*guiModuleInfoTxt { arg item, w;
-		holdView = TXTextBox(w, (item.at(1) ? viewWidth) @ 20, "Comments",
+		classData.holdView = TXTextBox(w, (item.at(1) ? classData.viewWidth) @ 20, "Comments",
 			{|view|
 				// set current value in module
 				argModule.moduleInfoTxt = view.string;
@@ -1697,18 +1993,18 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.moduleInfoTxt;
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 	}
 
 	// TXNetAddress
 	// arguments- index1 is row label, index2 is synth arg name to be updated,
 	// 	index3 is an optional ACTION function to be valued in views action,
 	// 	index4 is optional text width
-	// 	index5 is optional overall width - default viewWidth
+	// 	index5 is optional overall width - default classData.viewWidth
 	// e.g. ["TXNetAddress", "Text", "textString"]
 	*guiTXNetAddress { arg item, w;
-		holdView = TXNetAddress(w, (item.at(5) ? viewWidth) @ 20, item.at(1),
+		classData.holdView = TXNetAddress(w, (item.at(5) ? classData.viewWidth) @ 20, item.at(1),
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), view.string);
@@ -1722,14 +2018,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(2)),
 			false, 80, item.at(4)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.stringNoAction_(argModule.getSynthArgSpec(item.at(2)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.stringNoAction_(argMod.getSynthArgSpec(item.at(2)));
 			}
 		);
 	}
@@ -1743,7 +2039,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTXPopupAction { arg item, w;
 		// TXPopup.new  arg argParent, dimensions, label, items, action, initVal,
 		//   initAction=false, labelWidth=80;
-		holdView = TXPopup(w, (item.at(5) ?? viewWidth) @ 20, item.at(1), item.at(2).value,
+		classData.holdView = TXPopup(w, (item.at(5) ?? classData.viewWidth) @ 20, item.at(1), item.at(2).value,
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(3), view.value);
@@ -1758,17 +2054,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false,
 			item.at(6) ? 80
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		if (item.at(6) != 0, {
-			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		});
-		holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueNoAction_(argModule.getSynthArgSpec(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
@@ -1782,7 +2078,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTXPopupActionPlusMinus { arg item, w;
 		// TXPopup.new  arg argParent, dimensions, label, items, action, initVal,
 		//   initAction=false, labelWidth=80;
-		holdView = TXPopupPlusMinus(w, (item.at(5) ?? viewWidth) @ 20, item.at(1), item.at(2).value,
+		classData.holdView = TXPopupPlusMinus(w, (item.at(5) ?? classData.viewWidth) @ 20, item.at(1), item.at(2).value,
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(3), view.value);
@@ -1797,15 +2093,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false,
 			item.at(6) ? 80
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueNoAction_(argModule.getSynthArgSpec(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
@@ -1814,13 +2110,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// arguments- index1 is text, index2 is preset names array (function or value),
 	//	index3 is preset actions array (function or value), index4 is the optional width,
 	//	index5 is optional final action function
+	//	index6 is optional first item text (default: "Select preset...")
 	// e.g. ["TXPresetPopup", "Env presets", arrPresetNames, arrPresetActions]
 	*guiTXPresetPopup { arg item, w;
 		// TXPopup.new  arg argParent, dimensions, label, items, action, initVal,
 		//   initAction=false, labelWidth=80;
-		holdView = TXPopup(w, (item.at(4) ?? viewWidth) @ 20, item.at(1),
+		classData.holdView = TXPopup(w, (item.at(4) ?? classData.viewWidth) @ 20, item.at(1),
 			// add first item in popup
-			["Select preset..."] ++ item.at(2).value,
+			[item.at(6) ?? "Select preset..."] ++ item.at(2).value,
 			{|view|
 				// if not first item in popup
 				if (view.value > 0, {
@@ -1836,20 +2133,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			},
 			0
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
 	}
 
 	// TXListViewAction
 	// arguments- index1 is text, index2 is items array (function or value),
-	//	index3 is synth arg name to be updated, index4 is optional popup action,
+	//	index3 is synth arg name to be updated, index4 is optional popup ListView action,
 	//	index5 is the optional width, index6 is the optional height,
 	// e.g. ["TXListViewAction", "Sample", holdSampleFileNames, "sampleNo", { arg view; this.loadSample(view.value); }]
 	*guiTXListViewAction { arg item, w;
 		// ListView.new  arg argParent, dimensions, label, items, action, initVal,
 		//   initAction=false, labelWidth=80;
-		holdView = TXListView(w, (item.at(5) ?? viewWidth) @ (item.at(6) ?? 80), item.at(1), item.at(2).value,
+		classData.holdView = TXListViewLabel(w, (item.at(5) ?? classData.viewWidth) @ (item.at(6) ?? 80), item.at(1), item.at(2).value,
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(3), view.value);
@@ -1862,15 +2159,49 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.getSynthArgSpec(item.at(3))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueNoAction_(argModule.getSynthArgSpec(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3)));
+			}
+		);
+	}
+
+		// TXListViewActionPlusMinus
+	// arguments- index1 is text, index2 is items array (function or value),
+	//	index3 is synth arg name to be updated, index4 is optional popup ListView action,
+	//	index5 is the optional width, index6 is the optional height,
+	// e.g. ["TXListViewActionPlusMinus", "Sample", holdSampleFileNames, "sampleNo", { arg view; this.loadSample(view.value); }]
+	*guiTXListViewActionPlusMinus { arg item, w;
+		// ListView.new  arg argParent, dimensions, label, items, action, initVal,
+		//   initAction=false, labelWidth=80;
+		classData.holdView = TXListViewLabelPlusMinus(w, (item.at(5) ?? classData.viewWidth) @ (item.at(6) ?? 80), item.at(1), item.at(2).value,
+			{|view|
+				// store current data to synthArgSpecs
+				argModule.setSynthArgSpec(item.at(3), view.value);
+				// if action function passed then value it
+				if (item.at(4).notNil, {
+					// run action function passing it view as arg
+					item.at(4).value(view);
+				});
+			},
+			// get starting value
+			argModule.getSynthArgSpec(item.at(3))
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
@@ -1878,12 +2209,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// SynthOptionCheckBox
 	// arguments- index1 is checkbox text,
 	// index2 is arrOptionData, index3 is the index of arrOptions and arrOptionData to use,
-	//    index4 is the width (optional), index5 is optional checkbox action
+	// index4 is the width (optional), index5 is optional checkbox action
+	// index6 is optional onOffTextType
 	// e.g. ["SynthOptionCheckBox", "Filter", arrOptionData, 0, 250]
 	*guiSynthOptionCheckBox { arg item, w;
-		holdView = TXCheckBox(w, (item.at(4) ? 350) @ 20, item.at(1), TXColor.sysGuiCol1, TXColour.grey(0.8),
-			TXColor.white, TXColor.sysGuiCol1, 2);
-		holdView.action = {|view|
+		classData.holdView = TXCheckBox(w, (item.at(4) ? 350) @ 20, "*"++item.at(1), TXColor.sysGuiCol1, TXColour.grey(0.9),
+			TXColor.white, TXColor.sysGuiCol1, item.at(6) ? 2);
+		classData.holdView.action = {|view|
 			// store current data to arrOptions
 			argModule.arrOptions.put(item.at(3), view.value);
 			// if action function passed then value it
@@ -1894,15 +2226,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// rebuild synth
 			argModule.rebuildSynth;
 		};
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// get starting value
-		holdView.value =  argModule.arrOptions.at(item.at(3));
+		classData.holdView.value =  argModule.arrOptions.at(item.at(3));
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.value_(argModule.arrOptions.at(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(argMod.arrOptions.at(item.at(3)));
 			}
 		);
 	}
@@ -1910,12 +2242,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// SynthOptionPopup
 	// NOTE - this will automatically rebuild the synth once a synth option has been changed
 	// arguments- index1 is text, index2 is arrOptionData, index3 is the index of arrOptions and arrOptionData to use,
-	//    index4 is the width (optional), index5 is optional popup action
+	//    index4 is the optional width, index5 is optional popup action
+	//    index 6 - is optional text width
 	// e.g.    ["SynthOptionPopup", "Waveform", arrOptionData, 0, nil, {system.flagGuiUpd}],
 	*guiSynthOptionPopup { arg item, w;
 		// TXPopup.new  arg argParent, dimensions, label, items, action, initVal,
 		//   initAction=false, labelWidth=80;
-		holdView = TXPopup(w, item.at(4) ? viewWidth @ 20, item.at(1),
+		classData.holdView = TXPopup(w, item.at(4) ? classData.viewWidth @ 20, "*"++item.at(1),
 			item.at(2).at(item.at(3)).collect({arg item, i; item.at(0)}),
 			{|view|
 				// store current data to arrOptions
@@ -1929,17 +2262,21 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argModule.rebuildSynth;
 			},
 			// get starting value
-			argModule.arrOptions.at(item.at(3))
+			argModule.arrOptions.at(item.at(3)),
+			nil,
+			item.at(6)?80
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		if (classData.holdView.labelView.notNil, {
+			classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
+		});
+		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueNoAction_(argModule.arrOptions.at(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.arrOptions.at(item.at(3)));
 			}
 		);
 	}
@@ -1947,10 +2284,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// SynthOptionPopupPlusMinus _ same as SynthOptionPopup but with plus minus buttons
 	// NOTE - this will automatically rebuild the synth once a synth option has been changed
 	// arguments- index1 is text, index2 is arrOptionData, index3 is the index of arrOptions and arrOptionData to use,
-	//    index4 is the width (optional), index5 is optional popup action
+	//    index4 is the optional width, index5 is optional popup action
 	// e.g.    ["SynthOptionPopupPlusMinus", "Waveform", arrOptionData, 0, nil, {system.flagGuiUpd}],
 	*guiSynthOptionPopupPlusMinus { arg item, w;
-		holdView = TXPopupPlusMinus(w, item.at(4) ? viewWidth @ 20, item.at(1),
+		classData.holdView = TXPopupPlusMinus(w, item.at(4) ? classData.viewWidth @ 20, "*"++item.at(1),
 			item.at(2).at(item.at(3)).collect({arg item, i; item.at(0)}),
 			{|view|
 				// store current data to arrOptions
@@ -1966,15 +2303,87 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.arrOptions.at(item.at(3))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueNoAction_(argModule.arrOptions.at(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.arrOptions.at(item.at(3)));
+			}
+		);
+	}
+
+	// SynthOptionList
+	// NOTE - this will automatically rebuild the synth once a synth option has been changed
+	// arguments- index1 is text, index2 is arrOptionData, index3 is the index of arrOptions and arrOptionData to use,
+	//    index4 is the optional width, index5 is the optional height, index6 is optional action
+	// e.g.    ["SynthOptionList", "Waveform", arrOptionData, 0, nil, nil, {system.flagGuiUpd}],
+	*guiSynthOptionList { arg item, w;
+		// TXListViewLabel.new(argParent, dimensions, label, items, action, initVal,initAction=false, labelWidth=80;
+		classData.holdView = TXListViewLabel(w, (item.at(4) ? classData.viewWidth) @ (item.at(5) ? 80), "*"++item.at(1),
+			item.at(2).at(item.at(3)).collect({arg item, i; item.at(0)}),
+			{|view|
+				// store current data to arrOptions
+				argModule.arrOptions.put(item.at(3), view.value);
+				// if action function passed then value it
+				if (item.at(6).notNil, {
+					// run action function passing it view as arg
+					item.at(6).value(view);
+				});
+				// rebuild synth
+				argModule.rebuildSynth;
+			},
+			// get starting value
+			argModule.arrOptions.at(item.at(3))
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.arrOptions.at(item.at(3)));
+			}
+		);
+	}
+
+	// SynthOptionListPlusMinus
+	// NOTE - this will automatically rebuild the synth once a synth option has been changed
+	// arguments- index1 is text, index2 is arrOptionData, index3 is the index of arrOptions and arrOptionData to use,
+	//    index4 is the optional width, index5 is the optional height, index6 is optional action
+	// e.g.    ["SynthOptionListPlusMinus", "Waveform", arrOptionData, 0, nil, nil, {system.flagGuiUpd}],
+	*guiSynthOptionListPlusMinus { arg item, w;
+		// TXListViewLabel.new(argParent, dimensions, label, items, action, initVal,initAction=false, labelWidth=80;
+		classData.holdView = TXListViewLabelPlusMinus(w, (item.at(4) ? classData.viewWidth) @ (item.at(5) ? 80), "*"++item.at(1),
+			item.at(2).at(item.at(3)).collect({arg item, i; item.at(0)}),
+			{|view|
+				// store current data to arrOptions
+				argModule.arrOptions.put(item.at(3), view.value);
+				// if action function passed then value it
+				if (item.at(6).notNil, {
+					// run action function passing it view as arg
+					item.at(6).value(view);
+				});
+				// rebuild synth
+				argModule.rebuildSynth;
+			},
+			// get starting value
+			argModule.arrOptions.at(item.at(3))
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.arrOptions.at(item.at(3)));
 			}
 		);
 	}
@@ -1984,7 +2393,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index4 is an optional ACTION function to be valued in views action function
 	// e.g. ["TXMinMaxSlider", "BPM", ControlSpec(1, 999), "seqBPM"]
 	*guiTXMinMaxSlider { arg item, w;
-		holdView = TXMinMaxSlider(w, viewWidth @ 44, item.at(1), item.at(2),
+		classData.holdView = TXMinMaxSlider(w, classData.viewWidth @ 44, item.at(1), item.at(2),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -1999,15 +2408,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 			}
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.value_(argModule.getSynthArgSpec(item.at(3)));
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.value_(argModule.getSynthArgSpec(item.at(3)));
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueNoAction_(argModule.getSynthArgSpec(item.at(3)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3)));
 			}
 		);
 	}
@@ -2022,7 +2436,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index 10 is optional overall width,
 	// e.g. ["TXMinMaxSliderSplit", "Freq", \freq, "freq", "freqMin", "freqMax"]
 	*guiTXMinMaxSliderSplit { arg item, w;
-		holdView = TXMinMaxSlider(w, (item.at(10) ? viewWidth) @ 44, item.at(1), item.at(2),
+		classData.holdView = TXMinMaxSlider(w, (item.at(10) ? classData.viewWidth) @ 44, item.at(1), item.at(2),
 			{|view|
 				var holdValueSplit;
 				holdValueSplit = view.valueSplit;
@@ -2044,22 +2458,27 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			nil, false, item.at(8) ? 80, item.at(9) ? 120,
 			item.at(7)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.valueSplit_([
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.valueSplit_([
 			argModule.getSynthArgSpec(item.at(3)),
 			argModule.getSynthArgSpec(item.at(4)),
 			argModule.getSynthArgSpec(item.at(5))
 		]);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0), argMod = argArray.at(1);
 				argView.valueSplit_([
-					argModule.getSynthArgSpec(item.at(3)),
-					argModule.getSynthArgSpec(item.at(4)),
-					argModule.getSynthArgSpec(item.at(5))
+					argMod.getSynthArgSpec(item.at(3)),
+					argMod.getSynthArgSpec(item.at(4)),
+					argMod.getSynthArgSpec(item.at(5))
 				]);
 			}
 		);
@@ -2070,9 +2489,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	//	be updated for slider, min & max
 	// 	index6 is an optional ACTION function to be valued in views action function
 	// 	index7 is an optional preset array in the form: [["Presets:", []], ["1-16", [1,16]], ["17-32", [17,32]], ]
+	//  index8 is an optional width
 	// e.g. ["TXMinMaxFreqNoteSldr", "Flange freq", holdControlSpec,"freq", "freqMin", "freqMax", nil, arrTimeRanges]
 	*guiTXMinMaxFreqNoteSldr { arg item, w;
-		holdView = TXMinMaxFreqNoteSldr(w, viewWidth @ 44, item.at(1), item.at(2),
+		classData.holdView = TXMinMaxFreqNoteSldr(w, item.at(8) ? classData.viewWidth @ 44, item.at(1), item.at(2),
 			{|view|
 				var holdValueSplit;
 				holdValueSplit = view.valueSplit;
@@ -2094,22 +2514,27 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			nil, false, 80, 120,
 			item.at(7)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.valueSplit_([
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.valueSplit_([
 			argModule.getSynthArgSpec(item.at(3)),
 			argModule.getSynthArgSpec(item.at(4)),
 			argModule.getSynthArgSpec(item.at(5))
 		]);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0), argMod = argArray.at(1);
 				argView.valueSplit_([
-					argModule.getSynthArgSpec(item.at(3)),
-					argModule.getSynthArgSpec(item.at(4)),
-					argModule.getSynthArgSpec(item.at(5))
+					argMod.getSynthArgSpec(item.at(3)),
+					argMod.getSynthArgSpec(item.at(4)),
+					argMod.getSynthArgSpec(item.at(5))
 				]);
 			}
 		);
@@ -2121,7 +2546,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index6 is an optional ACTION function to be valued in views action function
 	// e.g. ["TXTimeBpmMinMaxSldr", "Delay ms/bpm", holdControlSpec, "delay", "delayMin", "delayMax"]
 	*guiTXTimeBpmMinMaxSldr { arg item, w;
-		holdView = TXTimeBpmMinMaxSldr(w, viewWidth @ 44, item.at(1), item.at(2),
+		classData.holdView = TXTimeBpmMinMaxSldr(w, classData.viewWidth @ 44, item.at(1), item.at(2),
 			{|view|
 				var holdValueSplit;
 				holdValueSplit = view.valueSplit;
@@ -2141,22 +2566,87 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 			}
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.valueSplit_([
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.valueSplit_([
 			argModule.getSynthArgSpec(item.at(3)),
 			argModule.getSynthArgSpec(item.at(4)),
 			argModule.getSynthArgSpec(item.at(5))
 		]);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.bpmNumberView.background_(TXColour.paleBlue2);
+		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0), argMod = argArray.at(1);
 				argView.valueSplit_([
-					argModule.getSynthArgSpec(item.at(3)),
-					argModule.getSynthArgSpec(item.at(4)),
-					argModule.getSynthArgSpec(item.at(5))
+					argMod.getSynthArgSpec(item.at(3)),
+					argMod.getSynthArgSpec(item.at(4)),
+					argMod.getSynthArgSpec(item.at(5))
+				]);
+			}
+		);
+	}
+
+	// TXFreqBpmMinMaxSldr - separate values are given for each of the 3 gui objects
+	// arguments- index1 is slider text, index2 is controlSpec, index3/4/5 are synth arg names to
+	//	be updated for slider, min & max
+	// 	index6 is an optional ACTION function to be valued in views action function
+	// 	index7 is an optional preset array in the form:
+	//		[["Presets:", []], ["1-16", [1,16]], ["17-32", [17,32]], ]
+	// 	index 8 is optional label width, index 9 is optional number width,
+	// 	index 10 is optional overall width,
+	// e.g. ["TXFreqBpmMinMaxSldr", "Freq cps/bpm", holdControlSpec, "freq", "freqMin", "freqMax"]
+	*guiTXFreqBpmMinMaxSldr { arg item, w;
+		classData.holdView = TXFreqBpmMinMaxSldr(w, (item.at(10) ? classData.viewWidth) @ 44, item.at(1), item.at(2),
+			{|view|
+				var holdValueSplit;
+				holdValueSplit = view.valueSplit;
+				// set current value on synth
+				if (argModule.moduleNode.notNil, {
+					argModule.moduleNode.set(item.at(3), holdValueSplit.at(0), item.at(4), holdValueSplit.at(1),
+						item.at(5), holdValueSplit.at(2) );
+				});
+				// store current data to synthArgSpecs
+				argModule.setSynthArgSpec(item.at(3), holdValueSplit.at(0));
+				argModule.setSynthArgSpec(item.at(4), holdValueSplit.at(1));
+				argModule.setSynthArgSpec(item.at(5), holdValueSplit.at(2));
+				// if action function passed then value it
+				if (item.at(6).notNil, {
+					// run action function passing it view as arg
+					item.at(6).value(view);
+				});
+			},
+			nil, false, item.at(8) ? 80, item.at(9) ? 120,
+			item.at(7)
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.valueSplit_([
+			argModule.getSynthArgSpec(item.at(3)),
+			argModule.getSynthArgSpec(item.at(4)),
+			argModule.getSynthArgSpec(item.at(5))
+		]);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.bpmNumberView.background_(TXColour.paleBlue2);
+		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueSplit_([
+					argMod.getSynthArgSpec(item.at(3)),
+					argMod.getSynthArgSpec(item.at(4)),
+					argMod.getSynthArgSpec(item.at(5))
 				]);
 			}
 		);
@@ -2165,19 +2655,19 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// TXMultiButton
 	// arguments- index1 is an array of textStrings
 	// index2 is ACTION function which is passed arg of indexNo of button pressed
-	// index3 is an optional width (default viewWidth)
+	// index3 is an optional width (default classData.viewWidth)
 	// index4 is an optional height (default 80)
 	// index5 is an optional height of rows (default 24)
 	// index6 is an optional stringColor
 	// index7 is an optional background
 	*guiTXMultiButton { arg item, w;
 		var holdWidth, holdHeight, holdButtonWidth, holdRowHeight;
-		holdWidth =  item.at(3) ? viewWidth;
+		holdWidth =  item.at(3) ? classData.viewWidth;
 		holdHeight = item.at(4) ? 24;
 		holdRowHeight = item.at(5) ? 24;
 		this.nextline(w);
-		holdView = TXMultiButton(w, holdWidth @ holdHeight, item.at(1).value, item.at(2), holdRowHeight, item.at(6), item.at(7));
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		classData.holdView = TXMultiButton(w, holdWidth @ holdHeight, item.at(1).value, item.at(2), holdRowHeight, item.at(6), item.at(7));
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 	}
 
 	// TXMultiSlider
@@ -2194,7 +2684,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		var holdHeight;
 		holdHeight = item.at(6) ? 44;
 		this.nextline(w);
-		holdView = TXMultiSlider(w, ((item.at(4).value * (item.at(10) ? 24)) + (item.at(9) ? 80) + 4) @ holdHeight,
+		classData.holdView = TXMultiSlider(w, ((item.at(4).value * (item.at(10) ? 24)) + (item.at(9) ? 80) + 12) @ holdHeight,
 			item.at(1).value, item.at(2),
 			{|view|
 				// store current data to synthArgSpecs
@@ -2210,24 +2700,24 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			labelWidth: item.at(9) ? 80, showClone1: item.at(8),
 			gridRows: item.at(11), gridCols: item.at(12)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1.copy.alpha_(0.7));
-		holdView.multiSliderView.valueThumbSize_(1);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1.copy.alpha_(0.5));
+		classData.holdView.multiSliderView.valueThumbSize_(1);
 		if (item.at(7) == "Vertical", {
-			holdView.multiSliderView.indexIsHorizontal_(false);
-			holdView.multiSliderView.indexThumbSize_((holdHeight/ (item.at(4).value ? 8) - 1));
-			holdView.multiSliderView.gap_(1);
-			},{
-				holdView.multiSliderView.indexThumbSize_((item.at(10)  ? 24) - 2);
-				holdView.multiSliderView.gap_(2);
+			classData.holdView.multiSliderView.indexIsHorizontal_(false);
+			classData.holdView.multiSliderView.indexThumbSize_((holdHeight/ (item.at(4).value ? 8) - 1));
+			classData.holdView.multiSliderView.gap_(1);
+		},{
+			classData.holdView.multiSliderView.indexThumbSize_((item.at(10)  ? 24) - 2);
+			classData.holdView.multiSliderView.gap_(2);
 		});
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.value_(argModule.getSynthArgSpec(item.at(3)) ?
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(argMod.getSynthArgSpec(item.at(3)) ?
 					Array.fill( (item.at(4).value ? 8), item.at(2).default));
 			}
 		);
@@ -2244,28 +2734,28 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index10 is optional ScrollView init action,
 	// e.g. ["TXMultiSliderNo", "Velocity", ControlSpec(0, 100), "arrVelocities", 16, nil, "showVelocityBars"]
 	*guiTXMultiSliderNo { arg item, w;
-		var holdScrollViewWidth;
+		var viewWidth;
 		this.nextline(w);
-		holdView = nil;
-		//  set holdStartIndex
+		classData.holdView = nil;
+		//  set classData.holdStartIndex
 		if (item.at(7).notNil, {
-			holdStartIndex = argModule.getSynthArgSpec(item.at(7));
-			},{
-				holdStartIndex = 0;
+			classData.holdStartIndex = argModule.getSynthArgSpec(item.at(7));
+		},{
+			classData.holdStartIndex = 0;
 		});
 		if (item.at(10).notNil, {
-			holdScrollViewWidth = 580;
+			viewWidth = 580;
 		});
 		// if set to hide multislider
 		if (item.at(6).notNil, {
 			if (argModule.getSynthArgSpec(item.at(6)) == 0, {
-				holdView = TXMultiNumber(w, viewWidth @ 20, item.at(1).value, item.at(2),
+				classData.holdView = TXMultiNumber(w, viewWidth @ 20, item.at(1).value, item.at(2),
 					{|view|
 						var holdArr;
 						// get initial value
 						holdArr = argModule.getSynthArgSpec(item.at(3));
 						view.value.do({ arg val, ind;
-							holdArr = holdArr.put(holdStartIndex + ind, val);
+							holdArr = holdArr.put(classData.holdStartIndex + ind, val);
 						});
 						// store current data to synthArgSpecs
 						argModule.setSynthArgSpec(item.at(3), holdArr);
@@ -2277,32 +2767,32 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 					},
 					// get initial value & restrict to display range range
 					argModule.getSynthArgSpec(item.at(3))
-					.copyRange(holdStartIndex,holdStartIndex+item.at(4).value -1),
+					.copyRange(classData.holdStartIndex,classData.holdStartIndex+item.at(4).value -1),
 
-					scrollInc: item.at(8), scrollViewWidth: holdScrollViewWidth
+					scrollInc: item.at(8), scrollViewWidth: viewWidth
 				);
 				if (item.at(10).notNil, {
-					item.at(10).value(holdView.scrollView);
+					item.at(10).value(classData.holdView.scrollView);
 				});
-				argModule.arrControls = argModule.arrControls.add(holdView);
+				argModule.arrControls = argModule.arrControls.add(classData.holdView);
 
 				// add screen update function
 				system.addScreenUpdFunc(
-					[holdView, argModule],
+					[classData.holdView, argModule],
 					{ arg argArray;
-						var argView = argArray.at(0), argModule = argArray.at(1), holdStartIndex;
+						var argView = argArray.at(0), argMod = argArray.at(1), holdStartIndex;
 						//  set holdStartIndex
 						if (item.at(7).notNil, {
-							holdStartIndex = argModule.getSynthArgSpec(item.at(7));
-							},{
-								holdStartIndex = 0;
+							holdStartIndex = argMod.getSynthArgSpec(item.at(7));
+						},{
+							holdStartIndex = 0;
 						});
 						//  set value
 						argView.value_(argModule.getSynthArgSpec(item.at(3))
-							.copyRange(holdStartIndex,holdStartIndex+item.at(4).value -1));
+							.copyRange(holdStartIndex, holdStartIndex + item.at(4).value - 1));
 					}
 				);
-				holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+				classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 				// button to show multislider
 				Button(w, 20 @ 20)
 				.states_([
@@ -2315,15 +2805,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				})
 			});
 		});
-		if (holdView.isNil, {
-			holdView = TXMultiSliderNo(w, ((item.at(4).value * 24)+78) @ ((item.at(9) ? 124) - 24),
+		if (classData.holdView.isNil, {
+			classData.holdView = TXMultiSliderNo(w, ((item.at(4).value * 24)+78) @ ((item.at(9) ? 124) - 24),
 				item.at(1).value, item.at(2),
 				{|view|
 					var holdArr;
 					// get initial value
 					holdArr = argModule.getSynthArgSpec(item.at(3));
 					view.value.do({ arg val, ind;
-						holdArr.put(holdStartIndex + ind, val);
+						holdArr.put(classData.holdStartIndex + ind, val);
 					});
 					// store current data to synthArgSpecs
 					argModule.setSynthArgSpec(item.at(3), holdArr);
@@ -2334,35 +2824,36 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 					});
 				},
 				// get initial value & restrict to display range range
-				argModule.getSynthArgSpec(item.at(3)) .copyRange(holdStartIndex,holdStartIndex + item.at(4).value -1),
-				scrollViewWidth: holdScrollViewWidth
+				argModule.getSynthArgSpec(item.at(3)) .copyRange(classData.holdStartIndex,classData.holdStartIndex + item.at(4).value -1),
+				labelWidth: 78,
+				scrollViewWidth: viewWidth
 			);
 			if (item.at(10).notNil, {
-				item.at(10).value(holdView.scrollView);
-				item.at(10).value(holdView.scrollView2);
+				item.at(10).value(classData.holdView.scrollView);
+				item.at(10).value(classData.holdView.scrollView2);
 			});
-			argModule.arrControls = argModule.arrControls.add(holdView);
+			argModule.arrControls = argModule.arrControls.add(classData.holdView);
 			// add screen update function
 			system.addScreenUpdFunc(
-				[holdView, argModule],
+				[classData.holdView, argModule],
 				{ arg argArray;
-					var argView = argArray.at(0), argModule = argArray.at(1), holdStartIndex;
+					var argView = argArray.at(0), argMod = argArray.at(1), holdStartIndex;
 					//  set holdStartIndex
 					if (item.at(7).notNil, {
-						holdStartIndex = argModule.getSynthArgSpec(item.at(7));
-						},{
-							holdStartIndex = 0;
+						holdStartIndex = argMod.getSynthArgSpec(item.at(7));
+					},{
+						holdStartIndex = 0;
 					});
 					//  set value
-					argView.valueNoAction_(argModule.getSynthArgSpec(item.at(3))
-						.copyRange(holdStartIndex,holdStartIndex + item.at(4).value -1));
+					argView.valueNoAction_(argMod.getSynthArgSpec(item.at(3))
+						.copyRange(holdStartIndex, holdStartIndex + item.at(4).value - 1));
 				}
 			);
-			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-			holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-			holdView.multiSliderView.valueThumbSize_(1);
-			holdView.multiSliderView.indexThumbSize_(19);
-			holdView.multiSliderView.gap_(5);
+			classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
+			classData.holdView.multiSliderView.valueThumbSize_(1);
+			classData.holdView.multiSliderView.indexThumbSize_(19);
+			classData.holdView.multiSliderView.gap_(5);
 			// button to hide multislider
 			Button(w, 20 @ 20)
 			.states_([
@@ -2388,7 +2879,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		var arrSynthArgNames;
 		arrSynthArgNames = item.at(3);
 		this.nextline(w);
-		holdView = TXMultiSliderNo(w, item.at(6) ?? viewWidth  @ ((item.at(5) ? 124) - 24),
+		classData.holdView = TXMultiSliderNo(w, item.at(6) ?? classData.viewWidth  @ ((item.at(5) ? 124) - 24),
 			item.at(1), item.at(2),
 			{|view|
 				var arrVals;
@@ -2408,28 +2899,28 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argModule.getSynthArgSpec(string);
 			});
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0), argMod = argArray.at(1);
 				//  set values
 				argView.valueNoAction_(
 					arrSynthArgNames.collect({ arg string, ind;
-						argModule.getSynthArgSpec(string);
+						argMod.getSynthArgSpec(string);
 					});
 				);
 			}
 		);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-		holdView.multiSliderView.valueThumbSize_(1);
-		holdView.multiSliderView.indexThumbSize_(
-			(( (item.at(6) ?? viewWidth  ) - 80) / item.at(3).size ) - 4
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
+		classData.holdView.multiSliderView.valueThumbSize_(1);
+		classData.holdView.multiSliderView.indexThumbSize_(
+			(( (item.at(6) ?? classData.viewWidth  ) - 80) / item.at(3).size ) - 4
 		);
-		holdView.multiSliderView.elasticMode_(1);
-		holdView.multiSliderView.gap_(5);
+		classData.holdView.multiSliderView.elasticMode_(1);
+		classData.holdView.multiSliderView.gap_(5);
 	}
 
 	//TXMultiSwitch - this is a modified version of TXMultiSlider
@@ -2437,26 +2928,27 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index3 in no. items in row function, index4 is an optional ACTION function to be valued in views action
 	// index5 is optional synth arg name where index of first item to be displayed is stored
 	// index6 is optional ScrollView init action,
+	// index7 is optional label width,
 	// e.g. ["TXMultiSwitch", "Step on/off", "arrOnOffSteps", 16]
 	*guiTXMultiSwitch { arg item, w;
-		var holdScrollViewWidth;
+		var viewWidth;
 		this.nextline(w);
-		//  set holdStartIndex
+		//  set classData.holdStartIndex
 		if (item.at(5).notNil, {
-			holdStartIndex = argModule.getSynthArgSpec(item.at(5));
-			},{
-				holdStartIndex = 0;
+			classData.holdStartIndex = argModule.getSynthArgSpec(item.at(5));
+		},{
+			classData.holdStartIndex = 0;
 		});
 		if (item.at(6).notNil, {
-			holdScrollViewWidth = 580;
+			viewWidth = 580;
 		});
-		holdView = TXMultiSlider(w, ((item.at(3).value * 24)+78) @ 24, item.at(1), ControlSpec(0, 1, step: 1),
+		classData.holdView = TXMultiSlider(w, ((item.at(3).value * 24)+78) @ 24, item.at(1), ControlSpec(0, 1, step: 1),
 			{|view|
 				var holdArr;
 				// get initial value
 				holdArr = argModule.getSynthArgSpec(item.at(2));
 				view.value.do({ arg val, ind;
-					holdArr.put(holdStartIndex + ind, val);
+					holdArr.put(classData.holdStartIndex + ind, val);
 				});
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), holdArr);
@@ -2467,36 +2959,76 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 			},
 			// get initial value & restrict to display range range
-			argModule.getSynthArgSpec(item.at(2)) .copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1),
-			scrollViewWidth: holdScrollViewWidth
+			argModule.getSynthArgSpec(item.at(2)) .copyRange(classData.holdStartIndex,classData.holdStartIndex + item.at(3).value -1),
+			labelWidth: 78,
+			scrollViewWidth: viewWidth
 		);
 		if (item.at(6).notNil, {
-			item.at(6).value(holdView.scrollView);
+			item.at(6).value(classData.holdView.scrollView);
 		});
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-		holdView.multiSliderView.valueThumbSize_(0.1);
-		holdView.multiSliderView.indexThumbSize_(23);
-		holdView.multiSliderView.gap_(1);
-		holdView.multiSliderView.step_(1);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
+		// classData.holdView.multiSliderView.valueThumbSize_(0.1);
+		// classData.holdView.multiSliderView.indexThumbSize_(23);
+		// classData.holdView.multiSliderView.gap_(1);
+		classData.holdView.multiSliderView.valueThumbSize_(1);
+		classData.holdView.multiSliderView.indexThumbSize_(19);
+		classData.holdView.multiSliderView.gap_(5);
+		classData.holdView.multiSliderView.step_(1);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1), holdStartIndex;
+				var argView = argArray.at(0), argMod = argArray.at(1), holdStartIndex;
 				//  set holdStartIndex
 				if (item.at(7).notNil, {
-					holdStartIndex = argModule.getSynthArgSpec(item.at(7));
-					},{
-						holdStartIndex = 0;
+					holdStartIndex = argMod.getSynthArgSpec(item.at(7));
+				},{
+					holdStartIndex = 0;
 				});
 				//  set value
-				argView.value_(argModule.getSynthArgSpec(item.at(2))
-					.copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1));
+				argView.value_(argMod.getSynthArgSpec(item.at(2))
+					.copyRange(holdStartIndex, holdStartIndex + item.at(3).value -1));
 			}
 		);
 	}
+
+	// TXMultiTrackView
+	// arguments- index1 is module,
+	//	index2 is action function
+	// 	index3 is a bpm value function
+	// 	index4 is a beats per bar value function
+	// 	index5 is optional ScrollView init action
+	// 	index6 is optional ScrollView update action
+	// 	index7 is optional height
+	// 	index8 is initial action function
+	// e.g. ["TXMultiTrackView", arrTracks, {arg view;},
+	//		{this.getSynthArgSpec("bpm");},
+	//		{this.getSynthArgSpec("beatsPerBar");},
+	//		{arg view; holdScrollView = view;},
+	//		{arg view; holdVisibleOrigin = view.visibleOrigin; }
+	//	],
+	// ======= *new {arg argSystem, argParent, dimensions, argArrTracks, argAction, argBpm, argBeatsPerBar, scrollViewAction;
+	*guiTXMultiTrackView { arg item, w;
+		var extraWidth = 0;
+		if (item.at(6).notNil, {extraWidth = 40;});
+		classData.holdView = TXMultiTrackView(system, w, (classData.viewWidth + extraWidth) @ (item.at(7) ? 412), item.at(1),
+			item.at(2), item.at(3).value, item.at(4).value, item.at(6), item.at(8));
+		if (item.at(5).notNil, {
+			item.at(5).value(classData.holdView.scrollView);
+		});
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				// not used currently
+			}
+		);
+	}	// end of TXMultiTrackView
+
 
 	// TXMultiNumber
 	// arguments- index1 is row text, index2 is controlSpec, index3 is synth arg name to be updated,
@@ -2505,24 +3037,24 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index7 is optional ScrollView init action,
 	// e.g. ["TXMultiNumber", "Rand octave", ControlSpec(1, 9, step: 1), "arrRandOctaves", 16]
 	*guiTXMultiNumber { arg item, w;
-		var holdScrollViewWidth;
+		var viewWidth;
 		this.nextline(w);
-		//  set holdStartIndex
+		//  set classData.holdStartIndex
 		if (item.at(6).notNil, {
-			holdStartIndex = argModule.getSynthArgSpec(item.at(6));
-			},{
-				holdStartIndex = 0;
+			classData.holdStartIndex = argModule.getSynthArgSpec(item.at(6));
+		},{
+			classData.holdStartIndex = 0;
 		});
 		if (item.at(7).notNil, {
-			holdScrollViewWidth = 580;
+			viewWidth = 580;
 		});
-		holdView = TXMultiNumber(w, viewWidth @ 20, item.at(1), item.at(2),
+		classData.holdView = TXMultiNumber(w, viewWidth @ 20, item.at(1), item.at(2),
 			{|view|
 				var holdArr;
 				// get initial value
 				holdArr = argModule.getSynthArgSpec(item.at(3));
 				view.value.do({ arg val, ind;
-					holdArr.put(holdStartIndex + ind, val);
+					holdArr.put(classData.holdStartIndex + ind, val);
 				});
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(3), holdArr);
@@ -2534,27 +3066,27 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			},
 			// get initial value & restrict to display range range
 			argModule.getSynthArgSpec(item.at(3))
-			.copyRange(holdStartIndex,holdStartIndex + item.at(4).value -1),
-			scrollViewWidth: holdScrollViewWidth
+			.copyRange(classData.holdStartIndex,classData.holdStartIndex + item.at(4).value -1),
+			scrollViewWidth: viewWidth
 		);
 		if (item.at(7).notNil, {
-			item.at(7).value(holdView.scrollView);
+			item.at(7).value(classData.holdView.scrollView);
 		});
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1), holdStartIndex;
+				var argView = argArray.at(0), argMod = argArray.at(1), holdStartIndex;
 				//  set holdStartIndex
 				if (item.at(6).notNil, {
-					holdStartIndex = argModule.getSynthArgSpec(item.at(6));
-					},{
-						holdStartIndex = 0;
+					holdStartIndex = argMod.getSynthArgSpec(item.at(6));
+				},{
+					holdStartIndex = 0;
 				});
 				//  set value
-				argView.value_(argModule.getSynthArgSpec(item.at(3))
+				argView.value_(argMod.getSynthArgSpec(item.at(3))
 					.copyRange(holdStartIndex,holdStartIndex + item.at(4).value -1));
 			}
 		);
@@ -2566,7 +3098,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// e.g. ["TXMultiCheckBox", "Step on/off", "arrOnOffSteps", 16]
 	*guiTXMultiCheckBox { arg item, w;
 		this.nextline(w);
-		holdView = TXMultiCheckBox(w, viewWidth @ 20, item.at(1),
+		classData.holdView = TXMultiCheckBox(w, classData.viewWidth @ 20, item.at(1),
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), view.value);
@@ -2579,20 +3111,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get initial value
 			argModule.getSynthArgSpec(item.at(2))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.value_(argModule.getSynthArgSpec(item.at(2)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(argMod.getSynthArgSpec(item.at(2)));
 			}
 		);
 	}
 
 	// TXMultiKnob
-	// NOTE: TXMultiKnob is called differently to other multiXXX types since index 2 is an array of
+	// NOTE: TXMultiKnob (and variations below) is called differently to other multiXXX types since index 2 is an array of
 	//       synth arg names, not just a single one. This is to avoid arrays as syth args.
 	// arguments- index1 is row text,
 	//   index2 is array of synth arg names to be updated,
@@ -2603,7 +3135,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTXMultiKnob { arg item, w;
 		var holdWidth;
 		holdWidth = 84 + (54 * item.at(3));
-		holdView = TXMultiKnob(w, holdWidth @ 40, item.at(1),
+		classData.holdView = TXMultiKnob(w, holdWidth @ 40, item.at(1),
 			item.at(4) ? ControlSpec.new,
 			{|view|
 				var arrVals;
@@ -2623,18 +3155,165 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argModule.getSynthArgSpec(string);
 			});
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.value_(argModule.getSynthArgSpec(item.at(2)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(
+					item.at(2).collect({arg string, i;
+						argMod.getSynthArgSpec(string);
+					});
+				);
 			}
 		);
 	}
 
+	// TXMultiKnobNo
+	// arguments- index1 is row text,
+	//   index2 is array of synth arg names to be updated,
+	//   index3 in no. items in row function
+	// 	index4 is an optional ControlSpec
+	// 	index5 is an optional ACTION function to be valued in views action
+	// 	index6 is an optional number of spacer gaps before first knob, default 0
+	// e.g. ["TXMultiKnobNo", "Input 1", ["In1Out1", "In1Out2", "In1Out3", "In1Out4"], 4]
+	*guiTXMultiKnobNo { arg item, w;
+		var holdWidth;
+		holdWidth = 84 + (54 * item.at(3));
+		classData.holdView = TXMultiKnobNo(w, holdWidth @ 40, item.at(1),
+			item.at(4) ? ControlSpec.new,
+			{|view|
+				var arrVals;
+				arrVals = view.value;
+				// store current data to synthArgSpecs
+				item.at(2).do({arg string, i;
+					argModule.setSynthValue(string, arrVals[i]);
+				});
+				// if action function passed then value it
+				if (item.at(5).notNil, {
+					// run action function passing it view as arg
+					item.at(5).value(view);
+				});
+			},
+			// get initial values
+			item.at(2).collect({arg string, i;
+				argModule.getSynthArgSpec(string);
+			}),
+			numSpacers: (item.at(6) ? 0)
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(
+					item.at(2).collect({arg string, i;
+						argMod.getSynthArgSpec(string);
+					});
+				);
+			}
+		);
+	}
+
+	// TXMultiKnobNoUnmap - value are displayed mapped but stored as unmapped
+	// arguments- index1 is row text,
+	//   index2 is array of synth arg names to be updated,
+	//   index3 in no. items in row function
+	// 	index4 is an optional ControlSpec
+	// 	index5 is an optional ACTION function to be valued in views action
+	// 	index6 is an optional number of spacer gaps before first knob, default 0
+	// 	index7 is an optional knob width
+	// e.g. ["TXMultiKnobNoUnmap", "Input 1", ["In1Out1", "In1Out2", "In1Out3", "In1Out4"], 4]
+	*guiTXMultiKnobNoUnmap { arg item, w;
+		var holdSpec = item.at(4) ? ControlSpec.new;
+		var knobWidth = item.at(7) ? 50;
+		var holdWidth = 84 + ((knobWidth + 4) * item.at(3));
+		classData.holdView = TXMultiKnobNo(w, holdWidth @ 40, item.at(1), holdSpec,
+			{|view|
+				var arrVals;
+				arrVals = view.value;
+				// store current data to synthArgSpecs
+				item.at(2).do({arg string, i;
+					argModule.setSynthValue(string, holdSpec.unmap(arrVals[i]));
+				});
+				// if action function passed then value it
+				if (item.at(5).notNil, {
+					// run action function passing it view as arg
+					item.at(5).value(view);
+				});
+			},
+			// get initial values
+			item.at(2).collect({arg string, i;
+				holdSpec.map(argModule.getSynthArgSpec(string));
+			}),
+			numSpacers: (item.at(6) ? 0),
+			knobWidth: knobWidth
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(
+					item.at(2).collect({arg string, i;
+						holdSpec.map(argMod.getSynthArgSpec(string));
+					});
+				);
+			}
+		);
+	}
+
+	// TXMultiKnobMidiNote
+	// arguments- index1 is row text,
+	//   index2 is array of synth arg names to be updated,
+	//   index3 in no. items in row function
+	// 	index4 is an optional ControlSpec
+	// 	index5 is an optional ACTION function to be valued in views action
+	// e.g. ["TXMultiKnobMidiNote", "Input 1", ["In1Out1", "In1Out2", "In1Out3", "In1Out4"], 4]
+	*guiTXMultiKnobMidiNote { arg item, w;
+		var holdWidth;
+		holdWidth = 84 + (54 * item.at(3));
+		classData.holdView = TXMultiKnobMidiNote(w, holdWidth @ 40, item.at(1),
+			item.at(4) ? ControlSpec.new,
+			{|view|
+				var arrVals;
+				arrVals = view.value;
+				// store current data to synthArgSpecs
+				item.at(2).do({arg string, i;
+					argModule.setSynthValue(string, arrVals[i]);
+				});
+				// if action function passed then value it
+				if (item.at(5).notNil, {
+					// run action function passing it view as arg
+					item.at(5).value(view);
+				});
+			},
+			// get initial values
+			item.at(2).collect({arg string, i;
+				argModule.getSynthArgSpec(string);
+			});
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.value_(
+					item.at(2).collect({arg string, i;
+						argMod.getSynthArgSpec(string);
+					});
+				);
+			}
+		);
+	}
 
 	// TXCurveDraw
 	// arguments- index1 is text, index2 is initial value array function,
@@ -2647,12 +3326,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index9 is an optional synth arg name for no. of grid rows (1-99)
 	// 	index10 is an optional synth arg name for no. of grid columns (1-99)
 	// 	index11 is an optional label for the x-axis
-	// 	index11 is an optional label for the y-axis
+	// 	index12 is an optional label for the y-axis
+	// 	index13 is an optional Event for local data storage
 	// e.g. ["TXCurveDraw", "Warp curve", {arrCurveValues}, {arg view; arrCurveValues = view.value; this.bufferStore(view.value);}],
 
 	*guiTXCurveDraw { arg item, w;
 		this.nextline(w);
-		holdView = TXCurveDraw(w, viewWidth @ 300, item.at(1).value,
+		classData.holdView = TXCurveDraw(w, classData.viewWidth @ 300, item.at(1).value,
 			{|view|
 				// if action function passed then value it
 				if (item.at(3).notNil, {
@@ -2670,12 +3350,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			gridRowsFunc: {argModule.getSynthArgSpec(item.at(9))},
 			gridColsFunc: {argModule.getSynthArgSpec(item.at(10))},
 			xLabel: item.at(11),
-			yLabel: item.at(12)
+			yLabel: item.at(12),
+			dataEvent: item.at(13)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		//	holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-		holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		//	classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
+		//classData.holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
 	}
 
 	// TXEQCurveDraw
@@ -2687,7 +3368,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 	*guiTXEQCurveDraw { arg item, w;
 		this.nextline(w);
-		holdView = TXEQCurveDraw(w, viewWidth @ 300, item.at(1),
+		classData.holdView = TXEQCurveDraw(w, classData.viewWidth @ 300, item.at(1),
 			{|view|
 				// if action function passed then value it
 				if (item.at(3).notNil, {
@@ -2701,10 +3382,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			numSlots: item.at(2).value.size,
 			arrSlotFreqs: item.at(5)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		//	holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-		holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		//	classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
+		classData.holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
 	}
 
 	// TXWaveTableSpecs
@@ -2713,13 +3394,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index4 is an optional value array function for initial slots data (see TXCurveDraw for details)
 	// 	index5 is an optional function or value of max no of harmonices (default 32)
 	//	index6 is an optional function or value 0/1 to show the wavetable processes gui (default 1 to show)
+	//	index7 is an optional height, index8 is an optional dataEvent function
 	// e.g. ["TXWaveTableSpecs", "Wavetables", {arrWaveSpecs},
 	//		{arg view; arrWaveSpecs = view.value; arrSlotData = view.arrSlotData; this.updateBuffers(view.value);},
 	//		{arrSlotData}],
 
 	*guiTXWaveTableSpecs { arg item, w;
-		this.nextline(w);
-		holdView = TXWaveTableSpecs(w, viewWidth @ 300, item.at(1),
+		//this.nextline(w);
+		classData.holdView = TXWaveTableSpecs(w, classData.viewWidth @ (item.at(7) ? 300), item.at(1),
 			{|view|
 				// if action function passed then value it
 				if (item.at(3).notNil, {
@@ -2731,25 +3413,25 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(2).value,
 			initSlotVals: item.at(4).value,
 			argMaxNoHarmonics: (item.at(5).value ? 32),
-			argShowProcesses: (item.at(6).value ? 1)
-
+			argShowProcesses: (item.at(6).value ? 1),
+			argDataEvent: (item.at(8).value),
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		//	holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-		holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		//	classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
+		classData.holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
 	}
 
 	// MIDINote
-	// arguments- index1 is slider text, index2 is synth arg name to be updated,
+	// arguments- index1 is text, index2 is synth arg name to be updated,
 	// index3 is an optional ACTION function to be valued in views action
 	*guiMIDINote { arg item, w;
-		holdView = TXNumber(w, viewWidth @ 20, item.at(1), ControlSpec(0, 127, step: 1),
+		classData.holdView = TXNumber(w, classData.viewWidth @ 20, item.at(1), ControlSpec(0, 127, step: 1),
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), view.value);
 				// update string text
-				holdNoteString.string = TXGetMidiNoteString(holdView.value);
+				classData.holdNoteString.string = TXGetMidiNoteString(classData.holdView.value);
 				// if action function passed then value it
 				if (item.at(3).notNil, {
 					// run action function passing it view as arg
@@ -2760,18 +3442,18 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(2)),
 			false, 80, 44
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// create text string for note base
-		holdNoteString = StaticText(w, 44 @ 20)
+		classData.holdNoteString = StaticText(w, 44 @ 20)
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdNoteString.string = TXGetMidiNoteString(holdView.value);
+		classData.holdNoteString.string = TXGetMidiNoteString(classData.holdView.value);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.numberView.value_(argModule.getSynthArgSpec(item.at(2)));
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.numberView.value_(argMod.getSynthArgSpec(item.at(2)));
 			}
 		);
 	}
@@ -2786,33 +3468,33 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		// start on new line
 		this.nextline(w);
 		// create row for note shift steps
-		holdNoteTexts = TXMultiTextBox(w, viewWidth @ 20, "Note text", Array.fill(item.at(3).value," "));
-		holdNoteTexts.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdNoteTexts.arrTextViews.do({ arg item, i;
+		classData.holdNoteTexts = TXMultiTextBox(w, classData.viewWidth @ 20, "Note text", Array.fill(item.at(3).value," "));
+		classData.holdNoteTexts.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdNoteTexts.arrTextViews.do({ arg item, i;
 			item.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		});
 		// start on new line
 		this.nextline(w);
-		//  set holdStartIndex
+		//  set classData.holdStartIndex
 		if (item.at(4).notNil, {
-			holdStartIndex = argModule.getSynthArgSpec(item.at(4));
-			},{
-				holdStartIndex = 0;
+			classData.holdStartIndex = argModule.getSynthArgSpec(item.at(4));
+		},{
+			classData.holdStartIndex = 0;
 		});
 		// create row for note shift steps
-		holdNoteShiftRow = TXMultiNumber(w, viewWidth @ 20, "Note val", ControlSpec(-127, 127, step: 1, default: 0),
+		classData.holdNoteShiftRow = TXMultiNumber(w, classData.viewWidth @ 20, "Note val", ControlSpec(-127, 127, step: 1, default: 0),
 			{|view|
 				var holdArr;
 				// get initial value
 				holdArr = argModule.getSynthArgSpec(item.at(2));
 				view.value.do({ arg val, ind;
-					holdArr.put(holdStartIndex + ind, val);
+					holdArr.put(classData.holdStartIndex + ind, val);
 				});
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), holdArr);
 				// update string texts
-				holdNoteTexts.strings = holdNoteShiftRow.value.collect({ arg item, i;
-					TXGetMidiNoteString(holdNoteBase.value + item.value);
+				classData.holdNoteTexts.strings = classData.holdNoteShiftRow.value.collect({ arg item, i;
+					TXGetMidiNoteString(classData.holdNoteBase.value + item.value);
 				});
 				// if action function passed then value it
 				if (item.at(5).notNil, {
@@ -2821,24 +3503,24 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 			},
 			// get initial value & restrict to display range range
-			argModule.getSynthArgSpec(item.at(2)) .copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1),
+			argModule.getSynthArgSpec(item.at(2)) .copyRange(classData.holdStartIndex,classData.holdStartIndex + item.at(3).value -1),
 			// set scroll increment to 1
 			scrollInc: 1
 		);
-		argModule.arrControls = argModule.arrControls.add(holdNoteShiftRow);
-		holdNoteShiftRow.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdNoteShiftRow);
+		classData.holdNoteShiftRow.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// start on new line
 		this.nextline(w);
 		// create row for note base
-		holdNoteBase = TXNumber(w, viewWidth @ 20, "Note base", ControlSpec(0, 127, step: 1),
+		classData.holdNoteBase = TXNumber(w, classData.viewWidth @ 20, "Note base", ControlSpec(0, 127, step: 1),
 			{|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(1), view.value);
 				// update string text
-				holdNoteString.string = TXGetMidiNoteString(holdNoteBase.value);
+				classData.holdNoteString.string = TXGetMidiNoteString(classData.holdNoteBase.value);
 				// update string texts
-				holdNoteTexts.strings = holdNoteShiftRow.value.collect({ arg item, i;
-					TXGetMidiNoteString(holdNoteBase.value + item.value);
+				classData.holdNoteTexts.strings = classData.holdNoteShiftRow.value.collect({ arg item, i;
+					TXGetMidiNoteString(classData.holdNoteBase.value + item.value);
 				});
 				// if action function passed then value it
 				if (item.at(5).notNil, {
@@ -2850,56 +3532,56 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(1)),
 			false, 80, 44
 		);
-		argModule.arrControls = argModule.arrControls.add(holdNoteBase);
-		holdNoteBase.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdNoteBase);
+		classData.holdNoteBase.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// create text string for note base
-		holdNoteString = StaticText(w, 44 @ 20)
+		classData.holdNoteString = StaticText(w, 44 @ 20)
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdNoteString.string = TXGetMidiNoteString(holdNoteBase.value);
+		classData.holdNoteString.string = TXGetMidiNoteString(classData.holdNoteBase.value);
 		// create buttons to move note base up/down 1/12
 		Button(w, 32 @ 20)
 		.states_([["-1", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({|view|
-			holdNoteBase.valueAction = (holdNoteBase.value - 1).max(0).min(127);
+			classData.holdNoteBase.valueAction = (classData.holdNoteBase.value - 1).max(0).min(127);
 		});
 		Button(w, 32 @ 20)
 		.states_([["+1", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({|view|
-			holdNoteBase.valueAction = (holdNoteBase.value + 1).max(0).min(127);
+			classData.holdNoteBase.valueAction = (classData.holdNoteBase.value + 1).max(0).min(127);
 		});
 		Button(w, 32 @ 20)
 		.states_([["-12", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({|view|
-			holdNoteBase.valueAction = (holdNoteBase.value - 12).max(0).min(127);
+			classData.holdNoteBase.valueAction = (classData.holdNoteBase.value - 12).max(0).min(127);
 		});
 		Button(w, 32 @ 20)
 		.states_([["+12", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({|view|
-			holdNoteBase.valueAction = (holdNoteBase.value + 12).max(0).min(127);
+			classData.holdNoteBase.valueAction = (classData.holdNoteBase.value + 12).max(0).min(127);
 		});
 		// create text string for note base
-		holdNoteTexts.strings = holdNoteShiftRow.value.collect({ arg item, i;
-			TXGetMidiNoteString(holdNoteBase.value + item);
+		classData.holdNoteTexts.strings = classData.holdNoteShiftRow.value.collect({ arg item, i;
+			TXGetMidiNoteString(classData.holdNoteBase.value + item);
 		});
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdNoteShiftRow, holdNoteBase, holdNoteString, holdNoteTexts, argModule],
+			[classData.holdNoteShiftRow, classData.holdNoteBase, classData.holdNoteString, classData.holdNoteTexts, argModule],
 			{ arg argArray;
 				var holdNoteShiftRow = argArray.at(0), holdNoteBase = argArray.at(1), holdNoteString = argArray.at(2),
-				holdNoteTexts = argArray.at(3), argModule = argArray.at(4), holdStartIndex, holdVal, holdVal2;
+				holdNoteTexts = argArray.at(3), module = argArray.at(4), holdStartIndex, holdVal, holdVal2;
 				//  set holdStartIndex
 				if (item.at(4).notNil, {
-					holdStartIndex = argModule.getSynthArgSpec(item.at(4));
-					},{
-						holdStartIndex = 0;
+					holdStartIndex = module.getSynthArgSpec(item.at(4));
+				},{
+					holdStartIndex = 0;
 				});
 				// get values for note shift steps & restrict to display range
-				holdVal = argModule.getSynthArgSpec(item.at(2))
+				holdVal = module.getSynthArgSpec(item.at(2))
 				.copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1);
 				// set values for note shift steps & restrict to display range
 				holdNoteShiftRow.value_(holdVal);
 				// get value for note base
-				holdVal2 = argModule.getSynthArgSpec(item.at(1));
+				holdVal2 = module.getSynthArgSpec(item.at(1));
 				// set values for note base & string
 				holdNoteBase.value_(holdVal2);
 				holdNoteString.string = TXGetMidiNoteString(holdVal2);
@@ -2925,80 +3607,80 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		if (item.at(5).notNil, {holdColour = TXColor.paleYellow2}, {holdColour = TXColor.white});
 		// start on new line
 		this.nextline(w);
-		//  set holdStartIndex
+		//  set classData.holdStartIndex
 		if (item.at(4).notNil, {
-			holdStartIndex = argModule.getSynthArgSpec(item.at(4));
-			},{
-				holdStartIndex = 0;
+			classData.holdStartIndex = argModule.getSynthArgSpec(item.at(4));
+		},{
+			classData.holdStartIndex = 0;
 		});
 		if (item.at(8).notNil, {
 			holdScrollWidth = 580;
 		});
 		// create row for note shift steps
-		holdNoteTexts = TXMultiTextBox(w, viewWidth @ 20, item.at(5).value ? "Note text",
+		classData.holdNoteTexts = TXMultiTextBox(w, classData.viewWidth @ 20, item.at(5).value ? "Note text",
 			Array.fill(item.at(3).value," "), scrollViewWidth: holdScrollWidth);
-		holdNoteTexts.labelView.stringColor_(TXColour.sysGuiCol1).background_(holdColour);
-		holdNoteTexts.arrTextViews.do({ arg item, i;
+		classData.holdNoteTexts.labelView.stringColor_(TXColour.sysGuiCol1).background_(holdColour);
+		classData.holdNoteTexts.arrTextViews.do({ arg item, i;
 			item.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		});
 		if (item.at(8).notNil, {
-			item.at(8).value(holdNoteTexts.scrollView);
+			item.at(8).value(classData.holdNoteTexts.scrollView);
 		});
 		// get values for note shift steps & restrict to display range
-		holdVal = argModule.getSynthArgSpec(item.at(2))
-		.copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1);
+		classData.holdVal = argModule.getSynthArgSpec(item.at(2))
+		.copyRange(classData.holdStartIndex,classData.holdStartIndex + item.at(3).value -1);
 		// get value for note base
-		holdVal2 = argModule.getSynthArgSpec(item.at(1));
+		classData.holdVal2 = argModule.getSynthArgSpec(item.at(1));
 		// create text string for note base
-		holdNoteTexts.strings = holdVal.collect({ arg item, i;
-			TXGetMidiNoteString(holdVal2 + item);
+		classData.holdNoteTexts.strings = classData.holdVal.collect({ arg item, i;
+			TXGetMidiNoteString(classData.holdVal2 + item);
 		});
 		// highlight text that falls within play range
 		if (item.at(6).notNil and: item.at(7).notNil, {
 			holdFirstStep = argModule.getSynthArgSpec(item.at(6)).min(argModule.getSynthArgSpec(item.at(7)));
 			holdLastStep = argModule.getSynthArgSpec(item.at(6)).max(argModule.getSynthArgSpec(item.at(7)));
-			holdNoteTexts.arrTextViews.do({ arg item, i;
-				if ( ((i+1) >= (holdFirstStep - holdStartIndex) ) and: ((i+1) <= (holdLastStep - holdStartIndex) ), {
+			classData.holdNoteTexts.arrTextViews.do({ arg item, i;
+				if ( ((i+1) >= (holdFirstStep - classData.holdStartIndex) ) and: ((i+1) <= (holdLastStep - classData.holdStartIndex) ), {
 					item.background_(TXColor.paleYellow2);
 					item.refresh;
-					},{
-						item.background_(TXColor.grey6);
-						item.refresh;
+				},{
+					item.background_(TXColor.grey6);
+					item.refresh;
 				});
 			});
 		});
 
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdNoteTexts, argModule],
+			[classData.holdNoteTexts, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1), holdStartIndex, holdVal, holdVal2;
+				var argView = argArray.at(0), argMod = argArray.at(1), holdStartIndex, holdVal, holdVal2;
 				//  set holdStartIndex
 				if (item.at(4).notNil, {
-					holdStartIndex = argModule.getSynthArgSpec(item.at(4));
-					},{
-						holdStartIndex = 0;
+					holdStartIndex = argMod.getSynthArgSpec(item.at(4));
+				},{
+					holdStartIndex = 0;
 				});
 				// get values for note shift steps & restrict to display range
-				holdVal = argModule.getSynthArgSpec(item.at(2)) .copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1);
+				holdVal = argMod.getSynthArgSpec(item.at(2)) .copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1);
 				// get value for note base
-				holdVal2 = argModule.getSynthArgSpec(item.at(1));
+				holdVal2 = argMod.getSynthArgSpec(item.at(1));
 				// create text string for notes
 				argView.strings = holdVal.collect({ arg item, i;
 					TXGetMidiNoteString(holdVal2 + item);
 				});
-				holdNoteTexts.labelView.string = item.at(5).value ? "Note text";
+				classData.holdNoteTexts.labelView.string = item.at(5).value ? "Note text";
 				// highlight text that falls within play range
 				if (item.at(6).notNil and: item.at(7).notNil, {
-					holdFirstStep = argModule.getSynthArgSpec(item.at(6)).min(argModule.getSynthArgSpec(item.at(7)));
-					holdLastStep = argModule.getSynthArgSpec(item.at(6)).max(argModule.getSynthArgSpec(item.at(7)));
-					holdNoteTexts.arrTextViews.do({ arg item, i;
+					holdFirstStep = argMod.getSynthArgSpec(item.at(6)).min(argMod.getSynthArgSpec(item.at(7)));
+					holdLastStep = argMod.getSynthArgSpec(item.at(6)).max(argMod.getSynthArgSpec(item.at(7)));
+					classData.holdNoteTexts.arrTextViews.do({ arg item, i;
 						if ( ((i+1) >= (holdFirstStep - holdStartIndex) ) and: ((i+1) <= (holdLastStep - holdStartIndex) ), {
 							item.background_(TXColor.paleYellow2);
 							item.refresh;
-							},{
-								item.background_(TXColor.grey6);
-								item.refresh;
+						},{
+							item.background_(TXColor.grey6);
+							item.refresh;
 						});
 					});
 				});
@@ -3020,29 +3702,29 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// e.g. ["TXMidiNoteKeybGrid", "seqNoteBase", "arrNotes", 16....]
 
 	*guiTXMidiNoteKeybGrid { arg item, w;
-		var holdMidiNoteKeybGrid, holdScrollWidth;
+		var holdMidiNoteKeybGrid, holdScrollWidth, holdNoteBase, holdNoteString, holdNoteTexts;
 		// start on new line
 		this.nextline(w);
 
-		//  set holdStartIndex
+		//  set classData.holdStartIndex
 		if (item.at(4).notNil, {
-			holdStartIndex = argModule.getSynthArgSpec(item.at(4));
-			},{
-				holdStartIndex = 0;
+			classData.holdStartIndex = argModule.getSynthArgSpec(item.at(4));
+		},{
+			classData.holdStartIndex = 0;
 		});
 		if (item.at(12).notNil, {
-			holdScrollWidth = 598;
+			holdScrollWidth = 580;
 		});
 
 		// create keyboard grid for note steps
-		holdMidiNoteKeybGrid = TXMidiNoteKeybGrid(w, viewWidth+18 @ (108 * item.at(8)),
+		holdMidiNoteKeybGrid = TXMidiNoteKeybGrid(w, classData.viewWidth+18 @ (108 * item.at(8)),
 			{|view|
 				var holdArr, holdValue;
 				// get initial value
 				holdArr = argModule.getSynthArgSpec(item.at(2));
 				holdValue = view.value - argModule.getSynthArgSpec(item.at(1));
 				holdValue.do({ arg val, ind;
-					holdArr.put(holdStartIndex + ind, val);
+					holdArr.put(classData.holdStartIndex + ind, val);
 				});
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), holdArr);
@@ -3055,7 +3737,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// add note base value to initial value & restrict to display range range
 			argModule.getSynthArgSpec(item.at(1)) +
 			argModule.getSynthArgSpec(item.at(2))
-			.copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1),
+			.copyRange(classData.holdStartIndex,classData.holdStartIndex + item.at(3).value -1),
 			system: system,
 			getOctaveFunction: item.at(6),
 			setOctaveFunction: item.at(7),
@@ -3079,19 +3761,19 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				holdNoteBase = argArray.at(1),
 				holdNoteString = argArray.at(2),
 				holdNoteTexts = argArray.at(3),
-				argModule = argArray.at(4),
+				module = argArray.at(4),
 				holdStartIndex, holdVal, holdVal2;
 				//  set holdStartIndex
 				if (item.at(4).notNil, {
-					holdStartIndex = argModule.getSynthArgSpec(item.at(4));
-					},{
-						holdStartIndex = 0;
+					holdStartIndex = module.getSynthArgSpec(item.at(4));
+				},{
+					holdStartIndex = 0;
 				});
 				// get values for note shift steps & restrict to display range
-				holdVal = argModule.getSynthArgSpec(item.at(2))
+				holdVal = module.getSynthArgSpec(item.at(2))
 				.copyRange(holdStartIndex,holdStartIndex + item.at(3).value -1);
 				// get value for note base
-				holdVal2 = argModule.getSynthArgSpec(item.at(1));
+				holdVal2 = module.getSynthArgSpec(item.at(1));
 				// set values for holdMidiNoteKeybGrid
 				holdMidiNoteKeybGrid.value_(holdVal + holdVal2);
 			}
@@ -3116,7 +3798,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			loopAllowance = 30;
 		});
 		// add rangeslider
-		holdSeqRangeView = TXRangeSlider(w, ((item.at(10) ? viewWidth) - loopAllowance) @ 20, item.at(5) ? "Play range",
+		classData.holdSeqRangeView = TXRangeSlider(w, ((item.at(10) ? classData.viewWidth) - loopAllowance) @ 20, item.at(5) ? "Play range",
 			ControlSpec(1, item.at(4), step: 1),
 			{|view|
 				// store current data to synthArgSpecs
@@ -3135,25 +3817,25 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(8), // presets
 			item.at(9) ? true
 		);
+		classData.holdSeqRangeView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// disable rangeView if requested
-		if (item.at(7) == false, {holdSeqRangeView.rangeView.enabled_(false);});
-		argModule.arrControls = argModule.arrControls.add(holdSeqRangeView);
-		holdSeqRangeView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		if (item.at(7) == false, {classData.holdSeqRangeView.rangeView.enabled_(false);});
+		argModule.arrControls = argModule.arrControls.add(classData.holdSeqRangeView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdSeqRangeView, argModule],
+			[classData.holdSeqRangeView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.valueBothNoAction_([argModule.getSynthArgSpec(item.at(1)),
-					argModule.getSynthArgSpec(item.at(2))]);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueBothNoAction_([argMod.getSynthArgSpec(item.at(1)),
+					argMod.getSynthArgSpec(item.at(2))]);
 			}
 		);
 
 		// if arg index 3 not nil, add loop checkbox
 		if (item.at(3).notNil, {
-			holdView2 = TXCheckBox(w, 54 @ 20, "Loop", TXColour.sysGuiCol1,
-				TXColor.grey(0.8), TXColor.white, TXColor.sysGuiCol1);
-			holdView2.action = {|view|
+			classData.holdView2 = TXCheckBox(w, 54 @ 20, "Loop", TXColour.sysGuiCol1,
+				TXColor.grey(0.9), TXColor.white, TXColor.sysGuiCol1);
+			classData.holdView2.action = {|view|
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(3), view.value);
 				// if action function passed then value it
@@ -3162,15 +3844,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 					item.at(11).value(view);
 				});
 			};
-			argModule.arrControls = argModule.arrControls.add(holdView2);
+			argModule.arrControls = argModule.arrControls.add(classData.holdView2);
 			// get initial value
-			holdView2.value = argModule.getSynthArgSpec(item.at(3));
+			classData.holdView2.value = argModule.getSynthArgSpec(item.at(3));
 			// add screen update function
 			system.addScreenUpdFunc(
-				[holdView2, argModule],
+				[classData.holdView2, argModule],
 				{ arg argArray;
-					var argView = argArray.at(0), argModule = argArray.at(1);
-					argView.value_(argModule.getSynthArgSpec(item.at(3)));
+					var argView = argArray.at(0), argMod = argArray.at(1);
+					argView.value_(argMod.getSynthArgSpec(item.at(3)));
 				}
 			);
 		});
@@ -3182,9 +3864,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// e.g. ["SeqStepNoTxt", 16, "Step"]
 	*guiSeqStepNoTxt { arg item, w;
 		this.nextline(w);
-		holdView = TXMultiTextBox(w, viewWidth @ 20, item.at(0) ? "Step", Array.series(item.at(1).value,1) );
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView = TXMultiTextBox(w, classData.viewWidth @ 20, item.at(0) ? "Step", Array.series(item.at(1).value,1) );
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 	}
 
 	// SeqScrollStep
@@ -3196,41 +3878,41 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiSeqScrollStep { arg item, w;
 		var holdFirstStep, holdLastStep;
 		this.nextline(w);
-		holdView = TXMultiTextBox(w, viewWidth @ 20, "Step", Array.series(item.at(1), 1),
+		classData.holdView = TXMultiTextBox(w, classData.viewWidth @ 20, "Step", Array.series(item.at(1), 1),
 			scrollViewWidth: 580, scrollViewAction: item.at(3));
-		item.at(2).value(holdView.scrollView);
+		item.at(2).value(classData.holdView.scrollView);
 		// highlight text that falls within play range
 		if (item.at(4).notNil and: item.at(5).notNil, {
 			holdFirstStep = argModule.getSynthArgSpec(item.at(4)).min(argModule.getSynthArgSpec(item.at(5)));
 			holdLastStep = argModule.getSynthArgSpec(item.at(4)).max(argModule.getSynthArgSpec(item.at(5)));
-			holdView.arrTextViews.do({ arg item, i;
+			classData.holdView.arrTextViews.do({ arg item, i;
 				if ( ((i+1) >= (holdFirstStep) ) and: ((i+1) <= (holdLastStep) ), {
 					item.background_(TXColor.paleYellow2);
 					item.refresh;
-					},{
-						item.background_(TXColor.grey6);
-						item.refresh;
+				},{
+					item.background_(TXColor.grey6);
+					item.refresh;
 				});
 			});
 		});
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1), holdFirstStep, holdLastStep;
+				var argView = argArray.at(0), argMod = argArray.at(1), holdFirstStep, holdLastStep;
 				// highlight text that falls within play range
 				if (item.at(4).notNil and: item.at(5).notNil, {
-					holdFirstStep = argModule.getSynthArgSpec(item.at(4)).min(argModule.getSynthArgSpec(item.at(5)));
-					holdLastStep = argModule.getSynthArgSpec(item.at(4)).max(argModule.getSynthArgSpec(item.at(5)));
+					holdFirstStep = argMod.getSynthArgSpec(item.at(4)).min(argMod.getSynthArgSpec(item.at(5)));
+					holdLastStep = argMod.getSynthArgSpec(item.at(4)).max(argMod.getSynthArgSpec(item.at(5)));
 					argView.arrTextViews.do({ arg item, i;
 						if ( ((i+1) >= (holdFirstStep) ) and: ((i+1) <= (holdLastStep) ), {
 							item.background_(TXColor.paleYellow2);
 							item.refresh;
-							},{
-								item.background_(TXColor.grey6);
-								item.refresh;
+						},{
+							item.background_(TXColor.grey6);
+							item.refresh;
 						});
 					});
 				});
@@ -3246,10 +3928,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiSeqSelectFirstDisplayStep { arg item, w;
 		this.nextline(w);
 		// get initial value
-		holdVal = argModule.getSynthArgSpec(item.at(2)) + 1;  // add 1 for display so step no.s start from 1
-		holdView = TXMultiTextBox(w, viewWidth @ 20, "Step", Array.series(item.at(1), holdVal););
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdVal = argModule.getSynthArgSpec(item.at(2)) + 1;  // add 1 for display so step no.s start from 1
+		classData.holdView = TXMultiTextBox(w, classData.viewWidth @ 20, "Step", Array.series(item.at(1), classData.holdVal););
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// create buttons to move start step up/down 16
 		Button(w, 18 @ 20)
 		.states_([["<<", TXColor.white, TXColor.sysGuiCol1]])
@@ -3309,7 +3991,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiSeqSelectChainStep { arg item, w;
 		this.nextline(w);
 		// get initial value
-		holdView = TXChainStepGui(w, viewWidth @ 20, nil, nil,
+		classData.holdView = TXChainStepGui(w, classData.viewWidth @ 20, nil, nil,
 			item.at(1),
 			{|view|
 				// store current data to synthArgSpecs
@@ -3332,9 +4014,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			true,
 			TXColor.paleYellow2
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleYellow2);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleYellow2);
 	}
 
 	// SeqSelect3GroupModules
@@ -3345,50 +4027,50 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiSeqSelect3GroupModules { arg item, w;
 		var arrValidModules;
 
-		labelView = StaticText(w, 80 @ 20).stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
-		labelView.string = item.at(7) ? "Modules";
-		labelView.align = \right;
+		classData.labelView = StaticText(w, 80 @ 20).stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.labelView.string = item.at(7) ? "Modules";
+		classData.labelView.align = \right;
 		// to prevent infinite loops, current module is not a valid output module
-		arrValidModules = arrGroupModules.select({arg item; item != argModule;});
+		arrValidModules = classData.arrGroupModules.select({arg item; item != argModule;});
 
 		// create 3 popups
 		3.do({ arg number, i;
 			var holdModule;
 			// allow for less than 3 popups if variable name isNil
 			if (item.at(i+1).notNil, {
-				holdView = PopUpMenu(w, 150 @ 20).stringColor_(TXColor.white).background_(TXColor.sysGuiCol1);
-				holdView.items = ["..."]
-				++ arrValidModules.collect({arg item; item.instName;});
-				holdView.action = { |view|
+				classData.holdView = PopUpMenu(w, 150 @ 20).stringColor_(TXColor.white).background_(TXColor.sysGuiCol1);
+				classData.holdView.items = ["..."]
+				++ arrValidModules.collect({arg item; item.instDisplayName;});
+				classData.holdView.action = { |view|
 					// check for 0 value meaning no module selected
 					if (view.value > 0, {
 						// set outputmodule variable
 						argModule.perform((item.at(i+1) ++ "_").asSymbol, arrValidModules.at(view.value - 1));
 						// store current data to synthArgSpecs
 						argModule.setSynthArgSpec(item.at(i+4), arrValidModules.at(view.value - 1).moduleID);
-						}, {
-							// set outputmodule variable
-							argModule.perform((item.at(i+1) ++ "_").asSymbol, nil);
-							// store current data to synthArgSpecs
-							argModule.setSynthArgSpec(item.at(i+4), nil);
+					}, {
+						// set outputmodule variable
+						argModule.perform((item.at(i+1) ++ "_").asSymbol, nil);
+						// store current data to synthArgSpecs
+						argModule.setSynthArgSpec(item.at(i+4), nil);
 					});
 					w.refresh;
 				};
-				holdVal = argModule.getSynthArgSpec(item.at(i+4));
-				if (holdVal.isNil, {
+				classData.holdVal = argModule.getSynthArgSpec(item.at(i+4));
+				if (classData.holdVal.isNil, {
 					// set starting value
-					holdView.value = 0;
-					}, {
-						holdModule = system.getModuleFromID(holdVal);
-						if (holdModule != 0, {
-							// get instance name of note out module
-							holdVal2 = holdModule.instName;
-							// set starting value
-							holdView.value = 1 +
-							(arrValidModules.collect({arg item, i; item.instName; }).indexOf(holdVal2) ? 0);
-						});
+					classData.holdView.value = 0;
+				}, {
+					holdModule = system.getModuleFromID(classData.holdVal);
+					if (holdModule != 0, {
+						// get instance name of note out module
+						classData.holdVal2 = holdModule.instName;
+						// set starting value
+						classData.holdView.value = 1 +
+						(arrValidModules.collect({arg item, i; item.instName; }).indexOf(classData.holdVal2) ? 0);
+					});
 				});
-				argModule.arrControls = argModule.arrControls.add(holdView);
+				argModule.arrControls = argModule.arrControls.add(classData.holdView);
 			});
 		});
 	}
@@ -3396,29 +4078,29 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// SeqSyncStartCheckBox
 	*guiSeqSyncStartCheckBox { arg item, w;
 		// N.B. no arguments - assumes arrSynthArgSpecs contains "syncStart"
-		holdView = TXCheckBox(w, 90 @ 20, "Sync Start", TXColor.sysGuiCol1, TXColour.grey(0.8),
+		classData.holdView = TXCheckBox(w, 90 @ 20, "Sync Start", TXColor.sysGuiCol1, TXColour.grey(0.9),
 			TXColor.white, TXColor.sysGuiCol1);
-		holdView.action = {|view|
+		classData.holdView.action = {|view|
 			// store current data to synthArgSpecs
 			argModule.setSynthArgSpec("syncStart", view.value);
 		};
 		// assumes arrSynthArgSpecs contains entry for "syncStart"
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.value =  argModule.getSynthArgSpec("syncStart");
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.value =  argModule.getSynthArgSpec("syncStart");
 	}
 
 	// SeqSyncStopCheckBox
 	*guiSeqSyncStopCheckBox { arg item, w;
 		// N.B. no arguments - assumes arrSynthArgSpecs contains "syncStop"
-		holdView = TXCheckBox(w, 90 @ 20, "Sync Stop", TXColor.sysGuiCol1, TXColour.grey(0.8),
+		classData.holdView = TXCheckBox(w, 90 @ 20, "Sync Stop", TXColor.sysGuiCol1, TXColour.grey(0.9),
 			TXColor.white, TXColor.sysGuiCol1);
-		holdView.action = {|view|
+		classData.holdView.action = {|view|
 			// store current data to synthArgSpecs
 			argModule.setSynthArgSpec("syncStop", view.value);
 		};
 		// assumes arrSynthArgSpecs contains entry for "syncStop"
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.value =  argModule.getSynthArgSpec("syncStop");
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.value =  argModule.getSynthArgSpec("syncStop");
 	}
 
 	// TXSlotGui
@@ -3428,13 +4110,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// e.g. ["TXSlotGui", arrSlots, {this.getSynthArgSpec("slotNo")}, {arg slotNo; this.setSynthArgSpec("slotNo", slotNo)},
 	//		{this.getSlotData}, {arg slotData; this.setSlotData(slotData)}],
 	*guiTXSlotGui { arg item, w;
-		holdView = TXSlotGui(w, 90 @ 20, "Pattern slots", item.at(1).value,
+		classData.holdView = TXSlotGui(w, 90 @ 20, "Pattern slots", item.at(1).value,
 			[item.at(3), item.at(4), item.at(5), item.at(6), item.at(7)], item.at(2).value);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView4.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView4.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 	}
 
 	// TXEnvGui
@@ -3447,15 +4129,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index5 is an optional ACTION function to be valued in views action
 	// index6 is an optional height for the gui
 	// index7 is an optional width for the envelope step time boxes
+	// index8 is an optional array of curves function, index9/10 are optional gridRows/gridCols
 	// e.g. ["TXEnvGui", arrLevelSynthArgs, arrTimeSynthArgs, "envTotalTime", {this.getSynthArgSpec("numStages")}]
 	*guiTXEnvGui { arg item, w;
-		holdVal = item.at(1).collect({ arg item, i;
+		classData.holdVal = item.at(1).collect({ arg item, i;
 			argModule.getSynthArgSpec(item);
 		});
-		holdVal2 = item.at(2).collect({ arg item, i;
+		classData.holdVal2 = item.at(2).collect({ arg item, i;
 			argModule.getSynthArgSpec(item);
 		});
-		holdView = TXEnvGui(w, viewWidth @ (item.at(6) ? 100), ControlSpec(0, 100), TXColor.sysGuiCol1, TXColour.white,
+		classData.holdView = TXEnvGui(w, classData.viewWidth @ (item.at(6) ? 100), ControlSpec(0, 100),
+			TXColor.sysGuiCol1, TXColour.white,
 			// view action
 			{|view|
 				var holdArr, holdArr2;
@@ -3475,14 +4159,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 				// store current data to synthArgSpecs
 				item.at(1).do({ arg item, i;
-					argModule.setSynthArgSpec(item, holdArr.at(i));
+					argModule.setSynthValue(item, holdArr.at(i));
 				});
 				item.at(2).do({ arg item, i;
-					argModule.setSynthArgSpec(item, holdArr2.at(i));
+					argModule.setSynthValue(item, holdArr2.at(i));
 				});
 				// store total to synthArgSpecs
-				argModule.setSynthArgSpec(item.at(3), holdArr2.sum);
-
+				argModule.setSynthValue(item.at(3), holdArr2.keep(item.at(4).value).sum);
 				// if action function passed then value it
 				if (item.at(5).notNil, {
 					// run action function passing it view as arg
@@ -3490,10 +4173,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 			},
 			// starting value array
-			[holdVal.copyRange(0, item.at(4).value -1), holdVal2.copyRange(0, item.at(4).value -1)],
-			stepWidth: item.at(7)
+			[classData.holdVal.copyRange(0, item.at(4).value -1), classData.holdVal2.copyRange(0, item.at(4).value -1)],
+			stepWidth: item.at(7),
+			arrCurves: item.at(8).value,
+			gridRows: item.at(9).value,
+			gridCols: item.at(10).value,
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 	}
 
 	// TXEnvDisplay
@@ -3501,25 +4187,46 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// arguments:
 	// index1 is function to give  initial value array of view
 	// index2 is an inital ACTION function to be valued with view as argument
+	// index3 is an optional curves array function
 	// e.g. ["TXEnvDisplay", arrLevelSynthArgs, arrTimeSynthArgs, "envTotalTime", {this.getSynthArgSpec("numStages")}]
 	*guiTXEnvDisplay { arg item, w;
-		holdView = EnvelopeView(w, viewWidth @ 80)
-		.thumbSize_(14)
+		classData.holdView = EnvelopeView(w, classData.viewWidth @ 80)
+		.thumbSize_(1)
+		.drawRects_(false)
 		.drawLines_(true)
-		.drawRects_(true)
-		.fillColor_(Color.white)
+		.style_(\dots)
+		.fillColor_(Color.grey(0.8))
 		.selectionColor_(Color.white)
 		.value_(item.at(1).value);
-		//			// label each point
-		//			["-", "P", "A", "D", "S", "R"].do({arg item, i;
-		//				holdView.setString(i, item);
-		//			});
+					// label each point
+					["-", "P", "A", "D", "S", "R"].do({arg item, i;
+						classData.holdView.setString(i, item);
+					});
 		6.do({arg i;
-			holdView.setEditable(i, false);
+			classData.holdView.setEditable(i, false);
 		});
+		classData.holdView.fillColor_(Color.grey(0.8));
+		// set val
+		classData.holdView.curves_(item.at(3).value ? 'lin');
+		classData.holdView.value_(item.at(1).value);
 		// run initial action
-		item.at(2).value(holdView);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		item.at(2).value(classData.holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+	}
+
+	// TXEnvPlot
+	// This module is for plotting an envelope
+	// arguments:
+	// index1 is function to give initial value array of view: [arrLevels, arrTimes, arrCurves]
+	// index2 is an inital ACTION function to be valued with view as argument
+	// e.g. ["TXEnvPlot", {this.envViewValues;}, {arg view; envView = view;}]
+	*guiTXEnvPlot { arg item, w;
+		classData.holdView = TXEnvPlot(w, classData.viewWidth @ 80);
+		// set val
+		classData.holdView.set_(item.at(1).value);
+		// run initial action
+		item.at(2).value(classData.holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 	}
 
 	// TXSoundFileView
@@ -3531,7 +4238,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index6 is an optional height
 	// e.g. ["TXSoundFileView", {sampleFileName}, "start", "end"]
 	*guiTXSoundFileView { arg item, w;
-		holdSFView = TXSoundFile(w, 450 @ (item.at(6) ?? 150),
+		classData.holdSFView = TXSoundFile(w, 450 @ (item.at(6) ?? 150),
 			{|view|
 				// if action function passed then value it
 				if (item.at(4).notNil, {
@@ -3548,7 +4255,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(2),
 			item.at(3)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdSFView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdSFView);
 		// next line
 		this.nextline(w);
 	}	// end of TXSoundFileView
@@ -3558,11 +4265,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index4 is an optional ACTION function to be valued in views action
 	// 	index5 is an optional function (val 0 or 1) for whether to display the file or not (to save CPU if not needed)
 	// 	index6 is an optional height
-	// 	NO LONGER USED: index7 is an optional function to get sampleData - NO LONGER USED
-	// 	NO LONGER USED: index8 is an optional function to set sampleData - NO LONGER USED
+	// 	index7 - NO LONGER USED: is an optional function to get sampleData - NO LONGER USED
+	// 	index8 - NO LONGER USED: is an optional function to set sampleData - NO LONGER USED
+	// 	index9 is an optional width
 	// e.g. ["TXSoundFileViewRange", {sampleFileName}, "start", "end"]
 	*guiTXSoundFileViewRange { arg item, w;
-		holdSFView = TXSoundFile(w, 450 @ (item.at(6) ?? 150),
+		classData.holdSFView = TXSoundFile(w, (item.at(9) ?? 450) @ (item.at(6) ?? 150),
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -3573,7 +4281,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argModule.setSynthArgSpec(item.at(2), view.lo);
 				argModule.setSynthArgSpec(item.at(3), view.hi);
 				// store values to TXRangeSlider
-				holdRangeView.valueBoth = [view.lo, view.hi];
+				classData.holdRangeView.valueBoth = [view.lo, view.hi];
 				// if action function passed then value it
 				if (item.at(4).notNil, {
 					// run action function passing it view as arg
@@ -3587,11 +4295,11 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(1).value,
 			item.at(5).value
 		);
-		argModule.arrControls = argModule.arrControls.add(holdSFView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdSFView);
 		// next line
 		this.nextline(w);
 		// TXRangeSlider
-		holdRangeView = TXRangeSlider(w, viewWidth @ 20, "Play range", nil,
+		classData.holdRangeView = TXRangeSlider(w, classData.viewWidth @ 20, "Play range", nil,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -3602,7 +4310,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argModule.setSynthArgSpec(item.at(2), view.lo);
 				argModule.setSynthArgSpec(item.at(3), view.hi);
 				// store values to TXSoundFile
-				holdSFView.valueBoth = [view.lo, view.hi];
+				classData.holdSFView.valueBoth = [view.lo, view.hi];
 				// if action function passed then value it
 				if (item.at(4).notNil, {
 					// run action function passing it view as arg
@@ -3613,8 +4321,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(2)),
 			argModule.getSynthArgSpec(item.at(3))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdRangeView);
-		holdRangeView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdRangeView);
+		classData.holdRangeView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 	}	// end of TXSoundFileViewRange
 
 	// TXSoundFileViewFraction
@@ -3626,7 +4334,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index7 is an optional function to set sampleData
 	// e.g. ["TXSoundFileViewFraction", {loopFileName}, "start", "end"]
 	*guiTXSoundFileViewFraction { arg item, w;
-		holdSFView = TXSoundFile(w, 450 @ 150,
+		classData.holdSFView = TXSoundFile(w, 450 @ 150,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -3637,8 +4345,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argModule.setSynthArgSpec(item.at(2), view.lo);
 				argModule.setSynthArgSpec(item.at(3), view.hi);
 				// store values to TXRangeSlider
-				holdTXFraction1.value = view.lo;
-				holdTXFraction2.value = view.hi;
+				classData.holdTXFraction1.value = view.lo;
+				classData.holdTXFraction2.value = view.hi;
 				// if action function passed then value it
 				if (item.at(4).notNil, {
 					// run action function passing it view as arg
@@ -3654,11 +4362,11 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(6),
 			item.at(7)
 		);
-		argModule.arrControls = argModule.arrControls.add(holdSFView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdSFView);
 		// next line
 		this.nextline(w);
 		// TXFraction1
-		holdTXFraction1 = TXFraction(w, viewWidth @ 20, "Start", nil,
+		classData.holdTXFraction1 = TXFraction(w, classData.viewWidth @ 20, "Start", nil,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -3667,7 +4375,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), view.value);
 				// store value to TXSoundFile
-				holdSFView.lo = view.value;
+				classData.holdSFView.lo = view.value;
 				// if action function passed then value it
 				if (item.at(4).notNil, {
 					// run action function passing it view as arg
@@ -3677,12 +4385,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.getSynthArgSpec(item.at(2))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdTXFraction1);
-		holdTXFraction1.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdTXFraction1.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdTXFraction1.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdTXFraction1);
+		classData.holdTXFraction1.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction1.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction1.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// TXFraction2
-		holdTXFraction2 = TXFraction(w, viewWidth @ 20, "End", nil,
+		classData.holdTXFraction2 = TXFraction(w, classData.viewWidth @ 20, "End", nil,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -3691,7 +4399,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(3), view.value);
 				// store value to TXSoundFile
-				holdSFView.hi = view.value;
+				classData.holdSFView.hi = view.value;
 				// if action function passed then value it
 				if (item.at(4).notNil, {
 					// run action function passing it view as arg
@@ -3701,62 +4409,62 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			// get starting value
 			argModule.getSynthArgSpec(item.at(3))
 		);
-		argModule.arrControls = argModule.arrControls.add(holdTXFraction2);
-		holdTXFraction2.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdTXFraction2.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdTXFraction2.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdTXFraction2);
+		classData.holdTXFraction2.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction2.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction2.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 	}	// end of TXSoundFileViewFraction
 
 	// TestNoteVals
 	// N.B. no arguments - assumes synth has variables testMIDINote, testMIDIVel, testMIDITime
 	*guiTestNoteVals { arg item, w;
-		holdView = StaticText(w, 150 @ 20);
-		holdView.string = "Test Note Settings:";
-		holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.setProperty(\align,\center);
+		classData.holdView = StaticText(w, 150 @ 20);
+		classData.holdView.string = "Test Note Settings:";
+		classData.holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.setProperty(\align,\center);
 		// start on new line
 		this.nextline(w);
-		holdNoteNo = TXNumber(w, viewWidth @ 20, "Test Note", ControlSpec(0, 127, step: 1),
+		classData.holdNoteNo = TXNumber(w, classData.viewWidth @ 20, "Test Note", ControlSpec(0, 127, step: 1),
 			{|view|
 				// store current data
 				argModule.testMIDINote = view.value;
 				// update string text
-				holdNoteString.string = TXGetMidiNoteString(view.value);
+				classData.holdNoteString.string = TXGetMidiNoteString(view.value);
 			},
 			// get initial value
 			argModule.testMIDINote,
 			false, 80, 44
 		);
-		argModule.arrControls = argModule.arrControls.add(holdNoteNo);
-		holdNoteNo.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdNoteNo);
+		classData.holdNoteNo.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// create text string for note
-		holdNoteString = StaticText(w, 44 @ 20)
+		classData.holdNoteString = StaticText(w, 44 @ 20)
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdNoteString.string = TXGetMidiNoteString(holdNoteNo.value);
+		classData.holdNoteString.string = TXGetMidiNoteString(classData.holdNoteNo.value);
 		// create buttons to move note up/down 1/12
 		Button(w, 32 @ 20)
 		.states_([["-1", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({|view|
-			holdNoteNo.value = (holdNoteNo.value - 1).max(0).min(127);
+			classData.holdNoteNo.value = (classData.holdNoteNo.value - 1).max(0).min(127);
 		});
 		Button(w, 32 @ 20)
 		.states_([["+1", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({|view|
-			holdNoteNo.value = (holdNoteNo.value + 1).max(0).min(127);
+			classData.holdNoteNo.value = (classData.holdNoteNo.value + 1).max(0).min(127);
 		});
 		Button(w, 32 @ 20)
 		.states_([["-12", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({|view|
-			holdNoteNo.value = (holdNoteNo.value - 12).max(0).min(127);
+			classData.holdNoteNo.value = (classData.holdNoteNo.value - 12).max(0).min(127);
 		});
 		Button(w, 32 @ 20)
 		.states_([["+12", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({|view|
-			holdNoteNo.value = (holdNoteNo.value + 12).max(0).min(127);
+			classData.holdNoteNo.value = (classData.holdNoteNo.value + 12).max(0).min(127);
 		});
 		// start on new line
 		this.nextline(w);
-		holdView = TXSlider(w, viewWidth @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
+		classData.holdView = TXSlider(w, classData.viewWidth @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
 			{|view|
 				// store current data
 				argModule.testMIDIVel = view.value;
@@ -3765,11 +4473,11 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.testMIDIVel,
 			false, 80, 60
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		// start on new line
 		this.nextline(w);
-		holdView = TXSlider(w, viewWidth @ 20, "Time",  ControlSpec(0.1, 20, 'db'),
+		classData.holdView = TXSlider(w, classData.viewWidth @ 20, "Time",  ControlSpec(0.1, 20, 'db'),
 			{|view|
 				// store current data
 				argModule.testMIDITime = view.value;
@@ -3778,20 +4486,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.testMIDITime,
 			false, 80, 60
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 	}	// end of TestNoteVals
 
 	// TestLoopVals
 	// N.B. no arguments - assumes synth has variables testMIDINote, testMIDIVel, testMIDITime
 	*guiTestLoopVals { arg item, w;
-		holdView = StaticText(w, 150 @ 20);
-		holdView.string = "Test Loop Settings:";
-		holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.setProperty(\align,\center);
+		classData.holdView = StaticText(w, 150 @ 20);
+		classData.holdView.string = "Test Loop Settings:";
+		classData.holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.setProperty(\align,\center);
 		// start on new line
 		this.nextline(w);
-		holdView = TXSlider(w, viewWidth @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
+		classData.holdView = TXSlider(w, classData.viewWidth @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
 			{|view|
 				// store current data
 				argModule.testMIDIVel = view.value;
@@ -3800,11 +4508,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.testMIDIVel,
 			false, 80, 60
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
 		// start on new line
 		this.nextline(w);
-		holdView = TXSlider(w, viewWidth @ 20, "Time",  ControlSpec(0.1, 20, 'db'),
+		classData.holdView = TXSlider(w, classData.viewWidth @ 20, "Time",  ControlSpec(0.1, 20, 'db'),
 			{|view|
 				// store current data
 				argModule.testMIDITime = view.value;
@@ -3813,8 +4522,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.testMIDITime,
 			false, 80, 60
 		);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
 	}	// end of TestLoopVals
 
 	// TXActionSteps
@@ -3840,17 +4550,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTXActionSteps { arg item, w;
 		var extraWidth = 0;
 		if (item.at(8).notNil, {extraWidth = 40;});
-		holdView = TXActionSteps(system, w, (viewWidth + extraWidth) @ 425, item.at(1).value, item.at(2),
+		classData.holdView = TXActionSteps(system, w, (classData.viewWidth + extraWidth) @ 425, item.at(1).value, item.at(2),
 			item.at(3).value, item.at(4).value, item.at(5).value, item.at(6), item.at(8), item.at(9), item.at(10));
 		if (item.at(7).notNil, {
-			item.at(7).value(holdView.scrollView);
+			item.at(7).value(classData.holdView.scrollView);
 		});
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
+				var argView = argArray.at(0), argMod = argArray.at(1);
 				// this only updates step times which can change when bpm changes
 				argView.updateTimesFromNew(item.at(1).value);
 			}
@@ -3873,17 +4583,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	//		{arg view; holdVisibleOrigin = view.visibleOrigin; } ],
 	*guiTXOSCTrigActions { arg item, w;
 		var extraWidth = 0;
-		holdView = TXOSCTrigActions(system, w, (viewWidth + extraWidth) @ 370, item.at(1).value, item.at(2),
+		classData.holdView = TXOSCTrigActions(system, w, (classData.viewWidth + extraWidth) @ 386, item.at(1).value, item.at(2),
 			item.at(3), item.at(5), item.at(6), item.at(7), item.at(8), item.at(9));
 		if (item.at(4).notNil, {
-			item.at(4).value(holdView.scrollView);
+			item.at(4).value(classData.holdView.scrollView);
 		});
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		//		// add screen update function
 		//		system.addScreenUpdFunc(
-		//			[holdView, argModule],
+		//			[classData.holdView, argModule],
 		//			{ arg argArray;
-		//				var argView = argArray.at(0), argModule = argArray.at(1);
+		//				var argView = argArray.at(0), argMod = argArray.at(1);
 		//				// update rows
 		//						argView.value_(item.at(1).value);
 		//			}
@@ -3895,7 +4605,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// e.g. ["SeqNavigationButtons", 64, "displayFirstStep"]
 	*guiSeqNavigationButtons { arg item, w;
 		// get initial value
-		holdVal = argModule.getSynthArgSpec(item.at(2)) + 1;  // add 1 for display so step no.s start from 1
+		classData.holdVal = argModule.getSynthArgSpec(item.at(2)) + 1;  // add 1 for display so step no.s start from 1
 		// navigation buttons
 		[ ["<<<", -10], ["<<", -5], ["<", -1], [">", 1], [">>", 5] , [">>>", 10] ].do({ arg arrData, i;
 			Button(w, 28 @ 24)
@@ -3919,11 +4629,11 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 	*guiTXActionView { arg item, w;
 		this.nextline(w);
-		holdView = TXActionView(w, viewWidth @ 20, item.at(1).value, item.at(2).value, 80, system);
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView = TXActionView(w, classData.viewWidth @ 20, item.at(1).value, item.at(2).value, 80, system);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 	}
 
 	// TXGridGreyZone
@@ -3940,12 +4650,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		setActiveGridFunc = {arg argGrid; argModule.setSynthArgSpec(item.at(3), argGrid)};
 		holdRows = item.at(4);
 		holdCols = item.at(5);
-		holdView = TXGridGrey(w, viewWidth @ 20, item.at(1), "Zone", holdRows, holdCols,
+		classData.holdView = TXGridGrey(w, classData.viewWidth @ 20, item.at(1), "Zone", holdRows, holdCols,
 			getSnapArrFunc, getActiveGridFunc, setActiveGridFunc, 80, system);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView],
+			[classData.holdView],
 			{ arg argArray;
 				var argView = argArray.at(0);
 				argView.setActiveGrid_(getActiveGridFunc.value);
@@ -3967,12 +4677,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		setTargetFunc = {arg argGrid; argModule.setSynthArgSpec(item.at(3), argGrid)};
 		holdRows = item.at(4);
 		holdCols = item.at(5);
-		holdView = TXGridGrey(w, viewWidth @ 20, item.at(1), "Target", holdRows, holdCols,
+		classData.holdView = TXGridGrey(w, classData.viewWidth @ 20, item.at(1), "Target", holdRows, holdCols,
 			getSnapArrFunc, getTargetFunc, setTargetFunc, 80, system);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView],
+			[classData.holdView],
 			{ arg argArray;
 				var argView = argArray.at(0);
 				argView.setTarget(getTargetFunc.value);
@@ -3994,12 +4704,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		setActiveGridFunc = {arg argGrid; argModule.setSynthArgSpec(item.at(3), argGrid)};
 		holdRows = item.at(4);
 		holdCols = item.at(5);
-		holdView = TXGridColour(w, viewWidth @ 20, item.at(1), "Zone", holdRows, holdCols,
+		classData.holdView = TXGridColour(w, classData.viewWidth @ 20, item.at(1), "Zone", holdRows, holdCols,
 			getSnapArrFunc, getActiveGridFunc, setActiveGridFunc, 80, system);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView],
+			[classData.holdView],
 			{ arg argArray;
 				var argView = argArray.at(0);
 				argView.setActiveGrid_(getActiveGridFunc.value);
@@ -4021,12 +4731,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		setTargetFunc = {arg argGrid; argModule.setSynthArgSpec(item.at(3), argGrid)};
 		holdRows = item.at(4);
 		holdCols = item.at(5);
-		holdView = TXGridColour(w, viewWidth @ 20, item.at(1), "Target", holdRows, holdCols,
+		classData.holdView = TXGridColour(w, classData.viewWidth @ 20, item.at(1), "Target", holdRows, holdCols,
 			getSnapArrFunc, getTargetFunc, setTargetFunc, 80, system);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView],
+			[classData.holdView],
 			{ arg argArray;
 				var argView = argArray.at(0);
 				argView.setTarget(getTargetFunc.value);
@@ -4052,15 +4762,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		getStringFunc = {argModule.getSynthArgSpec(item.at(4))};
 		setStringFunc = {arg argVal; argModule.setSynthArgSpec(item.at(4), argVal)};
 		controlSpec = item.at(5).value;
-		holdView = TXNumOrString(w, viewWidth @ 20, item.at(1), controlSpec, getTypeFunc, setTypeFunc,
+		classData.holdView = TXNumOrString(w, classData.viewWidth @ 20, item.at(1), controlSpec, getTypeFunc, setTypeFunc,
 			getNumFunc, setNumFunc, getStringFunc, setStringFunc, 80, 60, 330);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.valueAll_([getTypeFunc.value, getNumFunc.value, getStringFunc.value]);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.valueAll_([getTypeFunc.value, getNumFunc.value, getStringFunc.value]);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView],
+			[classData.holdView],
 			{ arg argArray;
 				var argView = argArray.at(0);
 				argView.valueAll_([getTypeFunc.value, getNumFunc.value, getStringFunc.value]);
@@ -4109,17 +4819,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			holdNum = argModule.getSynthArgSpec(item.at(2));
 			holdArgs ++ (holdMin + (holdNum * (holdMax - holdMin)));
 		};
-		holdView = TXQCArgGui(w, viewWidth @ 20, label, getNumFunc, setNumFunc, setActiveFunc,
+		classData.holdView = TXQCArgGui(w, classData.viewWidth @ 20, label, getNumFunc, setNumFunc, setActiveFunc,
 			arrArgs, argIndex, setArgValFunc, 110, 60, 330);
-		holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.label2View.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.85));
-		holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.presetPopup.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.valueAll_(arrValsFunc.value);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.label2View.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.85));
+		classData.holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.presetPopup.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.valueAll_(arrValsFunc.value);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView],
+			[classData.holdView],
 			{ arg argArray;
 				var argView = argArray.at(0);
 				argView.valueAll_(arrValsFunc.value);
@@ -4141,20 +4851,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	//		{arg view; holdScrollView = view;},
 	//		{arg view; holdVisibleOrigin = view.visibleOrigin; },
 	//	],
-	*guiTXQCArgGuiScroller { arg item, w;
+	*guiTXQCArgGuiScroller {arg item, w;
 		var extraWidth = 40;
-		holdView = TXQCArgGuiScroller(system, w, (viewWidth + extraWidth) @ 425, argModule, item.at(1).value,
+		classData.holdView = TXQCArgGuiScroller(system, w, (classData.viewWidth + extraWidth) @ 425, argModule, item.at(1).value,
 			item.at(2).value, item.at(3).value, item.at(4).value, item.at(5), item.at(7));
 		if (item.at(6).notNil, {
-			item.at(6).value(holdView.scrollView);
+			item.at(6).value(classData.holdView.scrollView);
 		});
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView, argModule],
+			[classData.holdView, argModule],
 			{ arg argArray;
-				var argView = argArray.at(0), argModule = argArray.at(1);
-				argView.update(item.at(4).value, item.at(2).value, argModule);
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.update(item.at(4).value, item.at(2).value, argMod);
 			}
 		);
 	}
@@ -4174,23 +4884,23 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	//		{arg view; holdScrollView = view;},
 	//		{arg view; holdVisibleOrigin = view.visibleOrigin; },
 	//	],
-	*guiTXV_GuiScroller { arg item, w;
+	*guiTXV_GuiScroller {arg item, w;
 		var extraWidth = 40;
-		holdView = TXV_GuiScroller(system, w, (viewWidth + extraWidth) @ (item.at(7) ? 500), argModule, item.at(1),
+		classData.holdView = TXV_GuiScroller(system, w, (classData.viewWidth + extraWidth) @ (item.at(7) ? 500), argModule, item.at(1),
 			item.at(2), item.at(3), item.at(5), item.at(6));
 		if (item.at(4).notNil, {
-			item.at(4).value(holdView.scrollView);
+			item.at(4).value(classData.holdView.scrollView);
 		});
-		argModule.arrControls = argModule.arrControls.add(holdView);
-		// NOT CURRENTLY USED:::::::::::::::::::::
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
-		// system.addScreenUpdFunc(
-		// 	[holdView, argModule],
-		// 	{ arg argArray;
-		// 		var argView = argArray.at(0), argModule = argArray.at(1);
-		// 		argView.update(item.at(1).value, item.at(2).value, argModule);
-		// 	}
-		// );
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.update(argMod, item.at(1),
+					item.at(2), item.at(3), item.at(5), item.at(6));
+			}
+		);
 	}
 
 	// ModMatrixRow
@@ -4208,27 +4918,28 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		arrMMDestNames = item.at(2);
 		getSourceFunc = {argModule.getSynthArgSpec(item.at(3))};
 		setSourceFunc = {arg argVal;
-			argModule.setSynthArgSpec(item.at(3), argVal);
+			argModule.setSynthValue(item.at(3), argVal);
 			// rebuild synth
 			argModule.rebuildSynth;
 		};
 		getDestFunc = {argModule.getSynthArgSpec(item.at(4))};
 		setDestFunc = {arg argVal;
-			argModule.setSynthArgSpec(item.at(4), argVal);
+			argModule.setSynthValue(item.at(4), argVal);
 			// rebuild synth
 			argModule.rebuildSynth;
 		};
 		getMMValueFunc = {argModule.getSynthArgSpec(item.at(5))};
-		setMMValueFunc = {arg argVal; argModule.setSynthArgSpec(item.at(5), argVal)};
-		holdView = ModMatrixRow(w, viewWidth @ 20, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc,
+		setMMValueFunc = {arg argVal; argModule.setSynthValue(item.at(5), argVal)};
+		classData.holdView = ModMatrixRow(w, classData.viewWidth @ 20, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc,
 			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc);
-		holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.popupMenuView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.valueAll_([getSourceFunc.value, getDestFunc.value, getMMValueFunc.value]);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		classData.holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.valueAll_([getSourceFunc.value, getDestFunc.value, getMMValueFunc.value]);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView],
+			[classData.holdView],
 			{ arg argArray;
 				var argView = argArray.at(0);
 				argView.valueAll_([getSourceFunc.value, getDestFunc.value, getMMValueFunc.value]);
@@ -4245,6 +4956,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index5 is synth arg name to be updated for the modulation amount
 	// 	index6 is arrMMScaleNames
 	//	index7 is synth arg name to be updated for the scale index
+	//  index8 is optional slider width
 	// e.g. ["ModMatrixRow", arrMMSourceNames, arrMMDestNames, "i_Source0", "i_Dest0", "mmValue0", arrMMScaleNames, "i_Scale0", ],
 	*guiModMatrixRowScale { arg item, w;
 		var arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc, getDestFunc, setDestFunc,
@@ -4253,36 +4965,38 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		arrMMDestNames = item.at(2);
 		getSourceFunc = {argModule.getSynthArgSpec(item.at(3))};
 		setSourceFunc = {arg argVal;
-			argModule.setSynthArgSpec(item.at(3), argVal);
+			argModule.setSynthValue(item.at(3), argVal);
 			// rebuild synth
 			argModule.rebuildSynth;
 		};
 		getDestFunc = {argModule.getSynthArgSpec(item.at(4))};
 		setDestFunc = {arg argVal;
-			argModule.setSynthArgSpec(item.at(4), argVal);
+			argModule.setSynthValue(item.at(4), argVal);
 			// rebuild synth
 			argModule.rebuildSynth;
 		};
 		getMMValueFunc = {argModule.getSynthArgSpec(item.at(5))};
-		setMMValueFunc = {arg argVal; argModule.setSynthArgSpec(item.at(5), argVal)};
+		setMMValueFunc = {arg argVal; argModule.setSynthValue(item.at(5), argVal)};
 		arrMMScaleNames = item.at(6);
 		getScaleFunc = {argModule.getSynthArgSpec(item.at(7))};
 		setScaleFunc = {arg argVal;
-			argModule.setSynthArgSpec(item.at(7), argVal);
+			argModule.setSynthValue(item.at(7), argVal);
 			// rebuild synth
 			argModule.rebuildSynth;
 		};
 
-		holdView = ModMatrixRowScale(w, viewWidth @ 20, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc,
-			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc, setScaleFunc);
-		holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.popupMenuView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.popupMenuView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		holdView.valueAll_([getSourceFunc.value, getDestFunc.value, getMMValueFunc.value, getScaleFunc.value]);
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		classData.holdView = ModMatrixRowScale(w, classData.viewWidth @ 20, arrMMSourceNames, arrMMDestNames, getSourceFunc,
+			setSourceFunc, getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc,
+			setScaleFunc, item.at(8) ? 115);
+		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.popupMenuView2.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.popupMenuView3.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.valueAll_([getSourceFunc.value, getDestFunc.value, getMMValueFunc.value, getScaleFunc.value]);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
 		system.addScreenUpdFunc(
-			[holdView],
+			[classData.holdView],
 			{ arg argArray;
 				var argView = argArray.at(0);
 				argView.valueAll_([getSourceFunc.value, getDestFunc.value, getMMValueFunc.value, getScaleFunc.value]);
@@ -4299,11 +5013,17 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index6 is the optional note stop function to be valued with note as argument
 	// index7 is the optional label string default: "Notes: C1 - B6"
 	// index8 is the optional boolean: Show velocity slider, default: true
+	// index9 is the optional function for scale semitones to be highlit
+	//   - e.g. for major scale: [ 0, 2, 4, 5, 7, 9, 11 ], default [0]
+	// index10 is the optional function for key 0-11, 0 = key C (default), 11 == B, that is used with the scale
+
 
 	*guiMIDIKeyboard { arg item, w;
-		var holdView;
+		var holdView, holdPos, holdMarginX;
+		holdPos = classData.win.asView.decorator.left;
+		holdMarginX = classData.win.asView.decorator.gap.x;
 		// Midi Keyboard
-		holdView = TXMIDIKeyboard.new(w, Rect(0, 0, item.at(4) ? viewWidth, item.at(3) ? 60),
+		holdView = TXMIDIKeyboard.new(w, Rect(0, 0, item.at(4) ? classData.viewWidth, item.at(3) ? 60),
 			item.at(2) ? 4, item.at(5) ? 48);
 		holdView.keyDownAction_(item.at(1));
 		holdView.keyUpAction_(item.at(6));
@@ -4311,13 +5031,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(6).value(oldNote);
 			item.at(1).value(newNote);
 		});
-		holdView.setColor(60, TXColour.yellow);
+		if (item.at(9).notNil, {
+			// show scale
+			holdView.showScale (item.at(9).value, item.at(10).value ? 0, TXColour.yellow);
+		});
+		// show middle C
+		holdView.setColor(60, holdView.getColor(60).blend(TXColour.red, 0.5));
 		argModule.arrControls = argModule.arrControls.add(holdView);
 
-		// new line
+		// new line & shift
 		this.nextline(w);
+		classData.win.asView.decorator.shift(holdPos - holdMarginX, 0);
+
 		// label
-		GUI.staticText.new(w, 160 @ 20)
+		StaticText(w, 160 @ 20)
 		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 		.string_(item.at(7) ? "Notes: C1 - B6")
 		.align_('center');
@@ -4336,7 +5063,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 		});
 		if (item.at(8).isNil or: (item.at(8) == true), {
-		// Velocity slider
+			// Velocity slider
 			holdView = TXSlider(w, 180 @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
 				{|view|
 					// store current data

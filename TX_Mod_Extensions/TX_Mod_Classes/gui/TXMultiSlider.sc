@@ -20,6 +20,12 @@ TXMultiSlider {	// MultiSlider module with label
 		gridRows = gridRows ? 0;
 		gridCols = gridCols ? 0;
 
+		if (window.class == Window, {
+			window.view.decorator.shift(-2, 0);
+		}, {
+			window.decorator.shift(-2, 0);
+		});
+
 		controlSpec = argControlSpec.asSpec;
 		initVal = initVal ? Array.fill(8, controlSpec.default);
 		action = argAction;
@@ -43,17 +49,18 @@ TXMultiSlider {	// MultiSlider module with label
 
 		if (gridRows > 0 or: {gridCols > 0}, {
 			// create grid
-			userView = UserView(scrollBox?window, holdMSVWidth @ dimensions.y);
+			userView = UserView(scrollBox?window, holdMSVWidth-2 @ dimensions.y);
+			userView.background = Color.gray(0.5);
 			userView.drawFunc = {
 				Pen.strokeColor = Color.white;
 				gridRows.do({arg item, i;
 					var holdHeight;
 					holdHeight = ((dimensions.y * (i + 1)) / gridRows).asInteger;
-					Pen.line(0 @ holdHeight, holdMSVWidth @ holdHeight);
+					Pen.line(0 @ holdHeight, holdMSVWidth-2 @ holdHeight);
 				});
 				gridCols.do({arg item, i;
 					var holdWidth;
-					holdWidth = ((holdMSVWidth * (i + 1)) / gridCols).asInteger;
+					holdWidth = ((holdMSVWidth-2 * (i + 1)) / gridCols).asInteger;
 					Pen.line(holdWidth @ 0, holdWidth @ dimensions.y);
 				});
 				Pen.stroke
@@ -75,6 +82,9 @@ TXMultiSlider {	// MultiSlider module with label
 			value = controlSpec.map(multiSliderView.value);
 			action.value(this);
 		};
+		if (gridRows > 0 or: {gridCols > 0}, {
+			multiSliderView.background = multiSliderView.background.alpha_(0.1);
+		});
 
 		if (showClone1 == 1, {
 			Button(window, 50 @ 20)
@@ -105,5 +115,9 @@ TXMultiSlider {	// MultiSlider module with label
 			value = initVal;
 			multiSliderView.value = controlSpec.unmap(value);
 		};
+	}
+
+	hasFocus {
+		^multiSliderView.hasFocus;
 	}
 }

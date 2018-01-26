@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Dual Filter St</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><b>Module type: Audio Insert (stereo input, stereo output)</b></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module filters stereo audio signals. </span></p>
+<p class="p1"><span class="s1">A filter cuts or boosts certain frequencies in an audio signal.  </span></p>
+<p class="p1"><span class="s1">In this module, 1 or 2 filters (named Filter A & Filter B) are used, depending on the <b>Filter Mode</b>. There are 4 modes:</span></p>
+<p class="p1"><span class="s1"><b><i>Filter Mix:  Mix between A and B</i></b> - crossfades between 2 filters</span></p>
+<p class="p1"><span class="s1"><b><i>Filter Morph:  Morph between A and B [Filter type B ignored]</i></b> - only 1 filter is used, based on Filter type A, morphing between the settings of A & B</span></p>
+<p class="p1"><span class="s1"><b><i>Filters in Series:  A is filtered by B  [Morph/Mix ignored]</i></b> - the signal is filtered by A and then by B</span></p>
+<p class="p1"><span class="s1"><b><i>Subtract Filters:  Subtract B from A  [Morph/Mix ignored]</i></b> - this can be used creatively, for example subtracting 2 resonant low-pass filters creates a band-pass with 2 resonant peaks.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Global button</b></p>
+<p class="p1"><span class="s1"><b>Filter Mode</b> - see above for details.</span></p>
+<p class="p1"><span class="s1"><b>Morph/Mix</b> - sets the morph or mix between Filter A and Filter B (only used in first 2 modes). </span></p>
+<p class="p1"><span class="s1"><b>Freq Smooth</b> - for smoothing out changes to the filter frequecy, this sets what type of smoothing to use - linear or 3 types of exponential smoothing which get progressively smoother.</span></p>
+<p class="p1"><span class="s1"><b>Smooth Time </b>- sets how long it takes (in seconds) for the frequency to reach a new value. </span></p>
+<p class="p1"><span class="s1"><b>Level control</b> - options:<br>
+<i>None - level unchanged</i><br>
+<i>Balance - match level to dry signal level </i><br>
+<i>Limiter - keep the signal level below 0db </i><br>
+<i>Normalize - force the signal level to just below 0db</i><br>
+<i>Tanh Clipping - uses hyperbolic tangent of signal to clip it (this adds some distortion)</i></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal. For send effects this will usually be set to 1 - i.e. 100% affected signal.</span></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Filter A button</b></p>
+<p class="p1"><span class="s1"><b>Filter Mode</b> - see above for details.</span></p>
+<p class="p1"><span class="s1"><b>Morph/Mix</b> - sets the morph or mix between Filter A and Filter B (only used in first 2 modes). </span></p>
+<p class="p1"><span class="s1"><b>Filter type A</b> - type of filter. The name will indicate whether the <b>Resonance</b> and <b>Saturation</b> controls are used - they are only used by some filters.</span></p>
+<p class="p1"><span class="s1"><b>Frequency A</b> - the centre or cut-off frequency of the filter. </span></p>
+<p class="p1"><span class="s1"><b>Resonance A</b> - only certain filter types have resonance controls (see filter names). Resonance is how focussed the filter is around the centre frequency.</span></p>
+<p class="p1"><span class="s1"><b>Saturation A</b> - only certain filter types have saturation controls (see filter names). Saturation boosts the filter signal and can introduce mild distortion.</span></p>
+<p class="p1"><span class="s1"><b>Gain A</b> - the output level of the filter. </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><b>Filter B button</b></p>
+<p class="p1"><span class="s1"><b>Filter Mode</b> - see above for details.</span></p>
+<p class="p1"><span class="s1"><b>Morph/Mix</b> - sets the morph or mix between Filter A and Filter B (only used in first 2 modes). </span></p>
+<p class="p1"><span class="s1"><b>Filter type B</b> - type of filter. The name will indicate whether the <b>Resonance</b> and <b>Saturation</b> controls are used - they are only used by some filters.</span></p>
+<p class="p1"><span class="s1"><b>Frequency B</b> - the centre or cut-off frequency of the filter. </span></p>
+<p class="p1"><span class="s1"><b>Ratio B</b> - if the button <b>Use Ratio B x Freq A for Freq B</b> is switched on, Ratio B is used to set the Frequency of Filter B by multiplying the ratio by the Frequency A, so it will change proportionately whenever Frequency A changes. </span></p>
+<p class="p1"><span class="s1"><b>Resonance B</b> - only certain filter types have resonance (see filter names). Resonance is how focussed the filter is around the centre frequency.</span></p>
+<p class="p1"><span class="s1"><b>Saturation B</b> - only certain filter types have saturation (see filter names). Saturation boosts the filter signal and can introduce mild distortion.</span></p>
+<p class="p1"><span class="s1"><b>Gain B</b> - the output level of the filter. </span></p>
+<p class="p1"><span class="s1"><b>Use Ratio B x Freq A for Freq B</b> - this forces Freq B to move with Freq A in a set ratio.</span></p>
+<p class="p1"><span class="s1"><b>Use Resonance A for Resonance B</b> - this keeps the Resonance of A & B the same.</span></p>
+<p class="p1"><span class="s1"><b>Use Saturation A for Saturation B</b> - this keeps the Saturation of A & B the same.</span></p>
+<p class="p1"><span class="s1"><b>Use Gain A for Gain B</b> - this keeps the Gain of A & B the same.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><b>Filter A & B button</b></p>
+<p class="p1"><span class="s1">This button shows the controls for both filters for easy editing.</p>
+<p class="p1"><span class="s1"><i><b>Note:</b></i> Min & Max values for the controls aren't shown - use Filter A and Filter B buttons to edit Min & Max values.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Morph/Mix</b></span></p>
+<p class="p1"><span class="s1"><b>Smooth Time</b></span></p>
+<p class="p1"><span class="s1"><b>Frequency A</b></span></p>
+<p class="p1"><span class="s1"><b>Frequency B</b></span></p>
+<p class="p1"><span class="s1"><b>Resonance A</b> </span></p>
+<p class="p1"><span class="s1"><b>Resonance B</b> </span></p>
+<p class="p1"><span class="s1"><b>Saturation A</b></span></p>
+<p class="p1"><span class="s1"><b>Saturation B</b></span></p>
+<p class="p1"><span class="s1"><b>Gain A</b></span></p>
+<p class="p1"><span class="s1"><b>Gain B</b></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>
+

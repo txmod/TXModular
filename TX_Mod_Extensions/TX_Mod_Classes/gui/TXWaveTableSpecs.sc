@@ -1,29 +1,32 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXWaveTableSpecs {	// MultiSlider, popup and buttons for wavetable specs with 5 user slots for saving banks
-	var <>arrButtonViews, <>labelView, <>multiSliderView, <>popupView,
-		<>rangeSliderView1, <>doubleSliderView1, <>doubleSliderView2, <>doubleSliderView3, <>doubleSliderView4, <>doButtonView,
-		<>action, <value, <arrSlotData, emptyArray, currentTable, arrProcessSpecs, processFunction, processType, maxNoHarmonics;
+	var <>arrButtonViews, <>labelView, <>multiSliderView, <>multiSliderSignalView, <>popupView, <>rangeSliderView1,
+	<>doubleSliderView1, <>doubleSliderView2, <>doubleSliderView3, <>doubleSliderView4, <>doButtonView,
+	<>action, <value, <arrSlotData, <>dataEvent, arrSignals, emptyArray, arrProcessSpecs,
+	userView, processFunction, processType, maxNoHarmonics;
 
 	*new { arg window, dimensions, label, action, initVal, initAction=false, labelWidth=80, initSlotVals,
-			argMaxNoHarmonics=32, argShowProcesses=1;
+			argMaxNoHarmonics, argShowProcesses=1, argDataEvent;
 		^super.new.init(window, dimensions, label, action, initVal, initAction, labelWidth, initSlotVals,
-			argMaxNoHarmonics, argShowProcesses);
+			argMaxNoHarmonics, argShowProcesses, argDataEvent);
 	}
 	init { arg window, dimensions, label, argAction, initVal, initAction, labelWidth, initSlotVals,
-			argMaxNoHarmonics, argShowProcesses;
-		var popItems, popAction, newArray, holdButton, holdClipboard;
+			argMaxNoHarmonics, argShowProcesses, argDataEvent;
+		var popItems, popAction, newArray, holdButton, holdLeft, holdTop, tableViewWidth;
 
-		maxNoHarmonics = argMaxNoHarmonics.asInteger;
+		tableViewWidth = 410;
+		maxNoHarmonics = (argMaxNoHarmonics ? 32).asInteger;
 		this.initProcessSpecs;
 		emptyArray = Array.newClear(maxNoHarmonics).fill(0);
-		currentTable = 0;
 		initVal = initVal ? emptyArray.dup(8);
 		// conform each slot to correct size
 		initVal = initVal.collect({arg item, i; (item ++ emptyArray).keep(maxNoHarmonics);});
 		initSlotVals = initSlotVals ? emptyArray.dup(8).dup(5);
 		arrSlotData = initSlotVals;
 		action = argAction;
+		dataEvent = argDataEvent;
+		this.initDataEvent;
 
 		labelView = StaticText(window, labelWidth @ 20);
 		labelView.string = label;
@@ -34,19 +37,21 @@ TXWaveTableSpecs {	// MultiSlider, popup and buttons for wavetable specs with 5 
 			holdButton = Button(window, 20 @ 20);
 			holdButton.states = [
 				[(i + 1).asString, TXColor.white, TXColor.sysGuiCol1],
-				[(i + 1).asString, TXColor.white, TXColor.sysGuiCol2]
+				[(i + 1).asString, TXColor.white, TXColor.sysGuiCol4]
 			];
 			holdButton.action = { arg view;
-				currentTable = i;
+				dataEvent.tableIndex = i;
 				this.updateButtonColours;
-				multiSliderView.value = value.at(currentTable);
+				this.updateSignalView;
+				multiSliderView.value = value.at(dataEvent.tableIndex);
+				action.value(this);
 			};
 			arrButtonViews = arrButtonViews.add(holdButton);
 		});
 		this.updateButtonColours;
 
 		// decorator next line
-		this.nextLine(window);
+		window.asView.decorator.nextLine;
 
 		// text
 		StaticText(window, labelWidth @ 20)
@@ -54,59 +59,96 @@ TXWaveTableSpecs {	// MultiSlider, popup and buttons for wavetable specs with 5 
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 			.align_(\right);
 
-		// multislider
-		multiSliderView = MultiSliderView(window, 256 @ 120);
+		// store pos
+		holdLeft = window.asView.decorator.left;
+		holdTop = window.asView.decorator.top;
+
+		// signal view
+		multiSliderSignalView = MultiSliderView(window, tableViewWidth @ (dimensions.asRect.height - 120));
+		multiSliderSignalView.thumbSize = 1;
+		multiSliderSignalView.elasticMode = 1;
+		multiSliderSignalView.reference = 0.5 ! 1024;
+		multiSliderSignalView.drawLines = true;
+		multiSliderSignalView.drawRects = false;
+		multiSliderSignalView.isFilled = true;
+		multiSliderSignalView.fillColor = Color.grey(0.5);
+		multiSliderSignalView.background = Color.white;
+		multiSliderSignalView.readOnly = true;
+
+		window.asView.decorator.left = holdLeft;
+		window.asView.decorator.top = holdTop;
+
+		// harmonic numbers
+		userView = UserView(window, tableViewWidth @ (dimensions.asRect.height - 120));
+		userView.background = Color.white.alpha_(0.05);
+		userView.drawFunc = {|view|
+			var harmWidth = (view.bounds.width - 6) / maxNoHarmonics;
+			maxNoHarmonics.do({arg i;
+				var boxRect = Rect(2 + (i * harmWidth), dimensions.asRect.height - 144, harmWidth, 18);
+				Pen.color = Color.white.alpha_(0.4);
+				Pen.addRect(boxRect);
+				Pen.fill;
+				if ((maxNoHarmonics < 17) or: ((i % 2) == 1), {
+					Pen.stringCenteredIn ((i + 1).asString, boxRect, Font.defaultSansFace, Color.black);
+				});
+			});
+
+		};
+		userView.refresh;
+
+		window.asView.decorator.left = holdLeft;
+		window.asView.decorator.top = holdTop;
+
+		// main multislider for editing
+		multiSliderView = MultiSliderView(window, tableViewWidth @ (dimensions.asRect.height - 120));
 		multiSliderView.gap_(2);
-		multiSliderView.indexThumbSize_((256 / maxNoHarmonics).asInteger - 2);
+		multiSliderView.elasticMode = 1;
+		multiSliderView.indexThumbSize_((tableViewWidth / maxNoHarmonics).asInteger - 3);
 		multiSliderView.valueThumbSize_(1);
-		multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
+		multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1.copy.alpha_(0.53));
+		multiSliderView.background_(Color.white.alpha_(0.05););
 		multiSliderView.action = {arg view;
-			value.put(currentTable, view.value);
+			value.put(dataEvent.tableIndex, view.value);
+			this.updateSignal(dataEvent.tableIndex);
 			action.value(this);
 		};
 		// create button
 		Button(window, 50 @ 20)
 		.states_([["Copy", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({
-			holdClipboard = multiSliderView.value;
+			dataEvent.clipboard = multiSliderView.value;
 		});
 		// decorator shift
-		if (window.class == Window, {
-			window.view.decorator.shift(-54, 25);
-		}, {
-			window.decorator.shift(-54, 25);
-		});
+		window.asView.decorator.shift(-54, 25);
+
 		// create button
 		Button(window, 50 @ 20)
 		.states_([["Paste", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({
-			multiSliderView.value = holdClipboard;
-			value.put(currentTable, holdClipboard);
-			action.value(this);
+			if (dataEvent.clipboard.notNil, {
+				multiSliderView.value = dataEvent.clipboard;
+				value.put(dataEvent.tableIndex, dataEvent.clipboard);
+				this.updateSignal(dataEvent.tableIndex);
+				action.value(this);
+			});
 		});
 		// decorator shift
-		if (window.class == Window, {
-			window.view.decorator.shift(-54, 25);
-		}, {
-			window.decorator.shift(-54, 25);
-		});
+		window.asView.decorator.shift(-54, 25);
+
 		// create button
 		Button(window, 50 @ 20)
 		.states_([["Reset", TXColor.white, TXColor.sysGuiCol1]])
 		.action_({
 			multiSliderView.value = emptyArray;
-			value.put(currentTable, emptyArray);
+			value.put(dataEvent.tableIndex, emptyArray);
+			this.updateSignal(dataEvent.tableIndex);
 			action.value(this);
 		});
 		// decorator shift
-		if (window.class == Window, {
-			window.view.decorator.shift(0,-50);
-		}, {
-			window.decorator.shift(0,-50);
-		});
+		window.asView.decorator.shift(0,-50);
 
 		// decorator next line
-		this.nextLine(window);
+		window.asView.decorator.nextLine;
 
 		// bank load buttons
 		StaticText(window, 80 @ 20)
@@ -133,48 +175,65 @@ TXWaveTableSpecs {	// MultiSlider, popup and buttons for wavetable specs with 5 
 		});
 
 		// decorator next line
-		this.nextLine(window);
+		window.asView.decorator.nextLine;
 
 		// if Processes are shown
 		if (argShowProcesses == 1, {
 
 			// decorator shift
-			if (window.class == Window, {
-				window.view.decorator.shift(0, 20);
-			}, {
-				window.decorator.shift(0, 20);
-			});
+			window.asView.decorator.shift(0, 10);
 
 			// Popup
 			popItems = arrProcessSpecs.collect({arg item, i; item.at(0);});
 			popAction = {arg view;
-				processFunction = arrProcessSpecs.at(view.value).at(1);
+				dataEvent.processIndex = view.value;
+				processFunction = arrProcessSpecs.at(dataEvent.processIndex).at(1);
 				[doubleSliderView1, doubleSliderView2, doubleSliderView3].do({arg item, i;
-					item.labelView.string = arrProcessSpecs.at(view.value).at(i+2).at(0);
-					item.controlSpec = arrProcessSpecs.at(view.value).at(i+2).at(1).value;
-					item.lo = arrProcessSpecs.at(view.value).at(i+2).at(2).value;
-					item.hi = arrProcessSpecs.at(view.value).at(i+2).at(3).value;
+					item.labelView.string = arrProcessSpecs.at(dataEvent.processIndex).at(i+2).at(0);
+					item.controlSpec = arrProcessSpecs.at(dataEvent.processIndex).at(i+2).at(1).value;
+					item.lo = arrProcessSpecs.at(dataEvent.processIndex).at(i+2).at(2).value;
+					item.hi = arrProcessSpecs.at(dataEvent.processIndex).at(i+2).at(3).value;
 				});
-				processType = arrProcessSpecs.at(view.value).at(5);
+				processType = arrProcessSpecs.at(dataEvent.processIndex).at(5);
 			};
-			popupView = TXPopup(window, dimensions.x @ 20, "Process", popItems, popAction,
+			popupView = TXPopup(window, 486 @ 20, "Process", popItems, popAction,
 				0, false, labelWidth);
 			popupView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 			popupView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
 
+			Button(window, 20 @ 20)
+			.states_([
+				["+", TXColor.white, TXColor.sysGuiCol1]
+			])
+			.action_({ arg view;
+				if (popupView.value < (popItems.size < 1), {
+					popupView.valueAction = popupView.value + 1;
+				});
+			});
+			Button(window, 20 @ 20)
+			.states_([
+				["-", TXColor.white, TXColor.sysGuiCol1]
+			])
+			.action_({ arg view;
+				if (popupView.value > 0, {
+					popupView.valueAction = popupView.value - 1;
+				});
+			});
+
 			// decorator next line
-			this.nextLine(window);
+			window.asView.decorator.nextLine.shift(0, 6);
 
 			// text
-			StaticText(window, 300 @ 20)
+			StaticText(window, 240 @ 20)
 				.string_("Processing parameters - start & end values")
 				.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 				.align = \centre;
 
+			window.asView.decorator.shift(10, 0);
 			// RUN button
-			doButtonView = Button(window, 80 @ 20);
+			doButtonView = Button(window, 90 @ 20);
 			doButtonView.states = [
-				["RUN", TXColor.white, TXColor.sysGuiCol1]
+				["Run Process", TXColor.white, TXColor.sysGuiCol1]
 			];
 			doButtonView.action = { arg view;
 				var loIndex, hiIndex, numTables, outArray, changeArray;
@@ -208,73 +267,108 @@ TXWaveTableSpecs {	// MultiSlider, popup and buttons for wavetable specs with 5 
 						});
 					});
 					value = outArray;
-					multiSliderView.value = value.at(currentTable);
+					multiSliderView.value = value.at(dataEvent.tableIndex);
+					this.updateSignals;
 					action.value(this);
 				});
 			};
 
 			// decorator next line
-			this.nextLine(window);
+			window.asView.decorator.nextLine.shift(0, 6);
 
 			// RangeSlider
 			rangeSliderView1 = TXRangeSlider(window, dimensions.x @ 20, "Wavetables", ControlSpec(1, 8, step:1), nil, 0, 8);
 			rangeSliderView1.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
 
 			// decorator next line
-			this.nextLine(window);
+			window.asView.decorator.nextLine.shift(0, 6);
 
 			// DoubleSlider
-			doubleSliderView4 = TXDoubleSlider(window, dimensions.x @ 20, "Mix percent", ControlSpec(0, 100), nil, 100, 100);
+			doubleSliderView4 = TXDoubleSlider(window, dimensions.x @ 24, "Mix percent", ControlSpec(0, 100), nil, 100, 100);
 			doubleSliderView4.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-			doubleSliderView4.sliderView1.knobColor_(TXColour.sysGuiCol1);
-			doubleSliderView4.sliderView2.knobColor_(TXColour.sysGuiCol1);
+			doubleSliderView4.sliderView1.knobColor_(TXColour.white).background_(TXColor.sysGuiCol1);
+			doubleSliderView4.sliderView2.knobColor_(TXColour.white).background_(TXColor.sysGuiCol1);
 
 			// decorator next line
-			this.nextLine(window);
+			window.asView.decorator.nextLine.shift(0, 6);
 
 			// DoubleSlider
-			doubleSliderView1 = TXDoubleSlider(window, dimensions.x @ 20, "(unused)", ControlSpec(0, 1), nil, 0, 1);
+			doubleSliderView1 = TXDoubleSlider(window, dimensions.x @ 24, "(unused)", ControlSpec(0, 1), nil, 0, 1);
 			doubleSliderView1.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-			doubleSliderView1.sliderView1.knobColor_(TXColour.sysGuiCol1);
-			doubleSliderView1.sliderView2.knobColor_(TXColour.sysGuiCol1);
+			doubleSliderView1.sliderView1.knobColor_(TXColour.white).background_(TXColor.sysGuiCol1);
+			doubleSliderView1.sliderView2.knobColor_(TXColour.white).background_(TXColor.sysGuiCol1);
 
 			// decorator next line
-			this.nextLine(window);
+			window.asView.decorator.nextLine.shift(0, 6);
 
 			// DoubleSlider
-			doubleSliderView2 = TXDoubleSlider(window, dimensions.x @ 20, "(unused)", ControlSpec(0, 1), nil, 0, 1);
+			doubleSliderView2 = TXDoubleSlider(window, dimensions.x @ 24, "(unused)", ControlSpec(0, 1), nil, 0, 1);
 			doubleSliderView2.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-			doubleSliderView2.sliderView1.knobColor_(TXColour.sysGuiCol1);
-			doubleSliderView2.sliderView2.knobColor_(TXColour.sysGuiCol1);
+			doubleSliderView2.sliderView1.knobColor_(TXColour.white).background_(TXColor.sysGuiCol1);
+			doubleSliderView2.sliderView2.knobColor_(TXColour.white).background_(TXColor.sysGuiCol1);
 
 			// decorator next line
-			this.nextLine(window);
+			window.asView.decorator.nextLine.shift(0, 6);
 
 			// DoubleSlider
-			doubleSliderView3 = TXDoubleSlider(window, dimensions.x @ 20, "(unused)", ControlSpec(0, 1), nil, 0, 1);
+			doubleSliderView3 = TXDoubleSlider(window, dimensions.x @ 24, "(unused)", ControlSpec(0, 1), nil, 0, 1);
 			doubleSliderView3.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-			doubleSliderView3.sliderView1.knobColor_(TXColour.sysGuiCol1);
-			doubleSliderView3.sliderView2.knobColor_(TXColour.sysGuiCol1);
+			doubleSliderView3.sliderView1.knobColor_(TXColour.white).background_(TXColor.sysGuiCol1);
+			doubleSliderView3.sliderView2.knobColor_(TXColour.white).background_(TXColor.sysGuiCol1);
 
-		});
+			// select & prepare process
+			popupView.valueAction_(dataEvent.processIndex);
+
+		}); // end of:   if (argShowProcesses == 1, {
 
 		if (initAction, {
 			this.value = initVal;
 		}, {
-			value = initVal;
-			multiSliderView.value = value.at(currentTable);
+			this.value_(initVal);
 		});
 	}
 	value_ { arg argValue;
 		value = argValue;
-		multiSliderView.value = value.at(currentTable);
+		multiSliderView.value = value.at(dataEvent.tableIndex);
+		this.updateSignals;
 		action.value(this);
 	}
-	nextLine {arg window;
-		if (window.class == Window, {
-			window.view.decorator.nextLine;
-		}, {
-			window.decorator.nextLine;
+	initDataEvent{
+		dataEvent = dataEvent ? ();
+		dataEvent.tableIndex = dataEvent.tableIndex ? 0;
+		dataEvent.harmonicGap = dataEvent.harmonicGap ? 1;
+		dataEvent.scaling = dataEvent.scaling ? 1;
+		dataEvent.processIndex = dataEvent.processIndex ? 0;
+	}
+	updateSignals {
+		arrSignals = arrSignals ? Array.newClear(8);
+		8.do({arg i;
+			this.updateSignal(i);
+		});
+		this.updateSignalView;
+	}
+	updateSignal { arg argTableIndex;
+		var holdSpec, holdFreqs, holdSignal;
+		// OLD CODE with sineFill:
+		//arrSignals[argTableIndex] = Signal.sineFill(1024, value[argTableIndex]);
+		holdSpec = ((value[argTableIndex].deepCopy.keep(maxNoHarmonics) ++ (0!32)).keep(32))
+		// first harmonic is > 0 as all zero's would crash method
+		.max([0.0001] ++  (0!31));
+		// apply dataEvent.scaling
+		holdSpec = holdSpec ** dataEvent.scaling;
+		// generate wavetables
+		holdFreqs = 32.collect({arg item, i; 1 + (item * dataEvent.harmonicGap);});
+		holdSignal = Signal.newClear(1024);
+		32.do({arg i;
+			holdSignal.addSine(harmonicNumber: holdFreqs[i], amplitude: holdSpec[i], phase: 0)
+		});
+		holdSignal.normalize;
+		arrSignals[argTableIndex] = holdSignal;
+		this.updateSignalView;
+	}
+	updateSignalView {
+		if (arrSignals.notNil, {
+			multiSliderSignalView.value = arrSignals[dataEvent.tableIndex].asArray * 0.5 + 0.5;
 		});
 	}
 	storeSlot { arg num;
@@ -285,7 +379,7 @@ TXWaveTableSpecs {	// MultiSlider, popup and buttons for wavetable specs with 5 
 	}
 	updateButtonColours { arg num;
 		arrButtonViews.do({arg item, i;
-			if (i == currentTable, {
+			if (i == dataEvent.tableIndex, {
 				item.value = 1;
 			}, {
 				item.value = 0;
@@ -355,6 +449,40 @@ TXWaveTableSpecs {	// MultiSlider, popup and buttons for wavetable specs with 5 
 				["Multiply", ControlSpec(0, 2), 0.1, 2], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
 				\localChange,
 			],
+			["Transform: multiply even-numbered harmonic levels by a value",
+				{arg argArray;
+					var outArray;
+					outArray = argArray.at(3).collect({arg item, i;
+						var outVal;
+						// if even
+						if ((i % 2) == 0, {
+							outVal = (item * argArray.at(0)).max(0).min(1);
+						}, {
+							outVal = item;
+						});
+						outVal;
+					});
+				},
+				["Multiply", ControlSpec(0, 2), 0.1, 2], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
+				\localChange,
+			],
+			["Transform: multiply odd-numbered harmonic levels by a value",
+				{arg argArray;
+					var outArray;
+					outArray = argArray.at(3).collect({arg item, i;
+						var outVal;
+						// if odd
+						if ((i % 2) == 1, {
+							outVal = (item * argArray.at(0)).max(0).min(1);
+						}, {
+							outVal = item;
+						});
+						outVal;
+					});
+				},
+				["Multiply", ControlSpec(0, 2), 0.1, 2], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
+				\localChange,
+			],
 			["Transform: add a value to all harmonic levels",
 				{arg argArray;
 					(argArray.at(3) + argArray.at(0)).max(0).min(1);
@@ -362,9 +490,77 @@ TXWaveTableSpecs {	// MultiSlider, popup and buttons for wavetable specs with 5 
 				["Add", ControlSpec(0, 1), 0, 0.5], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
 				\localChange,
 			],
+			["Transform: add a value to even-numbered harmonic levels",
+				{arg argArray;
+					var outArray;
+					outArray = argArray.at(3).collect({arg item, i;
+						var outVal;
+						// if even
+						if ((i % 2) == 0, {
+							outVal = (item + argArray.at(0)).max(0).min(1);
+						}, {
+							outVal = item;
+						});
+						outVal;
+					});
+				},
+				["Add", ControlSpec(0, 1), 0, 0.5], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
+				\localChange,
+			],
+			["Transform: add a value to odd-numbered harmonic levels",
+				{arg argArray;
+					var outArray;
+					outArray = argArray.at(3).collect({arg item, i;
+						var outVal;
+						// if odd
+						if ((i % 2) == 1, {
+							outVal = (item + argArray.at(0)).max(0).min(1);
+						}, {
+							outVal = item;
+						});
+						outVal;
+					});
+				},
+				["Add", ControlSpec(0, 1), 0, 0.5], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
+				\localChange,
+			],
 			["Transform: subtract a value from all harmonic levels",
 				{arg argArray;
 					(argArray.at(3) - argArray.at(0)).max(0).min(1);
+				},
+				["Subtract", ControlSpec(0, 1), 0, 0.5], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
+				\localChange,
+			],
+			["Transform: subtract a value from even-numbered harmonic levels",
+				{arg argArray;
+					var outArray;
+					outArray = argArray.at(3).collect({arg item, i;
+						var outVal;
+						// if even
+						if ((i % 2) == 0, {
+							outVal = (item - argArray.at(0)).max(0).min(1);
+						}, {
+							outVal = item;
+						});
+						outVal;
+					});
+				},
+				["Subtract", ControlSpec(0, 1), 0, 0.5], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
+				\localChange,
+			],
+			["Transform: subtract a value from odd-numbered harmonic levels",
+				{arg argArray;
+					var outArray;
+					outArray = argArray.at(3).collect({arg item, i;
+						var outVal;
+						// if odd
+						if ((i % 2) == 1, {
+							outVal = (item - argArray.at(0)).max(0).min(1);
+						}, {
+							outVal = item;
+						});
+						outVal;
+					});
 				},
 				["Subtract", ControlSpec(0, 1), 0, 0.5], ["(unused)", ControlSpec(0, 1), 0, 1], ["(unused)", ControlSpec(0, 1), 0, 1],
 				\localChange,

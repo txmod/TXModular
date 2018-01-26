@@ -21,7 +21,7 @@ TXNumberPlusMinus2 {
 		labelView.align = \right;
 
 		controlSpec = argControlSpec.asSpec;
-		initVal = initVal ? controlSpec.default;
+		initVal = initVal ? controlSpec.default ? 0;
 		action = argAction;
 
 		numberView = TXScrollNumBox(window, numberWidth @ dimensions.y).maxDecimals_(4);
@@ -60,13 +60,17 @@ TXNumberPlusMinus2 {
 		labelView.string = label;
 		controlSpec = spec.asSpec;
 		action = argAction;
-		initVal = initVal ? controlSpec.default;
+		initVal = initVal ? controlSpec.default ? 0;
 		if (initAction) {
 			this.value = initVal;
 		}{
 			value = initVal;
 			numberView.value = value.round(round);
 		};
+	}
+
+	hasFocus {
+		^numberView;
 	}
 }
 

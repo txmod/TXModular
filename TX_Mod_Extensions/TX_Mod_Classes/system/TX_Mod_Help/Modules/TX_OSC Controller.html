@@ -7,28 +7,31 @@
   <meta name="Generator" content="Cocoa HTML Writer">
   <meta name="CocoaVersion" content="1138.47">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
     span.s1 {text-decoration: underline}
     span.s2 {color: #971f8e}
   </style>
 </head>
 <body>
-<p class="p1"><b>OSC Controller<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>OSC Controller </b></p>
 <p class="p2"><br></p>
-<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Control Source</b></p>
+<p class="p1"><b>Module type: Control Source</b></p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Introduction:</i></b></p>
-<p class="p1">This<b> </b>module outputs a control signal from OSC messages received as long as the OSC message begins with a string that matches the <b>OSC string</b> on the screen.<span class="Apple-converted-space">  </span>The string matching is case sensitive (i.e. upper and lower case letters - G versus g - are treated as different letters, so take care when typing!).</p>
-<p class="p1">The OSC message sent should consist of the <b>OSC string</b> followed by a <b>number</b> <b>between -1 and 1</b>. The number will be sent out as a control signal from this module.</p>
+<p class="p1">This<b> </b>module outputs a control signal from OSC messages received as long as the OSC message begins with a string that matches the <b>OSC string</b> on the screen. The string matching is case sensitive (i.e. upper and lower case letters - G versus g - are treated as different letters, so take care when typing!).</p>
+<p class="p1">The OSC message sent should consist of the <b>OSC string</b> followed by a <b>number</b>. The number will be sent out as a control signal from this module, mapped to the output range set in the controls.</p>
 <p class="p2"><b></b><br></p>
-<p class="p1"><b>Note</b> - when sending <b>OSC messages</b> to the TX Modular system, you usually set the <b>port</b> to <b>57120</b>.<span class="Apple-converted-space">  </span>(NB: to see which Airport IP address and Port the TX Modular System is currently using, go to the <b>Notes &amp; Options</b> screen, see button near the top of the screen.).</p>
+<p class="p1"><b>Note</b> - when sending <b>OSC messages</b> to the TX Modular system, you usually set the <b>port</b> to <b>57120</b>. (NB: to see which Port the TX Modular System is currently using, go to the <b>Notes &amp; Options</b> screen, see button near the top of the screen.).</p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Controls:</i></b></p>
 <p class="p1"><b>OSC String</b> - this string will be checked against the first item in any OSC messages received. If the string matches, the control signal will be sent.</p>
-<p class="p1"><b>OSC Learn - to automatically detect the OSC string</b> - when switched on, this will wait for the next OSC message received and assign the string automatically.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b><i>Note:<span class="Apple-converted-space"> </span></i></b> the following OSC strings are used internally by SuperCollider and so shouldn't be used for OSC communication. They will be ignored by OSC Learn:<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>OSC Learn - to automatically detect the OSC string</b> - when switched on, this will wait for the next OSC message received and assign the string automatically. </p>
+<p class="p1"><b><i>Note: </i></b> the following OSC strings are used internally by SuperCollider and so shouldn't be used for OSC communication. They will be ignored by OSC Learn: </p>
 <p class="p1">/status.reply, /tr, /done, /synced, /n_on, /n_off, /n_move, /n_end, /n_go.</p>
+<p class="p1"><b>Min value</b> - sets the minimum expected value for mapping controller OSC messages to the output range.</p>
+<p class="p1"><b>Max value</b> - sets the maximum expected value for mapping controller OSC messages to the output range.</p>
+<p class="p1"><b>Output range </b> - sets the output range of the module.</p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>What is OSC?</i></b></p>
 <p class="p1">See help file: <A href="../TX_OSC_Info.html">OSC_Info<A></p>

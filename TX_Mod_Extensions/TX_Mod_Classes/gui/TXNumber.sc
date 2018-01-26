@@ -13,7 +13,7 @@ TXNumber {
 			initAction, labelWidth, numberWidth;
 
 		if (labelWidth > 0, {
-			labelView = GUI.staticText.new(window, labelWidth @ dimensions.y);
+			labelView = StaticText.new(window, labelWidth @ dimensions.y);
 			labelView.string = label;
 			labelView.align = \right;
 		});
@@ -22,7 +22,7 @@ TXNumber {
 		initVal = initVal ? controlSpec.default;
 		action = argAction;
 
-		numberView = TXScrollNumBox.new(window, numberWidth @ dimensions.y, controlSpec).maxDecimals_(4);
+		numberView = NumberBox.new(window, numberWidth @ dimensions.y, controlSpec).maxDecimals_(4);
 		numberView.action = {
 			this.valueAction_(numberView.value);
 		};
@@ -59,6 +59,13 @@ TXNumber {
 	visible { ^numberView.visible }
 	visible_ { |bool| [labelView, numberView].do(_.visible_(bool)) }
 
+	stringColor { ^numberView.stringColor }
+	stringColor_ { |color|
+		numberView.stringColor_(color);
+		numberView.normalColor_(color);
+		numberView.typingColor_(color);
+	}
+
 	typingColor { ^numberView.typingColor }
 	typingColor_ { |color|  numberView.typingColor_(color)  }
 
@@ -69,4 +76,8 @@ TXNumber {
 	enabled_ { |bool| numberView.enabled_(bool) }
 
 	remove { [labelView, numberView].do(_.remove) }
+
+	hasFocus {
+		^numberView.hasFocus;
+	}
 }

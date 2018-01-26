@@ -2,19 +2,7 @@
 
 TXOSCTrigger : TXModuleBase {
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=500;
-	classvar	defaultActionStep;
-	classvar arrUseOSCArgNames;
-	classvar arrOffsetOSCArgNames;
+	classvar <>classData;
 
 	var	displayOption;
 	var	oscControlRoutine;
@@ -25,17 +13,18 @@ TXOSCTrigger : TXModuleBase {
 	var oscFunction;
 
 	*initClass{
-		arrInstances = [];
 		//	set class specific variables
-		defaultName = "OSC Trigger";
-		moduleRate = "control";
-		moduleType = "action";
-		noInChannels = 0;
-		noOutChannels = 0;
-		arrUseOSCArgNames = ["useOSCArgs1", "useOSCArgs2", "useOSCArgs3",
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "OSC Trigger";
+		classData.moduleRate = "control";
+		classData.moduleType = "action";
+		classData.noInChannels = 0;
+		classData.noOutChannels = 0;
+		classData.arrUseOSCArgNames = ["useOSCArgs1", "useOSCArgs2", "useOSCArgs3",
 			"useOSCArgs4", "useOSCArgs5", "useOSCArgs6",
 			"useOSCArgs7", "useOSCArgs8", "useOSCArgs9", "useOSCArgs10"];
-		arrOffsetOSCArgNames = ["offsetOSCArgs1", "offsetOSCArgs2", "offsetOSCArgs3",
+		classData.arrOffsetOSCArgNames = ["offsetOSCArgs1", "offsetOSCArgs2", "offsetOSCArgs3",
 			"offsetOSCArgs4", "offsetOSCArgs5", "offsetOSCArgs6",
 			"offsetOSCArgs7", "offsetOSCArgs8", "offsetOSCArgs9", "offsetOSCArgs10"];
 	}
@@ -88,20 +77,28 @@ TXOSCTrigger : TXModuleBase {
 		holdPopupItems = 16.collect({ arg item, i; (item+1).asString; });
 		guiSpecArray = [
 			["ActionButton", "OSC String", {displayOption = "showOSCString";
-				this.buildGuiSpecArray; system.showView;}, 130,
-				TXColor.white, this.getButtonColour(displayOption == "showOSCString")],
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showOSCString")],
 			["Spacer", 3],
-			["ActionButton", "Actions 1-4", {displayOption = "showActions1-4";
-				this.buildGuiSpecArray; system.showView;}, 130,
-				TXColor.white, this.getButtonColour(displayOption == "showActions1-4")],
+			["ActionButton", "Actions 1-2", {displayOption = "showActions1-2";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions1-2")],
 			["Spacer", 3],
-			["ActionButton", "Actions 5-8", {displayOption = "showActions5-8";
-				this.buildGuiSpecArray; system.showView;}, 130,
-				TXColor.white, this.getButtonColour(displayOption == "showActions5-8")],
+			["ActionButton", "Actions 3-4", {displayOption = "showActions3-4";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions3-4")],
+			["Spacer", 3],
+			["ActionButton", "Actions 5-6", {displayOption = "showActions5-6";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions5-6")],
+			["Spacer", 3],
+			["ActionButton", "Actions 7-8", {displayOption = "showActions7-8";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions7-8")],
 			["Spacer", 3],
 			["ActionButton", "Actions 9-10", {displayOption = "showActions9-10";
-				this.buildGuiSpecArray; system.showView;}, 130,
-				TXColor.white, this.getButtonColour(displayOption == "showActions9-10")],
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions9-10")],
 			["Spacer", 3],
 			["DividingLine"],
 			["SpacerLine", 6],
@@ -125,23 +122,29 @@ TXOSCTrigger : TXModuleBase {
 					"triggerChoice"]
 			];
 		});
-		if (displayOption == "showActions1-4", {
+		if (displayOption == "showActions1-2", {
 			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 0],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs1", nil, 300],
 				["TXPopupAction", "First argument", holdPopupItems, "offsetOSCArgs1", nil, 140],
 				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 1],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs2", nil, 300],
 				["TXPopupAction", "First argument", holdPopupItems, "offsetOSCArgs2", nil, 140],
 				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions3-4", {
+			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 2],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs3", nil, 300],
 				["TXPopupAction", "First argument", holdPopupItems, "offsetOSCArgs3", nil, 140],
 				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 3],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs4", nil, 300],
@@ -149,23 +152,29 @@ TXOSCTrigger : TXModuleBase {
 				["DividingLine"],
 			];
 		});
-		if (displayOption == "showActions5-8", {
+		if (displayOption == "showActions5-6", {
 			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 4],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs5", nil, 300],
 				["TXPopupAction", "First argument", holdPopupItems, "offsetOSCArgs5", nil, 140],
 				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 5],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs6", nil, 300],
 				["TXPopupAction", "First argument", holdPopupItems, "offsetOSCArgs6", nil, 140],
 				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions7-8", {
+			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 6],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs7", nil, 300],
 				["TXPopupAction", "First argument", holdPopupItems, "offsetOSCArgs7", nil, 140],
 				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 7],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs8", nil, 300],
@@ -180,6 +189,7 @@ TXOSCTrigger : TXModuleBase {
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs9", nil, 300],
 				["TXPopupAction", "First argument", holdPopupItems, "offsetOSCArgs9", nil, 140],
 				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 9],
 				["NextLine"],
 				["TXCheckBox", "Use OSC arguments for value settings", "useOSCArgs10", nil, 300],
@@ -192,8 +202,8 @@ TXOSCTrigger : TXModuleBase {
 	getButtonColour { arg colour2Boolean;
 		if (colour2Boolean == true, {
 			^TXColor.sysGuiCol4;
-			},{
-				^TXColor.sysGuiCol1;
+		},{
+			^TXColor.sysGuiCol1;
 		});
 	}
 
@@ -301,24 +311,24 @@ TXOSCTrigger : TXModuleBase {
 				if (holdActionText.notNil, {
 					holdActionInd = holdArrActionItems.indexOfEqual(holdActionText) ? holdActionInd;
 					holdAction = holdModule.arrActionSpecs.at(holdActionInd);
-					},{
-						// if text not found, use number but only select older actions with legacyType == 1
-						holdAction = holdModule.arrActionSpecs
-						.select({arg item, i; item.legacyType == 1}).at(holdActionInd);
+				},{
+					// if text not found, use number but only select older actions with legacyType == 1
+					holdAction = holdModule.arrActionSpecs
+					.select({arg item, i; item.legacyType == 1}).at(holdActionInd);
 				});
 
 				actionArg1 = holdVal1;
 				actionArg2 = holdVal2;
 				actionArg3 = holdVal3;
 				actionArg4 = holdVal4;
-				holdOffset = this.getSynthArgSpec(arrOffsetOSCArgNames.at(i)).asInteger;
+				holdOffset = this.getSynthArgSpec(classData.arrOffsetOSCArgNames.at(i)).asInteger;
 				oscArg1 = oscMsg.at(1 + holdOffset);
 				oscArg2 = oscMsg.at(2 + holdOffset);
 				oscArg3 = oscMsg.at(3 + holdOffset);
 				oscArg4 = oscMsg.at(4 + holdOffset);
 
 				// if using OSC arguments
-				if (this.getSynthArgSpec(arrUseOSCArgNames.at(i)) == 1, {
+				if (this.getSynthArgSpec(classData.arrUseOSCArgNames.at(i)) == 1, {
 					// if object type is number
 					if (holdAction.guiObjectType == \number, {
 						if (oscArg1.isNumber, {
@@ -344,7 +354,7 @@ TXOSCTrigger : TXModuleBase {
 						if (oscArg1.isNumber, {
 							actionArg1 = ControlSpec(0, holdItems.size).constrain(oscArg1);
 						});
-						if (oscArg1.isSymbol, {
+						if (oscArg1.isSymbolWS, {
 							holdIndex = holdItems.indexOfEqual(oscArg1.asString);
 							if (holdIndex.notNil, {
 								actionArg1 = holdIndex;
@@ -356,21 +366,21 @@ TXOSCTrigger : TXModuleBase {
 						if (oscArg1.isNumber, {
 							actionArg1 = ControlSpec(0, 1, step: 1).constrain(oscArg1);
 						});
-						if (oscArg1.isSymbol, {
+						if (oscArg1.isSymbolWS, {
 							holdIndex = ["ON", "On", "on"].indexOfEqual(oscArg1.asString);
 							if (holdIndex.notNil, {
 								actionArg1 = 1;
-								},{
-									holdIndex = ["OFF", "Off", "off"].indexOfEqual(oscArg1.asString);
-									if (holdIndex.notNil, {
-										actionArg1 = 0;
-									});
+							},{
+								holdIndex = ["OFF", "Off", "off"].indexOfEqual(oscArg1.asString);
+								if (holdIndex.notNil, {
+									actionArg1 = 0;
+								});
 							});
 						});
 					});
 					// if object type is textedit
 					if (holdAction.guiObjectType == \textedit, {
-						if (oscArg1.isSymbol, {
+						if (oscArg1.isSymbolWS, {
 							actionArg1 = oscArg1.asString;
 						});
 					});

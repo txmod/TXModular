@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Mod Sequencer</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Control Source</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This triggered module is a 16-step sequencer that is focussed on modulation, rather than note triggering, with all controls including the </span><span class="s1">individual steps</span><span class="s1"> modulatable.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1">It outputs control signals for note and amplitude (volume) values, 3 controls - called CV1/</span><span class="s1"> CV</span><span class="s1">2/</span><span class="s1"> CV</span><span class="s1">3, a clock output, an end of sequence trigger (when the next trigger is received after the last step has played), and a gate trigger (for all played steps).</span></p>
+<p class="p1"><span class="s1">Up to 16 Steps can be used with various options for the step order, including random.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1">An internal clock can be used to trigger to the next step, or other modules can trigger it using Actions or modulation inputs - for example <b>Clock Pulse</b> and <b>Pulse Divider</b> modules.</span></p>
+<p class="p1"><span class="s1">If the internal clock is used, the length of each step (in beats) is set independently.</span></p>
+<p class="p1">Other  help that might be useful: <a href="../TX_Modulation_Vs_Automation.html">Modulation Vs Automation</a></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Play Clock</b> - start or stop the clock<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Restart Sequence</b> - once this is triggered, the sequence will return to the first step at the next clock pulse.</span></p>
+<p class="p1"><span class="s1"><b>Trigger Pulse</b> - triggers the next step.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Parameters button</b></span></p>
+<p class="p1"><span class="s1"><b>Step order</b> - can be: 1-Forwards, 2-Backwards 3-Random or 4-Use Select Index.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Select Index</b> - if Step order is set to 4, the current step is set to the value of Select Index at the next clock pulse.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Start step </b>- which step to start playing from.</span></p>
+<p class="p1"><span class="s1"><b>Seq length </b>- the number of steps to use in the sequence.<span class="Apple-converted-space">  </span>This will wrap around to the first step if high enough. For example, if the start step is 16 and sequence length is 4, the steps played will be 16, 1, 2, 3.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Loop</b> - if <i>not looped</i>, the sequence will stop responding to triggers once all the selected steps have played once - unless restart is triggered. If <i>looped</i> it will continue responding to triggers.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><i>Note: </i>Loop changes will only take effect when the sequence is restarted.</span></p>
+<p class="p1"><span class="s1"><b>Freq range</b> - the </span><span class="s1">range in</span><span class="s1"> frequencies for each step shown as midi notes. Musical instrument and octave range presets can be selected.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Freq Quantise</b> - shifts all step frequencies to the nearest midi note.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Beats range</b> - the </span><span class="s1">range in</span><span class="s1"> beats for each step’s length</span></p>
+<p class="p1"><span class="s1"><b>Beats Quantise</b> - if not set to 0 (off), this quantises all steps beat values.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Steps button</b></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16 Freq: MIDI note</b> - both frequency and MIDI note are shown<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16 Amp</b> - amplitude for each step<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16 CV1</b> -<span class="Apple-converted-space">  </span>for each step<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16 CV2</b> -<span class="Apple-converted-space">  </span>for each step<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16 Beats /CV3</b> -<span class="Apple-converted-space">  </span>for each step, with beats shown below each knob. The beats value is only relevent if the internal clock is being used. The value of the knob expressed in the range 0 to 1 is used as the output value for CV3.</span></p>
+<p class="p1"><b>MIDI learn notes & amps (velocities)</b> - when this is switched on, any MIDI notes and velocities received on any MIDI channels will be recorded into the steps of the sequencer starting at the <b>Next Step</b>, which is shown next to it. The new notes will be displayed on the screen.  </p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Clock button</b></span></p>
+<p class="p1"><span class="s1"><b>BPM</b> &amp; <b>Multiply BPM</b> - set the clock speed</span></p>
+<p class="p1"><span class="s1"><b>Jitter</b> - adds random variation to the BPM<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>BPM</b></span></p>
+<p class="p1"><span class="s1"><b>Multiply BPM</b></span></p>
+<p class="p1"><span class="s1"><b>Jitter</b></span></p>
+<p class="p1"><span class="s1"><b>Step order</b></span></p>
+<p class="p1"><span class="s1"><b>Play Clock</b></span></p>
+<p class="p1"><span class="s1"><b>Trigger pulse</b></span></p>
+<p class="p1"><span class="s1"><b>Restart seq</b></span></p>
+<p class="p1"><span class="s1"><b>Start step</b></span></p>
+<p class="p1"><span class="s1"><b>Seq length</b></span></p>
+<p class="p1"><span class="s1"><b>Select Index</b></span></p>
+<p class="p1"><span class="s1"><b>Loop</b></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16 Freq</b></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16</b></span><span class="s1"><b> Amp</b></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16</b></span><span class="s1"><b> CV1</b></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16</b></span><span class="s1"><b> CV2</b></span></p>
+<p class="p1"><span class="s1"><b>Step 1-16</b></span><span class="s1"><b> Beats/CV3</b></span></p>
+<p class="p1"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>

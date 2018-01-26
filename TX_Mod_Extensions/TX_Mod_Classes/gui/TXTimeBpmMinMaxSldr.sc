@@ -1,7 +1,7 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXTimeBpmMinMaxSldr {
-	var <>labelView, labelView2, <>sliderView, <>numberView, <>bpmNumberView, <>rangeView, <>minNumberView, <>maxNumberView;
+	var <>labelView, <>labelView2, <>sliderView, <>numberView, <>bpmNumberView, <>rangeView, <>minNumberView, <>maxNumberView;
 	var <>controlSpec, controlSpec2, <>action, viewValue, <>round = 0.0001;
 
 	// controlSpec2 is only used internally and it's min & max are decided by minNumberView & maxNumberView
@@ -35,6 +35,7 @@ TXTimeBpmMinMaxSldr {
 		action = argAction;
 
 		sliderView = Slider(window, (dimensions.x - labelWidth - numberWidth - (2 * spacingX)) @ height);
+		sliderView.thumbSize_(8).knobColor_(Color.white);
 		sliderView.action = {
 			viewValue = controlSpec2.map(sliderView.value);
 			numberView.value = viewValue.round(round);
@@ -89,7 +90,7 @@ TXTimeBpmMinMaxSldr {
 			controlSpec2.minval = minNumberView.value;
 			maxNumberView.value = controlSpec.map(rangeView.hi);
 			controlSpec2.maxval = maxNumberView.value;
-			sliderView.doAction;
+			sliderView.valueAction = controlSpec2.unmap(viewValue);
 		};
 		if (controlSpec.step != 0) {
 			rangeView.step = (controlSpec.step / (controlSpec.maxval - controlSpec.minval));
@@ -190,5 +191,10 @@ TXTimeBpmMinMaxSldr {
 			numberView.value = viewValue.round(round);
 			bpmNumberView.value = 60000 / viewValue;
 		};
+	}
+
+	hasFocus {
+		^sliderView.hasFocus || numberView.hasFocus || bpmNumberView.hasFocus || rangeView.hasFocus
+		|| minNumberView.hasFocus || maxNumberView.hasFocus;
 	}
 }

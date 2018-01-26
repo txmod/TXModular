@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Noise Gate</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type: Audio Insert (mono input, mono output)</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module can be used as a <b>gate</b> or <b>ducker</b> with an optional side-chain input. </p>
+<p class="p1">It changes the level of an audio signal coming into it by detecting the level of the control signal (the main input or side-chain). </p>
+<p class="p1">As a <b>gate </b> it reduces the level of the input signal when the control signal is below a certain threshold. For example it can be used to remove the low level noise in a signal.</p>
+<p class="p1">As a <b>ducker</b> it reduces the level of the input signal when the control signal is above the threshold. This can be used for example to reduce the output of a send effect such as delay, when the original signal is present (known as "ducking delay" or "ducked delay"). </p>
+<p class="p1">It can optionally use a mono audio side-chain input to control the noise gate, instead of the main input signal. If the side-chain is used, then on another audio channel, the destination can be set to the noise gate module's Side-chain bus (see Audio Input Busses below).</p>
+<p class="p1">An optional bracket EQ can be added to the control signal to focus on a specific range of frequencies (for example for de-essing, or ducking in response to a kick or bass hit). </p>
+<p class="p1">A lookahead delay can also be added. Take care to set appropriate open and close times if using a lookahead delay.</p>
+<p class="p1">The controls Hysteresis and Hold time (see below) can be used to reduce "gate chattering", where the control signal is hovering very close to the threshold and causes fast opening and closing.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Control signal</b> - sets whether the main input signal or the side-chain signal will be used to control the noise gate.</p>
+<p class="p1"><b>Monitor control signal + eq</b> - when set on, this let's you hear the control signal, with the Bracket EQ, which makes it easier to set the EQ range. </p>
+<p class="p1"><b>Bracket EQ</b> - set's the type of EQ used: 12db or 24db, Low-cut, Hi-cut, both or none. </p>
+<p class="p1"><b>EQ range</b> - sets the low and high frequencies used for the Bracket EQ. </p>
+<p class="p1"><b>Play mode</b> - whether the module acts as a Gate or Ducker. </p>
+<p class="p1"><b>Lookahead</b> - a lookahead delay can be added to input signal to allow the gate/ducker to act ahead of time. Set appropriate open and close times if using lookahead delay.</p>
+<p class="p1"><b>Threshold db</b> - when the level of the control signal goes above the threshold, in Gate mode the gate will open, and in Ducker mode the gate will close. </p>
+<p class="p1"><b>Hysteresis db</b> - this raises the opening Threshold for the Gate or Ducker. </p>
+<p class="p1"><b>Reduction db</b> - sets how much the input signal will be reduced when the Gate is off, or the Ducker is on. </p>
+<p class="p1"><b>Open time ms</b> - sets how long it takes for the Gate/Ducker to increase the audio level. </p>
+<p class="p1"><b>Hold time ms</b> - sets the minimum time the Gate/Ducker will be on. </p>
+<p class="p1"><b>Close time ms</b> - sets how long it takes for the Gate/Ducker to reduce the audio level. </p>
+<p class="p1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal. For send effects this will usually be set to 1 - i.e. 100% affected signal.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>Side-chain</b> - mono audio signal which can be used to control the noise gate.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Threshold</b></p>
+<p class="p1"><b>Hysteresis</b></p>
+<p class="p1"><b>Reduction</b></p>
+<p class="p1"><b>Open time</b></p>
+<p class="p1"><b>Hold time</b></p>
+<p class="p1"><b>Close time</b></p>
+<p class="p1"><b>Dry-Wet Mix</b></p>
+<p class="p2"><br></p>
+</body>
+</html>

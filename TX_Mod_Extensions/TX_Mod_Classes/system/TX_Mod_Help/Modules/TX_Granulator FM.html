@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none; color: #0000ee; -webkit-text-stroke: 0px #0000ee}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Granulator FM</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Audio Source (stereo output, triggered)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module uses Frequency Modulation Synthesis to create small "grains" of sound which are panned in stereo.</span></p>
+<p class="p1"><span class="s1">Frequency Modulation Synthesis uses 2 Sine waves: the Carrier wave has it's frequency modulated by the Modulator wave. </span></p>
+<p class="p1"><span class="s1">The Modulation Index sets the amount of modulation. Higher values create more harmonics.</span></p>
+<p class="p1"><span class="s1">The module can be triggered in various ways such as by MIDI notes, other modules (e.g. <b>Step Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>FM button</b></span></p>
+<p class="p1"><span class="s1"><b>Carrier mode</b> - selects how the carrier frequency will be set: <br>
+1) Use Carrier ratio multiplied by the MIDI note played. <br>
+2) Use Carrier freq </span></p>
+<p class="p1"><span class="s1"><b>Carrier ratio</b></span></p>
+<p class="p1"><span class="s1"><b>Carrier freq</b></span></p>
+<p class="p1"><span class="s1"><b>Modulator mode</b> - selects how the modulator frequency will be set: <br>
+1) Use Modulator ratio multiplied by the MIDI note played. <br>
+2) Use Modulator freq </span></p>
+<p class="p1"><span class="s1"><b>Modulator ratio</b></span></p>
+<p class="p1"><span class="s1"><b>Modulator freq</b></span></p>
+<p class="p1"><span class="s1"><b>Modulation index</b> - sets the amount of frequency modulation.</span></p>
+<p class="p2"><span class="s1"><b>Level</b> - the output level of the granulator. </span></p>
+<p class="p1"><b>Amp Comp</b> - select a preset for the type of amplitude compensation to use - see help file <A href="TX_Amp Comp.html">Amp Comp<A> for details. Can be set to off when not needed.</p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Grain button</b></span></p>
+<p class="p1"><span class="s1"><b>Max grains</b> - maximum number of grains at any time</span></p>
+<p class="p1"><span class="s1"><b>Triggering</b> - can be Internal or External. <br>
+Internal triggering uses an internal clock based on the grain time and density. <br>
+External triggering uses the Ext Trigger control input - whenever the signal goes above zero, a grain will be triggered. (Vary triggering and Grain density are ignored.)</span></p>
+<p class="p1"><span class="s1"><b>Vary triggering</b> - this adds a random variation to the start time of each grain. If set to zero, all grains will be at equally spaced times. </span></p>
+<p class="p1"><span class="s1"><b>Grain density</b> - the number of overlapping grains. Values below one will have gaps between grains.</span></p>
+<p class="p1"><span class="s1"><b>Grain time ms</b> - how long each grain is. Shorter times sound more fragmented. </span></p>
+<p class="p1"><span class="s1"><b>Vary grain time</b> - this adds a random variation to the length of each grain.</span></p>
+<p class="p1"><span class="s1"><b>Grain pan</b> - the pan position of the next grain.</span></p>
+<p class="p1"><span class="s1"><b>Vary panning</b> - this adds a random variation to the pan of each grain. </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Grain Env button</b></span></p>
+<p class="p1"><span class="s1"><b>Grain Env</b> - the envelope to use: either the custom envelope shown below it, or an built-in Hann envelope.</span></p>
+<p class="p1"><span class="s1"><b>Custom Env</b> - editable envelope curve.</span></p>
+<p class="p1"><span class="s1">See help file <a href="../TX_Curve%20Editing.html"><span class="s2">Curve Editing</span></a> for details.</span></p>
+<p class="p1"><span class="s1"><b>Grid rows</b> - no of rows (1-128) separated by white lines in the grid behind the curve.</span></p>
+<p class="p1"><span class="s1"><b>Grid cols</b> - no of columns (1-128) separated by white lines in the grid behind the curve.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>MIDI/ Note button</b></span></p>
+<p class="p1"><span class="s1">See help file <a href="../TX_MIDI%20Note%20Button.html"><span class="s2">MIDI Note Button</span></a> for details.</span></p>
+<p class="p1"><span class="s1">Note: unlike most other audio synth or sample modules, <b>keyboard tracking</b> is turned off by default in the Granulator module. Of course, you can turn it on if required.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Envelope button</b></span></p>
+<p class="p1"><span class="s1">See help file <a href="TX_Env%20DADSSR.html"><span class="s2">Env DADSSR</span></a> for details.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Carrier Freq</b></span></p>
+<p class="p1"><span class="s1"><b>Carrier Ratio</b></span></p>
+<p class="p1"><span class="s1"><b>Modulator Freq</b></span></p>
+<p class="p1"><span class="s1"><b>Modulator Ratio</b></span></p>
+<p class="p1"><span class="s1"><b>Modulator Index</b></span></p>
+<p class="p1"><span class="s1"><b>Grain time ms</b></span></p>
+<p class="p1"><span class="s1"><b>Grain density</b></span></p>
+<p class="p1"><span class="s1"><b>Grain pan</b></span></p>
+<p class="p1"><span class="s1"><b>Pitch bend</b> </span></p>
+<p class="p1"><span class="s1"><b>Vary position</b></span></p>
+<p class="p1"><span class="s1"><b>Vary triggering</b></span></p>
+<p class="p1"><span class="s1"><b>Vary grain time</b></span></p>
+<p class="p1"><span class="s1"><b>Vary panning</b></span></p>
+<p class="p1"><span class="s1"><b>Delay</b> </span></p>
+<p class="p1"><span class="s1"><b>Attack</b> </span></p>
+<p class="p1"><span class="s1"><b>Decay</b></span></p>
+<p class="p1"><span class="s1"><b>Sustain level</b></span></p>
+<p class="p1"><span class="s1"><b>Sustain time</b></span></p>
+<p class="p1"><span class="s1"><b>Release</b></span></p>
+<p class="p1"><span class="s1"><b>Ext Trigger</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>

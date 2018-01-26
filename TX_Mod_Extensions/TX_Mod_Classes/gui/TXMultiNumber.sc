@@ -47,7 +47,7 @@ TXMultiNumber {	// TXMultiNumber module with label
 				value = arrNumberViews.collect({ arg item, i; item.value});
 				action.value(this);
 			};
-			if (scrollInc.notNil, {holdNumberBox.inc = scrollInc});
+			//if (scrollInc.notNil, {holdNumberBox.inc = scrollInc}); // no longer used
 			arrNumberViews = arrNumberViews.add(holdNumberBox);
 			holdNumberBox.value = initVal.at(i);
 		});
@@ -84,5 +84,14 @@ TXMultiNumber {	// TXMultiNumber module with label
 			});
 		});
 		action.value(this);
+	}
+
+	hasFocus {
+		arrNumberViews.do({arg item;
+			if (item.hasFocus, {
+				^true;
+			});
+		});
+		^false;
 	}
 }

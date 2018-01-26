@@ -141,14 +141,14 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 		action.value(this);
 	}
 	reset {
-		this.value = linearArray;
+		this.valueAction = linearArray;
 	}
 	set { arg label, argAction, initVal, initAction=false;
 		labelView.string = label;
 		action = argAction;
 		initVal = initVal ? linearArray;
 		if (initAction) {
-			this.value = initVal;
+			this.valueAction = initVal;
 		}{
 			value = initVal;
 			multiSliderView.value = value;
@@ -158,6 +158,9 @@ TXEQCurveDraw {	// MultiSlider and buttons for curve drawing with 5 user slots f
 		arrSlotData.put(num, this.value);
 	}
 	loadSlot { arg num;
-		this.value = arrSlotData.at(num);
+		this.valueAction = arrSlotData.at(num);
+	}
+	hasFocus {
+		^multiSliderView.hasFocus;
 	}
 }

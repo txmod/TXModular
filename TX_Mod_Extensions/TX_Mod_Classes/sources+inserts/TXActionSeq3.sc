@@ -2,43 +2,34 @@
 
 TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=1080;
-	classvar	<seqLatency = 0.1;	// all seqs should use same small latency for server timing
-	classvar	defaultActionStep;
+	classvar <>classData;
 
-	var		<seqClock; 		// clock for sequencer
-	var		<seqCurrentStep;
-	var		<seqRunning = false;
-	var 		holdCurrTime;
-	var		holdDeltaTime;
-	var		extraDeltaTime;
-	var 		holdSeqClockSecs;
-	var 		infLoopCount = 0;
-	var		<>jumpStep;
-	var 		holdVisibleOrigin;
-	var		holdTapTime, newTapTime;
-	var 		currentStepID;
-	var		<>runningStatus;
-	var		<>runningStatusView;
+	var <seqClock; 		// clock for sequencer
+	var <seqCurrentStep;
+	var <seqRunning = false;
+	var holdCurrTime;
+	var holdDeltaTime;
+	var extraDeltaTime;
+	var holdSeqClockSecs;
+	var infLoopCount = 0;
+	var <>jumpStep;
+	var holdVisibleOrigin;
+	var holdTapTime, newTapTime;
+	var currentStepID;
+	var <>runningStatus;
+	var <>runningStatusView;
 
 	*initClass {
-		arrInstances = [];
 		//	set class specific variables
-		defaultName = "Action Sequencer";
-		moduleRate = "control";
-		moduleType = "action";
-		noInChannels = 0;
-		noOutChannels = 0;
-		defaultActionStep = [99,0,0,0,0,0,0, nil, 0, 0.0, 1, 100, 1, 1001];
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "Action Sequencer";
+		classData.moduleRate = "control";
+		classData.moduleType = "action";
+		classData.noInChannels = 0;
+		classData.noOutChannels = 0;
+		classData.guiWidth = 1080;
+		classData.defaultActionStep = [99,0,0,0,0,0,0, nil, 0, 0.0, 1, 100, 1, 1001];
 		// actionStep.at(0) is ModuleID
 		// actionStep.at(1) is Action Index
 		// actionStep.at(2) is value 1
@@ -60,25 +51,25 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 	}
 
 	*restoreAllOutputs {
-		arrInstances.do({ arg item, i;
+		classData.arrInstances.do({ arg item, i;
 			item.restoreOutputs;
 		});
 	}
 
 	*syncStartAllSequencers {
-		arrInstances.do({ arg item, i;
+		classData.arrInstances.do({ arg item, i;
 			item.syncStartSequencer;
 		});
 	}
 
 	*syncStopAllSequencers {
-		arrInstances.do({ arg item, i;
+		classData.arrInstances.do({ arg item, i;
 			item.syncStopSequencer;
 		});
 	}
 
 	*stopAllSequencers {
-		arrInstances.do({ arg item, i;
+		classData.arrInstances.do({ arg item, i;
 			item.stopSequencer;
 		});
 	}
@@ -88,11 +79,12 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 	init {arg argInstName;
 
 		holdVisibleOrigin = Point.new(0,0);
+		currentStepID = 0;
 
 		//	n.b. this module is using arrSynthArgSpecs just as a place to store variables for use with guiSpecArray
 		//  it takes advantage of the  gui objects saving values to arrSynthArgSpecs as well as it being already
 		//   saved and loaded with other data
-		//	it is only for (very lazy!) convenience, since no synths are used by this module - unlike most of the others
+		//	it is only for (very lazy!) convenience, since no synths are used by this module
 
 		arrSynthArgSpecs = [
 			["seqStartStep", 1],
@@ -105,7 +97,7 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 			["oldBpm", 120],
 			["beatsPerBar", 4],
 			["arrActionSteps",
-				defaultActionStep.deepCopy.dup
+				classData.defaultActionStep.deepCopy.dup
 				.collect({arg item, i; item.put(12, i+1); item.put(13, i + 1001;); })],
 			["holdNextStepID", 1003],
 			["autoTapTempo", 0],
@@ -127,13 +119,14 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 			["ActionButton", "Stop", {this.stopSequencer}, 50, nil, TXColor.sysGuiCol2],
 			["Spacer", 3],
 			["TXStaticText", "Status", {this.runningStatus},
-				{arg view; runningStatusView = view.textView}, 130, 50, TXColor.paleYellow2],
+				{arg view; if ((view.class == TextView) || (view.class == TextField), {runningStatusView = view},
+					{runningStatusView = view.textView}); }, 130, 50, TXColor.paleYellow],
 			["Spacer", 3],
 			["SeqSyncStartCheckBox"],
 			["Spacer", 3],
 			["SeqSyncStopCheckBox"],
 			["Spacer", 3],
-			["TXCheckBox", "Mute all actions", "muteSeq", nil, 200],
+			["TXCheckBox", "Mute all actions", "muteSeq", nil, 140, 20, 0, TXColor.white, TXColor.sysGuiCol2],
 			["Spacer", 3],
 			["HideModuleButton"],
 			["NextLine"],
@@ -150,7 +143,7 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 			["Spacer", 10],
 			["EZNumber", "BPM", ControlSpec(1, 999), "bpm",
 				{arg view; this.bpmUpdated(view.value); system.showView(this);}, 50, 50],
-			["TapTempoButton", {arg argTempo; this.useTapTempo(argTempo); }],
+			["TapTempoButton", {arg argTempo; this.useTapTempo(argTempo); }, 120],
 			["TXCheckBox", "Auto copy tap tempo ", "autoTapTempo", nil, 140],
 			["Spacer", 10],
 			["EZNumber", "Beats per bar", ControlSpec(1, 999), "beatsPerBar", {system.showView(this);}, 80, 30],
@@ -184,9 +177,6 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 			["TXCheckBox", "Auto copy tap tempo ", "autoTapTempo", nil, 180],
 			["EZNumber", "Beats per bar", ControlSpec(1, 999), "beatsPerBar"],
 			["TXCheckBox", "Lock step times when BPM changes", "timeLock", nil, 270],
-			["TXStaticText", "Status", {this.runningStatus},
-				{arg view; if (view.class == TextField, {runningStatusView = view},
-					{runningStatusView = view.textView}); }, 150],
 		]);
 		//	use base class initialise
 		this.baseInit(this, argInstName);
@@ -259,19 +249,19 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 					seqCurrentStep = (jumpStep - 1).max(0).asInteger;
 					holdCurrTime = holdArrActionSteps.at(jumpStep-1).at(9);
 					jumpStep = nil;
-					},{
-						seqCurrentStep = (seqCurrentStep + 1);
+				},{
+					seqCurrentStep = (seqCurrentStep + 1);
 				});
 
 				// if past end stop sequencer
 				if (seqCurrentStep > (holdArrActionSteps.size - 1), {
 					this.stopSequencer;
 					holdDeltaTime = nil;
-					},{
-						//schedule next event by subtracting old time from new add extra time
-						holdDeltaTime = (holdArrActionSteps.at(seqCurrentStep).at(9) - holdCurrTime).max(0);
-						//  add extra time
-						holdDeltaTime = holdDeltaTime + extraDeltaTime;
+				},{
+					//schedule next event by subtracting old time from new add extra time
+					holdDeltaTime = (holdArrActionSteps.at(seqCurrentStep).at(9) - holdCurrTime).max(0);
+					//  add extra time
+					holdDeltaTime = holdDeltaTime + extraDeltaTime;
 				});
 				holdDeltaTime;
 			});
@@ -283,9 +273,9 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 		infLoopFound = false;
 		if (holdSeqClockSecs == seqClock.seconds, {
 			infLoopCount = infLoopCount + 1;
-			},{
-				holdSeqClockSecs = seqClock.seconds;
-				infLoopCount = 0;
+		},{
+			holdSeqClockSecs = seqClock.seconds;
+			infLoopCount = 0;
 		});
 		if (infLoopCount > 100, {
 			this.stopSequencer;
@@ -370,31 +360,32 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 				if (holdActionText.notNil, {
 					holdActionInd = holdArrActionItems.indexOfEqual(holdActionText) ? holdActionInd;
 					holdAction = holdModule.arrActionSpecs.at(holdActionInd);
-					},{
-						// if text not found, use number but only select older actions with legacyType == 1
-						holdAction = holdModule.arrActionSpecs
-						.select({arg item, i; item.legacyType == 1}).at(holdActionInd);
+				},{
+					// if text not found, use number but only select older actions with legacyType == 1
+					holdAction = holdModule.arrActionSpecs
+					.select({arg item, i; item.legacyType == 1}).at(holdActionInd);
 				});
-				// if module is another sequencer, don't use latency (since they already use latency)
-				if ((system.arrAllPossCurSeqModules ++ system.arrAllPossOldSeqModules)
-					.indexOfEqual(holdModule.class).notNil, {
-						holdLatency = 0;
-					},{
-						holdLatency = seqLatency;
-				});
-				// use bundle to allow for latency
-				system.server.makeBundle(seqLatency, {
-					// if action type is commandAction then value it with arguments
-					if (holdAction.actionType == \commandAction, {
-						holdAction.actionFunction.value(holdVal1, holdVal2, holdVal3, holdVal4);
+				if (holdAction.notNil, {
+					// if module is another sequencer, don't use latency (since they already use latency)
+					if (system.arrAllPossCurSeqModules.indexOfEqual(holdModule.class).notNil, {
+							holdLatency = 0;
+						},{
+							holdLatency = system.seqLatency;
 					});
-					// if action type is valueAction then value it with arguments
-					if (holdAction.actionType == \valueAction, {
-						holdAction.setValueFunction.value(holdVal1, holdVal2, holdVal3, holdVal4);
-					});
-					// gui update
-					if (holdGuiUpd == 1, {
-						system.flagGuiUpd;
+					// use bundle to allow for latency
+					system.server.makeBundle(holdLatency, {
+						// if action type is commandAction then value it with arguments
+						if (holdAction.actionType == \commandAction, {
+							holdAction.actionFunction.value(holdVal1, holdVal2, holdVal3, holdVal4);
+						});
+						// if action type is valueAction then value it with arguments
+						if (holdAction.actionType == \valueAction, {
+							holdAction.setValueFunction.value(holdVal1, holdVal2, holdVal3, holdVal4);
+						});
+						// gui update
+						if (holdGuiUpd == 1, {
+							system.flagGuiUpd;
+						});
 					});
 				});
 		});
@@ -445,11 +436,11 @@ TXActionSeq3 : TXModuleBase {		// Action Sequencer module
 		var holdBPM;
 		if (newTapTime.isNil, {
 			newTapTime = Main.elapsedTime
-			}, {
-				holdTapTime = Main.elapsedTime;
-				holdBPM = 60 / (holdTapTime - newTapTime);
-				newTapTime = holdTapTime;
-				this.useTapTempo(holdBPM);
+		}, {
+			holdTapTime = Main.elapsedTime;
+			holdBPM = 60 / (holdTapTime - newTapTime);
+			newTapTime = holdTapTime;
+			this.useTapTempo(holdBPM);
 		});
 	}
 

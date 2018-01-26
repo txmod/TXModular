@@ -34,13 +34,17 @@ TXInterfaceLayoutView {
 				var holdRect, holdSmallRect, holdRate, holdModuleType;
 				holdRect = Rect(argWidget.fromLeft(layoutWidth),
 					argWidget.fromTop(layoutHeight), argWidget.width, argWidget.height);
-			//	// Draw the fill
-			//	Pen.fillColor = TXColor.black.alpha_(0.3);
-			//	Pen.addRect(holdRect);
-			//	Pen.fill;
+				//	// Draw the fill
+				//	Pen.fillColor = TXColor.black.alpha_(0.3);
+				//	Pen.addRect(holdRect);
+				//	Pen.fill;
 				Pen.width =2;
 				if (argWidget.highlight, {
-					Pen.strokeColor = TXColor.red;
+					if( resizeHandles.notNil and: {resizeFixed.notNil}, {
+						Pen.strokeColor = TXColor.orange;
+					},{
+						Pen.strokeColor = TXColor.red;
+					});
 				},{
 					Pen.strokeColor = TXColor.black;
 				});
@@ -106,34 +110,45 @@ TXInterfaceLayoutView {
 		userView.receiveDragHandler = { |v,x,y, mod|
 			var arrNewWidgets, diffPoint;
 			dropX = x; dropY = y;
-			arrNewWidgets = View.currentDrag.asArray;
-			if (View.currentDrag.isArray, {
-				if (startDragPoint != nil and: {startDragPoint != Point( nil, nil) }, {
-					diffPoint = Point(dropX,dropY) - startDragPoint;
-					// move all new widgets by diffPoint
-					arrNewWidgets.do({ arg item, i;
-						item.bounds_(
-							item.bounds(layoutWidth, layoutHeight).moveBy(diffPoint.x, diffPoint.y),
-							layoutWidth, layoutHeight
-						);
+			if (startDragPoint == nil, {
+				startDragPoint = Point(0,layoutHeight);
+			});
+			if (startDragPoint != nil and: {startDragPoint != Point( nil, nil) }, {
+				diffPoint = Point(dropX,dropY) - startDragPoint;
+				// minimum move 10 pixels
+				if (abs(diffPoint.x) < 10, {
+					if (diffPoint.x.isNegative, {
+						diffPoint.x = -10;
+					},{
+						diffPoint.x = 10;
 					});
 				});
-			},{
-				arrNewWidgets[0].fromLeft_(dropX, layoutWidth);
-				arrNewWidgets[0].fromTop_(dropY, layoutHeight);
+				if (abs(diffPoint.y) < 10, {
+					if (diffPoint.y.isNegative, {
+						diffPoint.y = -10;
+					},{
+						diffPoint.y = 10;
+					});
+				});
+				arrNewWidgets = View.currentDrag.asArray;
+				arrNewWidgets.do({ arg item, i;
+					item.bounds_(
+						item.bounds(layoutWidth, layoutHeight).moveBy(diffPoint.x, diffPoint.y),
+						layoutWidth, layoutHeight
+					);
+				});
+				// update all arrWidgets
+				TXFrontScreen.arrWidgets = TXFrontScreen.arrWidgets ++ arrNewWidgets;
+				arrWidgets = TXFrontScreen.arrWidgets;
+				selectedViews = arrNewWidgets;
+				dragging = true;
+				// testing xxx - check next line?? - based on older code
+				indent = dropX@dropY - Point(arrWidgets.last.fromLeft(layoutWidth), arrWidgets.last.fromTop(layoutHeight));
+				this.updateResizeHandles;
+				selectionChanged = false;
+				this.unhighlightAllViews;
+				this.mouseUp(dropX,dropY);
 			});
-			// update all arrWidgets
-			TXFrontScreen.arrWidgets = TXFrontScreen.arrWidgets ++ arrNewWidgets;
-			arrWidgets = TXFrontScreen.arrWidgets;
-			selectedViews = arrNewWidgets;
-			dragging = true;
-		// testing - check next line?? - based on older code
-			indent = dropX@dropY -
-				Point(arrWidgets.last.fromLeft(layoutWidth), arrWidgets.last.fromTop(layoutHeight));
- 			this.updateResizeHandles;
- 			selectionChanged = false;
- 			this.unhighlightAllViews;
- 			this.mouseUp(dropX,dropY);
 		};
  		this.updateResizeHandles;
 		userView.refresh;
@@ -142,7 +157,6 @@ TXInterfaceLayoutView {
 	mouseDown { |x,y, mod|
 		var view, point, handle;
 		//dropX = x; dropY = y;
-
 		point = x @ y;
 
 		view = this.viewContainingPoint(point);
@@ -202,7 +216,7 @@ TXInterfaceLayoutView {
 		});
 		resizeFixed = nil;
 		this.highlightSelectedViews;
-		this.fitToGridSelectedViews;
+		//this.fitToGridSelectedViews;
 		if(selection.notNil,{
 			selection = nil;
 		});
@@ -280,7 +294,7 @@ TXInterfaceLayoutView {
 	viewContainingPoint { |point|
 		if (point.x.isNil, {^nil});
 		if (point.y.isNil, {^nil});
-		arrWidgets.do({ |view|
+		arrWidgets.reverseDo({ |view|
 			var viewRect;
 			viewRect = Rect(view.fromLeft(layoutWidth), view.fromTop(layoutHeight),
 				view.width, view.height);
@@ -313,6 +327,8 @@ TXInterfaceLayoutView {
 	}
 	fitToGridSelectedViews {
 		selectedViews.do({ |view|
+			view.width_(view.width(layoutWidth).round(gridStep).max(gridStep), layoutWidth);
+			view.height_(view.height(layoutHeight).round(gridStep).max(gridStep), layoutHeight);
 			view.fromLeft_(view.fromLeft(layoutWidth).round(gridStep), layoutWidth);
 			view.fromTop_(view.fromTop(layoutHeight).round(gridStep), layoutHeight);
 		})

@@ -5,49 +5,54 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
   <title></title>
   <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1138.47">
+  <meta name="CocoaVersion" content="1404.13">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none; color: #042eee; -webkit-text-stroke: 0px #042eee}
   </style>
 </head>
 <body>
-<p class="p1"><b>Waveshaper</b></p>
-<p class="p2"><br></p>
-<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Insert (mono input, mono output)</b></p>
-<p class="p2"><br></p>
-<p class="p1"><b><i>Introduction:</i></b></p>
-<p class="p1">This module changes or distorts to the input signal. It changes the shape of the signal by using a function curve which can be drawn by hand or generated automatically based on harmonics and noise.<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p1"><b><i>Controls:</i></b></p>
-<p class="p2"><b></b><br></p>
-<p class="p1"><b>Settings page button</b></p>
-<p class="p1"><b>Shaping type</b> - sets type of waveshaping. Can be variable, which changes with the amplitude of the signal, or constant .<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Curve</b> - the curve used for waveshaping. You can edit the curve with a mouse. Some presets which compress or expand the signal are included.</p>
-<p class="p1"><b>Invert</b> - turns the curve upside down.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Smooth</b> - evens out spikes or sudden changes in the curve . Useful when the curve is drawn by the mouse or when noise has been mixed in, it can reduce the harshness of distortion.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Reset</b> - resets the curve to a linear curve.</p>
-<p class="p1"><b>Load 1/2/3/4/5</b> - to load curves stored in 5 slots.</p>
-<p class="p1"><b>Store 1/2/3/4/5</b> - to store curves in 5 slots.</p>
-<p class="p1"><b>Rebuild curve by mirroring &amp; inverting</b> - this can be useful for creating waveshaping curves.<span class="Apple-converted-space">  </span>The curve is mirrored at the bottom left corner and then the left hand side is inverted. Finally the whole curve is normalised.</p>
-<p class="p1"><b>In Gain</b> - cuts/boosts the signal before distorting it. This can affect how much distortion occurs.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Out Gain</b> - useful for reducing the volume of the distorted signal. This allows the dry and wet signals to be balanced in volume.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal.<span class="Apple-converted-space">  </span>For send effects this will usually be set to 1 - i.e. 100% affected signal.</p>
-<p class="p2"><b></b><br></p>
-<p class="p1"><b>Harmonics page button</b></p>
-<p class="p1"><b>Shaping type, Curve, Invert, Smooth, Reset,<span class="Apple-converted-space">  </span></b><i>... same as above</i></p>
-<p class="p1"><b>Harmonics</b> - sets the level for 16 harmonics that can be mixed into the curve.</p>
-<p class="p1"><b>Harm Mix</b> - this sets the mix of the harmonics with the original curve. <span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Add harmonics to the curve</b> - this button mixes in the harmonics (based on the Harmonics and Harm Mix settings).<span class="Apple-converted-space"> </span></p>
-<p class="p2"><b></b><br></p>
-<p class="p1"><b>Noise page button</b></p>
-<p class="p1"><b>Shaping type, Curve, Invert, Smooth, Reset, </b><i>... same as above</i></p>
-<p class="p1"><b>Noise Mix</b> - this sets the mix of the noise with the original curve.<span class="Apple-converted-space">  </span>2 types of noise can be used. Tapered noise will affect louder signals more than quieter ones (similar to amplifier distortion). Untapered noise affects all signals in the same way.</p>
-<p class="p1"><b>Add tapered noise to the curve</b> - this button mixes in tapered noise (based on the Noise Mix setting).<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Add untapered noise to the curve</b> - this button mixes in untapered noise (based on the Noise Mix setting).<span class="Apple-converted-space"> </span></p>
-<p class="p2"><b><i></i></b><br></p>
-<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
-<p class="p1"><b>Dry-Wet Mix</b> <span class="Apple-converted-space"> </span></p>
-<p class="p2"><b><i></i></b><br></p>
+<p class="p1"><span class="s1"><b>Waveshaper</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Insert (mono input, mono output)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module changes or distorts to the input signal. It changes the shape of the signal by using a function curve which can be drawn by hand or generated automatically based on harmonics and noise.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Settings page button</b></span></p>
+<p class="p1"><span class="s1"><b>Shaping type</b> - sets type of waveshaping. Can be variable, which changes with the amplitude of the signal, or constant .<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Curve</b> - the curve used for waveshaping. You can edit the curve with a mouse. Some presets which compress or expand the signal are included.</span></p>
+<p class="p2"><span class="s1">See help file <a href="file:../TX_Curve%20Editing.html"><span class="s2">Curve Editing</span></a> for details.</span></p>
+<p class="p1"><span class="s1"><b>In Gain</b> - cuts/boosts the signal before distorting it. This can affect how much distortion occurs.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Out Gain</b> - useful for reducing the volume of the distorted signal. This allows the dry and wet signals to be balanced in volume.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal.<span class="Apple-converted-space">  </span>For send effects this will usually be set to 1 - i.e. 100% affected signal.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Harmonics page button</b></span></p>
+<p class="p1"><span class="s1"><b>Shaping type, Curve, Invert, Smooth, Reset,<span class="Apple-converted-space">  </span></b><i>... same as above</i></span></p>
+<p class="p1"><span class="s1"><b>Harmonics</b> - sets the level for 16 harmonics that can be mixed into the curve.</span></p>
+<p class="p1"><span class="s1"><b>Harm Mix</b> - this sets the mix of the harmonics with the original curve. <span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Add harmonics to the curve</b> - this button mixes in the harmonics (based on the Harmonics and Harm Mix settings).<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Noise page button</b></span></p>
+<p class="p1"><span class="s1"><b>Shaping type, Curve, Invert, Smooth, Reset, </b><i>... same as above</i></span></p>
+<p class="p1"><span class="s1"><b>Noise Mix</b> - this sets the mix of the noise with the original curve.<span class="Apple-converted-space">  </span>2 types of noise can be used. Tapered noise will affect louder signals more than quieter ones (similar to amplifier distortion). Untapered noise affects all signals in the same way.</span></p>
+<p class="p1"><span class="s1"><b>Add tapered noise to the curve</b> - this button mixes in tapered noise (based on the Noise Mix setting).<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Add untapered noise to the curve</b> - this button mixes in untapered noise (based on the Noise Mix setting).<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b> <span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
 </body>
 </html>

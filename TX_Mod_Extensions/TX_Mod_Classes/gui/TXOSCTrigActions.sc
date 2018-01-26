@@ -52,7 +52,7 @@ TXOSCTrigActions {
 		actionData = ();
 
 		// button - add new
-		btnAddNew = Button(argParent, 17 @ 20)
+		btnAddNew = Button(argParent, 12 @ 20)
 			.states_([
 				["+", TXColor.white, TXColor.sysGuiCol1]
 			])
@@ -65,16 +65,11 @@ TXOSCTrigActions {
 			});
 
 		// text label
-		StaticText(argParent, Rect(0, 0, 291, 20))
+		StaticText(argParent, Rect(0, 0, 303, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 			.align_(\centre)
-			.string_("           OSC string (sorted alphabetically)           on - off");
+			.string_("add del    OSC string (sorted alphabetically)           on-off");
 
-//		// text label
-//		StaticText(argParent, Rect(0, 0, 270, 20))
-//			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
-//			.align_(\centre)
-//			.string_("OSC string                                   on - off");
 		// text label
 		StaticText(argParent, Rect(0, 0, 194, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
@@ -82,13 +77,13 @@ TXOSCTrigActions {
 			.string_("trigger type             use args from no");
 
 		// text label
-		StaticText(argParent, Rect(0, 0, 130, 20))
+		StaticText(argParent, Rect(0, 0, 153, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 			.align_(\centre)
 			.string_("module");
 
 		// text label
-		holdView = StaticText(argParent, Rect(0, 0, 250, 20))
+		holdView = StaticText(argParent, Rect(0, 0, 285, 20))
 			.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
 			.align_(\centre)
 			.string_("action");
@@ -112,7 +107,7 @@ TXOSCTrigActions {
 			scrollView.hasHorizontalScroller = false;
 			scrollView.hasVerticalScroller = true;
 			scrollBox = CompositeView(scrollView, Rect(0, 0, 100 + dimensions.x,
-				20 + (arrOSCTrigActions.size * 35)));
+				150 + (arrOSCTrigActions.size * 24)));
 			scrollBox.decorator = FlowLayout(scrollBox.bounds);
 			scrollBox.decorator.margin.x = 0;
 			scrollBox.decorator.margin.y = 0;
@@ -129,10 +124,10 @@ TXOSCTrigActions {
 //			var chkboxUpd, popupStep, labelStepID;
 //			var numboxMins, numboxSecs, numboxBars, numboxBeats;
 //			var chkboxOnOff, numboxProb, popupProb, btnCopy, btnPaste;
-			var modulePopup, actionPopup;
+			var moduleView, moduleActionView;
 			var val1NumberBox, val1Slider, val2NumberBox, val3NumberBox, val4NumberBox, valPopup;
 			var valCheckbox, valTextbox, chkboxUseArgs, popupFirstArg;
-			var holdOSCTrigAction;
+			var holdOSCTrigAction, isCurrentStep;
 
 			holdOSCTrigAction = arrOSCTrigActions.at(item);
 
@@ -149,18 +144,35 @@ TXOSCTrigActions {
 			prevOSCString = holdOSCTrigAction.at(8);
 			// if current step highlight with box
 			if (this.getCurrentStepID == holdOSCTrigAction.at(6), {
+				isCurrentStep = true;
 				// shift decorator
 				holdParent.decorator.shift(0, -4);
 				// draw a background box
-				holdBackgroundBox = StaticText(holdParent, dimensions.x @ 28);
+				holdBackgroundBox = StaticText(holdParent, dimensions.x @ 124);
 				holdBackgroundBox.background_(TXColor.sysViewHighlight);
 				// shift decorator back
 				holdParent.decorator.nextLine;
-				holdParent.decorator.shift(0, -28);
+				holdParent.decorator.shift(0, -124);
+			},{
+				isCurrentStep = false;
 			});
 
+			// button - highlight
+			Button(holdParent, 8 @ 20)
+			.states_([
+				["", TXColor.white, TXColor.sysViewHighlight]
+			])
+			.action_({|view|
+				if (isCurrentStep, {
+					this.setCurrentStepID(0);
+				},{
+					this.setCurrentStepID(holdOSCTrigAction.at(6));
+				});
+				// update view
+				system.showView;
+			});
 			// button - add
-			btnAdd = Button(holdParent, 17 @ 20)
+			btnAdd = Button(holdParent, 12 @ 20)
 				.states_([
 					["+", TXColor.white, TXColor.sysGuiCol1]
 				])
@@ -173,7 +185,7 @@ TXOSCTrigActions {
 				});
 
 			// button - delete
-			btnDelete = Button(holdParent, 17 @ 20)
+			btnDelete = Button(holdParent, 12 @ 20)
 				.states_([
 					["-", TXColor.white, TXColor.sysDeleteCol]
 				])
@@ -185,7 +197,7 @@ TXOSCTrigActions {
 				});
 
 			// text box - OSC String
-			txtOSCString = TextField(holdParent, Rect(0, 0, 240, 20));
+			txtOSCString = TextField(holdParent, Rect(0, 0, 246, 20));
 			txtOSCString.action = {arg view;
 				var holdString;
 				holdString = view.string;
@@ -206,7 +218,7 @@ TXOSCTrigActions {
 			txtOSCString.string =  holdOSCTrigAction[8];
 
 			// checkbox - active
-			chkboxActive = TXCheckBox(holdParent, 26 @ 20, "", TXColor.sysGuiCol1, TXColour.white,
+			chkboxActive = TXCheckBox(holdParent, 23 @ 20, "", TXColor.sysGuiCol1, TXColour.white,
 				TXColor.white, TXColor.sysGuiCol1)
 				.value_ (holdOSCTrigAction.at(9))
 				.action_ {|view|
@@ -222,7 +234,7 @@ TXOSCTrigActions {
 			// popup - trip type
 			popupTrigType = PopUpMenu(holdParent, Rect(0, 0, 130, 20))
 				.background_(TXColor.white).stringColor_(TXColor.black)
-				.items_(["Always trigger", "Trigger when arg = 1", "Trigger when arg = 0"])
+				.items_(["Always trigger", "Trigger if arg=1", "Trigger if arg=0"])
 				.action_({arg view;
 					var holdAction;
 					this.setCurrentStepID(holdOSCTrigAction.at(6));
@@ -234,7 +246,7 @@ TXOSCTrigActions {
 
 
 			// checkbox - Use Args
-			chkboxUseArgs = TXCheckBox(holdParent, 26 @ 20, "", TXColor.sysGuiCol1, TXColour.white,
+			chkboxUseArgs = TXCheckBox(holdParent, 23 @ 20, "", TXColor.sysGuiCol1, TXColour.white,
 				TXColor.white, TXColor.sysGuiCol1)
 				.value_ (holdOSCTrigAction.at(11))
 				.action_ {|view|
@@ -269,94 +281,109 @@ TXOSCTrigActions {
 			});
 			popupFirstArg.value =  holdOSCTrigAction[12] + 1;
 
-			// popup - module
-			modulePopup = PopUpMenu(holdParent, Rect(0, 0, 130, 20))
-				.background_(TXColor.white).stringColor_(TXColor.black)
-				.items_(arrModuleNames)
-				.action_({arg view;
-					var holdAction;
-					this.setCurrentStepID(holdOSCTrigAction.at(6));
-					arrOSCTrigActions.at(i).put(0, arrModules.at(view.value).moduleID);
-					arrOSCTrigActions.at(i).put(1, 0);
-					arrOSCTrigActions.at(i).put(7, nil);
+			// TXListView/Popup - module
+			if (isCurrentStep, {
+				moduleView = TXListView(holdParent, Rect(0, 0, 155, 116));
+			},{
+				moduleView = PopUpMenu(holdParent, Rect(0, 0, 155, 20));
+			});
+			moduleView.background_(TXColor.white).stringColor_(TXColor.black);
+			moduleView.items_(arrModuleNames);
+			moduleView.action_({arg view;
+				var holdAction;
+				arrOSCTrigActions.at(i).put(0, arrModules.at(view.value).moduleID);
+				arrOSCTrigActions.at(i).put(1, 0);
+				arrOSCTrigActions.at(i).put(7, nil);
+				{
 					// update view
+					this.setCurrentStepID(holdOSCTrigAction.at(6));
 					system.showView;
-				});
+				}.defer(0.02);
+			});
+			//moduleView.beginDragAction = {arg view; nil;}; // disable drag - can cause crashes
 			holdModuleID = arrOSCTrigActions.at(i).at(0);
 			holdModule = system.getModuleFromID(holdModuleID);
 			if (holdModule == 0, {holdModule = system});
-			modulePopup.value =  arrModules.indexOf(holdModule) ? 0;
+			moduleView.value =  arrModules.indexOf(holdModule) ? 0;
 
-			// popup - action
+			// TXListView/Popup - action
 			actionArrays = this.getActionArrays(holdModule);
 			holdArrActionSpecs = actionArrays[0];
 			arrActionItems = actionArrays[1];
 			arrLegacyActionItems = actionArrays[2];
-			actionPopup = PopUpMenu(holdParent, Rect(0, 0, 250, 20))
-				.background_(TXColor.white).stringColor_(TXColor.black)
-				.items_(arrActionItems)
-				.action_({arg view;
-					var holdAction;
-					this.setCurrentStepID(holdOSCTrigAction.at(6));
-					// popup value and text are stored
-					arrOSCTrigActions.at(i).put(1, view.value);
-					if (arrOSCTrigActions.at(i).size<8, {
-						holdAction = arrOSCTrigActions.at(i).deepCopy;
-						holdAction = holdAction.addAll([nil, nil, nil, nil, nil, nil]);
-						arrOSCTrigActions.put(i, holdAction.deepCopy);
-					});
-					arrOSCTrigActions.at(i).put(7, arrActionItems.at(view.value));
-					// default argument values are stored
-					// arg 1
-					if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 0, {
-						arrOSCTrigActions.at(i).put(2,
-							holdModule.arrActionSpecs.at(actionPopup.value)
-							.arrControlSpecFuncs.at(0).value.default);
-					});
-					// arg 2
-					if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 1, {
-						arrOSCTrigActions.at(i).put(3,
-							holdModule.arrActionSpecs.at(actionPopup.value)
-							.arrControlSpecFuncs.at(1).value.default);
-					});
-					// arg 3
-					if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 2, {
-						arrOSCTrigActions.at(i).put(4,
-							holdModule.arrActionSpecs.at(actionPopup.value)
-							.arrControlSpecFuncs.at(2).value.default);
-					});
-					// arg 4
-					if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 3, {
-						arrOSCTrigActions.at(i).put(5,
-							holdModule.arrActionSpecs.at(actionPopup.value)
-							.arrControlSpecFuncs.at(3).value.default);
-					});
-					// update view
-					system.showView;
+			if (isCurrentStep, {
+				moduleActionView = TXListView(holdParent, Rect(0, 0, 285, 116));
+			},{
+				moduleActionView = PopUpMenu(holdParent, Rect(0, 0, 285, 20));
+			});
+			moduleActionView.background_(TXColor.white).stringColor_(TXColor.black);
+			moduleActionView.items_(arrActionItems);
+			moduleActionView.action_({arg view;
+				var holdAction;
+				// popup value and text are stored
+				arrOSCTrigActions.at(i).put(1, view.value);
+				if (arrOSCTrigActions.at(i).size<8, {
+					holdAction = arrOSCTrigActions.at(i).deepCopy;
+					holdAction = holdAction.addAll([nil, nil, nil, nil, nil, nil]);
+					arrOSCTrigActions.put(i, holdAction.deepCopy);
 				});
+				arrOSCTrigActions.at(i).put(7, arrActionItems.at(view.value));
+				// default argument values are stored
+				// arg 1
+				if (holdModule.arrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size > 0, {
+					arrOSCTrigActions.at(i).put(2,
+						holdModule.arrActionSpecs.at(moduleActionView.value)
+						.arrControlSpecFuncs.at(0).value.default);
+				});
+				// arg 2
+				if (holdModule.arrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size > 1, {
+					arrOSCTrigActions.at(i).put(3,
+						holdModule.arrActionSpecs.at(moduleActionView.value)
+						.arrControlSpecFuncs.at(1).value.default);
+				});
+				// arg 3
+				if (holdModule.arrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size > 2, {
+					arrOSCTrigActions.at(i).put(4,
+						holdModule.arrActionSpecs.at(moduleActionView.value)
+						.arrControlSpecFuncs.at(2).value.default);
+				});
+				// arg 4
+				if (holdModule.arrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size > 3, {
+					arrOSCTrigActions.at(i).put(5,
+						holdModule.arrActionSpecs.at(moduleActionView.value)
+						.arrControlSpecFuncs.at(3).value.default);
+				});
+				{
+					// update view
+					this.setCurrentStepID(holdOSCTrigAction.at(6));
+					system.showView;
+				}.defer(0.02);
+			});
+			// moduleActionView.beginDragAction = {arg view; nil;}; // disable drag - can cause crashes
 			// if text found, match action string with text, else use numerical value
 			if (arrOSCTrigActions.at(i).at(7).notNil, {
-				actionPopup.value = arrActionItems.indexOfEqual(arrOSCTrigActions.at(i).at(7)) ? 0;
+				moduleActionView.value = arrActionItems.indexOfEqual(arrOSCTrigActions.at(i).at(7)) ? 0;
 			},{
 				// legacy code
 				holdActionText = arrLegacyActionItems.at(arrOSCTrigActions.at(i).at(1) ? 0);
-				actionPopup.value = arrActionItems.indexOfEqual(holdActionText) ? 0;
+				moduleActionView.value = arrActionItems.indexOfEqual(holdActionText) ? 0;
 			});
 
 			// show value settings
 			// if only 1 controlspec is given, then create slider
-			if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size == 1, {
+			if (holdModule.arrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size == 1, {
 			// slider - value 1
 				holdControlSpec1 =
-					holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
+					holdModule.arrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.at(0);
 				val1Slider = Slider(holdParent, Rect(0, 0, 145, 20))
 				.action_({arg view;
-			//		this.setCurrentStepID(holdOSCTrigAction.at(6));
-			// not for slider - since screen  update causes loss of slider control
 					arrOSCTrigActions.at(i)
 						.put(2, holdControlSpec1.value.map(view.value));
 					if (val1NumberBox.class.respondsTo('value'),
 						{val1NumberBox.value = holdControlSpec1.value.map(view.value);})
+				})
+				.mouseUpAction_({arg view;
+					this.setCurrentStepID(holdOSCTrigAction.at(6));
 				});
 				if (holdControlSpec1.value.step != 0, {
 					val1Slider.step = (holdControlSpec1.value.step
@@ -366,30 +393,30 @@ TXOSCTrigActions {
 					arrOSCTrigActions.at(i).at(2) ? 0);
 			});
 			// if object type is number
-			if (holdModule.arrActionSpecs.at(actionPopup.value).guiObjectType == \number, {
+			if (holdModule.arrActionSpecs.at(moduleActionView.value).guiObjectType == \number, {
 				// if at least 1 controlspec is given, then create numberbox
-				if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 0, {
+				if (holdModule.arrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size > 0, {
 					holdControlSpec1 =
-						 holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
+					holdModule.arrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.at(0);
 					val1NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec1)
 					.maxDecimals_(4)
 					.action_({arg view;
 						this.setCurrentStepID(holdOSCTrigAction.at(6));
 						view.value = holdControlSpec1.value.constrain(view.value);
 						arrOSCTrigActions.at(i).put(2, view.value);
-						if (val1Slider.class == Slider.redirectClass,
+						if (val1Slider.class == Slider,
 							{val1Slider.value = holdControlSpec1.value.unmap(view.value);})
 					});
 					val1NumberBox.value = holdControlSpec1.value.constrain(
 						arrOSCTrigActions.at(i).at(2) ? holdControlSpec1.value.default);
-				});
+				})
 			});
 			// popup
-			if (holdModule.arrActionSpecs.at(actionPopup.value).guiObjectType == \popup, {
+			if (holdModule.arrActionSpecs.at(moduleActionView.value).guiObjectType == \popup, {
 				valPopup = PopUpMenu(holdParent, Rect(0, 0, 240, 20))
-					.stringColor_(TXColour.black).background_(TXColor.white);
+				.stringColor_(TXColour.black).background_(TXColor.white);
 				valPopup.items =
-					holdModule.arrActionSpecs.at(actionPopup.value).getItemsFunction.value;
+				holdModule.arrActionSpecs.at(moduleActionView.value).getItemsFunction.value;
 				valPopup.action = {arg view;
 					this.setCurrentStepID(holdOSCTrigAction.at(6));
 					arrOSCTrigActions.at(i).put(2, view.value);
@@ -398,7 +425,7 @@ TXOSCTrigActions {
 			});
 
 			// checkbox
-			if (holdModule.arrActionSpecs.at(actionPopup.value).guiObjectType == \checkbox, {
+			if (holdModule.arrActionSpecs.at(moduleActionView.value).guiObjectType == \checkbox, {
 				valCheckbox = TXCheckBox(holdParent, Rect(0, 0, 60, 20),
 					" ", TXColour.black, TXColor.white,
 					TXColour.black, TXColor.white, 7);
@@ -410,7 +437,7 @@ TXOSCTrigActions {
 			});
 
 			// textbox
-			if (holdModule.arrActionSpecs.at(actionPopup.value).guiObjectType == \textedit, {
+			if (holdModule.arrActionSpecs.at(moduleActionView.value).guiObjectType == \textedit, {
 				valTextbox = TextField(holdParent, Rect(0, 0, 240, 20),
 					" ", TXColour.black, TXColor.white,
 					TXColour.black, TXColor.white, 4);
@@ -418,14 +445,14 @@ TXOSCTrigActions {
 					this.setCurrentStepID(holdOSCTrigAction.at(6));
 					arrOSCTrigActions.at(i).put(2, view.string);
 				};
-				valTextbox.string = arrOSCTrigActions.at(i).at(2) ? 0;
+				valTextbox.string = arrOSCTrigActions.at(i).at(2) ? "";
 			});
 
 			// if more than 1 control spec given, then create extra numberbox
-			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 1, {
+			if (holdArrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size > 1, {
 			// numberbox - value 2
 				holdControlSpec2 =
-					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(1);
+					holdArrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.at(1);
 				val2NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec2)
 				.maxDecimals_(4)
 				.action_({arg view;
@@ -444,9 +471,9 @@ TXOSCTrigActions {
 			});
 			// numberbox - value 3
 			// if more than 2 controlspecs given, then create extra numberbox
-			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 2, {
+			if (holdArrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size > 2, {
 				holdControlSpec3 =
-					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(2);
+					holdArrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.at(2);
 				val3NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec3)
 				.maxDecimals_(4)
 				.action_({arg view;
@@ -465,9 +492,9 @@ TXOSCTrigActions {
 			});
 			// numberbox - value 4
 			// if more than 3 controlspecs given, then create extra numberbox
-			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 3, {
+			if (holdArrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.size > 3, {
 				holdControlSpec4 =
-					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(3);
+					holdArrActionSpecs.at(moduleActionView.value).arrControlSpecFuncs.at(3);
 				val4NumberBox = NumberBox(holdParent, Rect(0, 0, 55, 20), holdControlSpec4)
 				.maxDecimals_(4)
 				.action_({arg view;

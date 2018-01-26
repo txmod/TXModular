@@ -1,8 +1,8 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXMinMaxSlider {
-	var <>labelView, labelView2, <>sliderView, <>numberView, <>rangeView, <>minNumberView, <>maxNumberView, <>presetPopupView;
-	var <>controlSpec, controlSpec2, <>action, viewValue, <>round = 0.001;
+	var <>labelView, <>labelView2, <>sliderView, <>numberView, <>rangeView, <>minNumberView;
+	var <>maxNumberView, <>presetPopupView, <>controlSpec, controlSpec2, <>action, viewValue, <>round = 0.001;
 
 	// controlSpec2 is only used internally and it's min & max are decided by minNumberView & maxNumberView
 
@@ -11,6 +11,7 @@ TXMinMaxSlider {
 		^super.new.init(window, dimensions, label, controlSpec, action, initVal,
 			initAction, labelWidth, numberWidth, arrRangePresets);
 	}
+
 	init { arg window, dimensions, label, argControlSpec, argAction, initVal,
 		initAction, labelWidth, numberWidth, arrRangePresets;
 		var height, spacingX, spacingY, indent;
@@ -18,11 +19,11 @@ TXMinMaxSlider {
 		if (window.class == Window, {
 			spacingX = window.view.decorator.gap.x;
 			spacingY = window.view.decorator.gap.y;
-			indent = window.view.decorator.left;
+			indent = window.view.decorator.left - window.view.decorator.margin.x;
 		}, {
 			spacingX = window.decorator.gap.x;
 			spacingY = window.decorator.gap.y;
-			indent = window.decorator.left;
+			indent = window.decorator.left - window.decorator.margin.x;
 		});
 		height = ( (dimensions.y - spacingY) / 2).asInteger;
 
@@ -38,6 +39,7 @@ TXMinMaxSlider {
 
 		sliderView = Slider(window,
 			(dimensions.x - labelWidth - numberWidth - (2 * spacingX)) @ height);
+		sliderView.thumbSize_(8).knobColor_(TXColour.white);
 		sliderView.action = {
 			viewValue = controlSpec2.map(sliderView.value);
 			numberView.value = viewValue.round(round);
@@ -87,8 +89,13 @@ TXMinMaxSlider {
 			controlSpec2.minval = minNumberView.value;
 			maxNumberView.value = controlSpec.map(rangeView.hi).round(round);
 			controlSpec2.maxval = maxNumberView.value;
+			if (controlSpec2.step != 0) {
+				sliderView.step = (controlSpec2.step / (controlSpec2.maxval - controlSpec2.minval));
+			};
 			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
-			sliderView.doAction;
+			sliderView.valueAction = controlSpec2.unmap(viewValue).round(sliderView.step);
+			// numberView.value = viewValue.round(round);
+			// sliderView.doAction;
 		};
 		if (controlSpec.step != 0) {
 			rangeView.step = (controlSpec.step / (controlSpec.maxval - controlSpec.minval));
@@ -103,6 +110,9 @@ TXMinMaxSlider {
 			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
 			rangeView.lo = controlSpec.unmap(minNumberView.value);
 			controlSpec2.minval = minNumberView.value;
+			if (controlSpec2.step != 0) {
+				sliderView.step = (controlSpec2.step / (controlSpec2.maxval - controlSpec2.minval));
+			};
 			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			viewValue = controlSpec2.constrain(viewValue);
 			sliderView.value = controlSpec2.unmap(viewValue);
@@ -118,6 +128,9 @@ TXMinMaxSlider {
 			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
 			rangeView.hi = controlSpec.unmap(maxNumberView.value);
 			controlSpec2.maxval = maxNumberView.value;
+			if (controlSpec2.step != 0) {
+				sliderView.step = (controlSpec2.step / (controlSpec2.maxval - controlSpec2.minval));
+			};
 			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			viewValue = controlSpec2.constrain(viewValue);
 			sliderView.value = controlSpec2.unmap(viewValue);
@@ -214,5 +227,9 @@ TXMinMaxSlider {
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
 		};
+	}
+
+	hasFocus {
+		^sliderView.hasFocus || numberView.hasFocus || rangeView.hasFocus || minNumberView.hasFocus || maxNumberView.hasFocus;
 	}
 }

@@ -3,22 +3,22 @@
 ModMatrixRowScale {
 	var <>popupMenuView, <>popupMenuView2, <>popupMenuView3, <>numberView, <>sliderView;
 	var sourceIndex=0, destIndex=0, numValue=0, scaleIndex=0, controlSpec;
-	
+
 // e.g.	holdView = ModMatrixRow(w, viewWidth @ 20, arrMMSourceNames, arrMMDestNames, getSourceFunc,
-//	 setSourceFunc, getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, 
+//	 setSourceFunc, getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames,
 //	getScaleFunc, setScaleFunc);
 
-	*new { arg window, dimensions, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc, 
-			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc, setScaleFunc;
-		^super.new.init(window, dimensions, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc, 
-			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc, setScaleFunc);
+	*new { arg window, dimensions, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc,
+			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc, setScaleFunc, sliderWidth;
+		^super.new.init(window, dimensions, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc,
+			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc, setScaleFunc, sliderWidth);
 	}
-	init { arg window, dimensions, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc, 
-			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc, setScaleFunc;
+	init { arg window, dimensions, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc,
+			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc, setScaleFunc, sliderWidth = 115;
 
 		controlSpec = [-100,100].asSpec;
-		
-		// source popup 
+
+		// source popup
 		popupMenuView = PopUpMenu(window, 100 @ dimensions.y);
 		popupMenuView.items = arrMMSourceNames;
 		popupMenuView.action = {
@@ -27,7 +27,7 @@ ModMatrixRowScale {
 			this.adjustVisibility;
 		};
 
-		// dest popup 
+		// dest popup
 		popupMenuView2 = PopUpMenu(window, 100 @ dimensions.y);
 		popupMenuView2.items = arrMMDestNames;
 		popupMenuView2.action = {
@@ -35,24 +35,25 @@ ModMatrixRowScale {
 			setDestFunc.value(popupMenuView2.value);
 			this.adjustVisibility;
 		};
-		
-		// slider 
-		sliderView = Slider(window, 120 @ dimensions.y);
+
+		// slider
+		sliderView = Slider(window, sliderWidth @ dimensions.y);
+		sliderView.thumbSize_(8).knobColor_(Color.white);
 		sliderView.action = {
 			numValue = controlSpec.map(sliderView.value);
 			numberView.value = numValue.round(1);
 			setMMValueFunc.value(numValue);
 		};
 
-		// number 
-		numberView = TXScrollNumBox(window, 30 @ dimensions.y);
+		// number
+		numberView = TXScrollNumBox(window, 35 @ dimensions.y);
 		numberView.action = {
 			numberView.value = numValue = controlSpec.constrain(numberView.value);
 			sliderView.value =  controlSpec.unmap(numberView.value);
 			setMMValueFunc.value(numberView.value);
 		};
-		
-		// scale popup 
+
+		// scale popup
 		popupMenuView3 = PopUpMenu(window, 100 @ dimensions.y);
 		popupMenuView3.items = arrMMScaleNames;
 		popupMenuView3.action = {
@@ -71,7 +72,7 @@ ModMatrixRowScale {
 			sliderView.visible_(false);
 		});
 	}
-	valueAll_ { arg arrVals; 
+	valueAll_ { arg arrVals;
 		popupMenuView.value = sourceIndex = arrVals.at(0);
 		popupMenuView2.value = destIndex = arrVals.at(1);
 		numberView.value = numValue = controlSpec.constrain(arrVals.at(2));

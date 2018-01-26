@@ -37,8 +37,19 @@ TXSoundFile {
 		soundFileView = SoundFileView.new(window, (dimensions.x) @ (height - 30 - (2 * spacingY)) )
 			.gridOn_(false).timeCursorOn_(false)
 			.waveColors_(Color.blue(alpha: 1.0) ! 8)
-			.background_(Color(0.65,0.65,0.95));
-		soundFileView.action = { arg view;
+			//.background_(Color(0.65,0.65,0.95));
+			.background_(Color(0.95,0.95,0.95));
+		soundFileView.setSelectionColor(0, TXColor.yellow2);
+
+		// set actions
+		/// OLD:
+		// soundFileView.action = { arg view;
+		// 	this.lo = view.selectionStart(0) / view.numFrames;
+		// 	this.range = view.selectionSize(0) / view.numFrames;
+		// 	action.value(this);
+		// };
+		// NEW:
+		soundFileView.mouseMoveAction = { arg view;
 			this.lo = view.selectionStart(0) / view.numFrames;
 			this.range = view.selectionSize(0) / view.numFrames;
 			action.value(this);
@@ -46,6 +57,8 @@ TXSoundFile {
 		soundFileView.mouseUpAction = {|view|
 			soundFileView.timeCursorPosition_(soundFileView.selectionStart(0));
 		};
+
+
 		if ((showFile == 1), {
 
 // setData not being set correctly for some reason - needs debugging
@@ -84,7 +97,9 @@ TXSoundFile {
 		});
 
 		sliderView = Slider(window, (dimensions.x) @ 10).action_({|slider| soundFileView.scrollTo(slider.value) });
-		sliderView.thumbSize_(sliderView.bounds.width - 2);
+		//sliderView.thumbSize_(sliderView.bounds.width - 6);
+		sliderView.thumbSize_(20);
+		sliderView.knobColor_(Color.white);
 
 		// decorator next line
 		if (window.class == Window, {
@@ -98,7 +113,7 @@ TXSoundFile {
 			["no zoom", { soundFileView.zoomAllOut} ],  // view all - zoom all out
 			["zoom out", { soundFileView.zoom(zout) } ],  // zoom out
 			["zoom in", { soundFileView.zoom(zin) } ], // zoom in
-			["zoom select", { soundFileView.zoomSelection(0)} ],  // fit selection to view
+			["zoom select", { soundFileView.zoomSelection(0); this.valueBoth = [lo,hi]} ],  // fit selection to view
 			["select all", { soundFileView.zoomAllOut; this.valueBoth = [0,1]; action.value(this);} ],  // select all
 			["select none", { this.valueBoth = [0,0]; action.value(this);} ],  // select none
 		].do({ arg item, i;
@@ -111,8 +126,8 @@ TXSoundFile {
 					// run action function
 					item.at(1).value;
 					sliderView.value = soundFileView.scrollPos;   // update scrollbar position
-					sliderView.thumbSize =
-						12.max((sliderView.bounds.width - 2) * soundFileView.xZoom * zoomOne);
+					// sliderView.thumbSize =
+					// 12.max((sliderView.bounds.width - 2) * soundFileView.xZoom * zoomOne);
 				});
 			});
 		});

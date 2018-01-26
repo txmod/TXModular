@@ -73,7 +73,7 @@ TXActionView {	// self-building module popup, action popup, and value fields
 		arrLegacyActionItems = holdArrActionSpecs .select({arg item, i; item.legacyType == 1})
 			.collect({arg item, i; item.actionName;});
 
-		actionPopup = PopUpMenu(argParent, Rect(0, 0, 300, 20))
+		actionPopup = TXListView(argParent, Rect(0, 0, 300, 120))
 			.background_(TXColor.white).stringColor_(TXColor.black)
 			.items_(arrActionItems)
 			.action_({arg view;
@@ -157,7 +157,7 @@ TXActionView {	// self-building module popup, action popup, and value fields
 					.action_({arg view;
 						view.value = holdControlSpec1.value.constrain(view.value);
 						holdArrActions.at(i).put(2, view.value);
-						if (val1Slider.class == Slider.redirectClass,
+						if (val1Slider.class == Slider,
 							{val1Slider.value = holdControlSpec1.value.unmap(view.value);})
 					});
 					TXScrollNumBox.updateNumberBoxFromSpec(val1NumberBox, holdControlSpec1);

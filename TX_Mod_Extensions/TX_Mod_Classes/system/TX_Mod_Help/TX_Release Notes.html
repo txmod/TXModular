@@ -5,246 +5,484 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
   <title></title>
   <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1187.39">
+  <meta name="CocoaVersion" content="1404.13">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; color: #ff1213; min-height: 18.0px}
-    span.s1 {text-decoration: underline ; color: #0000ee}
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p5 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000; min-height: 18.0px}
+    p.p6 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #1f39f6; -webkit-text-stroke: #1f39f6}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none; color: #0000ee; -webkit-text-stroke: 0px #0000ee}
+    span.s3 {font-kerning: none; color: #000000}
+    span.s4 {font-kerning: none; -webkit-text-stroke: 0px #000000}
+    span.s5 {font-kerning: none; -webkit-text-stroke: 0px #1f39f6}
   </style>
 </head>
 <body>
-<p class="p1">// Copyright (C) 2014 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <a href="file:///Users/paul/TX_Modular_086c/TX_Mod_Extensions/TX_Mod_Classes/system/TX_Mod_Help/LICENSE.html"><span class="s1">LICENSE</span></a>).</p>
-<p class="p2"><br></p>
-<p class="p3"><b>The TX Modular System - Release Notes</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 086 (November 2014)</b></p>
-<p class="p3"><b>Release 082 (January 2012)</b></p>
-<p class="p3"><b>Release 081 (August 2010)</b></p>
-<p class="p3"><b>Release 079 (December 2008)</b></p>
-<p class="p3"><b>Release 074 (December 2007)</b></p>
-<p class="p3"><b>Release 0.10.7 (April 2007)</b></p>
-<p class="p3"><b>Release 0.10.6 (August 2006)</b></p>
-<p class="p3"><b>Release 0.10.41 (January 2006)</b></p>
-<p class="p3"><b>Release 0.10.4 (October 2005)</b></p>
-<p class="p3"><b>Release 0.9.3 (June 2004)</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 086 (November 2014)</b></p>
-<p class="p2"><br></p>
-<p class="p3">This release uses the new GUI system in SuperCollider which uses Qt, a cross-platform toolkit.
-At the time of release, it has so far only been tested on Mac OSX 10.8.</p>
-<p class="p2"><br></p>
-<p class="p3">There are various bug fixes (including midi notes sometimes sticking); metering now includes options for frequency analysis; and one new module has been added:</p>
-<p class="p2"><br></p>
-<p class="p3"><b>Pattern Code</b> - allows you to use SuperCollider Pattern code to control any modules in the system.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 082 (January 2012)</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>Highlights:</i></b></p>
-<p class="p3">Building a system is quicker, with fewer mouse clicks.</p>
-<p class="p3">Interface building is also much easier and more flexible.</p>
-<p class="p3">Note Stacker makes building multi-layered instruments much easier.</p>
-<p class="p3">OSC Remote is useful for remote control by phone, tablet, &amp; other OSC devices.</p>
-<p class="p3">Sample Player + (similar to Wave Synth +) adds many more possibilities to sample-based instruments.</p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>The following new modules have been built:</i></b></p>
-<p class="p3"><b>Convolution</b> (mono &amp; stereo) - Convolution uses impulse response samples to simulate reverbs, filters/EQ, microphones, speakers, amplifiers and for special effects.</p>
-<p class="p3"><b>Env Follow </b>(mono &amp; stereo) - this audio insert module matches the level of an audio signal to another audio signal that is being fed into the side-chain input.</p>
-<p class="p3"><b>Matrix A 8x8 / Matrix C 8x8</b> - These audio &amp; control modules mix 8 input signals into 8 output channels using a 64-knob matrix.</p>
-<p class="p3"><b>Mix Audio 8-1 / Mix Audio 16-2 / Mix Control 8-1- </b>These modules mix 8 mono audio signals / 8 stereo audio signals / 8 control signals.</p>
-<p class="p3"><b>Mono to Stereo</b> - Converts a mono audio signal into a stereo signal by panning between the left and right channels.</p>
-<p class="p3"><b>M-S Encoder </b>- this takes a stereo audio signal and converts into mid and side signals.</p>
-<p class="p3"><b>M-S Decoder </b>- this takes mid and side signals and converts them into a stereo audio signal.</p>
-<p class="p3"><b>Note Stacker - </b>this triggered module makes no sound itself but instead triggers notes in other modules, with the option of modifying the pitch or velocity of the notes for various effects.</p>
-<p class="p3">Up to 18 different modules can be triggered, arranged in 6 layers each with 3 output modules. The modules on a layer can be played together, rotated each time the layers is played, or randomly chosen. Each layer has curves for modifying the overall velocity response, as well as individual note level and tuning for each note across the keyboard range.</p>
-<p class="p3"><b>OSC Control 2D -</b> outputs two control signals from OpenSound Control ('OSC') messages received.</p>
-<p class="p3"><b>OSC Remote - </b>This<b> </b>module is designed for linking up an external device that sends multiple OSC messages - such as a phone or an iPad running TouchOSC, or another computer running the TX Modular system or other OSC software. Each OSC String is linked to an Action within the TX.</p>
-<p class="p3"><b>Sample Player+ (mono &amp; stereo) - </b>this is an enhanced version of the Sample Player module which includes a filter, 2 LFOs, an extra assignable envelope and a modulation matrix.</p>
-<p class="p3"><b>Transient Shape (mono &amp; stereo)</b> - this has replaced the Transient module. Attack and sustain of incoming audio can be separately controlled with the divide frequency affecting how attack and release are separated. Useful with drums, plucked and percussive sounds which have strong transients.</p>
-<p class="p3"><b>X-Fader 2-1 C</b> (control source) module - for modulatable cross-fading between 2 control signals.</p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>Module changes include:</i></b></p>
-<p class="p3"><b>Action Slider </b>module - now includes various triggering options based on the direction of movement of the slider.</p>
-<p class="p3"><b>Gain</b> modules (mono/stereo) - new Phase Invert<b> </b>buttons for inverting the phase of audio signals.</p>
-<p class="p3"><b>Group Morph </b>module -<b> </b>this now has various 2D and Linear types of morph.</p>
-<p class="p3"><b>Midi Sustain Pedal and Pitchbend- </b>All Triggered Audio Source Modules now respond to Sustain Pedal and Pitchbend Midi messages when Midi Listen is activated.</p>
-<p class="p3"><b>Step Sequencer</b> is the new name for <b>Note Sequencer </b>- it was renamed for clarity since it sequences control values, velocities &amp; notes using steps.</p>
-<p class="p3"><b>Perlin Noise </b>module - a new control Rate Multiply has been added which controls the overall speed of the noise.</p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>Other changes include:</i></b></p>
-<p class="p3"><b>Audio Setup Window </b>- when the TX Modular system starts, this window opens first to set the Audio Device (i.e. Sound Card), and its Sample Rate and Buffer Size.</p>
-<p class="p3"><b>Volume slider &amp; 0dB button</b> - to set the overall output level for the system.</p>
-<p class="p3"><b>History buttons &lt; &gt;</b> - to navigate to a previously viewed screen</p>
-<p class="p3"><b>Interface Design improvements - GUI Properties</b> is now a floating window above the new <b>Design Interface</b> window which displays all widgets as you move or resize them.</p>
-<p class="p3"><b>Interface Screens: Background Images</b> - Each Interface screen can have its own background image with widgets displayed over it.</p>
-<p class="p3"><b>New Interface Widget: Knob -</b> knobs take up less space than sliders for editing numerical parameters.</p>
-<p class="p3"><b>Sample Banks &amp; Loop Banks</b> - there are now 99 Sample &amp; Loop Banks available for more flexibility when creating larger systems (previously there was only 1 Sample &amp; 1 Loop Bank).</p>
-<p class="p3"><b>SuperCollider users</b> <b>-</b> should find that TX Modular classes can be used more easily with multiple Quarks installed since the TX Modular uses many fewer class variables than before.</p>
-<p class="p3"><b>TX Autonomous Standalone Systems</b> - It is now possible to make a copy of the TX Modular Standalone and modify it so that it automatically loads a pre-saved system. An autonomous system can't be edited or saved, and only the Interface screens are shown, so it's like a play-only version of a prebuilt TX Modular instrument or system. This might be useful for creating installations or easily distributable live instruments. The pre-saved system file and any external files are enclosed within the self-contained app so it's easy to give a standalone to other people. A Help file explains this in detail.</p>
-<p class="p3"><b>User Options</b> - shown on the Notes &amp; Options screen, for choosing overall window colour &amp; transparency, adding a background image to the main window, and whether to ask for confirmation before deleting Modules and Channels.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 081 (August 2010)</b></p>
-<p class="p4"><br></p>
-<p class="p3"><b><i>Main changes in this release:</i></b></p>
-<p class="p3"><b>New Signal Flow window -</b> this window is designed to make it easier to see how a whole system works. It shows how audio and control signals flow around the system between modules, channels and busses. As you add modules and connect them together in the Modules window, they will automatically be added to the Signal Flow window. Blue lines show audio signals and green lines show control signals. The layout of the Signal Flow window can be easily changed (by clicking and dragging).</p>
-<p class="p3"><b>Interface improvements</b> - The Design Layout window has been improved so you can easily resize widgets by dragging their corners and you can select multiple widgets for moving or cloning. This makes it much faster to design an interface. It is now possible to change the size of the Inteface so more controls can be displayed on larger monitors.</p>
-<p class="p3"><b>Preset Files - </b>All modules can have their settings saved as Preset Files, which can be reloaded at a later time. This also makes it easier to copy module settings between different systems. Presets are saved or loaded using the Do... popup button which is on the top row of each module's control window.</p>
-<p class="p3"><b>Main window -</b> the overall layout has been simplified. All the buttons for system and inteface windows now appear together on the second row.</p>
-<p class="p3"><b>Modules window -</b> this has a new, simpler layout. A list of all modules in the system is now shown on the left. There is easier navigation through channels using a scroll bar.</p>
-<p class="p3"><b>Note Sequencer - </b>this has had many changes including: a new Play Mode that allows manual triggering of sequencer steps; interface improvements; individual parameters can be randomised; BPM can be modulated directly using a control signal; there are 3 new control outputs which can be sequenced alongside notes in each step; Midi output for notes and 3 controller values;</p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>Various new modules have been built:</i></b></p>
-<p class="p3"><b>Chorus (mono &amp; stereo)</b> - creates a chorus effect on a mono audio signal using several modulated delay lines.</p>
-<p class="p3"><b>Disintegrator (mono &amp; stereo)</b> - distorts the input by amplifying random half-cycles of the signal.</p>
-<p class="p3"><b>EQ Para (mono &amp; stereo)</b> - a parametric filter which cuts or boosts certain frequencies in an audio signal by a specified amount.</p>
-<p class="p3"><b>EQ Shelf (mono &amp; stereo)</b> - shelving filter which cuts or boosts frequencies in an audio signal above or below a cutoff frequency.</p>
-<p class="p3"><b>Env Curve - </b>user-defined envelope as control signal. The curve can be edited with a mouse.</p>
-<p class="p3"><b>Group Morph </b>- this was designed to simplify the control of modules with large numbers of parameters. It morphs between 4 different groups of values of 15 control signals.</p>
-<p class="p3"><b>LFO Curve</b> - Low Frequency Oscillator with an editable waveform curve - using a mouse.</p>
-<p class="p3"><b>Perlin Noise</b> - A Random Low Frequency Oscillator based on 3 dimensional Perlin Noise - useful for adding non-repetitive variation (i.e. "organic movement") to module parameters.</p>
-<p class="p3"><b>Ping Pong (mono &amp; stereo)</b> - creates a "ping-pong" delay that bounces sound from side to side.</p>
-<p class="p3"><b>Pluck</b> - creates notes based on a physical model of a plucked string.</p>
-<p class="p3"><b>Slope</b> - measures the velocity or acceleration of a control signal.</p>
-<p class="p3"><b>Spectral FX</b> - This module analyzes the frequency spectrum of a signal. Once analysed, the signal can then be transformed, using up to 6 different spectral processes (from over 50 choices). In addition a side chain input can be used to introduce a second audio signal for processing in some of the FX.</p>
-<p class="p3"><b>Vosim</b> - outputs a synthesised waveform as a mono audio signal using a technique called VOSIM - the name comes from VOice SIMulation.</p>
-<p class="p3"><b>Waveshaper (mono &amp; stereo) </b>- adds distortion to the input signal using a function curve, which can be drawn by hand or generated automatically based on harmonics and noise.</p>
-<p class="p3"><b>Wave Terrain</b> - a synthesised waveform based on a mathematical model of an object moving over a 3D terrain. The orbit and the terrain can be changed, or even rewritten using SuperCollider computer code.</p>
-<p class="p3"><b>X Distort (mono &amp; stereo)</b> - simulates crossover distortion in class B and AB power amplifiers.</p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>The following new modules allow use of SuperCollider code:</i></b></p>
-<p class="p3"><b>Animate Code </b>- use SuperCollider computer code to generate an animation which is displayed in a separate window.</p>
-<p class="p3"><b>Code Insert A (mono &amp; stereo) </b>- use SuperCollider computer code to process an audio signal.</p>
-<p class="p3"><b>Code Insert C </b>- use SuperCollider computer code to process a control signal.</p>
-<p class="p3"><b>Code Source A (mono &amp; stereo) </b>- use SuperCollider computer code to generate an audio signal.</p>
-<p class="p3"><b>Code Source C </b>- use SuperCollider computer code to generate a control signal.</p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>Other changes include:</i></b></p>
-<p class="p3"><b>Bit Crusher</b> - this module has new choices for processing.</p>
-<p class="p3"><b>Delays</b> - up to 5 minutes of delay time can be used for each delay, &amp; MultiTap Delay now has 8 delay taps for more complex patterns. Tap Tempo buttons have been added to automatically calculate BPM values.</p>
-<p class="p3"><b>File Player (mono &amp; stereo) </b>- playback speed can be varied.</p>
-<p class="p3"><b>Filter</b> - more choices for types of Filter.</p>
-<p class="p3"><b>LFO</b> - more choices for random LFOs.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 079 (December 2008)</b></p>
-<p class="p4"><br></p>
-<p class="p3"><b><i>Main changes in this release include:</i></b></p>
-<p class="p3"><b>Cleaner Audio</b> - glitching could occasionally happen in certain modules (e.g. Waveform module when using Pulse waveform, Filter, Delay, Flanger modules.). This glitching is now filtered out.</p>
-<p class="p3"><b>Meters</b> - this new popup, on the top right of the window, allows you to select any module or bus in the system and display its output(s) on a meter. Meters are on separate movable windows. Audio signals are shown in loudness units (-90dB to 0dB); Control signals are shown directly (range -1 to +1).</p>
-<p class="p3">All <b>numbers</b> displayed in the TX Modular screens are now <b>scrolling numbers</b> - click on them and drag up/down, left/right to change their values.</p>
-<p class="p3"><b>Window layout</b> - various improvements have been made to make the user interface clearer and easier to use.</p>
-<p class="p3"><b>Sync Start</b> + <b>Sync Stop</b> + <b>Stop All </b>- these 3 buttons appear at the top of the window. They allow Sequencers, Fle Players and File Recorders to be started and stopped together. Each sequencer, file player and recorder can be individually set to respond to Sync Start and Sync Stop instructions. Stop All will ask all modules to stop regardless of their Sync Start and Sync Stop settings.</p>
-<p class="p3"><b>Modules &amp; Channels</b> - are now merged into one <b>Modules </b>window.<b> </b>Modules are displayed on the left hand side with Channels on the right. If no module is selected, a list of all modules currently in the system is shown.</p>
-<p class="p3">The channel number of first displayed channel is shown next to channel arrow keys. This can be edited or scrolled as an alternative to using the arrow keys.</p>
-<p class="p3">It is now possible to change a channel's source (when a channel is in edit mode).</p>
-<p class="p3">All Modules &amp; Channels now have a blank text line for users to add their own notes.</p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>Various new modules have been built:</i></b></p>
-<p class="p3"><b>Action Slider</b> - this module triggers up to 10 Actions when the value of a slider goes above a certain level (the trigger threshold). Both the value and trigger threshold can be modulated.</p>
-<p class="p3"><b>Amp Sim (mono &amp; stereo)</b> - Ampllifier simulator. This module adds distortion to the input signal, similar to the sound of vacuum-tube amplifiers. It adds a roughness and warmth to the sound.</p>
-<p class="p3"><b>Analyser </b>- this uses various different tools to analyse a mono audio signal coming into it. It can be calibrated for specific audio signals.</p>
-<p class="p3"><b>Bit Crusher (mono &amp; stereo)</b> - this module distorts the input signal in by reducing the sample rate and bit size.</p>
-<p class="p3"><b>DC Remove</b> - this removes a DC offset from an audio signal.</p>
-<p class="p3"><b>FM Synth</b> - this module creates polyphonic synthesised notes using multi-layer Frequency Modulation (FM) Synthesis.</p>
-<p class="p3"><b>Midi Out</b> - this sends out various kinds of Midi messages.</p>
-<p class="p3"><b>OSC Control Out</b> - this<b> </b>module sends an OSC message to up to 10 different network addresses. The OSC messages have 2 arguments, the OSC string and the control value. The control value can be modulated. This allows communication across a network to other TX Modular systems running on other computers, or to any software (such as Processing &amp; Max/MSP) that can respond to OSC messages.</p>
-<p class="p3"><b>Pitch Follower</b> - this follows the pitch of a mono audio signal coming into it.</p>
-<p class="p3"><b>Quartz Player</b> - this creates a new window containing any Quartz Composer Composition which can be controlled by the the TX Modular system. This can be used with other modules to create interactive and/or automated audio-visual systems. (Quartz Composer is a very powerful visual engine that comes free with OS X.)</p>
-<p class="p3"><b>ReverbA, ReverbF, ReverbF St, ReverbG</b> - these are various new mono and stereo reverbs with different sound characters.</p>
-<p class="p3"><b>Wave Synth Plus</b> - this is an expanded version of the Wave Synth module which also includes a filter, 2 LFOs, an extra envelope and a modulation matrix.</p>
-<p class="p3"><b>Wii Ctrl Darwiin</b> - this module outputs a control signal based on a selected Wii or Nunchuck control, including: acceleration, rotation, button and IR camera data. To use this module, you will need the free software <i>DarwiinRemote OSC</i>.</p>
-<p class="p3"><b>Wii Ctrl OSC</b> - this module outputs a control signal based on a selected Wii or Nunchuck control, including: acceleration, rotation, button and IR camera data. To use this module, you will need the software <i>OSCulator</i>.</p>
-<p class="p3"><b>Wii Trig Darwiin</b> - this module triggers up to 10 Actions when a Wii button is pressed on or off. To use this module, you will need the free software <i>DarwiinRemote OSC</i><b>.</b></p>
-<p class="p3"><b>Wii Trig OSC</b> - this module triggers up to 10 Actions when a Wii button is pressed on or off. To use this module, you will need the software <i>OSCulator</i>.</p>
-<p class="p2"><br></p>
-<p class="p3"><b><i>Other changes include:</i></b></p>
-<p class="p3"><b>Note Sequencer </b>- the interface has been improved by creating a new Piano Roll window to edit notes as well as any of the other parameters for each step - velocity, probablity, delay, etc.</p>
-<p class="p3"><b>Compander</b> - there is now an option to use a side chain to control the compander.</p>
-<p class="p3"><b>Filter</b> - several new filter types have been added (including various Moog and TB303 emulations).</p>
-<p class="p3"><b>Midi Control Out</b> - this module sends out Midi controller messages and has been improved. (Note: This has now become an Action module - in previous releases it was a Control Insert module).</p>
-<p class="p3"><b>Table Synth</b> - two new parameters - harmonic gap and scaling - give more flexibility in defining wavetables .</p>
-<p class="p3"><b>Waveform</b> - It is now possible to use a note list instead of having a variable frequency. Using a note list forces the frequency of the waveform to conform to the notes of a selected scale/ mode/ chord in a chosen key - this is the same as quantizing the frequency to a scale. The note list position can be modulated.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 074 (December 2007)</b></p>
-<p class="p3">Changes include:</p>
-<p class="p3">For simplicity, all releases are now given a 3-digit number.</p>
-<p class="p3">The <b>Stereo Loop Player</b> can now play both mono and stereo loops.</p>
-<p class="p3">The <b>Stereo Sample Player</b> can now play both mono and stereo samples.</p>
-<p class="p3">Various <b><i>new modules</i></b> have been built:</p>
-<p class="p3"><b>Action Sequencer</b> - this can trigger all kinds of actions at specific times. Actions are commands or instructions for any modules in the system, such as changing the settings of any module in the system, triggering notes to play, starting and stopping other sequencers.</p>
-<p class="p3"><b>CyclOSC Colour</b> - this module analyses video data coming in from a video camera to check for the presence of a particular target colour which you can set.</p>
-<p class="p3">You can also to define a zone which means that the target is looked for in only certain parts of the video grid. This is useful for triggering events only when a target colour enters a space. For example, by adding multiple modules you can create colour-sensitive hot-zones in an interactive performance or installation space.</p>
-<p class="p3"><b>CyclOSC Grey</b> - this module is similar to CyclOSC Colour except it looks for a shade of grey instead of a colour.</p>
-<p class="p3"><b>EQ Graphic </b>(audio insert) module - adjust the EQ of an audio signal.</p>
-<p class="p3"><b>OSC Out</b> - this<b> </b>module sends an OSC message to up to 10 different network addresses. This allows communication across a network to other TX Modular systems running on other computers, or to any software (such as Processing &amp; Max/MSP) that can respond to OSC messages.</p>
-<p class="p3"><b>OSC Trigger</b> - this can trigger up to 10 actions when OSC messages are received as long as the OSC message begins with a string that matches the OSC string on the screen. OSC message arguments can be passed to the actions.</p>
-<p class="p3"><b>OSC Controller - </b>outputs a control signal from OpenSound Control ('OSC') messages received. (This came out in a previous release, but I forgot to mention it.)</p>
-<p class="p3"><b>QC Particles</b> - this module creates a new window which contains a video screen running a 3D particle system animation.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 0.10.7 (April 2007)</b></p>
-<p class="p3"><b>StandAlone</b> versions of the TX Modular for OS X Tiger and Panther have been built.</p>
-<p class="p3">A <b>Help </b>system has now been completed, with specific help buttons in every module.</p>
-<p class="p3">The opening of saved systems is much faster now (±3 times as quick).</p>
-<p class="p3">In many modules there are now <b>presets</b> for things like envelope shapes or frequency ranges.</p>
-<p class="p3">Various <b><i>new modules</i></b> have been built:</p>
-<p class="p3"><b>Audio Trigger</b> (control source) - triggers other modules when the amplitude (volume level) of audio coming into it goes above a certain level.</p>
-<p class="p3"><b>Filter Synth </b>(audio source) module - creates triggered filters (from midi or sequencers) which use an audio side chain for input. Each filter is velocity-sensitive and has its own envelope - like the wave synth module</p>
-<p class="p3"><b>Gain </b>(audio insert) module - adjust the gain (volume level) of an audio signal.</p>
-<p class="p3"><b>Granulator</b> (audio source) module - granulates any mono sample in the sample bank creating a stereo output.</p>
-<p class="p3"><b>Limiter </b>(audio insert) module - keeps an audio signal below its threshold.</p>
-<p class="p3"><b>MultiTap Delay</b> (audio insert) module - for rhythmic delay effects.</p>
-<p class="p3"><b>Normalizer</b> (audio insert) module - flattens the dynamics of an audio signal.</p>
-<p class="p3"><b>Notch Phaser </b>(audio insert) module - uses notch filters to create phasing effect.</p>
-<p class="p3"><b>Phaser </b>(audio insert) module - uses allpass delays to create phasing effect.</p>
-<p class="p3"><b>Sample and Hold</b> (control insert) module for triggered sampling the levels of a control source - this can also function as a Gate and Hold unit for other effects .</p>
-<p class="p3"><b>StereoWidth </b>(audio insert) module - allows stereo width to be changed.</p>
-<p class="p3"><b>Transient</b> (audio insert) module - transient shaper, limits the slope of an audio signal.</p>
-<p class="p3"><b>Trigger Impulse</b> (control source) module - creates short trigger impulses, for example to trigger the new Sample and Hold module. This can be sequenced or triggered via midi.</p>
-<p class="p3"><b>X-Fader</b> (audio source) module - mono and stereo versions allow modulatable cross-fading between 2 audio signals.</p>
-<p class="p3"><b><i>Other changes</i></b> include:</p>
-<p class="p3">The <b>Sequencer</b> has been renamed <b>Note Sequencer</b> and has had various enhancements. On the new global tab, there are buttons to mute the output, to use a random trigger (as opposed to a clock) based on the BPM, and an option to randomise the step order every cycle. Sequencer steps can now be put into up to 8 groups so that they can be controlled by widgets on the Front Interface screens - this makes the sequencer dynamically controllable - good for gestural control while playing.</p>
-<p class="p3">The <b>File Player</b> mono/stereo modules have been improved with better control capability from interface screens.</p>
-<p class="p3">The <b>Waveform </b>module now has a stereo version with a beats frequency control for wide stereo effects or for creating binaural beats.</p>
-<p class="p3">The <b>Table Synth</b> module now allows frequency modulation through a modulation input (using the modulation options button in the Table Synth window).</p>
-<p class="p3">Modules <b>Ring Mod</b>, <b>Vocoder</b>, &amp; <b>VocoderFX </b>now have Dry-Wet Mix controls.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 0.10.6 (August 2006)</b></p>
-<p class="p3">As well as fixing various bugs, this version has an more streamlined main window and a new <b>interface</b> system where users can design a front screen with objects that can control multiple modules. I haven't yet had time to update the other help files with details of how to use the new interface system. There are some examples which use the new interface, so have a look at those to get an idea of how you could use it.</p>
-<p class="p3">The <b>sequencer</b> module is now much more powerful: It can now have up to 64 steps (used to be 16), there is a new delay option for making individual steps late (as in swing patterns), you can now chain patterns together, and you can apply all kinds of processes to patterns including generating new ones from many types of scales.</p>
-<p class="p3">A new <b>Table Synth</b> module has been built which allows you to create wavetables by mixing harmonics in various proportions. You can have up to 8 wavetables and smoothly mix between them.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 0.10.41 (January 2006)</b></p>
-<p class="p3">This version should display more easily on 12 inch powerbooks, the main screen layout has been adjusted slightly.</p>
-<p class="p3">The Lag module has been renamed Smooth and now includes linear and exponential smoothing.</p>
-<p class="p3">I have decided to give out this release even though it has some known bugs (see help file "Known Bugs"). So it very much a <b>TEST</b> system and I will release new versions as and when bugs are solved.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 0.10.4 (October 2005)</b></p>
-<p class="p3">The first release written in SuperCollider 3 for Mac OS X.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
-<p class="p3"><b>Release 0.9.3 (June 2004)</b></p>
-<p class="p3">The first release written in SuperCollider 2 for Mac OS 9.</p>
-<p class="p2"><br></p>
-<p class="p3"><b>-----------------------------------------------------</b></p>
-<p class="p2"><br></p>
+<p class="p1"><span class="s1">// Copyright (C) 2018 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <a href="file:LICENSE.html"><span class="s2">LICENSE</span></a>).</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>The TX Modular System - Release Notes</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 087 (January 2018)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 086 (November 2014)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 082 (January 2012)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 081 (August 2010)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 079 (December 2008)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 074 (December 2007)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 0.10.7 (April 2007)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 0.10.6 (August 2006)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 0.10.41 (January 2006)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 0.10.4 (October 2005)</b></span></p>
+<p class="p2"><span class="s1"><b>Release 0.9.3 (June 2004)</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 087 (January 2018)</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1">This release includes many new modules, lots of them coming from recent additions to SuperCollider (see full list below). </span></p>
+<p class="p2"><span class="s3">A redesign of the interface gives a more flexible screen layout with sliding panels, meters on every channel (with a new narrow option to display more channels), and easier gui interface building by importing gui widgets directly from modules</span><span class="s3">.</span></p>
+<p class="p2"><span class="s3">As well as various bug fixes, the code has been refactored enabling many more modules to be added.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>New module highlights:</i></b></span></p>
+<p class="p2"><span class="s1"><b>MultiTrack Sequencer</b> - this adds new sequencing capabilities to TX Modular with lots of possible uses. Includes basic MIDI file import/export.</span></p>
+<p class="p2"><span class="s1"><b>Note Multiply</b>, <b>Scale Chord</b> </span><span class="s4">and </span><span class="s1"><b>Scale Quantise</b> modules - for some extra musical dimensions</span></p>
+<p class="p2"><span class="s1"><b>Mod Sequencer</b>, <b>T Noise Ring</b>, various <b>mono</b> & <b>gain envelopes</b>, <b>clocks</b>, <b>dividers</b>, <b>switches</b>, & <b>logic</b> modules - all add new </span><span class="s4">possibilities for using </span><span class="s1">modulation.</span></p>
+<p class="p2"><span class="s1"><b>JPverb</b> (mono & stereo audio insert) - lush reverb.</span></p>
+<p class="p2"><span class="s1"><b>Granulator FM </b> (stereo source) - uses Frequency Modulation Synthesis to create small "grains" of sound which are panned in stereo.</span></p>
+<p class="p2"><span class="s1"><b>Bowed Res</b>, <b>Formlets</b>, <b>Klank</b>, <b>Membrane</b>, <b>Piano Res St</b>, <b>Strings</b>, <b>Tubes</b> - these are new "Resonator" audio insert modules for sound design.</span></p>
+<p class="p2"><span class="s1"><b>Interference </b>(mono & stereo audio insert) - a different way to add distortion.</span></p>
+<p class="p2"><span class="s1"><b>Vowel Morph </b>(mono & stereo audio source) - morph between vowels for vocal textures.</span></p>
+<p class="p2"><span class="s1"><b>WaveFold </b>(mono & stereo audio insert) - variable waveform distortion using folding, wrapping, and clipping.</span></p>
+<p class="p2"><span class="s3"><br>
+</span><span class="s1"><b><i>Module changes include:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Audio modules & channels </b>- will now fade in and out when they are added, rebuilt or deleted, so level changes are less abrupt.</span></p>
+<p class="p2"><span class="s1"><b>Envelopes </b>- which are used in various modules now include more curve options, including snappy exponential curves, and their shapes are drawn more clearly on the screen. <br>
+Most polyphonic audio modules now use DADSSR envelopes. These have a start and end levels for the sustain part of the envelope giving more flexibility than the DADSR envelopes that were used before.</span></p>
+<p class="p2"><span class="s1"><b>Curve editing & Curve Builder </b>- improved drawing/editing for  modules with curves (including <b>Env Curve, Gain Curve, LFO Curve, Mono Env Curve, Warp, Warp Morph, Waveshaper, WaveshaperX</b>). Curves can zoom in/out, and drawing now includes line drawing with preset curves & optional quantise to grid.</span></p>
+<p class="p2"><span class="s1"><b>FM Synth & FM Drone </b>- now include presets for all 32 algorithms used by the Yamaha DX7, parameter randomisation, & for each operator: optional fixed frequency, detune, velocity curve & note levels curve.</span></p>
+<p class="p2"><span class="s1"><b>LFO Curve </b>- restart can be triggered</span></p>
+<p class="p2"><span class="s1"><b>Mix Audio 8-1/16-2 & Mix Control 8-1, MatrixA88 MatrixC88 </b>- new "Auto scale" option, where the output level is reduced if the mixed level headroom exceeds 1</span></p>
+<p class="p2"><span class="s1"><b>Ring Modulator </b>- new parameter Diode Mix, which mixes in ring modulation based on a physical model of a diode used in analogue ring modulation circuits.</span></p>
+<p class="p2"><span class="s1"><b>Table Synth & Table Drone</b> - new internal/external sync and phase distortion options can add a harmonically rich edge to the sound. </span></p>
+<p class="p2"><span class="s1"><b>Waveform, Wave Synth  & Wave Synth+</b> - these have new phase distortion waveforms: sync sine, sync sawtooth & sync triangle, new chaotic waveforms of various kinds (added to <b>LFO</b> too). <br>
+Frequency modulation is now available, either from an external audio source or from an internal sine wave.</span></p>
+<p class="p2"><span class="s1"><b>Wave Terrain </b>- can now import PNG images as wave terrains, with a new <b>Wave Terrain Builder</b> window to help build and visualise terrains.</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1"><b><i>All New Modules - grouped by category:</i></b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>1. Audio Source Modules</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Drone</b></span></p>
+<p class="p2"><span class="s1"><b>Table Drone (mono &amp; stereo) - </b>outputs a synthesised waveform as an audio signal using wavetable synthesis, with optional sync, phase and frequency modulation. Wavetables are single waveforms made up from a mixture of different harmonics.</span></p>
+<p class="p2"><span class="s1"><b>FM Drone - </b>outputs a mono signal using multi-layer Frequency Modulation (FM) Synthesis.</span></p>
+<p class="p2"><span class="s1"><b>Vowel Morph (mono &amp; stereo) - </b>generates an audio signal based on morphing between 2-5 Vowel presets, each with 5 formants. It can use formant, waveform or noise synthesis, or process an external signal using a vowel filter.</span></p>
+<p class="p2"><span class="s1"><br>
+<p class="p6"><span class="s1"><b>Conversion</b></span></p>
+<p class="p2"><span class="s1"><b>Convert To Audio - </b>converts a control signal into an audio signal, with optional DC offset removal.</span></p>
+<p class="p2"><span class="s1"><br>
+<p class="p6"><span class="s1"><b>Polyphonic, triggered</b></span></p>
+<p class="p2"><span class="s1"><b>Bowed (mono) - </b>creates synth notes based on a digital wave guide physical model of a bowed instrument.</span></p>
+<p class="p2"><span class="s1"><b>Granulator FM (stereo) - </b>uses Frequency Modulation Synthesis to create small "grains" of sound which are panned in stereo.</span></p>
+<p class="p2"><span class="s1"><b>Piano String St (stereo)</b> - creates notes based on a digital wave guide physical model of a piano string.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s5"><b>2. </b></span><span class="s1"><b>Control</b></span><span class="s5"><b> </b></span><span class="s1"><b>Source</b></span><span class="s5"><b> &amp; Action </b></span><span class="s1"><b>Modules</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Clock &amp; Divider</b></span></p>
+<p class="p2"><span class="s1"><b>Clock Pulse - </b>outputs clock pulses with variable swing and jitter.</span></p>
+<p class="p2"><span class="s1"><b>Gauss Clock - </b>outputs clock pulses where the time between pulses can be randomised using a Gaussian random distribution.</span></p>
+<p class="p2"><span class="s1"><b>Pulse Divider - </b>outputs clock pulses by dividing the number of triggers it receives by various amounts (2 to 8).</span></p>
+<p class="p2"><span class="s1"><b>Pulse DividerV - </b>outputs clock pulses by dividing the number of triggers it receives by a settable number.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Conversion</b></span></p>
+<p class="p2"><span class="s1"><b>Convert To Control - </b>converts an audio signal into a control signal.</span></p>
+<p class="p2"><span class="s1"><br>
+<p class="p6"><span class="s1"><b>Envelopes: Monophonic, triggered</b></span></p>
+<p class="p2"><span class="s1"><b>Mono Env 16 stage - </b>creates a mono 16-stage envelope as a control signal. </span></p>
+<p class="p2"><span class="s1"><b>Mono Env Curve - </b>creates a mono user-defined envelope as a control signal. The curve can be edited with a mouse.</span></p>
+<p class="p2"><span class="s1"><b>Mono Env DADSR - </b>creates a mono DADSR (Delay Attack Decay Sustain Release) envelope as a control signal. </span></p>
+<p class="p2"><span class="s1"><b>Mono Env DADSSR - </b>creates a mono DADSSR (Delay Attack Decay Sustain1 Sustain2 Release) envelope as a control signal. </span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Envelopes: Polyphonic, triggered</b></span></p>
+<p class="p2"><span class="s1"><b>Env DADSSR - </b>creates a polyphonic DADSSR (Delay Attack Decay Sustain1 Sustain2 Release) envelope as a control signal. </span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Input Device</b></span></p>
+<p class="p2"><span class="s1"><b>Gametrak</b> - This module is for use with a connected a Gametrak USB controller, which was originally made for a golf game, but is useful as a 2-hand gestural controller with much higher resolution than MIDI (10-bit vs. 7-bit).</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Logic</b></span></p>
+<p class="p2"><span class="s1"><b>Logic Bool - </b>combines 2/3/4 input signals using Boolean logic.</span></p>
+<p class="p2"><span class="s1"><b>Logic NonBin - </b>combines 2/3/4 input signals using non-binary logic.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Modulation</b></span></p>
+<p class="p2"><span class="s1"><b>T NoiseRing</b> - based on a SuperCollider model of the Wiard Noise Ring, when triggered it outputs random values in a sequence which can loop or gradually change in a controlled way.</span></p>
+<p class="p2"><span class="s1"><b>T Random</b> - outputs random values that change whenever a trigger is received.</span></p>
+<p class="p2"><span class="s1"><b>T Random Choice</b> - outputs random values, selected from a group of 2-16 choices, that change whenever a trigger is received.</span></p>
+<p class="p2"><span class="s1"><b>T Random Walk</b> - outputs random values that change whenever a trigger is received. The amount of change is a random positive or negative value, limited by a maximum step size.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Note Tools</b></span></p>
+<p class="p2"><span class="s1"><b>Note Multiply - </b>This triggered module makes no sound itself but instead triggers notes in up to 6 modules. It can also output MIDI notes.<br>
+When it is triggered, it plays a number of repeated notes. Each note can be transposed and has its own velocity, probability and gate time settings, allowing randomness to be introduced in various ways. </span></p>
+<p class="p2"><span class="s1"><b>Scale Chord</b> - This triggered module makes no sound itself but instead triggers notes in up to 6 modules. It can also output MIDI notes.<br>
+When it is triggered, it restricts the output notes to a particular key and scale (if the chromatic scale is chosen, then any notes played are be part of the scale). <br>
+Optionally, a chord can be played instead of just a single note . An open version of the chord can be chosen, with selectable octave transposition to spread the chord. Each note in the chord has both velocity and probability settings, allowing randomness to be introduced in various ways.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Physical Models</b></span></p>
+<p class="p2"><span class="s1"><b>Ball </b>- models the behaviour of a ball bouncing against a vibrating surface. The surface can be moved by a triggered force. </span></p>
+<p class="p2"><span class="s1"><b>Spring </b>- models the behaviour of a vibrating string that is hit with a triggered force. </span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Sequencers</b></span></p>
+<p class="p2"><span class="s1"><b>Mod Sequencer</b> - This triggered module is a 16-step sequencer that is focussed on modulation, rather than note triggering, with all controls including the individual steps modulatable. <br>
+It outputs control signals for note and amplitude values and 3 extra controls - called CV1/ CV2/ CV3.</span></p>
+<p class="p2"><span class="s1"><b>MultiTrack Seq</b> - This module can be used to record, edit, and play back multiple controller and note tracks to control parameters of other modules or send them note triggers. <br>
+Controller tracks can record from 16 modulation inputs. Each track can records from MIDI input and have up to 6 output modules, as well as MIDI output.<br>
+Basic MIDI file import/export is available.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Switch</b></span></p>
+<p class="p2"><span class="s1"><b>On Off Switch</b> - outputs either 0 (Off) or 1(On). It has separate on and off triggers.</span></p>
+<p class="p2"><span class="s1"><b>Toggle Switch</b> - outputs either 0 (Off) or 1(On). It has a single trigger which causes a change in the output value, from 0 to 1, or 1 to 0 .</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s5"><b>3. </b></span><span class="s1"><b>Audio Insert Modules</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Distortion</b></span></p>
+<p class="p2"><span class="s1"><b>Interference (mono &amp; stereo) - </b>adds 'interference' to the input signal by using up to 3 regular or noisy waveforms to modulate a short delay line.</span></p>
+<p class="p2"><span class="s1"><b>WaveFold (mono &amp; stereo)</b> - distorts the input signal, by boosting the gain (amplitude) and adding harmonics using 4 layers of folding, wrapping, or clipping.</span></p>
+<p class="p2"><span class="s1"><b>WaveshaperX (mono &amp; stereo) </b>- adds distortion to the input signal using mix of 2 function curves, which can be drawn by hand or generated automatically based on harmonics and noise.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Dynamics</b></span></p>
+<p class="p2"><span class="s1"><b>Amp Comp</b> <b>(mono &amp; stereo)</b> - Psychoacoustic amplitude compensation - frequency-dependent amplitude reduction, the level of the input signal is reduced for higher frequencies.</span></p>
+<p class="p2"><span class="s1"><b>Balance</b> <b>(mono &amp; stereo)</b> - sets the incoming audio to be at the same level as one of two options: 1) the Target level, 2) the level of the mono audio side-chain signal.</span></p>
+<p class="p2"><span class="s1"><b>Noise Gate (mono &amp; stereo) -</b> can be used as a gate or ducker with an optional side-chain input. Reduces the level of the input signal when the level of the input or side-chain goes below (gate) or above (ducker) a certain threshold.</span></p>
+<p class="p2"><span class="s1"><b>SoftKnee Comp (mono &amp; stereo) - </b>responds to the amplitude (volume level) of an audio signal coming into it. A compressor reduces the level of the louder parts of signal. It has the effect of evening out the volume. The type of compression can be changed from Peak Compression to RMS Compression, which responds to a signal over a settable averaging time.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>EQ & Filter</b></span></p>
+<p class="p2"><span class="s1"><b>Bracket EQ (mono &amp; stereo)</b> - this can "bracket" the frequencies of a sound, removing frequencies that are below the low-cut frequency or above the high-cut frequency.</span></p>
+<p class="p2"><span class="s1"><b>Dual Filter  (mono &amp; stereo)</b> - uses 1 or 2 filters combined in various ways to cut or boost certain frequencies in an audio signal.</span></p>
+<p class="p2"><span class="s1"><b>EQ6 (mono &amp; stereo)</b> - 6 switchable bands of EQ: Lo-shelf, Parametric 1 - 4, &amp; Hi-shelf, with +/- 15db gain per band.</span></p>
+<p class="p2"><span class="s1"><b>EQ6M (mono &amp; stereo)</b> - 6 switchable bands of EQ: Lo-shelf, Parametric 1 - 4, &amp; Hi-shelf. This "Mastering" version has +/- 6db gain per band.</span></p>
+<p class="p2"><span class="s1"><b>EQ Morph (mono &amp; stereo)</b> -  morph between 2-5 EQ presets using 6 switchable bands of EQ: Lo-shelf, Parametric, or Hi-shelf, with +/- 15db gain per band.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Gain Envelope</b></span></p>
+<p class="p2"><span class="s1"><b>Gain 16 Stage (mono &amp; stereo) - </b>applies a 16-stage envelope to the input signal.</span></p>
+<p class="p2"><span class="s1"><b>Gain Curve (mono &amp; stereo) - </b>applies a user-defined envelope to the input signal. The curve can be edited with a mouse.</span></p>
+<p class="p2"><span class="s1"><b>Gain DADSR (mono &amp; stereo) - </b>applies a DADSR (Delay Attack Decay Sustain Release) envelope to the input signal.</span></p>
+<p class="p2"><span class="s1"><b>Gain DADSSR (mono &amp; stereo) - </b>applies a DADSSR (Delay Attack Decay Sustain1 Sustain2 Release) envelope to the input signal.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Granulation</b></span></p>
+<p class="p2"><span class="s1"><b>Live Grain (mono to stereo)</b> - granulates a mono input signal, turning it into 'grains' of sound which are panned in stereo.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Resonator</b></span></p>
+<p class="p2"><span class="s1"><b>Bowed Res (mono)</b> - digital wave guide physical model of a soundboard resonator for a bowed instrument.</span></p>
+<p class="p2"><span class="s1"><b>Formlets (mono)</b> - uses a group of 1-8 resonant filters to add formants to the input signal. The filter impulse response is like that of a sine wave with an attack-decay envelope over it.</span></p>
+<p class="p2"><span class="s1"><b>Klank (mono)</b> - uses a group of 1-8 frequency resonators on to the input signal - with controls for frequency, ring time and amplitude. </span></p>
+<p class="p2"><span class="s1"><b>Membrane (mono)</b> - uses the input signal to excite a physical model of a drum-like membrane, based on triangular waveguide meshes of a hexagon or circle.</span></p>
+<p class="p2"><span class="s1"><b>Piano Res St (stereo)</b> - digital wave guide physical model of a piano soundboard.</span></p>
+<p class="p2"><span class="s1"><b>Strings (mono)</b> - uses the input signal to excite Karplus-Strong models of a group of 1-8 strings. When a trigger is received, the strings are 'plucked' using a short burst of the input signal to excite the strings.</span></p>
+<p class="p2"><span class="s1"><b>Tubes (mono)</b> - uses the input signal to excite a physical model of a tube made up of 2-8 sections. </span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Reverb</b></span></p>
+<p class="p2"><span class="s1"><b>Greyhole (mono &amp; stereo)</b> - 'A complex echo-like effect … a diffuser (like a mini-reverb) connected in a feedback system with a long modulated delay-line. Excels at producing spacey washes of sound.' (from SC help)</span></p>
+<p class="p2"><span class="s1"><b>Infinity (mono &amp; stereo)</b> - adds a long, smeared wash to the input signal using multiple all-pass delays. Maximum feedback produces infinite sustain.</span></p>
+<p class="p2"><span class="s1"><b>JPverb (mono &amp; stereo)</b> - 'An algorithmic reverb, inspired by the lush chorused sound of certain vintage Lexicon and Alesis reverberation units. Designed to sound great with synthetic sound sources, rather than sound like a realistic space.' (from SC help)</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Spectral</b></span></p>
+<p class="p2"><span class="s1"><b>Spectral Delay</b> - adds separate delays, of up to 1 second, to the input signal in 256 different frequency bands. The delay time for every band is set by editing a curve showing Frequency on the X-axis and Delay Time on the Y-axis.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Synthesis</b></span></p>
+<p class="p2"><span class="s1"><b>Sub Harm (mono &amp; stereo) -</b> adds 4 pulse-wave sub-harmonics to a mono audio signal. Each sub-harmonic is progressively lower. A filter cuts or boost frequencies to shape the output signal.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>4. Control Insert </b></span><span class="s4"><b>Modules</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Analysis</b></span></p>
+<p class="p2"><span class="s1"><b>Changed Trig</b> - whenever the input signal changes, a very short trigger pulse is output. </span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p6"><span class="s1"><b>Modify</b></span></p>
+<p class="p2"><span class="s1"><b>Quantise - </b>quantises the input signal to a set number of equally placed steps. </span></p>
+<p class="p2"><span class="s1"><b>Scale Quantise - </b>quantises the input signal to a set key, scale and note range.</span></p>
+<p class="p2"><span class="s1"><b>Warp Morph - </b>for "mapping" or changing the behaviour of a control signal. The incoming signal is mapped using a mix between 2 editable transfer curves.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 086 (November 2014)</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1">This release uses the new GUI system in SuperCollider which uses Qt, a cross-platform toolkit. At the time of release, it has so far only been tested on Mac OSX 10.8.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1">There are various bug fixes (including MIDI notes sometimes sticking); metering now includes options for frequency analysis; and one new module has been added:</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Pattern Code</b> - allows you to use SuperCollider Pattern code to control any modules in the system.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 082 (January 2012)</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Highlights:</i></b></span></p>
+<p class="p2"><span class="s1">Building a system is quicker, with fewer mouse clicks.</span></p>
+<p class="p2"><span class="s1">Interface building is also much easier and more flexible.</span></p>
+<p class="p2"><span class="s1">Note Stacker makes building multi-layered instruments much easier.</span></p>
+<p class="p2"><span class="s1">OSC Remote is useful for remote control by phone, tablet, &amp; other OSC devices.</span></p>
+<p class="p2"><span class="s1">Sample Player + (similar to Wave Synth +) adds many more possibilities to sample-based instruments.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>The following new modules have been built:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Convolution</b> (mono &amp; stereo) - Convolution uses impulse response samples to simulate reverbs, filters/EQ, microphones, speakers, amplifiers and for special effects.</span></p>
+<p class="p2"><span class="s1"><b>Env Follow </b>(mono &amp; stereo) - this audio insert module matches the level of an audio signal to another audio signal that is being fed into the side-chain input.</span></p>
+<p class="p2"><span class="s1"><b>Matrix A 8x8 / Matrix C 8x8</b> - These audio &amp; control modules mix 8 input signals into 8 output channels using a 64-knob matrix.</span></p>
+<p class="p2"><span class="s1"><b>Mix Audio 8-1 / Mix Audio 16-2 / Mix Control 8-1- </b>These modules mix 8 mono audio signals / 8 stereo audio signals / 8 control signals.</span></p>
+<p class="p2"><span class="s1"><b>Mono to Stereo</b> - Converts a mono audio signal into a stereo signal by panning between the left and right channels.</span></p>
+<p class="p2"><span class="s1"><b>M-S Encoder </b>- this takes a stereo audio signal and converts into mid and side signals.</span></p>
+<p class="p2"><span class="s1"><b>M-S Decoder </b>- this takes mid and side signals and converts them into a stereo audio signal.</span></p>
+<p class="p2"><span class="s1"><b>Note Stacker - </b>this triggered module makes no sound itself but instead triggers notes in other modules, with the option of modifying the pitch or velocity of the notes for various effects.</span></p>
+<p class="p2"><span class="s1">Up to 18 different modules can be triggered, arranged in 6 layers each with 3 output modules. The modules on a layer can be played together, rotated each time the layers is played, or randomly chosen. Each layer has curves for modifying the overall velocity response, as well as individual note level and tuning for each note across the keyboard range.</span></p>
+<p class="p2"><span class="s1"><b>OSC Control 2D -</b> outputs two control signals from OpenSound Control ('OSC') messages received.</span></p>
+<p class="p2"><span class="s1"><b>OSC Remote - </b>This<b> </b>module is designed for linking up an external device that sends multiple OSC messages - such as a phone or an iPad running TouchOSC, or another computer running the TX Modular system or other OSC software. Each OSC String is linked to an Action within the TX.</span></p>
+<p class="p2"><span class="s1"><b>Sample Player+ (mono &amp; stereo) - </b>this is an enhanced version of the Sample Player module which includes a filter, 2 LFOs, an extra assignable envelope and a modulation matrix.</span></p>
+<p class="p2"><span class="s1"><b>Transient Shape (mono &amp; stereo)</b> - this has replaced the Transient module. Attack and sustain of incoming audio can be separately controlled with the divide frequency affecting how attack and release are separated. Useful with drums, plucked and percussive sounds which have strong transients.</span></p>
+<p class="p2"><span class="s1"><b>X-Fader 2-1 C</b> (control source) module - for modulatable cross-fading between 2 control signals.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Module changes include:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Action Slider </b>module - now includes various triggering options based on the direction of movement of the slider.</span></p>
+<p class="p2"><span class="s1"><b>Gain</b> modules (mono/stereo) - new Phase Invert<b> </b>buttons for inverting the phase of audio signals.</span></p>
+<p class="p2"><span class="s1"><b>Group Morph </b>module -<b> </b>this now has various 2D and Linear types of morph.</span></p>
+<p class="p2"><span class="s1"><b>MIDI Sustain Pedal and Pitchbend- </b>All Triggered Audio Source Modules now respond to Sustain Pedal and Pitchbend MIDI messages when MIDI Listen is activated.</span></p>
+<p class="p2"><span class="s1"><b>Step Sequencer</b> is the new name for <b>Note Sequencer </b>- it was renamed for clarity since it sequences control values, velocities &amp; notes using steps.</span></p>
+<p class="p2"><span class="s1"><b>Perlin Noise </b>module - a new control Rate Multiply has been added which controls the overall speed of the noise.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Other changes include:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Audio Setup Window </b>- when the TX Modular system starts, this window opens first to set the Audio Device (i.e. Sound Card), and its Sample Rate and Buffer Size.</span></p>
+<p class="p2"><span class="s1"><b>Volume slider &amp; 0dB button</b> - to set the overall output level for the system.</span></p>
+<p class="p2"><span class="s1"><b>History buttons &lt; &gt;</b> - to navigate to a previously viewed screen</span></p>
+<p class="p2"><span class="s1"><b>Interface Design improvements - GUI Properties</b> is now a floating window above the new <b>Design Interface</b> window which displays all widgets as you move or resize them.</span></p>
+<p class="p2"><span class="s1"><b>Interface Screens: Background Images</b> - Each Interface screen can have its own background image with widgets displayed over it.</span></p>
+<p class="p2"><span class="s1"><b>New Interface Widget: Knob -</b> knobs take up less space than sliders for editing numerical parameters.</span></p>
+<p class="p2"><span class="s1"><b>Sample Banks &amp; Loop Banks</b> - there are now 99 Sample &amp; Loop Banks available for more flexibility when creating larger systems (previously there was only 1 Sample &amp; 1 Loop Bank).</span></p>
+<p class="p2"><span class="s1"><b>SuperCollider users</b> <b>-</b> should find that TX Modular classes can be used more easily with multiple Quarks installed since the TX Modular uses many fewer class variables than before.</span></p>
+<p class="p2"><span class="s1"><b>TX Autonomous Standalone Systems</b> - It is now possible to make a copy of the TX Modular Standalone and modify it so that it automatically loads a pre-saved system. An autonomous system can't be edited or saved, and only the Interface screens are shown, so it's like a play-only version of a prebuilt TX Modular instrument or system. This might be useful for creating installations or easily distributable live instruments. The pre-saved system file and any external files are enclosed within the self-contained app so it's easy to give a standalone to other people. A Help file explains this in detail.</span></p>
+<p class="p2"><span class="s1"><b>User Options</b> - shown on the Notes &amp; Options screen, for choosing overall window colour &amp; transparency, adding a background image to the main window, and whether to ask for confirmation before deleting Modules and Channels.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 081 (August 2010)</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Main changes in this release:</i></b></span></p>
+<p class="p2"><span class="s1"><b>New Signal Flow window -</b> this window is designed to make it easier to see how a whole system works. It shows how audio and control signals flow around the system between modules, channels and busses. As you add modules and connect them together in the Modules window, they will automatically be added to the Signal Flow window. Blue lines show audio signals and green lines show control signals. The layout of the Signal Flow window can be easily changed (by clicking and dragging).</span></p>
+<p class="p2"><span class="s1"><b>Interface improvements</b> - The Design Layout window has been improved so you can easily resize widgets by dragging their corners and you can select multiple widgets for moving or cloning. This makes it much faster to design an interface. It is now possible to change the size of the Inteface so more controls can be displayed on larger monitors.</span></p>
+<p class="p2"><span class="s1"><b>Preset Files - </b>All modules can have their settings saved as Preset Files, which can be reloaded at a later time. This also makes it easier to copy module settings between different systems. Presets are saved or loaded using the Do... popup button which is on the top row of each module's control window.</span></p>
+<p class="p2"><span class="s1"><b>Main window -</b> the overall layout has been simplified. All the buttons for system and inteface windows now appear together on the second row.</span></p>
+<p class="p2"><span class="s1"><b>Modules window -</b> this has a new, simpler layout. A list of all modules in the system is now shown on the left. There is easier navigation through channels using a scroll bar.</span></p>
+<p class="p2"><span class="s1"><b>Note Sequencer - </b>this has had many changes including: a new Play Mode that allows manual triggering of sequencer steps; interface improvements; individual parameters can be randomised; BPM can be modulated directly using a control signal; there are 3 new control outputs which can be sequenced alongside notes in each step; MIDI output for notes and 3 controller values;</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Various new modules have been built:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Chorus (mono &amp; stereo)</b> - creates a chorus effect on a mono audio signal using several modulated delay lines.</span></p>
+<p class="p2"><span class="s1"><b>Disintegrator (mono &amp; stereo)</b> - distorts the input by amplifying random half-cycles of the signal.</span></p>
+<p class="p2"><span class="s1"><b>EQ Para (mono &amp; stereo)</b> - a parametric filter which cuts or boosts certain frequencies in an audio signal by a specified amount.</span></p>
+<p class="p2"><span class="s1"><b>EQ Shelf (mono &amp; stereo)</b> - shelving filter which cuts or boosts frequencies in an audio signal above or below a cutoff frequency.</span></p>
+<p class="p2"><span class="s1"><b>Env Curve - </b>user-defined envelope as control signal. The curve can be edited with a mouse.</span></p>
+<p class="p2"><span class="s1"><b>Group Morph </b>- this was designed to simplify the control of modules with large numbers of parameters. It morphs between 4 different groups of values of 15 control signals.</span></p>
+<p class="p2"><span class="s1"><b>LFO Curve</b> - Low Frequency Oscillator with an editable waveform curve - using a mouse.</span></p>
+<p class="p2"><span class="s1"><b>Perlin Noise</b> - A Random Low Frequency Oscillator based on 3 dimensional Perlin Noise - useful for adding non-repetitive variation (i.e. "organic movement") to module parameters.</span></p>
+<p class="p2"><span class="s1"><b>Ping Pong (mono &amp; stereo)</b> - creates a "ping-pong" delay that bounces sound from side to side.</span></p>
+<p class="p2"><span class="s1"><b>Pluck</b> - creates notes based on a physical model of a plucked string.</span></p>
+<p class="p2"><span class="s1"><b>Slope</b> - measures the velocity or acceleration of a control signal.</span></p>
+<p class="p2"><span class="s1"><b>Spectral FX</b> - This module analyzes the frequency spectrum of a signal. Once analysed, the signal can then be transformed, using up to 6 different spectral processes (from over 50 choices). In addition a side chain input can be used to introduce a second audio signal for processing in some of the FX.</span></p>
+<p class="p2"><span class="s1"><b>Vosim</b> - outputs a synthesised waveform as a mono audio signal using a technique called VOSIM - the name comes from VOice SIMulation.</span></p>
+<p class="p2"><span class="s1"><b>Waveshaper (mono &amp; stereo) </b>- adds distortion to the input signal using a function curve, which can be drawn by hand or generated automatically based on harmonics and noise.</span></p>
+<p class="p2"><span class="s1"><b>Wave Terrain</b> - a synthesised waveform based on a mathematical model of an object moving over a 3D terrain. The orbit and the terrain can be changed, or even rewritten using SuperCollider computer code.</span></p>
+<p class="p2"><span class="s1"><b>X Distort (mono &amp; stereo)</b> - simulates crossover distortion in class B and AB power amplifiers.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>The following new modules allow use of SuperCollider code:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Animate Code </b>- use SuperCollider computer code to generate an animation which is displayed in a separate window.</span></p>
+<p class="p2"><span class="s1"><b>Code Insert A (mono &amp; stereo) </b>- use SuperCollider computer code to process an audio signal.</span></p>
+<p class="p2"><span class="s1"><b>Code Insert C </b>- use SuperCollider computer code to process a control signal.</span></p>
+<p class="p2"><span class="s1"><b>Code Source A (mono &amp; stereo) </b>- use SuperCollider computer code to generate an audio signal.</span></p>
+<p class="p2"><span class="s1"><b>Code Source C </b>- use SuperCollider computer code to generate a control signal.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Other changes include:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Bit Crusher</b> - this module has new choices for processing.</span></p>
+<p class="p2"><span class="s1"><b>Delays</b> - up to 5 minutes of delay time can be used for each delay, &amp; MultiTap Delay now has 8 delay taps for more complex patterns. Tap Tempo buttons have been added to automatically calculate BPM values.</span></p>
+<p class="p2"><span class="s1"><b>File Player (mono &amp; stereo) </b>- playback speed can be varied.</span></p>
+<p class="p2"><span class="s1"><b>Filter</b> - more choices for types of Filter.</span></p>
+<p class="p2"><span class="s1"><b>LFO</b> - more choices for random LFOs.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 079 (December 2008)</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Main changes in this release include:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Cleaner Audio</b> - glitching could occasionally happen in certain modules (e.g. Waveform module when using Pulse waveform, Filter, Delay, Flanger modules.). This glitching is now filtered out.</span></p>
+<p class="p2"><span class="s1"><b>Meters</b> - this new popup, on the top right of the window, allows you to select any module or bus in the system and display its output(s) on a meter. Meters are on separate movable windows. Audio signals are shown in loudness units (-90dB to 0dB); Control signals are shown directly (range -1 to +1).</span></p>
+<p class="p2"><span class="s1">All <b>numbers</b> displayed in the TX Modular screens are now <b>scrolling numbers</b> - click on them and drag up/down, left/right to change their values.</span></p>
+<p class="p2"><span class="s1"><b>Window layout</b> - various improvements have been made to make the user interface clearer and easier to use.</span></p>
+<p class="p2"><span class="s1"><b>Sync Start</b> + <b>Sync Stop</b> + <b>Stop All </b>- these 3 buttons appear at the top of the window. They allow Sequencers, Fle Players and File Recorders to be started and stopped together. Each sequencer, file player and recorder can be individually set to respond to Sync Start and Sync Stop instructions. Stop All will ask all modules to stop regardless of their Sync Start and Sync Stop settings.</span></p>
+<p class="p2"><span class="s1"><b>Modules &amp; Channels</b> - are now merged into one <b>Modules </b>window.<b> </b>Modules are displayed on the left hand side with Channels on the right. If no module is selected, a list of all modules currently in the system is shown.</span></p>
+<p class="p2"><span class="s1">The channel number of first displayed channel is shown next to channel arrow keys. This can be edited or scrolled as an alternative to using the arrow keys.</span></p>
+<p class="p2"><span class="s1">It is now possible to change a channel's source (when a channel is in edit mode).</span></p>
+<p class="p2"><span class="s1">All Modules &amp; Channels now have a blank text line for users to add their own notes.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Various new modules have been built:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Action Slider</b> - this module triggers up to 10 Actions when the value of a slider goes above a certain level (the trigger threshold). Both the value and trigger threshold can be modulated.</span></p>
+<p class="p2"><span class="s1"><b>Amp Sim (mono &amp; stereo)</b> - Ampllifier simulator. This module adds distortion to the input signal, similar to the sound of vacuum-tube amplifiers. It adds a roughness and warmth to the sound.</span></p>
+<p class="p2"><span class="s1"><b>Analyser </b>- this uses various different tools to analyse a mono audio signal coming into it. It can be calibrated for specific audio signals.</span></p>
+<p class="p2"><span class="s1"><b>Bit Crusher (mono &amp; stereo)</b> - this module distorts the input signal in by reducing the sample rate and bit size.</span></p>
+<p class="p2"><span class="s1"><b>DC Remove</b> - this removes a DC offset from an audio signal.</span></p>
+<p class="p2"><span class="s1"><b>FM Synth</b> - this module creates polyphonic synthesised notes using multi-layer Frequency Modulation (FM) Synthesis.</span></p>
+<p class="p2"><span class="s1"><b>MIDI Out</b> - this sends out various kinds of MIDI messages.</span></p>
+<p class="p2"><span class="s1"><b>OSC Control Out</b> - this<b> </b>module sends an OSC message to up to 10 different network addresses. The OSC messages have 2 arguments, the OSC string and the control value. The control value can be modulated. This allows communication across a network to other TX Modular systems running on other computers, or to any software (such as Processing &amp; Max/MSP) that can respond to OSC messages.</span></p>
+<p class="p2"><span class="s1"><b>Pitch Follower</b> - this follows the pitch of a mono audio signal coming into it.</span></p>
+<p class="p2"><span class="s1"><b>Quartz Player</b> - this creates a new window containing any Quartz Composer Composition which can be controlled by the the TX Modular system. This can be used with other modules to create interactive and/or automated audio-visual systems. (Quartz Composer is a very powerful visual engine that comes free with OS X.)</span></p>
+<p class="p2"><span class="s1"><b>ReverbA, ReverbF, ReverbF St, ReverbG</b> - these are various new mono and stereo reverbs with different sound characters.</span></p>
+<p class="p2"><span class="s1"><b>Wave Synth Plus</b> - this is an expanded version of the Wave Synth module which also includes a filter, 2 LFOs, an extra envelope and a modulation matrix.</span></p>
+<p class="p2"><span class="s1"><b>Wii Ctrl Darwiin</b> - this module outputs a control signal based on a selected Wii or Nunchuck control, including: acceleration, rotation, button and IR camera data. To use this module, you will need the free software <i>DarwiinRemote OSC</i>.</span></p>
+<p class="p2"><span class="s1"><b>Wii Ctrl OSC</b> - this module outputs a control signal based on a selected Wii or Nunchuck control, including: acceleration, rotation, button and IR camera data. To use this module, you will need the software <i>OSCulator</i>.</span></p>
+<p class="p2"><span class="s1"><b>Wii Trig Darwiin</b> - this module triggers up to 10 Actions when a Wii button is pressed on or off. To use this module, you will need the free software <i>DarwiinRemote OSC</i><b>.</b></span></p>
+<p class="p2"><span class="s1"><b>Wii Trig OSC</b> - this module triggers up to 10 Actions when a Wii button is pressed on or off. To use this module, you will need the software <i>OSCulator</i>.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Other changes include:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Note Sequencer </b>- the interface has been improved by creating a new Piano Roll window to edit notes as well as any of the other parameters for each step - velocity, probablity, delay, etc.</span></p>
+<p class="p2"><span class="s1"><b>Compander</b> - there is now an option to use a side chain to control the compander.</span></p>
+<p class="p2"><span class="s1"><b>Filter</b> - several new filter types have been added (including various Moog and TB303 emulations).</span></p>
+<p class="p2"><span class="s1"><b>MIDI Control Out</b> - this module sends out MIDI controller messages and has been improved. (Note: This has now become an Action module - in previous releases it was a Control Insert module).</span></p>
+<p class="p2"><span class="s1"><b>Table Synth</b> - two new parameters - harmonic gap and scaling - give more flexibility in defining wavetables .</span></p>
+<p class="p2"><span class="s1"><b>Waveform</b> - It is now possible to use a note list instead of having a variable frequency. Using a note list forces the frequency of the waveform to conform to the notes of a selected scale/ mode/ chord in a chosen key - this is the same as quantizing the frequency to a scale. The note list position can be modulated.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 074 (December 2007)</b></span></p>
+<p class="p2"><span class="s1">Changes include:</span></p>
+<p class="p2"><span class="s1">For simplicity, all releases are now given a 3-digit number.</span></p>
+<p class="p2"><span class="s1">The <b>Stereo Loop Player</b> can now play both mono and stereo loops.</span></p>
+<p class="p2"><span class="s1">The <b>Stereo Sample Player</b> can now play both mono and stereo samples.</span></p>
+<p class="p2"><span class="s1">Various <b><i>new modules</i></b> have been built:</span></p>
+<p class="p2"><span class="s1"><b>Action Sequencer</b> - this can trigger all kinds of actions at specific times. Actions are commands or instructions for any modules in the system, such as changing the settings of any module in the system, triggering notes to play, starting and stopping other sequencers.</span></p>
+<p class="p2"><span class="s1"><b>CyclOSC Colour</b> - this module analyses video data coming in from a video camera to check for the presence of a particular target colour which you can set.</span></p>
+<p class="p2"><span class="s1">You can also to define a zone which means that the target is looked for in only certain parts of the video grid. This is useful for triggering events only when a target colour enters a space. For example, by adding multiple modules you can create colour-sensitive hot-zones in an interactive performance or installation space.</span></p>
+<p class="p2"><span class="s1"><b>CyclOSC Grey</b> - this module is similar to CyclOSC Colour except it looks for a shade of grey instead of a colour.</span></p>
+<p class="p2"><span class="s1"><b>EQ Graphic </b>(audio insert) module - adjust the EQ of an audio signal.</span></p>
+<p class="p2"><span class="s1"><b>OSC Out</b> - this<b> </b>module sends an OSC message to up to 10 different network addresses. This allows communication across a network to other TX Modular systems running on other computers, or to any software (such as Processing &amp; Max/MSP) that can respond to OSC messages.</span></p>
+<p class="p2"><span class="s1"><b>OSC Trigger</b> - this can trigger up to 10 actions when OSC messages are received as long as the OSC message begins with a string that matches the OSC string on the screen. OSC message arguments can be passed to the actions.</span></p>
+<p class="p2"><span class="s1"><b>OSC Controller - </b>outputs a control signal from OpenSound Control ('OSC') messages received. (This came out in a previous release, but I forgot to mention it.)</span></p>
+<p class="p2"><span class="s1"><b>QC Particles</b> - this module creates a new window which contains a video screen running a 3D particle system animation.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 0.10.7 (April 2007)</b></span></p>
+<p class="p2"><span class="s1"><b>StandAlone</b> versions of the TX Modular for OS X Tiger and Panther have been built.</span></p>
+<p class="p2"><span class="s1">A <b>Help </b>system has now been completed, with specific help buttons in every module.</span></p>
+<p class="p2"><span class="s1">The opening of saved systems is much faster now (±3 times as quick).</span></p>
+<p class="p2"><span class="s1">In many modules there are now <b>presets</b> for things like envelope shapes or frequency ranges.</span></p>
+<p class="p2"><span class="s1">Various <b><i>new modules</i></b> have been built:</span></p>
+<p class="p2"><span class="s1"><b>Audio Trigger</b> (control source) - triggers other modules when the amplitude (volume level) of audio coming into it goes above a certain level.</span></p>
+<p class="p2"><span class="s1"><b>Filter Synth </b>(audio source) module - creates triggered filters (from MIDI or sequencers) which use an audio side chain for input. Each filter is velocity-sensitive and has its own envelope - like the wave synth module</span></p>
+<p class="p2"><span class="s1"><b>Gain </b>(audio insert) module - adjust the gain (volume level) of an audio signal.</span></p>
+<p class="p2"><span class="s1"><b>Granulator</b> (audio source) module - granulates any mono sample in the sample bank creating a stereo output.</span></p>
+<p class="p2"><span class="s1"><b>Limiter </b>(audio insert) module - keeps an audio signal below its threshold.</span></p>
+<p class="p2"><span class="s1"><b>MultiTap Delay</b> (audio insert) module - for rhythmic delay effects.</span></p>
+<p class="p2"><span class="s1"><b>Normalizer</b> (audio insert) module - flattens the dynamics of an audio signal.</span></p>
+<p class="p2"><span class="s1"><b>Notch Phaser </b>(audio insert) module - uses notch filters to create phasing effect.</span></p>
+<p class="p2"><span class="s1"><b>Phaser </b>(audio insert) module - uses allpass delays to create phasing effect.</span></p>
+<p class="p2"><span class="s1"><b>Sample and Hold</b> (control insert) module for triggered sampling the levels of a control source - this can also function as a Gate and Hold unit for other effects .</span></p>
+<p class="p2"><span class="s1"><b>StereoWidth </b>(audio insert) module - allows stereo width to be changed.</span></p>
+<p class="p2"><span class="s1"><b>Transient</b> (audio insert) module - transient shaper, limits the slope of an audio signal.</span></p>
+<p class="p2"><span class="s1"><b>Trigger Impulse</b> (control source) module - creates short trigger impulses, for example to trigger the new Sample and Hold module. This can be sequenced or triggered via MIDI.</span></p>
+<p class="p2"><span class="s1"><b>X-Fader</b> (audio source) module - mono and stereo versions allow modulatable cross-fading between 2 audio signals.</span></p>
+<p class="p2"><span class="s1"><b><i>Other changes</i></b> include:</span></p>
+<p class="p2"><span class="s1">The <b>Sequencer</b> has been renamed <b>Note Sequencer</b> and has had various enhancements. On the new global tab, there are buttons to mute the output, to use a random trigger (as opposed to a clock) based on the BPM, and an option to randomise the step order every cycle. Sequencer steps can now be put into up to 8 groups so that they can be controlled by widgets on the Front Interface screens - this makes the sequencer dynamically controllable - good for gestural control while playing.</span></p>
+<p class="p2"><span class="s1">The <b>File Player</b> mono/stereo modules have been improved with better control capability from interface screens.</span></p>
+<p class="p2"><span class="s1">The <b>Waveform </b>module now has a stereo version with a beats frequency control for wide stereo effects or for creating binaural beats.</span></p>
+<p class="p2"><span class="s1">The <b>Table Synth</b> module now allows frequency modulation through a modulation input (using the modulation options button in the Table Synth window).</span></p>
+<p class="p2"><span class="s1">Modules <b>Ring Mod</b>, <b>Vocoder</b>, &amp; <b>VocoderFX </b>now have Dry-Wet Mix controls.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 0.10.6 (August 2006)</b></span></p>
+<p class="p2"><span class="s1">As well as fixing various bugs, this version has an more streamlined main window and a new <b>interface</b> system where users can design a front screen with objects that can control multiple modules. I haven't yet had time to update the other help files with details of how to use the new interface system. There are some examples which use the new interface, so have a look at those to get an idea of how you could use it.</span></p>
+<p class="p2"><span class="s1">The <b>sequencer</b> module is now much more powerful: It can now have up to 64 steps (used to be 16), there is a new delay option for making individual steps late (as in swing patterns), you can now chain patterns together, and you can apply all kinds of processes to patterns including generating new ones from many types of scales.</span></p>
+<p class="p2"><span class="s1">A new <b>Table Synth</b> module has been built which allows you to create wavetables by mixing harmonics in various proportions. You can have up to 8 wavetables and smoothly mix between them.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 0.10.41 (January 2006)</b></span></p>
+<p class="p2"><span class="s1">This version should display more easily on 12 inch powerbooks, the main screen layout has been adjusted slightly.</span></p>
+<p class="p2"><span class="s1">The Lag module has been renamed Smooth and now includes linear and exponential smoothing.</span></p>
+<p class="p2"><span class="s1">I have decided to give out this release even though it has some known bugs (see help file "Known Bugs"). So it very much a <b>TEST</b> system and I will release new versions as and when bugs are solved.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 0.10.4 (October 2005)</b></span></p>
+<p class="p2"><span class="s1">The first release written in SuperCollider 3 for Mac OS X.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 0.9.3 (June 2004)</b></span></p>
+<p class="p2"><span class="s1">The first release written in SuperCollider 2 for Mac OS 9.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
 </body>
 </html>

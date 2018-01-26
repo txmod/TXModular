@@ -81,5 +81,9 @@ TXTimeBeatsBpmNumber {	// Time and equivalent beats at a bpm
 			numberViewBPM.value = 60;
 		};
 	}
+
+	hasFocus {
+		^numberViewBeats.hasFocus || numberViewBPM.hasFocus || numberView.hasFocus;
+	}
 }
 

@@ -100,5 +100,9 @@ TXFraction {	// Fraction module with label
 	// 		numberViewY.value = 1;
 	// 	};
 	// }
+
+	hasFocus {
+		^numberView.hasFocus || numberViewX.hasFocus || numberViewY.hasFocus;
+	}
 }
 

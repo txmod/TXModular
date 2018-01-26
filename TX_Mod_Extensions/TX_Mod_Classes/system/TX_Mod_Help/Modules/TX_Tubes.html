@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Tubes</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Audio Insert (mono input, mono output)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module uses the input signal to excite a physical model of a tube made up of 2-8 sections.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1">The controls are: <b>length </b>of each tube, <b>scattering</b> at junctions between sections, and <b>loss</b> at junctions between sections as well as at both ends.</span></p>
+<p class="p1"><span class="s1">So for example, for 2 tubes there are 2 length controls, 1 scatter control, and 3 loss controls.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Gain button</b></span></p>
+<p class="p1"><span class="s1"><b>In gain</b></span></p>
+<p class="p1"><span class="s1"><b>Out gain</b></span></p>
+<p class="p1"><span class="s1"><b>Level control</b> - options:<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><i>None - level unchanged</i></span></p>
+<p class="p1"><span class="s1"><i>Balance - match level to dry signal level<span class="Apple-converted-space"> </span></i></span></p>
+<p class="p1"><span class="s1"><i>Limiter - keep the signal level below 0db<span class="Apple-converted-space"> </span></i></span></p>
+<p class="p1"><span class="s1"><i>Normalize - force the signal level to just below 0db<span class="Apple-converted-space"> </span></i></span></p>
+<p class="p1"><span class="s1"><i>Tanh Clipping - uses hyperbolic tangent of signal to clip it (this adds some distortion)</i></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal. For send effects this will usually be set to 1 - i.e. 100% affected signal.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Parameters button</b></span></p>
+<p class="p1"><span class="s1"><b>Loss range</b> - the range of values for loss</span></p>
+<p class="p1"><span class="s1"><b>Max length</b> - maximum length of each tube</span></p>
+<p class="p1"><span class="s1"><b>Scatter range</b> - the range of values for scatter</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Tubes button</b></span></p>
+<p class="p1"><span class="s1"><b>Complexity</b> - the number of tubes</span></p>
+<p class="p1"><span class="s1"><b>Loss 1-9</b></span></p>
+<p class="p1"><span class="s1"><b>Length 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Scatter 1-7</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Input gain</b></span></p>
+<p class="p1"><span class="s1"><b>Max length</b></span></p>
+<p class="p1"><span class="s1"><b>Loss 1-9</b></span></p>
+<p class="p1"><span class="s1"><b>Length 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Scatter 1-7</b></span></p>
+<p class="p1"><span class="s1"><b>Output gain</b></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>

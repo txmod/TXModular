@@ -2,37 +2,32 @@
 
 TXCodeSourceAuSt : TXModuleBase {
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=500;
+	classvar <>classData;
 
-	var userFunctionString;
+	var defaultFunctionString, emptyFunctionString, validFunctionString, userFunctionString;
+	var userFuncCompileStatus, userFuncCompileStatusView;
+
 
 	*initClass{
-		arrInstances = [];
 		//	set class specific variables
-		defaultName = "Code Source A St";
-		moduleRate = "audio";
-		moduleType = "source";
-		arrCtlSCInBusSpecs = [
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "Code Source A St";
+		classData.moduleRate = "audio";
+		classData.moduleType = "source";
+		classData.arrCtlSCInBusSpecs = [
 			["Modify 1", 1, "modChange1", 0],
 			["Modify 2", 1, "modChange2", 0],
 			["Modify 3", 1, "modChange3", 0],
 			["Modify 4", 1, "modChange4", 0],
 		];
-		noOutChannels = 2;
-		arrOutBusSpecs = [
+		classData.noOutChannels = 2;
+		classData.arrOutBusSpecs = [
 			["Out L + R", [0,1]],
 			["Out L only", [0]],
 			["Out R only", [1]]
 		];
+		classData.guiWidth = 800;
 	}
 
 	*new{ arg argInstName;
@@ -41,12 +36,13 @@ TXCodeSourceAuSt : TXModuleBase {
 
 	init {arg argInstName;
 		//	set  class specific instance variables
-		userFunctionString = "// Example code
-		{arg mod1, mod2, mod3, mod4;
-		[Pulse.ar(SinOsc.ar(0.5, 0, 60,60)
-		+ [60,400].asSpec.map(mod1), 0.1, 0.3),
-		SinOsc.ar(SinOsc.ar(0.3333, 0, 60,60)
-		+ [60,400].asSpec.map(mod2), 0, 0.3)]; }";
+		validFunctionString = userFunctionString = defaultFunctionString = "// Example code
+{arg mod1, mod2, mod3, mod4;
+[Pulse.ar(SinOsc.ar(0.5, 0, 60,60)
++ [60,400].asSpec.map(mod1), 0.1, 0.3),
+SinOsc.ar(SinOsc.ar(0.3333, 0, 60,60)
++ [60,400].asSpec.map(mod2), 0, 0.3)]; }";
+		emptyFunctionString = "{DC.ar(0.0) ! 2}";
 		arrSynthArgSpecs = [
 			["out", 0, 0],
 			["change1", 0, defLagTime],
@@ -71,25 +67,28 @@ TXCodeSourceAuSt : TXModuleBase {
 			change3, change3Min, change3Max, change4, change4Min, change4Max,
 			modChange1 = 0, modChange2 = 0, modChange3 = 0, modChange4 = 0;
 			var outChange1, outChange2, outChange3, outChange4;
+			var startEnv = TXEnvPresets.startEnvFunc.value;
+
 			outChange1 = change1Min + ((change1Max - change1Min) * (change1 + modChange1).max(0).min(1));
 			outChange2 = change2Min + ((change2Max - change2Min) * (change2 + modChange2).max(0).min(1));
 			outChange3 = change3Min + ((change3Max - change3Min) * (change3 + modChange3).max(0).min(1));
 			outChange4 = change4Min + ((change4Max - change4Min) * (change4 + modChange4).max(0).min(1));
-			//		// use TXClean to stop blowups
-			//		Out.ar(out, TXClean.ar(
-			//			userFunctionString.compile.value.value(outChange1, outChange2, outChange3, outChange4)
-			//		));
-			Out.ar(out,
-				userFunctionString.compile.value.value(outChange1, outChange2, outChange3, outChange4)
-			);
+			// Out.ar(out, startEnv *
+			// 	validFunctionString.compile.value.value(outChange1, outChange2, outChange3, outChange4)
+			// );
+			// use TXClean to stop blowups
+			Out.ar(out, TXClean.ar(startEnv *
+				validFunctionString.compile.value.value(outChange1, outChange2, outChange3, outChange4)
+			));
 		};
 		guiSpecArray = [
 			["TXMinMaxSliderSplit", "Modify 1", \unipolar, "change1", "change1Min", "change1Max"],
 			["TXMinMaxSliderSplit", "Modify 2", \unipolar, "change2", "change2Min", "change2Max"],
 			["TXMinMaxSliderSplit", "Modify 3", \unipolar, "change3", "change3Min", "change3Max"],
 			["TXMinMaxSliderSplit", "Modify 4", \unipolar, "change4", "change4Min", "change4Max"],
-			["TextViewDisplay", "Coding Notes: Enter Supercollider 3 code in the window below. The code needs to be a function which returns a stereo audio signal. The function will be passed the arguments Modify 1, Modify 2, Modify 3, Modify 4.  Use the Evaulate text button to store and evaluate the code.", 400, 70, "Notes"],
-			["TextViewCompile", {userFunctionString}, {arg argText; this.evaluate(argText);}, 400, 200],
+			["TextViewDisplay", "Coding Notes: Enter Supercollider 3 code in the window below. The code needs to be a function which returns a stereo audio signal. The function will be passed the arguments: Modify 1, Modify 2, Modify 3, Modify 4.  Use the 'Store & compile code' button after editing the code.", 750, 48, "Notes"],
+			["TextViewCompile", {userFunctionString}, {arg argText; this.evaluate(argText);}, 730, 246, "Store & compile code"],
+			["TXStaticText", "Status", {userFuncCompileStatus}, {arg view; userFuncCompileStatusView = view.textView}, 400, 50],
 		];
 		arrActionSpecs = this.buildActionSpecs(guiSpecArray);
 		//	use base class initialise
@@ -100,13 +99,20 @@ TXCodeSourceAuSt : TXModuleBase {
 
 	evaluate {arg argText, showErrors = true;
 		var compileResult;
+		userFunctionString = argText;
 		compileResult = argText.compile;
 		if (compileResult.isNil, {
+			userFuncCompileStatus = "ERROR: Code cannot compile - see post window.";
 			if (showErrors, {
-				TXInfoScreen.new("ERROR: code will not compile - see post window ");
+				userFuncCompileStatusView.string = userFuncCompileStatus;
 			});
+			validFunctionString = emptyFunctionString;
 		},{
-			userFunctionString = argText;
+			userFuncCompileStatus = "Compiled OK.";
+			if (showErrors, {
+				userFuncCompileStatusView.string = userFuncCompileStatus;
+			});
+			validFunctionString = userFunctionString;
 		});
 		this.rebuildSynth;
 	}

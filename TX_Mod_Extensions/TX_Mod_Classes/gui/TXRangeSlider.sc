@@ -32,6 +32,7 @@ TXRangeSlider {
 		labelView.align = \right;
 
 		rangeView = RangeSlider(window, (dimensions.x - labelWidth - numberWidth - (2 * spacingX)) @ height );
+		rangeView.background_(TXColor.sysGuiCol1).knobColor_(TXColor.grey(0.75));
 		rangeView.action = { arg view;
 			minNumberView.value = controlSpec.map(rangeView.lo);
 			maxNumberView.value = controlSpec.map(rangeView.hi);
@@ -93,12 +94,29 @@ TXRangeSlider {
 		};
 	}
 
+	makeRangePositive {
+		var holdMin, holdMaX;
+		if (this.range < 0, {
+			holdMin = this.minVal;
+			holdMaX = this.maxVal;
+			this.valueBothNoAction_([holdMin, holdMaX]);
+		});
+	}
+
 	value {
 		^lo;
 	}
 
 	valueBoth {
 		^[lo, hi];
+	}
+
+	minVal {
+		^min(lo, hi);
+	}
+
+	maxVal {
+		^max(lo, hi);
 	}
 
 	range {
@@ -111,19 +129,22 @@ TXRangeSlider {
 	}
 
 	valueBoth_ { arg valueArray;
-		lo = controlSpec.constrain(valueArray.at(0));
-		minNumberView.valueAction = lo.round(round);
-		hi = controlSpec.constrain(valueArray.at(1));
-		maxNumberView.valueAction = hi.round(round);
+			lo = controlSpec.constrain(valueArray.at(0));
+			hi = controlSpec.constrain(valueArray.at(1));
+			minNumberView.value = lo;
+			maxNumberView.value = hi;
+			rangeView.lo = controlSpec.unmap(lo);
+			rangeView.hi = controlSpec.unmap(hi);
+			action.value(this);
 	}
 
 	valueBothNoAction_  { arg valueArray;
-			minNumberView.value = controlSpec.constrain(valueArray.at(0));
-			maxNumberView.value = controlSpec.constrain(valueArray.at(1));
-			rangeView.lo = controlSpec.unmap(minNumberView.value);
-			rangeView.hi = controlSpec.unmap(maxNumberView.value);
-			lo = minNumberView.value;
-			hi = maxNumberView.value;
+			lo = controlSpec.constrain(valueArray.at(0));
+			hi = controlSpec.constrain(valueArray.at(1));
+			minNumberView.value = lo;
+			maxNumberView.value = hi;
+			rangeView.lo = controlSpec.unmap(lo);
+			rangeView.hi = controlSpec.unmap(hi);
 	}
 
 	lo_ {arg value;
@@ -155,6 +176,10 @@ TXRangeSlider {
 		if (initAction) {
 			action.value(this);
 		};
+	}
+
+	hasFocus {
+		^rangeView.hasFocus || minNumberView.hasFocus || maxNumberView.hasFocus;
 	}
 }
 

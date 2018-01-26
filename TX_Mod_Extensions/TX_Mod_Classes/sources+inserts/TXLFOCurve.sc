@@ -1,37 +1,30 @@
 // Copyright (C) 2010  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
+TXLFOCurve : TXModuleBase {
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar <guiWidth=950;
-	classvar <arrBufferSpecs;
+	classvar <>classData;
 
 	var arrCurveValues;
-	var arrSlotData;
+	var arrSlotData, curveDataEvent;
 	var arrGridPresetNames, arrGridPresetActions;
 
 	*initClass{
-		arrInstances = [];
 		//	set class specific variables
-		defaultName = "LFO Curve";
-		moduleRate = "control";
-		moduleType = "source";
-		arrCtlSCInBusSpecs = [
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "LFO Curve";
+		classData.moduleRate = "control";
+		classData.moduleType = "source";
+		classData.arrCtlSCInBusSpecs = [
+			["Restart", 1, "restartTrig", nil],
 			["Frequency", 1, "modFreq", 0],
 		];
-		noOutChannels = 1;
-		arrOutBusSpecs = [
+		classData.noOutChannels = 1;
+		classData.arrOutBusSpecs = [
 			["Out", [0]]
 		];
-		arrBufferSpecs = [ ["bufnumCurve", 700, 1] ];
+		classData.arrBufferSpecs = [ ["bufnumCurve", 700, 1] ];
+		classData.guiWidth = 950;
 	}
 
 	*new{ arg argInstName;
@@ -40,11 +33,14 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 
 	init {arg argInstName;
 		var holdControlSpec;
+		curveDataEvent = ();
 		//	set  class specific instance variables
 		extraLatency = 0.2;	// allow extra time when recreating
 		arrSynthArgSpecs = [
 			["out", 0, 0],
 			["bufnumCurve", 0, \ir],
+			["restartTrig", 0, 0],
+			["t_userRestartTrig", 0, 0],
 			["freq", 0.5, defLagTime],
 			["freqMin", 0.01, defLagTime],
 			["freqMax", 100, defLagTime],
@@ -60,11 +56,12 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 				["Positive & Negative: -0.5 to 0.5", {arg input; input - 0.5}],
 			],
 		];
-		synthDefFunc = { arg out, bufnumCurve, freq, freqMin, freqMax, modFreq = 0;
-			var outFreq, outCurve, rangeFunction, outSignal;
+		synthDefFunc = { arg out, bufnumCurve, restartTrig = 0, t_userRestartTrig = 0, freq, freqMin, freqMax, modFreq = 0;
+			var holdRestartTrig, outFreq, outCurve, rangeFunction, outSignal;
+			holdRestartTrig = TXClean.kr(restartTrig + t_userRestartTrig);
 			outFreq = ( (freqMax/freqMin) ** ((freq + modFreq).max(0.001).min(1)) ) * freqMin;
 			outCurve = BufRd.kr(1, bufnumCurve,
-				Phasor.kr(0, outFreq * ControlDur.ir * 700, 0, 700));
+				Phasor.kr(holdRestartTrig, outFreq * ControlDur.ir * 700, 0, 700));
 
 			// select function based on arrOptions
 			rangeFunction = arrOptionData.at(0).at(arrOptions.at(0)).at(1);
@@ -90,36 +87,50 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 			{this.setSynthArgSpec("gridRows", 32); this.setSynthArgSpec("gridCols", 32); },
 		];
 		guiSpecArray = [
-			["TXMinMaxSliderSplit", "Frequency", holdControlSpec, "freq", "freqMin", "freqMax",
-				nil, TXLFO.arrLFOFreqRanges],
 			["NextLine"],
+			["ActionButton", "Restart", {this.moduleNode.set("t_userRestartTrig", 1);},
+				120, TXColor.white, TXColor.sysGuiCol2],
+			["Spacer", 20],
+			["ActionButton", "Freq x 2", {this.freqMultiply(2);}, 60],
+			["ActionButton", "Freq x 3", {this.freqMultiply(3);}, 60],
+			["ActionButton", "Freq / 2", {this.freqMultiply(0.5);}, 60],
+			["ActionButton", "Freq / 3", {this.freqMultiply(1/3);}, 60],
+			["NextLine"],
+			["TXFreqBpmMinMaxSldr", "Frequency", holdControlSpec, "freq", "freqMin", "freqMax",
+				nil, TXLFO.arrLFOFreqRanges,],
+			["SpacerLine", 2],
 			["TXCurveDraw", "LFO curve", {arrCurveValues},
 				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
 					this.bufferStore(view.value);},
-				{arrSlotData}, "LFO", 706, 340, nil, "gridRows", "gridCols",
-				"time", "output level"],
+				{arrSlotData}, "LFO", 706, 324, nil, "gridRows", "gridCols",
+				"time", "output level", curveDataEvent],
 			// ["ActionButton", "Rebuild curve by mirroring ", {this.runMirror}, 250],
 			// ["Spacer", 10],
 			// ["ActionButton", "Rebuild curve by mirroring & inverting",
 			// {this.runMirrorInvert}, 250],
 			["NextLine"],
-			["TXNumberPlusMinus", "Grid rows", ControlSpec(1, 99), "gridRows", {system.showView}],
-			["Spacer", 10],
-			["TXNumberPlusMinus", "Grid columns", ControlSpec(1, 99), "gridCols", {system.showView}],
-			["Spacer", 10],
+			["TXNumberPlusMinus", "Grid rows", ControlSpec(1, 128), "gridRows", {system.showView}, nil, nil, 40],
+			["Spacer", 2],
+			["TXNumberPlusMinus", "Grid columns", ControlSpec(1, 128), "gridCols", {system.showView}, nil, nil, 40],
+			["Spacer", 2],
 			["TXPresetPopup", "Grid presets", arrGridPresetNames, arrGridPresetActions, 200],
-			["Spacer", 10],
-			["ActionButton", "Quantise to grid", {this.quantiseToGrid}, 130],
-			["NextLine"],
+			["Spacer", 6],
+			["ActionButton", "Quantise to grid", {this.quantiseToGrid(quantizeRows: true, quantizeCols: true)}, 94],
+			["ActionButton", "Quantise rows", {this.quantiseToGrid(quantizeRows: true, quantizeCols: false)}, 90],
+			["ActionButton", "Quantise columns", {this.quantiseToGrid(quantizeRows: false, quantizeCols: true)}, 102],
+			["SpacerLine", 2],
 			["SynthOptionPopupPlusMinus", "Output range", arrOptionData, 0, 350],
 		];
-		arrActionSpecs = this.buildActionSpecs(guiSpecArray);
+		arrActionSpecs = this.buildActionSpecs([
+			["commandAction", "Restart", {this.moduleNode.set("t_userRestartTrig", 1);}],
+		]
+		++ guiSpecArray);
 		//	initialise buffer to linear curve
 		arrCurveValues = Array.newClear(700).seriesFill(0, 1/699);
 		//	use base class initialise
 		this.baseInit(this, argInstName);
 		//	make the buffer, load the synthdef and create the synth
-		this.makeBuffersAndSynth(arrBufferSpecs);
+		this.makeBuffersAndSynth(classData.arrBufferSpecs);
 		Routine.run {
 			var holdModCondition;
 			// add condition to load queue
@@ -134,6 +145,25 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 		};
 		//	initialise slots to linear curves
 		arrSlotData = arrCurveValues.dup(5);
+	}
+
+	freqMultiply { arg argMultiplyValue;
+		var currentFreq, minFreq, maxFreq, holdControlSpec, newFreq;
+		minFreq = this.getSynthArgSpec("freqMin");
+		maxFreq = this.getSynthArgSpec("freqMax");
+		holdControlSpec = ControlSpec.new(minFreq, maxFreq, \exp);
+		currentFreq = holdControlSpec.map(this.getSynthArgSpec("freq"));
+		newFreq = currentFreq * argMultiplyValue;
+		if (argMultiplyValue < 1, {
+			if ( newFreq >= minFreq, {
+				this.setSynthValue("freq", holdControlSpec.unmap(newFreq));
+			});
+		},{
+			if ( newFreq <= maxFreq, {
+				this.setSynthValue("freq", holdControlSpec.unmap(newFreq));
+			});
+		});
+		system.flagGuiIfModDisplay(this);
 	}
 
 	runMirror {
@@ -166,22 +196,36 @@ TXLFOCurve : TXModuleBase {		// Same as TXLFOCurve but with a longer curve
 		system.showView;
 	}
 
-	quantiseToGrid {
-		var newArray, rows, cols, holdSignal;
+	quantiseToGrid {arg quantizeRows = true, quantizeCols = true;
+		var holdArray, holdSignal, outArray, holdCols;
+		var rows, cols;
 		var maxVal = 700;
-		newArray = Array.newClear(maxVal);
+		holdArray = Array.newClear(maxVal);
 		rows = this.getSynthArgSpec("gridRows");
 		cols = this.getSynthArgSpec("gridCols");
 
-		cols.do({arg item, i;
-			var jump, startRange, endRange, meanVal;
-			jump = cols.reciprocal;
-			startRange = (item * jump * maxVal).round(1);
-			endRange = ((item + 1) * jump * maxVal).round(1) - 1;
-			meanVal = arrCurveValues.copyRange(startRange.asInteger, endRange.asInteger).mean;
-			newArray[startRange.asInteger..endRange.asInteger] = meanVal.round(rows.reciprocal);
+		if (quantizeCols, {
+			cols.do({arg item;
+				var jump, startRange, endRange, meanVal;
+				jump = cols.reciprocal;
+				startRange = (item * jump * maxVal).round(1);
+				endRange = ((item + 1) * jump * maxVal).round(1) - 1;
+				meanVal = arrCurveValues.copyRange(startRange.asInteger, endRange.asInteger).mean;
+				if (quantizeRows, {
+					meanVal = meanVal.round(rows.reciprocal);
+				});
+				holdArray[startRange.asInteger..endRange.asInteger] = meanVal;
+			});
+		},{
+			holdArray = arrCurveValues.collect({arg item;
+				var outVal = item;
+				if (quantizeRows, {
+					outVal = outVal.round(rows.reciprocal);
+				});
+				outVal;
+			});
 		});
-		holdSignal = Signal.newFrom(newArray);
+		holdSignal = Signal.newFrom(holdArray);
 		arrCurveValues = Array.newFrom(holdSignal);
 		this.bufferStore(arrCurveValues);
 		system.showView;

@@ -57,5 +57,9 @@ TXNumberPlusMinus {	// Number module with label and plus / minus buttons
 			numberView.value = value.round(round);
 		};
 	}
+
+	hasFocus {
+		^numberView.hasFocus;
+	}
 }
 

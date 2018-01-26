@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>FM Drone</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type: Audio Source (mono output)</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module outputs a mono signal using multi-layer Frequency Modulation (FM) Synthesis.</p>
+<p class="p1">It uses 6 "operators" (which are the equivalent to sine oscillators in FM terminology), which can each modulate the frequency of any of the 6 operators, including themselves (self-modulation). </p>
+<p class="p1">See help file <A href="../TX_Frequency Modulation Synthesis.html">Frequency Modulation Synthesis<A> for details.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Operators button</b></p>
+<p class="p1">See help file <A href="../TX_Frequency Modulation Synthesis.html">Frequency Modulation Synthesis<A> for details about the operators.</p>
+
+<p class="p1"><b>Main level</b> - this sets the overall output level of the synth</p>
+<p class="p1"><b>Amp Comp</b> - select a preset for the type of amplitude compensation to use - see help file <A href="TX_Amp Comp.html">Amp Comp<A> for details. Can be set to off when not needed.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Base Freq button</b></p>
+<p class="p1"><b>Base Freq</b> - sets the pitch or frequency of the waveform </p>
+<p class="p1"><b>notes</b> - this popup allows you to select a midi note name (e.g. D3) to set the frequency.</p>
+<p class="p1"><b>OFF/ON Use note list instead of variable frequency </b>- if set on, this uses a specific note list which the waveform's frequency is chosen from. The controls below allow you to specify the which notes will be in the note list.</p>
+<p class="p1"><b>Scale type </b>- sets the interval, scale, mode or chord used for the note list.</p>
+<p class="p1"><b>Key / root </b>- sets the key or root of the above scale.</p>
+<p class="p1"><b>Note range </b>- sets the min and max of notes in the note list using midi note numbers.</p>
+<p class="p1"><b>Note list </b>- shows the total number of notes in the current note list.</p>
+<p class="p1"><b>Note select </b>- this slider selects one of the notes in the current note list. The lowest note is with the slider set to 0, with the highest at 1, and all others in between.The more notes there are in the note list, the more closely they will be packed along the length of the slider. This can be modulated, for example with an lfo or midi controller.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Base Freq Smooth button</b></p>
+<p class="p1">This allows you to add smoothing to the base frequency.</p>
+<p class="p1">See help file <a href="file:../Modules/TX_Smooth.html">Smooth</a></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Base Freq</b>  </p>
+<p class="p1"><b>Note select</b></p>
+<p class="p1"><b>Smooth time 1</b></p>
+<p class="p1"><b>Smooth time 2</b></p>
+<p class="p1"><b>Op 1* Freq Ratio</b></p>
+<p class="p1"><b>Op 1* Fixed Freq</b></p>
+<p class="p1"><b>Op 1* Detune</b></p>
+<p class="p1"><b>Op 1* Freq Ratio</b></p>
+<p class="p1"><b>Op 1* Phase</b></p>
+<p class="p1"><b>Op 1* Amp</b></p>
+<p class="p1"><b>. . . (* same for Op 2 - Op 6). . . </b></p>
+<p class="p1"><b>Mod Ind 1 -&gt; 1*</b></p>
+<p class="p1"><b>Mod Ind 2 -&gt; 1*</b></p>
+<p class="p1"><b>Mod Ind 3 -&gt; 1*</b></p>
+<p class="p1"><b>Mod Ind 4 -&gt; 1*</b></p>
+<p class="p1"><b>Mod Ind 5 -&gt; 1*</b></p>
+<p class="p1"><b>Mod Ind 6 -&gt; 1*</b></p>
+<p class="p1"><b>. . . (* same for 2 - 6). . . </b></p>
+<p class="p1"><b>Op 1 Level</b></p>
+<p class="p1"><b>Op 2 Level</b></p>
+<p class="p1"><b>Op 3 Level</b></p>
+<p class="p1"><b>Op 4 Level</b></p>
+<p class="p1"><b>Op 5 Level</b></p>
+<p class="p1"><b>Op 6 Level</b></p>
+</body>
+</html>

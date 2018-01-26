@@ -5,47 +5,54 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
   <title></title>
   <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1138.47">
+  <meta name="CocoaVersion" content="1404.13">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
   </style>
 </head>
 <body>
-<p class="p1"><b>Midi Control Out</b></p>
-<p class="p2"><br></p>
-<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Action</b></p>
-<p class="p2"><br></p>
-<p class="p1"><b><i>Introduction:</i></b></p>
-<p class="p1">This module sends out MIDI controller messages.<span class="Apple-converted-space"> </span></p>
-<p class="p1">There are 128 possible MIDI controller numbers, which can be sent on one of 16 MIDI channels.</p>
-<p class="p1">The value of the control signal can be between 0-127.</p>
-<p class="p1">Make sure to switch the<span class="Apple-converted-space">  </span><b>Active</b> button on so MIDI messages are sent out.</p>
-<p class="p1">In order to interact with other software, it is sometimes useful (for example when using "midi learn"<span class="Apple-converted-space">  </span>in some software) to be able to temporarily solo one Midi Control Out module, so midi data for only one controller number will be sent out. This is called <b>Solo Mode</b> and can be controlled using buttons (see below).</p>
-<p class="p2"><br></p>
-<p class="p1"><b><i>Controls:</i></b></p>
-<p class="p1"><b>Port</b> - sets the MIDI port messages are sent from.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Data rate</b> - the maximum rate of sending MIDI messages. The default is 20, but make this 40 or 80 if you are using quickly changing modulation (such as an LFO with a frequency higher than 5 hz).</p>
-<p class="p1"><b>Channel</b> - sets the MIDI channel (1-16) messages are sent on.</p>
-<p class="p1"><b>Control no</b> - sets the MIDI controller number (0-127) messages are sent as.</p>
-<p class="p1"><b>Control val</b> - sets the controller value (0-127)<span class="Apple-converted-space">  </span>to be sent. This value can also be modulated.</p>
-<p class="p1"><b>Active</b> - if switched on, MIDI messages will be sent out.<span class="Apple-converted-space"> </span></p>
-<p class="p2"><b><i></i></b><br></p>
-<p class="p1"><b><i>Global Controls:</i></b></p>
-<p class="p1"><b>Turn off Solo Mode for all Midi Control Out modules</b> - button</p>
-<p class="p1"><b>Turn on Solo Mode for current Midi Control Out module only</b> - button</p>
-<p class="p1"><b>Turn on Solo Mute All to mute all Midi Control Out modules</b> - button</p>
-<p class="p1"><b>Solo Mode text box</b> - this will display one the following messages:</p>
-<p class="p1">-"Midi Control Out Solo is currently Off (default setting)",</p>
-<p class="p1">-"Midi Control Out Solo is currently On for this module only,so nothing will be output from other Midi Control Out modules",</p>
-<p class="p1">-"Midi Control Out Solo is currently On for another module so nothing will be output from this module",</p>
-<p class="p1">-"Solo Mute All is On so nothing will be output from any Midi Control Out modules"</p>
-<p class="p1"><b>Copy current Port to all Midi Control Out modules</b> - button<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Copy current Data Rate to all Midi Control Out modules</b> - button<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Turn Active on for all Midi Control Out modules</b> - button<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Turn Active off for all Midi Control Out modules</b> - button<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
-<p class="p1"><b>Control val</b><span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="s1"><b>Midi Control Out</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type:<span class="Apple-converted-space">  </span>Action</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module sends out MIDI controller messages.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1">There are 128 possible MIDI controller numbers, which can be sent on one of 16 MIDI channels.</span></p>
+<p class="p1"><span class="s1">The value of the control signal can be between 0-127.</span></p>
+<p class="p1"><span class="s1">Make sure to switch the<span class="Apple-converted-space">  </span><b>Active</b> button on so MIDI messages are sent out.</span></p>
+<p class="p1"><span class="s1">In order to interact with other software, it is sometimes useful (for example when using "midi learn"<span class="Apple-converted-space">  </span>in some software) to be able to temporarily solo one Midi Control Out module, so midi data for only one controller number will be sent out. This is called <b>Solo Mode</b> and can be controlled using buttons (see below).</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Port</b> - sets the MIDI port messages are sent from.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><b>MIDI Loop-Back </b>- for sending MIDI output back into the TX Modular</span></p>
+<p class="p1"><span class="s1"><b>Data rate</b> - the maximum rate of sending MIDI messages. The default is 20, but make this 40 or 80 if you are using quickly changing modulation (such as an LFO with a frequency higher than 5 hz).</span></p>
+<p class="p1"><span class="s1"><b>Channel</b> - sets the MIDI channel (1-16) messages are sent on.</span></p>
+<p class="p1"><span class="s1"><b>Control no</b> - sets the MIDI controller number (0-127) messages are sent as.</span></p>
+<p class="p1"><span class="s1"><b>Control val</b> - sets the controller value (0-127)<span class="Apple-converted-space">  </span>to be sent. This value can also be modulated.</span></p>
+<p class="p1"><span class="s1"><b>Active</b> - if switched on, MIDI messages will be sent out.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Global Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Turn off Solo Mode for all Midi Control Out modules</b> - button</span></p>
+<p class="p1"><span class="s1"><b>Turn on Solo Mode for current Midi Control Out module only</b> - button</span></p>
+<p class="p1"><span class="s1"><b>Turn on Solo Mute All to mute all Midi Control Out modules</b> - button</span></p>
+<p class="p1"><span class="s1"><b>Solo Mode text box</b> - this will display one the following messages:</span></p>
+<p class="p1"><span class="s1">-"Midi Control Out Solo is currently Off (default setting)",</span></p>
+<p class="p1"><span class="s1">-"Midi Control Out Solo is currently On for this module only,so nothing will be output from other Midi Control Out modules",</span></p>
+<p class="p1"><span class="s1">-"Midi Control Out Solo is currently On for another module so nothing will be output from this module",</span></p>
+<p class="p1"><span class="s1">-"Solo Mute All is On so nothing will be output from any Midi Control Out modules"</span></p>
+<p class="p1"><span class="s1"><b>Copy current Port to all Midi Control Out modules</b> - button<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Copy current Data Rate to all Midi Control Out modules</b> - button<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Turn Active on for all Midi Control Out modules</b> - button<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Turn Active off for all Midi Control Out modules</b> - button<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Control val</b><span class="Apple-converted-space"> </span></span></p>
 </body>
 </html>

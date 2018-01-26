@@ -5,64 +5,94 @@
   <meta http-equiv="Content-Style-Type" content="text/css">
   <title></title>
   <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="1138.47">
+  <meta name="CocoaVersion" content="1404.13">
   <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Gill Sans'}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Gill Sans'; min-height: 17.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 15.0px 'Gill Sans'; min-height: 18.0px}
-    span.s1 {text-decoration: underline}
-    span.s2 {color: #971f8e}
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none; color: #0000ee; -webkit-text-stroke: 0px #0000ee}
   </style>
 </head>
 <body>
-<p class="p1"><b>Granulator</b></p>
-<p class="p2"><br></p>
-<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Source<span class="Apple-converted-space">  </span>(stereo output, triggered)</b></p>
-<p class="p2"><br></p>
-<p class="p1"><b><i>Introduction:</i></b></p>
-<p class="p1">This module takes a mono sample from the sample bank and plays small "grains" from it which are panned in stereo.<span class="Apple-converted-space"> </span></p>
-<p class="p1">It can be triggered in various ways such as by MIDI notes, other modules (e.g.<span class="Apple-converted-space">  </span><b>Step Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. <span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p1"><b><i>Controls:</i></b></p>
-<p class="p2"><br></p>
-<p class="p1"><b>Sample button</b></p>
-<p class="p1"><b>Mono sample</b> - select from all the mono samples in the system's sample bank. <span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Reverse play</b> - if on, the playback of the grains will be reversed.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Add samples to bank</b> - to add any audio samples stored on the hard disk.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Show/Hide</b> - buttons for the display of the sample waveform. When the waveform is displayed, you can zoom in and out using the zoom buttons. You can also select which part of the waveform is used for granulation by using the select all/ select none buttons.</p>
-<p class="p1"><b>Play range</b> - which part of the sample will be used for grains.</p>
-<p class="p1"><b>Play position</b> - the current position in the sample that grains are taken from</p>
-<p class="p1"><b>Vary position</b> - this adds a random variation to the play position. If set to zero, all grains will be taken from the same play position.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Grain time ms</b> - how long each grain is. Shorter times sound more fragmented.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Grain density</b> - the number of overlapping grains. Values below one will have gaps between grains.</p>
-<p class="p1"><b>Vary pitch</b> - this adds a random variation to the pitch of each grain. If set to zero, all grains will be at the same pitch. <span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Vary timing</b> -<span class="Apple-converted-space">  </span>this adds a random variation to the start time of each grain. If set to zero, all grains will be at equally spaced times.<span class="Apple-converted-space">   </span></p>
-<p class="p1"><b>Pan range</b> - each pitch will be placed randomly across the pan range. Select presets using the black triangle at the end of the row.</p>
-<p class="p1"><b>Level</b> - the output level of the granulator.<span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
-<p class="p1"><b>MIDI/ Note button</b></p>
-<p class="p1">See help file <A href="../TX_MIDI Note Button.html">MIDI Note Button<A> for details.</p>
-<p class="p1">Note: unlike most other audio synth or sample modules, <b>keyboard tracking</b> is turned off by default in the Granulator module. Of course, you can turn it on if required.</p>
-<p class="p2"><br></p>
-<p class="p1"><b>Envelope button</b></p>
-<p class="p1">See help file <A href="TX_Env DADSR.html">Env DADSR<A> for details.</p>
-<p class="p2"><br></p>
-<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
-<p class="p1"><b>Sample start</b> - start of play range</p>
-<p class="p1"><b>Sample end</b> - end of play range</p>
-<p class="p1"><b>Play position</b></p>
-<p class="p1"><b>Vary position</b></p>
-<p class="p1"><b>Grain time ms</b></p>
-<p class="p1"><b>Grain density</b></p>
-<p class="p1"><b>Grain pan L</b></p>
-<p class="p1"><b>Grain pan R</b></p>
-<p class="p1"><b>Reverse play</b> <span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Pre-Delay</b> <span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Attack</b> <span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Decay</b></p>
-<p class="p1"><b>Sustain level</b></p>
-<p class="p1"><b>Sustain time</b></p>
-<p class="p1"><b>Release</b> <span class="Apple-converted-space"> </span></p>
-<p class="p3"><b><i></i></b><br></p>
+<p class="p1"><span class="s1"><b>Granulator</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Audio Source (stereo output, triggered)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module takes a mono sample from the sample bank and plays small "grains" from it which are panned in stereo. </span></p>
+<p class="p1"><span class="s1">It can be triggered in various ways such as by MIDI notes, other modules (e.g. <b>Step Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Sample button</b></span></p>
+<p class="p1"><span class="s1"><b>Sample bank/Mono sample</b> - select from all the mono samples in a sample bank. </span></p>
+<p class="p1"><span class="s1"><b>Add samples to bank</b> - to add any audio samples stored on the hard disk. </span></p>
+<p class="p1"><span class="s1"><b>Show/Hide</b> - buttons for the display of the sample waveform. When the waveform is displayed, you can zoom in and out using the zoom buttons. You can also select which part of the waveform is used for granulation by using the select all/ select none buttons.</span></p>
+<p class="p1"><span class="s1"><b>Play range</b> - which part of the sample will be used for grains.</span></p>
+<p class="p1"><span class="s1"><b>Play position</b> - the current position in the sample that grains are taken from</span></p>
+<p class="p1"><span class="s1"><b>Vary position</b> - this adds a random variation to the play position. If set to zero, all grains will be taken from the same play position. </span></p>
+<p class="p2"><span class="s1"><b>Reverse play</b> - if on, the playback of the grains will be reversed. </span></p>
+<p class="p2"><span class="s1"><b>Level</b> - the output level of the granulator. </span></p>
+<p class="p1"><b>Amp Comp</b> - select a preset for the type of amplitude compensation to use - see help file <A href="TX_Amp Comp.html">Amp Comp<A> for details. Can be set to off when not needed.</p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Grain button</b></span></p>
+<p class="p1"><span class="s1"><b>Max grains</b> - maximum number of grains at any time</span></p>
+<p class="p1"><span class="s1"><b>Triggering</b> - can be Internal or External. <br>
+Internal triggering uses an internal clock based on the grain time and density. <br>
+External triggering uses the Ext Trigger control input - whenever the signal goes above zero, a grain will be triggered. (Vary triggering and Grain density are ignored.)</span></p>
+<p class="p1"><span class="s1"><b>Vary triggering</b> - this adds a random variation to the start time of each grain. If set to zero, all grains will be at equally spaced times. </span></p>
+<p class="p1"><span class="s1"><b>Grain density</b> - the number of overlapping grains. Values below one will have gaps between grains.</span></p>
+<p class="p1"><span class="s1"><b>Grain time ms</b> - how long each grain is. Shorter times sound more fragmented. </span></p>
+<p class="p1"><span class="s1"><b>Vary grain time</b> - this adds a random variation to the length of each grain.</span></p>
+<p class="p1"><span class="s1"><b>Grain pan</b> - the pan position of the next grain.</span></p>
+<p class="p1"><span class="s1"><b>Vary panning</b> - this adds a random variation to the pan of each grain. </span></p>
+<p class="p1"><span class="s1"><b>Vary pitch</b> - this adds a random variation to the pitch of each grain. If set to zero, all grains will be at the same pitch. </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Grain Env button</b></span></p>
+<p class="p1"><span class="s1"><b>Grain Env</b> - the envelope to use: either the custom envelope shown below it, or an built-in Hann envelope.</span></p>
+<p class="p1"><span class="s1"><b>Custom Env</b> - editable envelope curve.</span></p>
+<p class="p1"><span class="s1">See help file <a href="../TX_Curve%20Editing.html"><span class="s2">Curve Editing</span></a> for details.</span></p>
+<p class="p1"><span class="s1"><b>Grid rows</b> - no of rows (1-128) separated by white lines in the grid behind the curve.</span></p>
+<p class="p1"><span class="s1"><b>Grid cols</b> - no of columns (1-128) separated by white lines in the grid behind the curve.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>MIDI/ Note button</b></span></p>
+<p class="p1"><span class="s1">See help file <a href="../TX_MIDI%20Note%20Button.html"><span class="s2">MIDI Note Button</span></a> for details.</span></p>
+<p class="p1"><span class="s1">Note: unlike most other audio synth or sample modules, <b>keyboard tracking</b> is turned off by default in the Granulator module. Of course, you can turn it on if required.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Envelope button</b></span></p>
+<p class="p1"><span class="s1">See help file <a href="TX_Env%20DADSSR.html"><span class="s2">Env DADSSR</span></a> for details.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Sample start</b> - start of play range</span></p>
+<p class="p1"><span class="s1"><b>Sample end</b> - end of play range</span></p>
+<p class="p1"><span class="s1"><b>Play position</b></span></p>
+<p class="p1"><span class="s1"><b>Grain time ms</b></span></p>
+<p class="p1"><span class="s1"><b>Grain density</b></span></p>
+<p class="p1"><span class="s1"><b>Grain pan</b></span></p>
+<p class="p1"><span class="s1"><b>Reverse play</b> </span></p>
+<p class="p1"><span class="s1"><b>Pitch bend</b> </span></p>
+<p class="p1"><span class="s1"><b>Vary position</b></span></p>
+<p class="p1"><span class="s1"><b>Vary pitch</b></span></p>
+<p class="p1"><span class="s1"><b>Vary triggering</b></span></p>
+<p class="p1"><span class="s1"><b>Vary grain time</b></span></p>
+<p class="p1"><span class="s1"><b>Vary panning</b></span></p>
+<p class="p1"><span class="s1"><b>Delay</b> </span></p>
+<p class="p1"><span class="s1"><b>Attack</b> </span></p>
+<p class="p1"><span class="s1"><b>Decay</b></span></p>
+<p class="p1"><span class="s1"><b>Sustain level</b></span></p>
+<p class="p1"><span class="s1"><b>Sustain time</b></span></p>
+<p class="p1"><span class="s1"><b>Release</b></span></p>
+<p class="p1"><span class="s1"><b>Ext Trigger</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
 </body>
 </html>

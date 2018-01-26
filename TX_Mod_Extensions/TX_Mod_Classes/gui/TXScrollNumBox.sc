@@ -10,10 +10,11 @@
 
 
 // NB this is now based on NumberBox
-TXScrollNumBox : ViewRedirect {
+TXScrollNumBox : NumberBox {
 	*key { ^\numberBox }
 	*updateNumberBoxFromSpec { arg numberBox, spec;
 		var holdRange;
+		spec = spec.asSpec;
 		if (spec.class == ControlSpec, {
 			numberBox.clipLo = spec.minval;
 			numberBox.clipHi = spec.maxval;

@@ -2,35 +2,31 @@
 
 TXWarp2 : TXModuleBase {		// Warp module
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=500;
-	classvar	<arrBufferSpecs;
+	classvar <>classData;
 
+	var displayOption;
 	var arrCurveValues;
-	var arrSlotData;
+	var arrSlotData, curveDataEvent;
 	var arrGridPresetNames, arrGridPresetActions;
 
 	*initClass{
-		arrInstances = [];
 		//	set class specific variables
-		defaultName = "Warp";
-		moduleRate = "control";
-		moduleType = "insert";
-		noInChannels = 1;
-		arrCtlSCInBusSpecs = [];
-		noOutChannels = 1;
-		arrOutBusSpecs = [
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "Warp";
+		classData.moduleRate = "control";
+		classData.moduleType = "insert";
+		classData.noInChannels = 1;
+		classData.arrCtlSCInBusSpecs = [
+			["Quantise", 1, "modQuantise", 0],
+			["Quant steps", 1, "modSteps", 0],
+		];
+		classData.noOutChannels = 1;
+		classData.arrOutBusSpecs = [
 			["Out", [0]]
 		];
-		arrBufferSpecs = [ ["bufnumWarp", 128, 1] ];
+		classData.arrBufferSpecs = [ ["bufnumWarp", 128, 1] ];
+		classData.specSteps = ControlSpec(2, 128, step: 1);
 	}
 
 	*new{ arg argInstName;
@@ -48,8 +44,9 @@ TXWarp2 : TXModuleBase {		// Warp module
 	}
 
 	init {arg argInstName;
-		//	set  class specific instance variables
+		curveDataEvent = ();
 		extraLatency = 0.05;	// allow extra time when recreating
+		displayOption = "showInputOutput";
 		arrSynthArgSpecs = [
 			["in", 0, 0],
 			["out", 0, 0],
@@ -58,13 +55,48 @@ TXWarp2 : TXModuleBase {		// Warp module
 			["inputMax", 1, defLagTime],
 			["outputMin", 0, defLagTime],
 			["outputMax", 1, defLagTime],
-
+			["quantise", 0, 0],
+			["steps", classData.specSteps.unmap(4), 0],
+			["stepsMin", 2, 0],
+			["stepsMax", 128, 0],
+			["modQuantise", 0, 0],
+			["modSteps", 0, 0],
 			// N.B. the args below aren't used in the synthdef, just stored here for convenience
 			["gridRows", 8],
 			["gridCols", 8],
 		];
-		synthDefFunc = { arg in, out, bufnumWarp, inputMin, inputMax, outputMin, outputMax;
-			var inSignal, inLimit, scaleWarp, invWarp, curveWarp, outWarp;
+		arrOptions = [1];
+		arrOptionData = [
+			// output range
+			[
+				["Quantise input, before warping", {arg mode, signal, round;
+					var outSig;
+					if (mode == 'out', {
+						outSig = signal;
+					}, {
+						outSig = signal.round(round);
+					});
+				}],
+				["Quantise output, after warping (default)", {arg mode, signal, round;
+					var outSig;
+					if (mode == 'in', {
+						outSig = signal;
+					}, {
+						outSig = signal.round(round);
+					});
+				}],
+			],
+		];
+		synthDefFunc = { arg in, out, bufnumWarp, inputMin, inputMax, outputMin, outputMax,
+			quantise, steps, stepsMin, stepsMax, modQuantise = 0, modSteps = 0;
+
+			var quantFunction, holdQuant, holdSteps, holdRound;
+			var inSignal, inQuant, inLimit, scaleWarp, invWarp, curveWarp, curveQuant, outWarp;
+
+			quantFunction = this.getSynthOption(0);
+			holdQuant = (quantise + modQuantise).max(0).min(1);
+			holdSteps = (steps + modSteps).max(0).min(1).linlin(0, 1, stepsMin, stepsMax).round;
+			holdRound = holdQuant * (holdSteps - 1).reciprocal;
 
 			inSignal = TXClean.kr(In.kr(in,1));
 
@@ -72,11 +104,18 @@ TXWarp2 : TXModuleBase {		// Warp module
 			inLimit = inSignal.max(inputMin).min(inputMax);
 			// scale to limits
 			scaleWarp = (inLimit - inputMin)  / (inputMax - inputMin);
+
+			// quantise
+			inQuant = quantFunction.value('in', scaleWarp, holdRound);
+
 			// apply curve by indexing into buffer
-			curveWarp =  BufRd.kr(1, bufnumWarp, scaleWarp * 127, 0, 0);
+			curveWarp =  BufRd.kr(1, bufnumWarp, inQuant * 127, 0, 0);
+
+			// quantise
+			curveQuant = quantFunction.value('out', curveWarp, holdRound);
 
 			// map to o/p range
-			outWarp = outputMin + (curveWarp * (outputMax - outputMin));
+			outWarp = outputMin + (curveQuant * (outputMax - outputMin));
 
 			Out.kr(out, TXClean.kr(outWarp));
 		};
@@ -97,34 +136,21 @@ TXWarp2 : TXModuleBase {		// Warp module
 			{this.setSynthArgSpec("gridRows", 24); this.setSynthArgSpec("gridCols", 24); },
 			{this.setSynthArgSpec("gridRows", 32); this.setSynthArgSpec("gridCols", 32); },
 		];
-		guiSpecArray = [
+		this.buildGuiSpecArray;
+		arrActionSpecs = this.buildActionSpecs([
 			["TXRangeSlider", "Input range", \bipolar, "inputMin", "inputMax", nil,
 				this.class.arrOutputRanges],
-			["SpacerLine", 2],
-			["TXCurveDraw", "Warp curve", {arrCurveValues},
-				{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
-					this.bufferStore(view.value);},
-				{arrSlotData}, "Warp", nil, nil, nil, "gridRows", "gridCols" ],
-			// ["NextLine",],
-			// ["ActionButton", "Rebuild curve by mirroring ", {this.runMirror}, 234],
-			// ["ActionButton", "Rebuild curve by mirroring & inverting",
-			// {this.runMirrorInvert}, 234],
-			["SpacerLine", 2],
-			["TXNumberPlusMinus", "Grid rows", ControlSpec(1, 99), "gridRows", {system.showView}],
-			["TXNumberPlusMinus", "Grid columns", ControlSpec(1, 99), "gridCols", {system.showView}],
-			["TXPresetPopup", "Grid presets", arrGridPresetNames, arrGridPresetActions, 200],
-			["Spacer", 10],
-			["ActionButton", "Quantise to grid", {this.quantiseToGrid}, 130],
-			["SpacerLine", 2],
 			["TXRangeSlider", "Output range", \bipolar, "outputMin", "outputMax", nil, this.class.arrOutputRanges],
-		];
-		arrActionSpecs = this.buildActionSpecs(guiSpecArray);
+			["TXCheckBox", "Quantise", "quantise"],
+			["SynthOptionPopupPlusMinus", "Quant type", arrOptionData, 0],
+			["TXMinMaxSliderSplit", "Quant steps", classData.specSteps, "steps", "stepsMin", "stepsMax"],
+		]);
+		//	initialise buffer to linear curve
+		arrCurveValues = Array.newClear(128).seriesFill(0, 1/127);
 		//	use base class initialise
 		this.baseInit(this, argInstName);
 		//	make the buffer, load the synthdef and create the synth
-		this.makeBuffersAndSynth(arrBufferSpecs);
-		//	initialise buffer to linear curve
-		arrCurveValues = Array.newClear(128).seriesFill(0, 1/127);
+		this.makeBuffersAndSynth(classData.arrBufferSpecs);
 		Routine.run {
 			var holdModCondition;
 			// add condition to load queue
@@ -139,6 +165,60 @@ TXWarp2 : TXModuleBase {		// Warp module
 		};
 		//	initialise slots to linear curves
 		arrSlotData = arrCurveValues.dup(5);
+	}
+
+	buildGuiSpecArray {
+		guiSpecArray = [
+			["ActionButton", "In/Out & Quantise", {displayOption = "showInputOutput";
+				this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showInputOutput")],
+			["Spacer", 3],
+			["ActionButton", "Curve", {displayOption = "showCurve";
+				this.buildGuiSpecArray; system.showView;}, 130,
+			TXColor.white, this.getButtonColour(displayOption == "showCurve")],
+			["DividingLine"],
+			["SpacerLine", 6],
+		];
+
+		if (displayOption == "showInputOutput", {
+			guiSpecArray = guiSpecArray ++[
+				["TXRangeSlider", "Input range", \bipolar, "inputMin", "inputMax", nil,
+					this.class.arrOutputRanges],
+				["DividingLine"],
+				["SpacerLine", 10],
+				["TXRangeSlider", "Output range", \bipolar, "outputMin", "outputMax", nil, this.class.arrOutputRanges],
+				["DividingLine"],
+				["SpacerLine", 10],
+				["TXCheckBox", "Quantise", "quantise"],
+				["SpacerLine", 6],
+				["SynthOptionPopupPlusMinus", "Quant type", arrOptionData, 0],
+				["SpacerLine", 6],
+				["TXMinMaxSliderSplit", "Quant steps", classData.specSteps, "steps", "stepsMin", "stepsMax"],
+			];
+		});
+		if (displayOption == "showCurve", {
+			guiSpecArray = guiSpecArray ++[
+				["TXCurveDraw", "Warp curve", {arrCurveValues},
+					{arg view; arrCurveValues = view.value; arrSlotData = view.arrSlotData;
+						this.bufferStore(view.value);},
+					{arrSlotData}, "Warp", nil, nil, nil, "gridRows", "gridCols", nil, nil, curveDataEvent],
+				["SpacerLine", 2],
+				["TXNumberPlusMinus", "Grid rows", ControlSpec(1, 128), "gridRows", {system.showView}],
+				["TXNumberPlusMinus", "Grid columns", ControlSpec(1, 128), "gridCols", {system.showView}],
+				["TXPresetPopup", "Grid presets", arrGridPresetNames, arrGridPresetActions, 182],
+				["ActionButton", "Quantise to grid", {this.quantiseToGrid(quantizeRows: true, quantizeCols: true)}, 94],
+				["ActionButton", "Quantise rows", {this.quantiseToGrid(quantizeRows: true, quantizeCols: false)}, 88],
+				["ActionButton", "Quantise columns", {this.quantiseToGrid(quantizeRows: false, quantizeCols: true)}, 102],
+			];
+		});
+	}
+
+	getButtonColour { arg colour2Boolean;
+		if (colour2Boolean == true, {
+			^TXColor.sysGuiCol4;
+		},{
+			^TXColor.sysGuiCol1;
+		});
 	}
 
 	runMirror {
@@ -171,23 +251,36 @@ TXWarp2 : TXModuleBase {		// Warp module
 		system.showView;
 	}
 
-	quantiseToGrid {
-		var newArray, rows, cols, holdSignal;
+	quantiseToGrid {arg quantizeRows = true, quantizeCols = true;
+		var holdArray, holdSignal, outArray, holdCols;
+		var rows, cols;
 		var maxVal = 128;
-		newArray = Array.newClear(maxVal);
+		holdArray = Array.newClear(maxVal);
 		rows = this.getSynthArgSpec("gridRows");
 		cols = this.getSynthArgSpec("gridCols");
 
-		cols.do({arg item, i;
-			var jump, startRange, endRange, meanVal;
-			// jump = (maxVal / cols);
-			jump = cols.reciprocal;
-			startRange = (item * jump * maxVal).round(1);
-			endRange = ((item + 1) * jump * maxVal).round(1) - 1;
-			meanVal = arrCurveValues.copyRange(startRange.asInteger, endRange.asInteger).mean;
-			newArray[startRange.asInteger..endRange.asInteger] = meanVal.round(rows.reciprocal);
+		if (quantizeCols, {
+			cols.do({arg item;
+				var jump, startRange, endRange, meanVal;
+				jump = cols.reciprocal;
+				startRange = (item * jump * maxVal).round(1);
+				endRange = ((item + 1) * jump * maxVal).round(1) - 1;
+				meanVal = arrCurveValues.copyRange(startRange.asInteger, endRange.asInteger).mean;
+				if (quantizeRows, {
+					meanVal = meanVal.round(rows.reciprocal);
+				});
+				holdArray[startRange.asInteger..endRange.asInteger] = meanVal;
+			});
+		},{
+			holdArray = arrCurveValues.collect({arg item;
+				var outVal = item;
+				if (quantizeRows, {
+					outVal = outVal.round(rows.reciprocal);
+				});
+				outVal;
+			});
 		});
-		holdSignal = Signal.newFrom(newArray);
+		holdSignal = Signal.newFrom(holdArray);
 		arrCurveValues = Array.newFrom(holdSignal);
 		this.bufferStore(arrCurveValues);
 		system.showView;

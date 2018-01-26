@@ -85,6 +85,10 @@ TXNumOrString {
 	valueAll{ arg argType, argNum, argString;
 		^[argTypeVal, numValue, string];
 	}
+
+	hasFocus {
+		^numberView.hasFocus || textView.hasFocus || popupMenuView.hasFocus;
+	}
 }
 
 

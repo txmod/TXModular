@@ -2,36 +2,30 @@
 
 TXCodeInsertCtrl : TXModuleBase {
 
-	classvar <>arrInstances;
-	classvar <defaultName;  		// default module name
-	classvar <moduleRate;			// "audio" or "control"
-	classvar <moduleType;			// "source", "insert", "bus",or  "channel"
-	classvar <noInChannels;			// no of input channels
-	classvar <arrAudSCInBusSpecs; 	// audio side-chain input bus specs
-	classvar <>arrCtlSCInBusSpecs; 	// control side-chain input bus specs
-	classvar <noOutChannels;		// no of output channels
-	classvar <arrOutBusSpecs; 		// output bus specs
-	classvar	<guiWidth=500;
+	classvar <>classData;
 
-	var userFunctionString;
+	var defaultFunctionString, emptyFunctionString, validFunctionString, userFunctionString;
+	var userFuncCompileStatus, userFuncCompileStatusView;
 
 	*initClass{
-		arrInstances = [];
 		//	set class specific variables
-		defaultName = "Code Insert C";
-		moduleRate = "control";
-		moduleType = "insert";
-		noInChannels = 1;
-		arrCtlSCInBusSpecs = [
+		classData = ();
+		classData.arrInstances = [];
+		classData.defaultName = "Code Insert C";
+		classData.moduleRate = "control";
+		classData.moduleType = "insert";
+		classData.noInChannels = 1;
+		classData.arrCtlSCInBusSpecs = [
 			["Modify 1", 1, "modChange1", 0],
 			["Modify 2", 1, "modChange2", 0],
 			["Modify 3", 1, "modChange3", 0],
 			["Modify 4", 1, "modChange4", 0],
 		];
-		noOutChannels = 1;
-		arrOutBusSpecs = [
+		classData.noOutChannels = 1;
+		classData.arrOutBusSpecs = [
 			["Out", [0]]
 		];
+		classData.guiWidth = 800;
 	}
 
 	*new{ arg argInstName;
@@ -40,9 +34,10 @@ TXCodeInsertCtrl : TXModuleBase {
 
 	init {arg argInstName;
 		//	set  class specific instance variables
-		userFunctionString = "// Example code
+		validFunctionString = userFunctionString = defaultFunctionString = "// Example code
 		{arg inSignal, mod1, mod2, mod3, mod4;
 		inSignal * SinOsc.kr(0.1 + SinOsc.kr(mod1, 0,mod1), 0, 0.5,0.5); }";
+		emptyFunctionString = "{DC.kr(0.0)}";
 		arrSynthArgSpecs = [
 			["in", 0, 0],
 			["out", 0, 0],
@@ -75,7 +70,7 @@ TXCodeInsertCtrl : TXModuleBase {
 			outChange4 = change4Min + ((change4Max - change4Min) * (change4 + modChange4).max(0).min(1));
 			// use TXClean to stop blowups
 			Out.kr(out, TXClean.kr(
-				userFunctionString.compile.value.value(inSignal, outChange1, outChange2, outChange3, outChange4)
+				validFunctionString.compile.value.value(inSignal, outChange1, outChange2, outChange3, outChange4)
 			));
 		};
 		guiSpecArray = [
@@ -83,8 +78,9 @@ TXCodeInsertCtrl : TXModuleBase {
 			["TXMinMaxSliderSplit", "Modify 2", \unipolar, "change2", "change2Min", "change2Max"],
 			["TXMinMaxSliderSplit", "Modify 3", \unipolar, "change3", "change3Min", "change3Max"],
 			["TXMinMaxSliderSplit", "Modify 4", \unipolar, "change4", "change4Min", "change4Max"],
-			["TextViewDisplay", "Coding Notes: Enter Supercollider 3 code in the window below. The code needs to be a function which returns a control signal. The function will be passed the arguments: InSignal, Modify 1, Modify 2, Modify 3, Modify 4.  Use the Evaulate text button to store and evaluate the code.", 400, 70, "Notes"],
-			["TextViewCompile", {userFunctionString}, {arg argText; this.evaluate(argText);}, 400, 200],
+			["TextViewDisplay", "Coding Notes: Enter Supercollider 3 code in the window below. The code needs to be a function which returns a stereo audio signal. The function will be passed the arguments: inSignal, Modify 1, Modify 2, Modify 3, Modify 4.  Use the 'Store & compile code' button after editing the code.", 750, 48, "Notes"],
+			["TextViewCompile", {userFunctionString}, {arg argText; this.evaluate(argText);}, 730, 246, "Store & compile code"],
+			["TXStaticText", "Status", {userFuncCompileStatus}, {arg view; userFuncCompileStatusView = view.textView}, 400, 50],
 		];
 		arrActionSpecs = this.buildActionSpecs(guiSpecArray);
 		//	use base class initialise
@@ -95,13 +91,20 @@ TXCodeInsertCtrl : TXModuleBase {
 
 	evaluate {arg argText, showErrors = true;
 		var compileResult;
+		userFunctionString = argText;
 		compileResult = argText.compile;
 		if (compileResult.isNil, {
+			userFuncCompileStatus = "ERROR: Code cannot compile - see post window.";
 			if (showErrors, {
-				TXInfoScreen.new("ERROR: code will not compile - see post window ");
+				userFuncCompileStatusView.string = userFuncCompileStatus;
 			});
+			validFunctionString = emptyFunctionString;
 		},{
-			userFunctionString = argText;
+			userFuncCompileStatus = "Compiled OK.";
+			if (showErrors, {
+				userFuncCompileStatusView.string = userFuncCompileStatus;
+			});
+			validFunctionString = userFunctionString;
 		});
 		this.rebuildSynth;
 	}
