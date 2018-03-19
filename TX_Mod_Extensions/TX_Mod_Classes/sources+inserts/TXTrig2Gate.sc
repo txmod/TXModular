@@ -1,4 +1,4 @@
-// Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
+// Copyright (C) 2018  James Harkins. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXTrig2Gate : TXModuleBase {
 
@@ -13,7 +13,7 @@ TXTrig2Gate : TXModuleBase {
 		classData.moduleType = "insert";
 		classData.noInChannels = 1;
 		classData.arrCtlSCInBusSpecs = [
-			["Time", 1, "modHoldTime", 0]
+			["Hold time", 1, "modHoldTime", 0]
 		];
 		classData.noOutChannels = 1;
 		classData.arrOutBusSpecs = [
@@ -36,20 +36,33 @@ TXTrig2Gate : TXModuleBase {
 			["holdMax", 30, defLagTime],
 			["modHoldTime", 0, defLagTime]
 		];
-		arrOptions = [];
+		arrOptions = [1];
 		arrOptionData = [
-			/*TXSmoothFunctions.arrOptionData,*/
+			[ // Re-trig mode
+				["Retrigger Off - won't retrigger when gate is on", {
+					arg holdTime, inTrig;
+					Trig1.kr(inTrig, holdTime);
+				}],
+				["Retrigger On - allows retriggering when gate is on", {
+					arg holdTime, inTrig;
+					// EnvGen.kr(Env([0, 1, 1, 0], [0, holdTime, 0], \lin), inTrig); // env doesn't retrigger
+					EnvGen.kr(Env([0, 0, 1, 1, 0], [0, 0, holdTime, 0], \lin), inTrig);  // added stage to force start level 0
+				}],
+			],
 		];
-		synthDefFunc = { arg in, out, holdTime, holdMin, holdMax, modHoldTime;
-			var inTrig, outGate;
+		synthDefFunc = { arg in, out, holdTime, holdMin, holdMax, modHoldTime = 0;
+			var inTrig, gateFunc, outGate;
 			inTrig = TXClean.kr(In.kr(in, 1));
 			holdTime = (holdTime + modHoldTime).linexp(0.01, 1.0, holdMin, holdMax, \minmax);
-			// note, NOT using Trig1 because Trig1 ignores triggers while it's outputting an open gate
-			outGate = EnvGen.kr(Env([0, 1, 1, 0], [0, holdTime, 0], \lin), inTrig);
+			gateFunc = this.getSynthOption(0);
+			outGate = gateFunc.value(holdTime, inTrig);
 			Out.kr(out, TXClean.kr(outGate));
 		};
 		holdControlSpec = ControlSpec(0.01, 30, \exp, 0, 1, units: " secs");
 		guiSpecArray = [
+			["SpacerLine", 4],
+			["SynthOptionPopupPlusMinus", "Retrig mode", arrOptionData, 0, 450],
+			["SpacerLine", 10],
 			["TXMinMaxSliderSplit", "Hold time", holdControlSpec, "holdTime", "holdMin", "holdMax"],
 		];
 		arrActionSpecs = this.buildActionSpecs(guiSpecArray);
@@ -60,4 +73,3 @@ TXTrig2Gate : TXModuleBase {
 	}
 
 }
-
