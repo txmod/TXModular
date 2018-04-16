@@ -307,6 +307,7 @@ TXSystem1 {		// system module 1
 			TXTRandomWalk,
 			TXTransientShape,
 			TXTransientShapeSt,
+			TXTrig2Gate,
 			TXTrigImpulse,
 			TXTubes,
 			//TXV_System, // not working
@@ -605,6 +606,7 @@ TXSystem1 {		// system module 1
 			["   Sample and Hold", TXSampleHold, "control"],
 			["   Scale Quantise", TXScaleQuantise, "control"],
 			["   Smooth", TXSmooth2, "control"],
+			["   Trig to Gate", TXTrig2Gate, "control"],
 			["   Warp ", TXWarp2, "control"],
 			["   Warp Morph ", TXWarpMorph, "control"],
 			[">SuperCollider ", nil, "control"],
