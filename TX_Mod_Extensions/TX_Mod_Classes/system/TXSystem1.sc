@@ -1021,7 +1021,10 @@ TXSystem1 {		// system module 1
 			//		mouseButtonResponder.remove;
 			//	end
 			//	server.freeAll;
-			{server.quit}.defer(1);
+			{
+				server.quit;
+				this.removeOldSynthDefs;
+			}.defer(1);
 		});
 	}
 
