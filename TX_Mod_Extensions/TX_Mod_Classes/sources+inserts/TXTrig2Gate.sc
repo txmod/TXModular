@@ -43,10 +43,13 @@ TXTrig2Gate : TXModuleBase {
 					arg holdTime, inTrig;
 					Trig1.kr(inTrig, holdTime);
 				}],
-				["Retrigger On - allows retriggering when gate is on", {
+				["Retrigger On - retriggers when gate is on", {
 					arg holdTime, inTrig;
-					// EnvGen.kr(Env([0, 1, 1, 0], [0, holdTime, 0], \lin), inTrig); // env doesn't retrigger
 					EnvGen.kr(Env([0, 0, 1, 1, 0], [0, 0, holdTime, 0], \lin), inTrig);  // added stage to force start level 0
+				}],
+				["Slurrable - retrigger resets time but keeps gate open", {
+					arg holdTime, inTrig;
+					EnvGen.kr(Env([0, 1, 1, 0], [0, holdTime, 0], \lin), inTrig); // env doesn't retrigger
 				}],
 			],
 		];
