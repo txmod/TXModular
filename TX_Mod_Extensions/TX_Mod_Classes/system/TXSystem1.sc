@@ -77,8 +77,6 @@ TXSystem1 {		// system module 1
 		dataBank.audioSetupQuit = false;	// for final closing down
 		dataBank.seqLatency = 0.1;        // latency used by sequencers
 
-		Font.default =  Font("Helvetica", 12);
-
 		this.buildArrays;
 	}
 
@@ -630,6 +628,8 @@ TXSystem1 {		// system module 1
 	*start { arg argStandAlone = 0, argFileNameString, showAudioOptions = true;
 		var holdString;
 		var classError = "";
+
+		Font.default =  Font("Helvetica", 12);
 
 		// if open already, window to front and return
 		if (TXSystem1GUI.w.notNil and: {TXSystem1GUI.w.isClosed != true}, {
