@@ -23,7 +23,7 @@
 </span></p>
 <p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
 <p class="p1"><span class="s1">This module creates a mono user-defined envelope as a control signal. The curve can be edited with a mouse.</span></p>
-<p class="p1"><span class="s1">It can be triggered in various ways such as by modulation of the gate input, by other modules (such as an <b>Action Sequencer</b>) or by action buttons on an interface screen.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1">It can be triggered in various ways such as by modulation of the gate input, by other modules (such as an <b>Action Sequencer</b>) or by action buttons on an interface screen. </span></p>
 <p class="p2"><span class="s1"><br>
 </span></p>
 <p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
@@ -31,17 +31,23 @@
 <p class="p1"><span class="s1">See help file <a href="file:../TX_Curve%20Editing.html"><span class="s2">Curve Editing</span></a> for details.</span></p>
 <p class="p1"><span class="s1"><b>Grid rows</b> - no of rows (1-128) separated by white lines in the grid behind the curve.</span></p>
 <p class="p1"><span class="s1"><b>Grid cols</b> - no of columns (1-128) separated by white lines in the grid behind the curve.</span></p>
-<p class="p1"><span class="s1"><b>Env Time</b> - time taken for the whole envelope.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Env Time</b> - time taken for the whole envelope. </span></p>
 <p class="p1"><span class="s1"><b>Level scale</b> - scales the level of the curve.</span></p>
 <p class="p1"><span class="s1"><b>Gate</b> - sets the gate to trigger or stop the envelope.</span></p>
-<p class="p1"><span class="s1"><b>Gate Mode </b>- This controls how the gate affects the envelope .</span></p>
-<p class="p1"><span class="s1"><i>“Fixed length”</i> means the gate will start the envelope and it will play its whole length. The final envelope value will be left at whatever value is at the end of the curve.</span></p>
-<p class="p1"><span class="s1"><i><span class="Apple-converted-space"> </span>“Forced release” </i>means the gate will start the envelope and it will play its whole length or, if the gate is turned off before then, it will fade the curve to its minimum value using <b>Close time</b> as the fade out time. <br>
-</span><span class="s1"><b>Output range</b> - preset output ranges including negative values</span></p>
+<p class="p1"><span class="s1"><b>Gate Mode </b>- This controls how the gate affects the envelope .<br>
+<i>“Fixed length”</i> means the gate will start the envelope and it will play its whole length. The final envelope value will be left at whatever value is at the end of the curve.</span><br>
+<i> “Forced release”</i> means the gate will start the envelope and it will play its whole length or, if the gate is turned off before then, it will fade the curve to its minimum value using <b>Close time</b> as the fade out time. <br>
+<i> “Looped with forced release”</i> means the gate will start the envelope and it will play looped until the gate is turned off. Then it will fade the curve to its minimum value using <b>Close time</b> as the fade out time. </p>
+<p class="p1"><span class="s1"><b>Output range</b> - preset output ranges including negative values</span></p>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
 <p class="p1"><span class="s1"><b>Gate</b></span></p>
 <p class="p1"><span class="s1"><b>Gate close time</b></span></p>
 <p class="p1"><span class="s1"><b>Level scale</b></span></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Output Busses:</i></b></p>
+<p class="p1"><b>Env Out</b> - the envelope signal</p>
+<p class="p1"><b>Env End Trig</b> - outputs a trigger when the envelope ends</p>
+<p class="p1"><br></p>
 </body>
 </html>

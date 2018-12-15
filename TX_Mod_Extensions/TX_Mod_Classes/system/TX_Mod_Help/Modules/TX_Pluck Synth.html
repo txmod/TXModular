@@ -8,42 +8,45 @@
   <meta name="CocoaVersion" content="1138.47">
   <style type="text/css">
     p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
-    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
     span.s1 {text-decoration: underline}
   </style>
 </head>
 <body>
 <p class="p1"><b>Pluck Synth</b></p>
-<p class="p2"><br></p>
-<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Source (mono output, triggered)</b></p>
-<p class="p2"><br></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Module type: Audio Source (mono output, triggered)</b></p>
+<p class="p1"><br></p>
 <p class="p1"><b><i>Introduction:</i></b></p>
 <p class="p1">This module creates notes based on a physical model of a plucked string.</p>
-<p class="p1">Notes can be triggered in various ways such as by MIDI notes, other modules (e.g.<span class="Apple-converted-space">  </span><b>Step Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. <span class="Apple-converted-space"> </span></p>
-<p class="p2"><br></p>
+<p class="p1">The initial pluck sound can be noise, a waveform or any other sound. To use an external sound for the pluck, there is a pluck input where an audio signal can be connected using another audio channel (see Audio Input Busses below)</p>
+<p class="p1">Notes can be triggered in various ways such as by MIDI notes, other modules (e.g. <b>Step Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen.  </p>
+<p class="p1"><br></p>
 <p class="p1"><b><i>Controls:</i></b></p>
-<p class="p2"><br></p>
-<p class="p1"><b>Pluck/ Env<span class="Apple-converted-space">  </span>button</b></p>
-<p class="p1"><b>Pick type</b> - the sound used to start the pluck. Noise or waveform combinations can be selected.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Pluck/ Env button</b></p>
+<p class="p1"><b>Pick type</b> - the sound used to start the pluck. Noise or waveform combinations can be selected or the Pluck input can be used to sample an external sound source.</p>
 <p class="p1"><b>Pick morph</b> - morphs between different pluck sounds, depending on which Pick type has been selected.</p>
 <p class="p1"><b>Filtering</b> - this affects the developing tone as the pluck decays. A value of 0 gives an unfiltered decay. Negative values make the pluck time much shorter and brighten the sound.</p>
-<p class="p1"><b>Boost odd partials</b> - this changes the tone of the pluck to emphasize odd paritals.</p>
+<p class="p1"><b>Boost odd partials</b> - this changes the tone of the pluck to emphasize odd partials (harmonics) making it sound deeper and more 'hollow'.</p>
 <p class="p1"><b>Decay</b> - the decay time of the pluck envelope</p>
 <p class="p1"><b>Release</b> - the release time of the envelope.</p>
 <p class="p1"><b>Curve</b> - this sets the shape of the curve for the release of the envelope.</p>
-<p class="p1"><b>Env. Type</b> - this can be sustain or fixed length.<span class="Apple-converted-space">  </span>A sustain envelope will use the release time at the end of the trigger or midi note.<span class="Apple-converted-space">  </span>A fixed length envelope will decay completely according to the decay time, ignoring the release time.</p>
+<p class="p1"><b>Env. Type</b> - this can be sustain or fixed length. A sustain envelope will use the release time at the end of the trigger or midi note. A fixed length envelope will decay completely according to the decay time, ignoring the release time.</p>
 <p class="p1"><b>Level</b> - sets the output level.</p>
 <p class="p1"><b>Amp Comp</b> - select a preset for the type of amplitude compensation to use - see help file <A href="TX_Amp Comp.html">Amp Comp<A> for details. Can be set to off when not needed.</p>
-<p class="p2"><br></p>
+<p class="p1"><br></p>
 <p class="p1"><b>MIDI/ Note button</b></p>
 <p class="p1">See help file <A href="../TX_MIDI Note Button.html">MIDI Note Button<A> for details.</p>
-<p class="p2"><br></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>Pluck input</b> - mono audio signal which can be used for the pluck sound.</p>
+<p class="p1"><br></p>
 <p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
 <p class="p1"><b>Pick morph</b></p>
 <p class="p1"><b>Filtering</b></p>
 <p class="p1"><b>Pitch bend</b></p>
-<p class="p1"><b>Frequency</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Frequency</b></p>
 <p class="p1"><b>Decay</b></p>
-<p class="p1"><b>Release</b> <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Release</b></p>
 </body>
 </html>

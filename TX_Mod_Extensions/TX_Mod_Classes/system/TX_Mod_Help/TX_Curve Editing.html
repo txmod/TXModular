@@ -18,12 +18,13 @@
 </span></p>
 <p class="p1"><span class="s1"><b>Curve Editing</b></p>
 </span></p>
-<p class="p1"><span class="s1">Several modules use curves, including: <b>Env Curve, LFO Curve, Warp, Warp Morph, Waveshaper, WaveshaperX</b>.</span></p>
+<p class="p1"><span class="s1">Several modules use curves, including: <b>Env Curve, LFO Curve, Loop Player, Warp, Warp Morph, Waveshaper, WaveshaperX</b>.</span></p>
 <p class="p1"><span class="s1">Using a mouse, click and drag to draw either freehand points or pre-selected line shapes (see controls below). </span></p>
 <p class="p1"><span class="s1">Zoom sliders allow very detailed editing of the curve.</span></p>
 <p class="p1"><span class="s1">History buttons keep the last 20 curve edits for undo/redo.</span></p>
 <p class="p1"><span class="s1"></span></p>
 <p class="p1"><span class="s1">A separate Curve Builder can also be opened for more options for manipulating curve shapes. See help file <a href="./TX_Curve%20Builder.html"><span class="s2">Curve Builder</span></a> for details.</p>
+<p class="p1"><span class="s1"><b>Note:</b> Most TX modules display their curves horizontally, though an exception is Groove curves in Loop Player modules which are shown vertically (see image on right). However, all curves will be shown horizontally if they are opened in the Curve Builder. This is to allow adequate screen space for editing multiple curves.</span></p>
 </span></p>
 <p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
 <p class="p1"><span class="s1"><b>&lt; &gt;</b> - to move backwards/forwards through the curve edit history </span></p>
@@ -31,8 +32,12 @@
 <p class="p1"><span class="s1"><b>Curve Builder</b> - this button opens the current curve inside the Curve Builder, which is in a separate window.</span></p>
 <p class="p1"><span class="s1"><b>Draw Points/Lines</b> - this selects between 2 different draw modes:</span></p>
 <p class="p1"><span class="s1"><b>- Draw Points</b> is for drawing a curve freehand. </span></p>
-<p class="p1"><span class="s1"><b>- Draw Lines</b> uses preset curve shapes, or straight lines, to draw lines between mouse-down and mouse-up points.</span></p>
-<p class="p1"><span class="s1"><b>Line Quant</b> [only in <b>Draw Lines</b> mode] - this gives the option of quantising the start and end points of the line using the grid behind the curve. </span></p>
+<p class="p1"><span class="s1"><b>- Draw Lines</b> uses preset curve shapes, or straight lines, to draw lines between mouse-down and mouse-up points. If the <b>Shift</b> button is down when the mouse button is pressed, a line is drawn from the last drawn point to the current mouse point - this allows a chain of points to be linked together.</span></p>
+<p class="p1"><span class="s1"><b>Quantise</b> [only in <b>Draw Lines</b> mode] - this gives the option of quantising the start and end points of the line using the grid behind the curve. Options are: <br>
+<b><i>quant off</i></b> - no quantising is used<br>
+<b><i>quant x+y</i></b> - quantise both to columns and rows <br>
+<b><i>quant x</i></b> - quantise to columns only <br>
+<b><i>quant y</i></b> - quantise  to rows only</span></p>
 <p class="p1"><span class="s1"><b>Shape</b> - [only in <b>Draw Lines</b> mode] - selects the line shape to draw - the default is <b><i>linear</i></b> for straight lines. </span></p>
 <p class="p1"><span class="s1"><b>Reverse</b> - reverses the curve from right to left. </span></p>
 <p class="p1"><span class="s1"><b>Invert</b> - turns the curve upside down. </span></p>

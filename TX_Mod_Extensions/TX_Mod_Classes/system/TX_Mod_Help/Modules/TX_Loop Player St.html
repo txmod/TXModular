@@ -10,54 +10,114 @@
     p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
     p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 17.0px}
     p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
-    span.Apple-tab-span {white-space:pre}
   </style>
 </head>
 <body>
 <p class="p1"><b>Loop Player St</b></p>
 <p class="p2"><br></p>
-<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Source<span class="Apple-converted-space">  </span>(stereo output, triggered)</b></p>
+<p class="p1"><b>Module type: Audio Source (stereo output, triggered)</b></p>
 <p class="p3"><b></b><br></p>
 <p class="p1"><b><i>Introduction:</i></b></p>
-<p class="p1">This module takes a mono <b><i>or</i></b> stereo loop from the loop bank and plays it back .<span class="Apple-converted-space"> </span></p>
-<p class="p1">It can be triggered in various ways such as by MIDI notes, other modules (e.g.<span class="Apple-converted-space">  </span><b>Step Sequencer</b>, <b>Action Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen. <span class="Apple-converted-space"> </span></p>
+<p class="p1">This module takes a mono <b><i>or</i></b> stereo loop from the loop bank and plays it back. </p>
+<p class="p1">It can be triggered in various ways such as by MIDI notes, other modules (e.g. <b>MultiTrack Seq</b>, <b>Step Sequencer</b>, <b>Action Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen.  </p>
+<p class="p1">Granular time-stretching and pitch-shifting can be applied to the loop. <br>
+Granulation allows independent control of pitch and timing,  for example keeping the pitch steady while the bpm or "Groove" is changed.</p>
+<p class="p1">Morphable curves can be used to change the "Feel" or "Groove" of the loop.</p>
+<p class="p1">Feel curves change the level of the loop while it plays. </p>
+<p class="p1">Groove curves change timing of the loop while it plays. They can also rearrange the order of the beats in a loop, or reverse them.<br>
+If time-stretch granulation isn't being used, Groove curves will also affect the pitch of the loop.</p>
+<p class="p1"><b><i>Note:</i></b> Feel curves are horizontal (drawn left to right) & Groove curves are vertical (drawn top to bottom) <br>
+See help image: <b><i>"Loop Player St 02.png"</i></b></p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Controls:</i></b></p>
 <p class="p2"><br></p>
 <p class="p1"><b>Loop button</b></p>
-<p class="p1"><b>Loop</b> - select from all the <b>mono and stereo</b> loops in the system's loop bank.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Loop</b> - select from all the <b>mono and stereo</b> loops in the system's loop bank. </p>
 <p class="p1"><b>Loopbank Settings</b> - the settings for <b>original bpm</b> and <b>total beats</b> of the loop are displayed, taken from the settings in the loopbank. These can be edited in the loopbank screen.</p>
-<p class="p1"><b>Add loops to loop bank</b> - to add any audio loops stored on the hard disk.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Add loops to loop bank</b> - to add any audio loops stored on the hard disk. </p>
 <p class="p1"><b>Show/Hide</b> - buttons for the display of the loop waveform. When the waveform is displayed, you can zoom in and out using the zoom buttons. You can also select which part of the waveform is played by using the select all/ select none buttons.</p>
-<p class="p1"><b>Start/End</b> - the start and end of the loop section that will be played. These are shown as fractions (e.g. 7/8), as well as numbers between 0 and 1.<span class="Apple-converted-space"> </span></p>
-<p class="p1">Fractions can be useful for selecting particular sections of rhythmic loops - such as 2/12 to 8/12.</p>
-<p class="p1"><b>Loop type</b> - there are two options:</p>
-<p class="p1"><span class="Apple-tab-span">	</span><b><i>looped</i> </b>- play looped from start point to end point - this is the default setting.</p>
-<p class="p1"><span class="Apple-tab-span">	</span><b><i>single shot</i></b> - play once from start point to end point</p>
-<p class="p1"><b>Reverse</b> - if on, loop playback will be reversed.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Level</b> - the output level of the loop player.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Play BPM</b> - The BPM that the loop will be played back at.<span class="Apple-converted-space">  </span>The pitch of the loop will go up or down compared to the original loop, depending the how different the play bpm is from the original bpm. If the play bpm is lower, the pitch will also be lower.</p>
-<p class="p1"><b>Speed factor</b> - A quick way to change the playback speed.<span class="Apple-converted-space"> </span></p>
-<p class="p1">Higher numbers will increase the speed, lower numbers will decrease the speed.</p>
-<p class="p1">A setting of 0 will be normal speed,<span class="Apple-converted-space">  </span>A setting of 1 will be double the speed,<span class="Apple-converted-space">  </span>A setting of -1 will be half the speed,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Start/End</b> - the start and end of the loop section that will be played. These are shown as fractions (e.g. 7/8), as well as numbers between 0 and 1. <br>
+Fractions can be useful for selecting particular sections of rhythmic loops - such as 2/12 to 8/12.</p>
+<p class="p1"><b>Loop type</b> - there are three options:<br>
+<b><i>Looped - play while gated</i> </b>- play looped from start to end point while gate is on (default)<br>
+<b><i>Single shot - play while gated</i></b> - play once from start to end point while gate is on<br>
+<b><i>Single shot - play whole loop</i></b> - play once from start point to end point</p>
+<p class="p1"><b>Reverse</b> - if on, loop playback will be reversed. </p>
+<p class="p1"><b>Level</b> - the output level of the loop player. </p>
+<p class="p1"><b>Play BPM</b> - The BPM that the loop will be played back at. <br>
+Note: If time-stretching is not being used, the pitch of the loop will go up or down compared to the original loop, depending the how different the play bpm is from the original bpm. If the play bpm is lower, the pitch will also be lower.</p>
+<p class="p1"><b>Speed factor</b> - A quick way to change the playback speed. <br>
+Higher numbers will increase the speed, lower numbers will decrease the speed.<br>
+A setting of 0 will be normal speed, a setting of 1 will be double the speed, a setting of -1 will be half the speed, </p>
 <p class="p2"><br></p>
-<p class="p1"><b>MIDI/ Test button</b></p>
-<p class="p1"><b>Midi Listen</b> - this allows the module to be triggered by a midi note.<span class="Apple-converted-space"> </span></p>
-<p class="p1"><b>Midi Chan.</b> - set the midi channels the module will listen to.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Env, MIDI, Test button</b></p>
+<p class="p1"><b>Env Curve</b> - this selects the curve for the loop envelope. </p>
+<p class="p1"><b>Attack</b> - the attack time of the envelope. </p>
+<p class="p1"><b>Release</b> - the release time of the envelope. </p>
+<p class="p1"><b>Midi Listen</b> - this allows the module to be triggered by a midi note. </p>
+<p class="p1"><b>Midi Chan.</b> - set the midi channels the module will listen to. </p>
 <p class="p1"><b>Note range</b> - which notes will trigger the module.</p>
 <p class="p1"><b>Vel range</b> - which velocities will trigger the module.</p>
-<p class="p1"><b>Test Loop Settings:</b> - these set the velocity and play time<span class="Apple-converted-space">  </span>of the test loop that is played when the <b>Play test loop </b>button<b> </b>is pressed.</p>
+<p class="p1"><b>Test Loop Settings:</b> - these set the velocity and play time of the test loop that is played when the <b>Play test loop </b>button<b> </b>is pressed.</p>
 <p class="p2"><br></p>
-<p class="p1"><b>Play test loop button</b></p>
-<p class="p1">This starts the loop playing.<span class="Apple-converted-space"> </span></p>
-<p class="p1">The velocity and time of the loop that is triggered are set using the <b>MIDI/ Test button.</b></p>
+<p class="p1"><b>Time Stretch button</b></p>
+<p class="p1"><b>Time Stretch</b> - this sets the type of granular time-stretching used. </p>
+<p class="p1"><b>Window size</b> - how long each grain is. </p>
+<p class="p1"><b>Overlaps</b> - how many overlapping grains are used. </p>
+<p class="p1"><b>Interpolation</b> - this sets the quality when pitch-shifting grains. Cubic is best though more computationally intensive. </p>
+<p class="p1"><b>Randomness</b> - this randomises the timing of the grains which can help to blur the effect of the granulation. </p>
+<p class="p1"><b>Pitch-shift</b> - this changes the pitch of the grains, shown in semitones. </p>
 <p class="p2"><br></p>
-<p class="p1"><b>Stop test loop button</b></p>
+<p class="p1"><b>Feel 1 button</b></p>
+<p class="p1"><b>Feel mode</b> - sets which Feel curve (1 or 2 or both) will be used. </p>
+<p class="p1"><b>Feel multi</b> - sets the number of times the Feel curve will be applied across the selected part of the loop. <br>
+For example if the loop was 8 beats long and the Feel multi was set to 2, the Feel curve would be applied twice - on each set of 4 beats. </p>
+<p class="p1"><b>Add Feel after Groove</b> - if switched on, the Feel curve will be applied after the Groove curve. </p>
+<p class="p1"><b>Feel morph</b> - if the Feel mode is set to morph, this will morph between curves 1 & 2. </p>
+<p class="p1"><b>Show Waveform</b> - this displays the loop waveform behind the curve. <br>
+(<b><i>Note:</i></b> if Feel multi is more than 1, if the Waveform is shown it won't correspond to the Feel curve since they are in different timescales. This is also true if <b>Add Feel after Groove</b> is switched on since the Groove curve can change the playback order.)</p>
+<p class="p1"><b>Hide</b> - this hides the loop waveform. </p>
+<p class="p1"><b>Grid rows</b> - no of rows (1-128) separated by white lines in the grid behind the curve.</p>
+<p class="p1"><b><b>Grid columns</b> - no of columns (1-128) separated by white lines in the grid behind the curve.</p>
+<p class="p1"><b>Feel 1 Curve</b> - the Feel curve used with the loop. You can edit the curve with a mouse.<br>
+See help file <a href="../TX_Curve%20Editing.html">Curve Editing</a> for details. </p>
+<p class="p2"><br></p>
+<p class="p1"><b>Feel 2 button</b></p>
+<p class="p1">Same as Feel 1. </p>
+<p class="p2"><br></p>
+<p class="p1"><b>Groove 1 button</b></p>
+<p class="p1"><b>Groove mode</b> - sets which Groove curve (1 or 2 or both) will be used. </p>
+<p class="p1"><b>Groove multi</b> - sets the number of times the Groove curve will be applied across the selected part of the loop. <br>
+For example if the loop was 8 beats long and the Groove multi was set to 2, the Groove curve would be applied twice - on each set of 4 beats. )</p>
+<p class="p1"><b>Add Feel after Groove</b> - if switched on, the Feel curve will be applied after the Groove curve. </p>
+<p class="p1"><b>Groove morph</b> - if the Groove mode is set to morph, this will morph between curves 1 & 2. </p>
+<p class="p1"><b>Show Waveform</b> - this displays the loop waveform behind the curve. <br>
+(<b><i>Note:</i></b> if Groove multi is more than 1, if the waveform is shown it won't correspond to the Groove curve since they are in different timescales.)</p>
+<p class="p1"><b>Hide</b> - this hides the loop waveform. </p>
+<p class="p1"><b>Grid rows</b> - no of rows (1-128) separated by white lines in the grid behind the curve.</p>
+<p class="p1"><b><b>Grid columns</b> - no of columns (1-128) separated by white lines in the grid behind the curve.</p>
+<p class="p1"><b>Groove 1 Curve</b> - the Groove curve used with the loop. You can edit the curve with a mouse.<br>
+See help file <a href="../TX_Curve%20Editing.html">Curve Editing</a> for details. </p>
+<p class="p2"><br></p>
+<p class="p1"><b>Groove 2 button</b></p>
+<p class="p1">Same as Groove 1. </p>
+<p class="p2"><br></p>
+<p class="p1"><b>Play button</b></p>
+<p class="p1">This starts the test loop playing. </p>
+<p class="p1">The velocity and time of the loop that is triggered are set using the <b>Env, MIDI, Test button.</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Stop button</b></p>
 <p class="p1">Stops the test loop playing.</p>
 <p class="p2"><br></p>
 <p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
-<p class="p1"><b>Loop Start</b><span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Loop Start</b> </p>
 <p class="p1"><b>Loop End</b></p>
-<p class="p1"><b>Loop Reverse<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>Loop Reverse </b></p>
+<p class="p1"><b>Pitch Shift</b> </p>
+<p class="p1"><b>Feel morph</b> </p>
+<p class="p1"><b>Groove morph</b> </p>
+<p class="p1"><b>Attack</b> </p>
+<p class="p1"><b>Release</b> </p>
+<p class="p1"><b>Play BPM</b> </p>
 </body>
 </html>

@@ -25,6 +25,7 @@
 <p class="p2"><span class="s1"><b>The TX Modular System - Release Notes</b></span></p>
 <p class="p2"><span class="s1"><br>
 </span></p>
+<p class="p2"><span class="s1"><b>Release 088 (December 2018)</b></span></p>
 <p class="p2"><span class="s1"><b>Release 087 (January 2018)</b></span></p>
 <p class="p2"><span class="s1"><b>Release 086 (November 2014)</b></span></p>
 <p class="p2"><span class="s1"><b>Release 082 (January 2012)</b></span></p>
@@ -41,9 +42,76 @@
 <p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
 <p class="p2"><span class="s1"><br>
 </span></p>
-<p class="p2"><span class="s1"><b>Release 087 (January 2018)</b></span></p>
+
+<p class="p2"><span class="s1"><b>Release 088 (December 2018)</b></span></p>
+<p class="p2"><span class="s1"></span></p>
+<p class="p2"><span class="s1">This release includes various new modules, bug fixes and other changes:. </span></p>
+<p class="p2"><span class="s1"></span></p>
+<p class="p2"><span class="s1"><b><i>New modules:</i></b></span></p>
+<p class="p2"><span class="s1"><b>CompanderMB & CompanderMB St</b> <br>
+[Insert Modules category: Audio: Dynamics]</span><br>
+- Multiband compander - splits the input signal into 4 frequency bands with a compander on each band which can function as a compressor or expander/ gate.</span></p>
+<p class="p2"><span class="s1"><b>DistortionMB & DistortionMB St</b> <br>
+[Insert Modules category: Audio: Distortion]</span><br>
+- Multiband distortion - splits the input signal into 4 frequency bands and adds distortion, giving a roughness and/or warmth to the signal.</span></p>
+<p class="p2"><span class="s1"><b>FM Filter & FM Filter St</b> <br>
+[Insert Modules category: Audio: EQ & Filter]</span><br>
+- Filters audio signals using a resonant filter. Frequency modulation (internal or external) can be used to add complexity to the sound.</p>
+<p class="p2"><span class="s1"><b>Freq Shift & Freq Shift St</b> <br>
+[Insert Modules category: Audio: Pitch & Freq Shift]</span><br>
+'Freq Shift implements single sideband amplitude modulation, also known as frequency shifting, but not to be confused with pitch shifting.'<br>
+'Frequency shifting moves all the components of a signal by a fixed amount but does not preserve the original harmonic relationships.'<br>
+Frequency modulation (internal or external) is optional</p>
+<p class="p2"><span class="s1"><b>LFO Pulse</b> <br>
+[Source Modules category: Control: Modulation]</span><br>
+- Low Frequency Oscillator that outputs a 'pulse' waveform, where a proportion of the signal will have a value of 1 and the rest a value 0. The proportion depends on the pulse width.</p>
+<p class="p2"><span class="s1"><b>PolyNote Trigger</b> <br>
+[Source Modules category: Control: Note Tools]</span><br>
+- PolyNote Trigger can be used to trigger notes in up to 6 polyphonic modules using a control signal from another module, such as Clock Pulse, LFO or Step Sequencer, or using an Action Button on an Interface Screen.</p>
+<p class="p2"><span class="s1"><b>Rotate St</b> <br>
+[Insert Modules category: Audio: Channel Tools]</span><br>
+- Rotates a stereo input signal in the stereo field, with both manual and automatic rotation available; can be used to add movement to a stereo signal, creating amplitude modulation effects at higher rotation frequencies.</span></p>
+<p class="p2"><span class="s1"><b>SoftKnee CompMB & SoftKnee CompMB St</b> <br>
+[Insert Modules category: Audio: Dynamics]</span><br>
+- Multiband compressor - splits the input signal into 4 frequency bands with a compressor on each band which reduces the level of the louder parts of signal. It has the effect of evening out the volume. The type of compression can be changed from Peak Compression to RMS Compression, which responds to a signal over a settable averaging time.</span></p>
+<p class="p2"><span class="s1"><b>Split 2-Band, Split 2-Band St,  <br>Split 4-Band, Split 4-Band St,  <br>Split 8-Band, Split 8-Band St</b><br>
+[Source Modules category: Audio: Split]</span><br>
+- Split an audio signal into 2/4/8 frequency bands.<br>
+<p class="p2"><span class="s1"><b>Strum</b> <br>
+[Source Modules category: Control: Note Tools]</span><br>
+- Strum can output trigger pulses and trigger notes in up to 6 polyphonic modules. Whenever, the strum position is moved or modulated, it triggers notes in the current scale - either a preset scale, such as 'Major' or 'Minor', or a Custom Scale which is editable.</p>
+<p class="p2"><span class="s1"><b>Trig to Gate</b> <br>
+[Insert Modules category: Control: Modify]</span>.<br>
+- Trig to Gate converts a 'trigger' into a 'gate’. When a trigger is received (when a control signal changes from zero or below to above zero), it outputs a gate signal (level set to 1) for a specific length of time.</p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1"><b><i>Bug fixes include:</i></b></span></p>
+<p class="p2"><span class="s1">- Fixed bug with All Notes Off button so non-polyphonic modules are unaffected.</span></p>
+<p class="p2"><span class="s1">- Fixed white-on-white text color issues when using a dark color theme in SuperCollider IDE.</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p2"><span class="s1"><b><i>Other changes include:</i></b></span></p>
+<p class="p2"><span class="s1">All <b>Envelope</b> modules (mono & polyphonic) now have an 'Env End Trig' output which sends a trigger when the envelope ends.</span></p>
+<p class="p2"><span class="s1"> <b>Curve Editing</b> has been enhanced - when drawing lines, if the <b>Shift</b> button is down when the mouse button is pressed, a line is drawn from the last drawn point to the current mouse point. This allows a chain of points to be linked together. </span></p>
+<p class="p2"><span class="s1"><b>Loop Player & Loop Player St</b> have been enhanced: <br>
+There's new loop type: 'Single shot - play whole loop'.<br>
+Envelope parameters have been added for Attack, Release and Envelope curve.<br>
+New Feel & Groove curves can change the level, timing & pitch of the loop while it plays. There are 2 curves each for Feel & Groove which can be morphed.<br>
+Groove curves can also rearrange the order of the beats in a loop, or reverse them.</span></p>
+<p class="p2"><span class="s1"><b>Mono Env Curve</b> has a  new Gate mode:  'Looped with forced release' which is a gated & looped envelope with variable close time.</span></p>
+<p class="p2"><span class="s1"><b>Pitch Shifter & Pitch Shifter St</b> have been rebuilt and renamed <b>Pitch Shift & Pitch Shift St.</b></span><br>
+The new versions have a Pitch Shift (in semitones) replacing the old Pitch Ratio so musical intervals can be created more easily.<br>
+<b>Pitch Shift St</b> also has Stereo Shift which shifts the left and right channels’ pitch in opposite directions. This can be used for stereo detuning.</p>
+<p class="p2"><span class="s1"><b>Pluck Synth</b> has a  new Pick type:  'Pluck input - Use pluck input for pick sound' which uses  external audio from another module or bus to create the initial pick sound. This allows for a much greater range of pluck sounds to be created.</span></p>
+<p class="p2"><span class="s1"><b>Sample & Loop Banks</b>:</span><br>
+When a saved system is opened, an error window will appear if there are any sample or loop banks with missing samples or loops.<br>
+There are new buttons 'Search folder for missing samples/loops' & 'Replace selected sample/loop' so any sample/loop in a bank (missing or not) can be replaced with another one.</p>
+<p class="p2"><span class="s1"><b>X-Fader</b> modules now have editable cross-fade curves, including some DJ-oriented preset curves, to control the mix as the cross-fader moves.</span></p>
 <p class="p2"><span class="s1"><br>
 </span></p>
+<p class="p2"><span class="s1"><b>-----------------------------------------------------</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Release 087 (January 2018)</b></span></p>
+<p class="p2"><span class="s1"></span></p>
 <p class="p2"><span class="s1">This release includes many new modules, lots of them coming from recent additions to SuperCollider (see full list below). </span></p>
 <p class="p2"><span class="s3">A redesign of the interface gives a more flexible screen layout with sliding panels, meters on every channel (with a new narrow option to display more channels), and easier gui interface building by importing gui widgets directly from modules</span><span class="s3">.</span></p>
 <p class="p2"><span class="s3">As well as various bug fixes, the code has been refactored enabling many more modules to be added.</span></p>

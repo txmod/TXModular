@@ -96,6 +96,12 @@
 <p class="p3"><span class="s1"><b>Wave Synth+ (mono)</b> - this is an enhanced version of the Wave Synth module which includes a filter, 2 LFOs, an extra envelope and a modulation matrix.</span></p>
 <p class="p3"><span class="s1"><br>
 </span></p>
+<p class="p4"><span class="s1"><b>Split</b></span></p>
+<p class="p3"><span class="s1"><b>Split 2-Band (mono &amp; stereo) </b>- splits an audio signal into 2 frequency bands.</span></p>
+<p class="p3"><span class="s1"><b>Split 4-Band (mono &amp; stereo) </b>- splits an audio signal into 4 frequency bands.</span></p>
+<p class="p3"><span class="s1"><b>Split 8-Band (mono &amp; stereo) </b>- splits an audio signal into 8 frequency bands.</span></p>
+<p class="p4"><span class="s1"><br>
+</span></p>
 <p class="p4"><span class="s1"><b>SuperCollider Code</b></span></p>
 <p class="p3"><span class="s1"><b>Code Source A (mono &amp; stereo) </b>- use SuperCollider computer code within the TX Modular system to generate an audio signal.</span></p>
 <p class="p4"><span class="s1"><br>
@@ -141,7 +147,7 @@
 <p class="p3"><span class="s1"><b>Trigger Impulse - </b> outputs a very short impulse when triggered.</span></p>
 <p class="p5"><span class="s1"><br>
 </span></p>
-<p class="p4"><span class="s1"><b>Input Device</b></span></p>
+<p class="p4"><span class="s1"><b>Input Devices</b></span></p>
 <p class="p3"><span class="s1"><b>Gametrak</b> - This module is for use with a connected a Gametrak USB controller (originally made for a golf game, but useful as a 2-hand gestural controller with much higher resolution than midi - 10-bit vs. 7-bit).</span></p>
 <p class="p3"><span class="s1"><b>Wii Ctrl Darwiin</b> - This module outputs a control signal between 0 and 1 based on a selected Wii or Nunchuck control, including: acceleration, rotation, button and IR camera data. To use this module, you will need the software <b><i>DarwiinRemote OSC</i>.</b></span></p>
 <p class="p3"><span class="s1"><b>Wii Ctrl OSC</b> - This module outputs a control signal between 0 and 1 based on a selected Wii or Nunchuck control, including: acceleration, rotation, button and IR camera data. To use this module, you will need the software <b><i>OSCulator</i></b>.</span></p>
@@ -173,6 +179,7 @@
 <p class="p4"><span class="s1"><b>Modulation</b></span></p>
 <p class="p3"><span class="s1"><b>LFO - </b>Low Frequency Oscillator for modulating parameters on other modules.</span></p>
 <p class="p3"><span class="s1"><b>LFO Curve</b> - Low Frequency Oscillator with an editable waveform curve - using a mouse.</span></p>
+<p class="p3"><span class="s1"><b>LFO Pulse</b> - Low Frequency Oscillator that outputs a 'pulse' waveform, where a proportion of the signal will have a value of 1 and the rest a value 0. The proportion depends on the pulse width. </span></p>
 <p class="p3"><span class="s1"><b>Perlin Noise</b> - A Random Low Frequency Oscillator based on 3 dimensional Perlin Noise - useful for adding non-repetitive variation (i.e. "organic movement") to module parameters.</span></p>
 <p class="p3"><span class="s1"><b>T NoiseRing</b> - based on a SuperCollider model of the Wiard Noise Ring, when triggered it outputs random values in a sequence which can loop or gradually change in a controlled way. </span></p>
 <p class="p3"><span class="s1"><b>T Random</b> - outputs random values that change whenever a trigger is received.</span></p>
@@ -192,13 +199,15 @@
 <p class="p4"><span class="s1"><br>
 </span></p>
 <p class="p4"><span class="s1"><b>Note Tools</b></span></p>
-<p class="p3"><span class="s1"><b>Note Multiply - </b>This triggered module makes no sound itself but instead triggers notes in up to 6 modules. It can also output MIDI notes.</span></p>
-<p class="p3"><span class="s1">When it is triggered, it plays a number of repeated notes. Each note can be transposed and has its own velocity, probability and gate time settings, allowing randomness to be introduced in various ways. </span></p>
-<p class="p3"><span class="s1"><b>Note Stacker - </b>This triggered module makes no sound itself but instead triggers notes in other modules, with the option of modifying the pitch or velocity of the notes for various effects.</span></p>
-<p class="p3"><span class="s1">Up to 18 different modules can be triggered, arranged in 6 layers each with 3 output modules. The modules on a layer can be played together, rotated each time the layers is played, or randomly chosen. Each layer has curves for modifying the overall velocity response, as well as individual note level and tuning for each note across the keyboard range.</span></p>
-<p class="p3"><span class="s1"><b>Scale Chord</b> - This triggered module makes no sound itself but instead triggers notes in up to 6 modules. It can also output MIDI notes.</span></p>
-<p class="p3"><span class="s1">When it is triggered, it restricts the output notes to a particular key and scale (if the chromatic scale is chosen, then any notes played are be part of the scale). </span></p>
-<p class="p3"><span class="s1">Optionally, a chord can be played instead of just a single note . An open version of the chord can be chosen, with selectable octave transposition to spread the chord. Each note in the chord has both velocity and probability settings, allowing randomness to be introduced in various ways.</span></p>
+<p class="p3"><span class="s1"><b>Note Multiply - </b>This triggered module makes no sound itself but instead triggers notes in up to 6 modules. It can also output MIDI notes.<br>
+When it is triggered, it plays a number of repeated notes. Each note can be transposed and has its own velocity, probability and gate time settings, allowing randomness to be introduced in various ways. </span></p>
+<p class="p3"><span class="s1"><b>Note Stacker - </b>This triggered module makes no sound itself but instead triggers notes in other modules, with the option of modifying the pitch or velocity of the notes for various effects.<br>
+Up to 18 different modules can be triggered, arranged in 6 layers each with 3 output modules. The modules on a layer can be played together, rotated each time the layers is played, or randomly chosen. Each layer has curves for modifying the overall velocity response, as well as individual note level and tuning for each note across the keyboard range.</span></p>
+<p class="p3"><span class="s1"><b>PolyNote Trigger - </b>This module can be used to trigger notes in up to 6 polyphonic modules using a control signal. The note lengths can be fixed or variable.</span></p>
+<p class="p3"><span class="s1"><b>Scale Chord</b> - This triggered module makes no sound itself but instead triggers notes in up to 6 modules. It can also output MIDI notes.<br>
+When it is triggered, it restricts the output notes to a particular key and scale (if the chromatic scale is chosen, then any notes played are be part of the scale). <br>
+Optionally, a chord can be played instead of just a single note . An open version of the chord can be chosen, with selectable octave transposition to spread the chord. Each note in the chord has both velocity and probability settings, allowing randomness to be introduced in various ways.</span></p>
+<p class="p3"><span class="s1"><b>Strum - </b>This module can output trigger pulses and trigger notes in up to 6 polyphonic modules. Whenever, the strum position is moved or modulated, it triggers notes in the current scale - either a preset scale, such as 'Major' or 'Minor', or a Custom Scale which is editable.</span></p>
 <p class="p5"><span class="s1"><br>
 </span></p>
 <p class="p5"><span class="s1"><b>Physical Models</b></span></p>
@@ -227,7 +236,7 @@
 <p class="p3"><span class="s1"><b>Pattern Code</b> - use SuperCollider Pattern code within the TX Modular system to control any modules in the current system. </span></p>
 <p class="p5"><span class="s1"><br>
 </span></p>
-<p class="p5"><span class="s1"><b>Switch</b></span></p>
+<p class="p5"><span class="s1"><b>Switches</b></span></p>
 <p class="p3"><span class="s1"><b>On Off Switch</b> - outputs either 0 (Off) or 1(On). It has separate on and off triggers. </span></p>
 <p class="p3"><span class="s1"><b>Toggle Switch</b> - outputs either 0 (Off) or 1(On). It has a single trigger which causes a change in the output value, from 0 to 1, or 1 to 0 . </span></p>
 <p class="p4"><span class="s1"><br>
@@ -240,6 +249,7 @@
 </span></p>
 <p class="p4"><span class="s1"><b>Channel tools</b></span></p>
 <p class="p3"><span class="s1"><b>Mono to Stereo (mono input, stereo output) </b>- Converts a mono audio signal into a stereo signal by panning between the left and right channels.</span></p>
+<p class="p3"><span class="s1"><b>Rotate St - </b>rotates a stereo input signal in the stereo field, with both manual and automatic rotation available; can be used to add movement to a stereo signal, creating amplitude modulation effects at higher rotation frequencies</span></p>
 <p class="p3"><span class="s1"><b>Stereo To Mono - </b>converts a stereo audio signal into a mono signal by mixing the left and right channels.</span></p>
 <p class="p3"><span class="s1"><b>Stereo Width - </b>adjusts the perceived width of a stereo audio signal by mixing the left and right channels in different proportions.</span></p>
 <p class="p4"><span class="s1"><br>
@@ -256,6 +266,7 @@
 <p class="p3"><span class="s1"><b>Bit Crusher (mono &amp; stereo)</b> - this module distorts the input signal in by reducing the sample rate and bit size.</span></p>
 <p class="p3"><span class="s1"><b>Disintegrator (mono &amp; stereo)</b> - distorts the input by amplifying random half-cycles of the signal.</span></p>
 <p class="p6"><span class="s1"><b>Distortion (mono &amp; stereo) - </b>can distort the input signal in various ways, adding a roughness and/or warmth to the signal.</span></p>
+<p class="p6"><span class="s1"><b>DistortionMB (mono &amp; stereo) - </b>Multiband Distortion - splits the input signal into 4 frequency bands and adds distortion, giving a roughness and/or warmth to the signal.</span></p>
 <p class="p6"><span class="s1"><b>Interference (mono &amp; stereo) - </b>adds 'interference' to the input signal by using up to 3 regular or noisy waveforms to modulate a short delay line.</span></p>
 <p class="p6"><span class="s1"><b>WaveFold (mono &amp; stereo)</b> - distorts the input signal, by boosting the gain (amplitude) and adding harmonics using 4 layers of folding, wrapping, or clipping.</span></p>
 <p class="p6"><span class="s1"><b>Waveshaper (mono &amp; stereo) </b>- adds distortion to the input signal using a function curve, which can be drawn by hand or generated automatically based on harmonics and noise.</span></p>
@@ -267,10 +278,12 @@
 <p class="p3"><span class="s1"><b>Amp Comp</b> <b>(mono &amp; stereo)</b> - Psychoacoustic amplitude compensation - frequency-dependent amplitude reduction, the level of the input signal is reduced for higher frequencies.</span></p>
 <p class="p3"><span class="s1"><b>Balance</b> <b>(mono &amp; stereo)</b> - sets the incoming audio to be at the same level as one of two options: 1) the Target level, 2) the level of the mono audio side-chain signal.</span></p>
 <p class="p3"><span class="s1"><b>Compander (mono &amp; stereo) - </b>detects the amplitude (volume level) of a stereo audio signal coming into it. It can function as a compressor or expander/ gate.</span></p>
+<p class="p3"><span class="s1"><b>CompanderMB (mono &amp; stereo) - </b>Multiband compander - splits the input signal into 4 frequency bands with a compander on each band which can function as a compressor or expander/ gate.</span></p>
 <p class="p3"><span class="s1"><b>Limiter (mono &amp; stereo) - </b>limits the volume (amplitude) of an audio signal to a certain level (called the threshold).</span></p>
 <p class="p3"><span class="s1"><b>Noise Gate (mono &amp; stereo) -</b> can be used as a gate or ducker with an optional side-chain input. Reduces the level of the input signal when the level of the input or side-chain goes below (gate) or above (ducker) a certain threshold.</span></p>
 <p class="p3"><span class="s1"><b>Normalizer (mono &amp; stereo) -</b> flattens the dynamics (i.e. the volume or amplitude) of an audio signal to a certain level.</span></p>
 <p class="p6"><span class="s1"><b>SoftKnee Comp (mono &amp; stereo) - </b>responds to the amplitude (volume level) of an audio signal coming into it. A compressor reduces the level of the louder parts of signal. It has the effect of evening out the volume. The type of compression can be changed from Peak Compression to RMS Compression, which responds to a signal over a settable averaging time.</span></p>
+<p class="p6"><span class="s1"><b>SoftKnee CompMB (mono &amp; stereo) - </b>Multiband compressor - splits the input signal into 4 frequency bands with a compressor on each band which reduces the level of the louder parts of signal. It has the effect of evening out the volume. The type of compression can be changed from Peak Compression to RMS Compression, which responds to a signal over a settable averaging time.</span></p>
 <p class="p3"><span class="s1"><b>Transient Shape - </b>shapes the transients in a mono audio signal. Attack and sustain of incoming audio can be separately controlled with the divide frequency affecting how attack and release are separated.</span></p>
 <p class="p4"><span class="s1"><br>
 </span></p>
@@ -285,9 +298,10 @@
 <p class="p3"><span class="s1"><b>EQ Para (mono &amp; stereo)</b> - a parametric filter which cuts or boosts certain frequencies in an audio signal by a specified amount.</span></p>
 <p class="p3"><span class="s1"><b>EQ Shelf (mono &amp; stereo)</b> - shelving filter which cuts or boosts frequencies in an audio signal above or below a cutoff frequency.</span></p>
 <p class="p3"><span class="s1"><b>Filter (mono &amp; stereo) - </b>cuts or boosts certain frequencies in an audio signal, with many different filters to choose from.</span></p>
+<p class="p3"><span class="s1"><b>FM Filter (mono &amp; stereo) - </b>a resonant filter with frequency modulation that can add complexity to the sound. The modulation can come from another module using the FM input, or from  an internal sine wave.</span></p>
 <p class="p4"><span class="s1"><br>
 </span></p>
-<p class="p4"><span class="s1"><b>Gain Envelope</b></span></p>
+<p class="p4"><span class="s1"><b>Gain Envelopes</b></span></p>
 <p class="p3"><span class="s1"><b>Gain (mono &amp; stereo) - </b>controls the gain (volume level) of an audio signal coming into it.</span></p>
 <p class="p3"><span class="s1"><b>Gain 16 Stage (mono &amp; stereo) - </b>applies a 16-stage triggered envelope to the input signal.</span></p>
 <p class="p3"><span class="s1"><b>Gain Curve (mono &amp; stereo) - </b>applies a user-defined triggered envelope to the input signal. The curve can be edited with a mouse.</span></p>
@@ -307,8 +321,9 @@
 <p class="p3"><span class="s1"><b>Ring Modulator - </b>ring modulates one mono audio signal (called the Modulator) onto another mono audio signal (called the Carrier). Ring modulation creates a complex signal which constists of the frequencies of the Modulator and Carrier being added together as well as subtracted from each other.</span></p>
 <p class="p4"><span class="s1"><br>
 </span></p>
-<p class="p4"><span class="s1"><b>Pitch Shift</b></span></p>
-<p class="p3"><span class="s1"><b>Pitch Shifter</b> <b>(mono &amp; stereo) -</b> shifts the pitch of an incoming audio signal.</span></p>
+<p class="p4"><span class="s1"><b>Pitch & Freq Shift</b></span></p>
+<p class="p3"><span class="s1"><b>Freq Shift</b> <b>(mono &amp; stereo) -</b> Frequency shifting moves all the components of a signal by a fixed amount but (unlike Pitch Shift) does not preserve the original harmonic relationships.</span></p>
+<p class="p3"><span class="s1"><b>Pitch Shift</b> <b>(mono &amp; stereo) -</b> shifts the pitch of an incoming audio signal.</span></p>
 <p class="p4"><span class="s1"><br>
 </span></p>
 <p class="p4"><span class="s1"><b>Recording</b></span></p>
@@ -369,6 +384,7 @@
 <p class="p3"><span class="s1"><b>Sample and Hold - </b>outputs a control signal based on the input signal as well as a trigger input signal. Two types of processing are available: Sample &amp; Hold and Gate &amp; Hold.</span></p>
 <p class="p6"><span class="s5"><b>Scale Quantise</b></span><span class="s1"><b> - </b>quantises the input signal to a set key, scale and note range.</span></p>
 <p class="p3"><span class="s1"><b>Smooth - </b>for smoothing out a control signal over time.</span></p>
+<p class="p3"><span class="s1"><b>Trig to Gate - </b>converts a trigger signal into a timed gate. </span></p>
 <p class="p3"><span class="s1"><b>Warp - </b>for "mapping" or changing the behaviour of a control signal. The incoming signal is mapped using a "transfer curve" which is displayed on the screen.</span></p>
 <p class="p6"><span class="s1"><b>Warp Morph - </b>for "mapping" or changing the behaviour of a control signal.</span></p>
 <p class="p6"><span class="s1">The incoming signal is mapped using a mix between 2 editable transfer curves.</span></p>
