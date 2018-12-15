@@ -244,7 +244,7 @@ TXOSCOut : TXModuleBase {
 			["EZNumber", "Port 9", ControlSpec(0, 99999, 'lin', 1), "port9"],
 			["TXTextBox","Notes 9", "notes9"],
 			["TXCheckBox", "Activate", "activate9"],
-			["TXNetAddress","Address 10", "address10, {this.buildArrNetAddresses;}"],
+			["TXNetAddress","Address 10", "address10", {this.buildArrNetAddresses;}],
 			["EZNumber", "Port 10", ControlSpec(0, 99999, 'lin', 1), "port10"],
 			["TXTextBox","Notes 10", "notes10"],
 			["TXCheckBox", "Activate", "activate10"],

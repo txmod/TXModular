@@ -21,9 +21,10 @@ TXMonoEnvCurve : TXModuleBase {
 			["Level scale", 1, "modLevelScale", 0],
 			["Env Time", 1, "modEnvTotalTime", 0],
 		];
-		classData.noOutChannels = 1;
+		classData.noOutChannels = 2;
 		classData.arrOutBusSpecs = [
-			["Out", [0]]
+			["Env Out", [0]],
+			["Env End Trig", [1]],
 		];
 		classData.arrBufferSpecs = [ ["bufnumCurve", 700, 1] ];
 		classData.guiWidth = 950;
@@ -77,29 +78,44 @@ TXMonoEnvCurve : TXModuleBase {
 							* (gateCloseTime + modGateCloseTime))).max(0.01).min(20);
 						gate - ((1 - gate) * (1 + gateCloseTime));
 					}
+				],
+				["Looped with forced release - triggered & ended by gate using close time, final value is zero",
+					{arg gate, gateCloseTime, gateCloseTimeMin, gateCloseTimeMax, modGateCloseTime;
+						var gtCloseTime;
+						gtCloseTime= (gateCloseTimeMin + ((gateCloseTimeMax - gateCloseTimeMin)
+							* (gateCloseTime + modGateCloseTime))).max(0.01).min(20);
+						gate - ((1 - gate) * (1 + gateCloseTime));
+					}
 				]
 			],
 		];
 		synthDefFunc = {arg out, bufnumCurve, gate, gateCloseTime, gateCloseTimeMin, gateCloseTimeMax,
-			envTotalTime, envTotalTimeMin, envTotalTimeMax, levelScale,
+			envTotalTime, envTotalTimeMin, envTotalTimeMax, levelScale, levelEnv,
 			modGate = 0, modGateCloseTime = 0, modLevelScale = 0, modEnvTotalTime = 0;
-			var envTime, gt, levelGate, gateFunction, outCurve, rangeFunction, outSignal, levelSc, levelFunc;
+			var envTime, gt, levelGate, curvePhaseFunc, gateFunction, outCurve, envEnd, rangeFunction,
+			outSignal, levelSc, levelFunc;
 
 			envTime = (envTotalTime + modEnvTotalTime).linlin(0, 1, envTotalTimeMin, envTotalTimeMax);
 			gt = (gate + modGate).max(0).min(1);
 			gateFunction = this.getSynthOption(1);
 			levelGate = gateFunction.value(gt, gateCloseTime, gateCloseTimeMin, gateCloseTimeMax, modGateCloseTime);
 			rangeFunction = this.getSynthOption(0);
-			outCurve = BufRd.kr(1, bufnumCurve,
-				699 * EnvGen.kr( Env([0,0, 1], [0,1]), gt, timeScale: envTime, doneAction: 0);
-			);
+			curvePhaseFunc = [
+				{arg gt, envTime; EnvGen.kr( Env([0,0, 1], [0,1]), gt, timeScale: envTime, doneAction: 0);},
+				{arg gt, envTime; EnvGen.kr( Env([0,0, 1], [0,1]), gt, timeScale: envTime, doneAction: 0);},
+				{arg gt, envTime; Sweep.kr(gt, envTime.reciprocal) % 1.0;},
+			] [arrOptions[1]];
+			outCurve = BufRd.kr(1, bufnumCurve, 699 * curvePhaseFunc.value(gt, envTime));
 			levelFunc = [
 				{EnvGen.kr( Env([0, 1, 1], [0, 1]), levelGate, timeScale: envTime, doneAction: 0);},
 				{EnvGen.kr( Env([0, 1, 1, 0], [0, 1, 0]), levelGate, timeScale: envTime, doneAction: 0);},
+				{EnvGen.kr( Env([0, 1, 1, 0], [0, 1, 0], 'lin', 2), gt, timeScale: envTime, doneAction: 0);},
 			] [arrOptions[1]];
-			levelSc = (levelScale + modLevelScale).max(0).min(1) * levelFunc.value;
+			levelEnv = levelFunc.value;
+			levelSc = (levelScale + modLevelScale).max(0).min(1) * levelEnv;
 			outSignal = rangeFunction.value(outCurve * levelSc);
-			Out.kr(out, outSignal);
+			envEnd = Trig1.kr(Done.kr(levelEnv), ControlDur.ir);
+			Out.kr(out, [outSignal, envEnd]);
 		};
 		holdControlSpec = ControlSpec(0.001, 100, \exp, 0, 1, units: " Hz");
 		arrGridPresetNames = ["1 x 1", "2 x 2", "3 x 3", "4 x 4", "5 x 5", "6 x 6", "8 x 8", "9 x 9",

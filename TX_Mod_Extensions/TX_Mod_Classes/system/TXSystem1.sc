@@ -5,7 +5,7 @@ TXSystem1 {		// system module 1
 	// Note: GUI has been moved to TXSystem1GUI
 
 	/*	 use the following code to show all class methods:
-		TXSystem1.class.dumpMethodList;
+	TXSystem1.class.dumpMethodList;
 	*/
 	////////////////////////////////////////////////////////////////////////////////////
 	//	define class variables:
@@ -52,9 +52,9 @@ TXSystem1 {		// system module 1
 	*initClass{
 		// create event and set variables:
 		dataBank = ();
-		dataBank.systemVersion = "087";					// version of the TX Modular system shown in gui
-		dataBank.standaloneName = "TX_Modular_087s";
-		dataBank.systemRevision = 1004;					// current revision no of the system
+		dataBank.systemVersion = "088";					// version of the TX Modular system shown in gui
+		dataBank.standaloneName = "TX_Modular_088s";
+		dataBank.systemRevision = 1005;					// current revision no of the system
 
 		dataBank.savedSystemRevision = 0;
 		//dataBank.modulesVisibleOrigin = Point.new(0,0);
@@ -62,6 +62,7 @@ TXSystem1 {		// system module 1
 		dataBank.windowVisibleOrigin = Point.new(0,0);
 		dataBank.mainWindowWidth = 1410;
 		dataBank.mainWindowHeight = 786;
+		dataBank.alwaysOnTop = 0;
 		dataBank.viewBoxWidth = 3000;
 		dataBank.viewBoxHeight = 1500;
 		dataBank.closingDown = false;	// only used when closing down
@@ -77,9 +78,9 @@ TXSystem1 {		// system module 1
 		dataBank.audioSetupQuit = false;	// for final closing down
 		dataBank.seqLatency = 0.1;        // latency used by sequencers
 
-		Font.default =  Font("Helvetica", 12);
-
 		this.buildArrays;
+		this.buildArrays2;
+		this.buildArrays3;
 	}
 
 	*seqLatency {
@@ -91,253 +92,277 @@ TXSystem1 {		// system module 1
 		arrAllPossModules = [
 
 			// required system modules
-			TXChannel,
-			TXBusMainOuts,
-			TXBusFXSend,
-			TXBusAudioAux,
-			TXBusControlAux,
+			'TXChannel',
+			'TXBusMainOuts',
+			'TXBusFXSend',
+			'TXBusAudioAux',
+			'TXBusControlAux',
 			//
 			//	N.B. ADD ANY NEW MODULES INTO THIS LIST (by alpha) AND FOLLOWING ONES (by category):  --->
 			//
-			// other modules in ALPHA order, by their defaultName
-			TXActionSeq3,
-			TXActionSlider,
-			TXAmpFollower3,
-			TXAmpComp,
-			TXAmpCompSt,
-			TXAmpSim,
-			TXAmpSimSt,
-			TXAnalyser3,
-			TXAnimateCode2,
-			TXAudioIn4,
-			TXAudioTrigger3,
-			TXBall,
-			TXBalance,
-			TXBalanceSt,
-			TXBitCrusher2,
-			TXBitCrusher2St,
-			TXBowed,
-			TXBowedRes,
-			TXBracketEQ,
-			TXBracketEQSt,
-			TXChangedTrig,
-			TXChorus,
-			TXChorusSt,
-			TXClockPulse,
-			TXCodeInsertAu,
-			TXCodeInsertAuSt,
-			TXCodeInsertCtrl,
-			TXCodeSourceAu,
-			TXCodeSourceAuSt,
-			TXCodeSourceCtrl,
-			TXCompander3,
-			TXCompander3St,
-			TXControlDelay4,
-			TXConvertToControl,
-			TXConvertToAudio,
-			TXConvolution,
-			TXConvolutionSt,
-			TXCyclOSCCol,
-			TXCyclOSCGrey,
-			TXDCRemove,
-			TXDCRemoveSt,
-			TXDelay4,
-			TXDelay4St,
-			TXDisintegrator,
-			TXDisintegratorSt,
-			TXDistortion3,
-			TXDistortion3St,
-			TXDualFilter,
-			TXDualFilterSt,
-			TXEnv16Stage,
-			TXEnvCurve,
-			TXEnvDADSR4,
-			TXEnvDADSSR,
-			TXEnvFollow,
-			TXEnvFollowSt,
-			TXEQ6,
-			TXEQ6St,
-			TXEQ6M,
-			TXEQ6MSt,
-			TXEQGraphic,
-			TXEQGraphicSt,
-			TXEQMorph,
-			TXEQMorphSt,
-			TXEQPara,
-			TXEQParaSt,
-			TXEQShelf,
-			TXEQShelfSt,
-			TXFilePlayer6,
-			TXFilePlayer6St,
-			TXFileRecorder2,
-			TXFileRecorder2St,
-			TXFilterExt2,
-			TXFilterExt2St,
-			TXFilterSynth2,
-			TXFlanger3,
-			TXFlanger3St,
-			TXFMDrone,
-			TXFMSynth5,
-			TXFormlets,
-			TXGain,
-			TXGain16Stage,
-			TXGain16StageSt,
-			TXGainCurve,
-			TXGainCurveSt,
-			TXGainDADSR,
-			TXGainDADSRSt,
-			TXGainDADSSR,
-			TXGainDADSSRSt,
-			TXGainSt,
-			TXGameTrak,
-			TXGaussClock,
-			TXGranulator2,
-			TXGranulatorFM,
-			TXGreyhole,
-			TXGreyholeSt,
-			TXGroupMorph,
-			TXHarmoniser,
-			TXInfinity,
-			TXInfinitySt,
-			TXInterference,
-			TXInterferenceSt,
-			TXKlank,
-			TXJPverb,
-			TXJPverbSt,
-			TXLFOMulti2,
-			TXLFOCurve,
-			TXLimiter,
-			TXLimiterSt,
-			TXLiveGrain,
-			TXLiveLooper2,
-			TXLogicBool,
-			TXLogicNonBin,
-			TXLoopPlayer,
-			TXLoopPlayerSt2,
-			TXMatrixAudio8x8,
-			TXMatrixControl8x8,
-			TXMembrane,
-			TXMIDIController2,
-			TXMIDIControlOut3,
-			TXMIDINote2,
-			TXMIDIOut,
-			TXMIDIPitchbend2,
-			TXMIDIVelocity2,
-			TXMixAudio8to1,
-			TXMixAudio16to2,
-			TXMixControl8to1,
-			TXModSequencer,
-			TXMonoToStereo,
-			TXMidSideDecoder,
-			TXMidSideEncoder,
-			TXMonoEnv16Stage,
-			TXMonoEnvCurve,
-			TXMonoEnvDADSR,
-			TXMonoEnvDADSSR,
-			TXMultiTapDelay2,
-			TXMultiTrackSeq,
-			TXNoiseGate,
-			TXNoiseGateSt,
-			TXNoiseWhitePink,
-			TXNormalizer,
-			TXNormalizerSt,
-			TXNotchPhaser,
-			TXNotchPhaserSt,
-			TXNoteMultiply,
-			TXNoteStacker,
-			TXOnOffSwitch,
-			TXOSCController,
-			TXOSCController2D,
-			TXOSCControlOut,
-			TXOSCOut,
-			TXOSCRemote,
-			TXOSCTrigger,
-			TXPatternCode,
-			TXPerlinNoise,
-			TXPhaser,
-			TXPhaserSt,
-			TXPianoResSt,
-			TXPianoStringSt,
-			TXPItchFollower4,
-			TXPitchShifter,
-			TXPitchShifterSt,
-			TXPingPong,
-			TXPingPongSt,
-			TXPluckSynth,
-			TXPulseDivider,
-			TXPulseDividerV,
-			TXReverb2,
-			TXReverbSt2,
-			TXReverbA,
-			TXReverbF,
-			TXReverbFSt,
-			TXReverbG,
-			TXRingMod2,
-			// TXQCParticles2, // not working
-			// TXQCPlayer4, // not working
-			TXQuantise,
-			TXSampleHold,
-			TXSamplePlayer5a,
-			TXSamplePlayerSt6,
-			TXSamplePlayerPlus3,
-			TXSamplePlayerPlus3St,
-			TXScaleChord,
-			TXScaleQuantise,
-			TXSimpleSlider2,
-			TXSlope,
-			TXSmooth2,
-			TXSoftKneeComp,
-			TXSoftKneeCompSt,
-			TXSpectralFX,
-			TXSpectralDelay,
-			TXSpring,
-			TXStepSequencer,
-			TXStereoToMono2,
-			TXStereoWidth,
-			TXStrings,
-			TXSubHarm,
-			TXSubHarmSt,
-			TXTableDrone,
-			TXTableDroneSt,
-			TXTableSynth5,
-			TXToggleSwitch,
-			TXTNoiseRing,
-			TXTRandom,
-			TXTRandomChoice,
-			TXTRandomWalk,
-			TXTransientShape,
-			TXTransientShapeSt,
-			TXTrigImpulse,
-			TXTubes,
-			//TXV_System, // not working
-			TXVocoder2,
-			TXVocoderFX2,
-			TXVosim,
-			TXVowelMorph,
-			TXVowelMorphSt,
-			TXWarp2,
-			TXWarpMorph,
-			TXWaveFold,
-			TXWaveFoldSt,
-			TXWaveform5,
-			TXWaveform5St,
-			TXWaveshaper,
-			TXWaveshaperSt,
-			TXWaveshaperX,
-			TXWaveshaperXSt,
-			TXWaveSynth8,
-			TXWaveSynthPlus4,
-			TXWaveTerrain,
-			TXWiiController,
-			TXWiiControllerOSC3,
-			TXWiiTrigger,
-			TXWiiTrigOSC2,
-			TXXDistort,
-			TXXDistortSt,
-			TXXFader2to1,
-			TXXFader2to1C,
-			TXXFader4to2,
+			// other modules in ALPHA order', by their defaultName
+			'TXActionSeq3',
+			'TXActionSlider',
+			'TXAmpFollower3',
+			'TXAmpComp',
+			'TXAmpCompSt',
+			'TXAmpSim',
+			'TXAmpSimSt',
+			'TXAnalyser3',
+			'TXAnimateCode2',
+			'TXAudioIn4',
+			'TXAudioTrigger3',
+			'TXBall',
+			'TXBalance',
+			'TXBalanceSt',
+			'TXBitCrusher2',
+			'TXBitCrusher2St',
+			'TXBowed',
+			'TXBowedRes',
+			'TXBracketEQ',
+			'TXBracketEQSt',
+			'TXChangedTrig',
+			'TXChorus',
+			'TXChorusSt',
+			'TXClockPulse',
+			'TXCodeInsertAu',
+			'TXCodeInsertAuSt',
+			'TXCodeInsertCtrl',
+			'TXCodeSourceAu',
+			'TXCodeSourceAuSt',
+			'TXCodeSourceCtrl',
+			'TXCompander3',
+			'TXCompander3St',
+			'TXCompanderMB',
+			'TXCompanderMBSt',
+			'TXControlDelay4',
+			'TXConvertToControl',
+			'TXConvertToAudio',
+			'TXConvolution',
+			'TXConvolutionSt',
+			'TXCyclOSCCol',
+			'TXCyclOSCGrey',
+			'TXDCRemove',
+			'TXDCRemoveSt',
+			'TXDelay4',
+			'TXDelay4St',
+			'TXDisintegrator',
+			'TXDisintegratorSt',
+			'TXDistortion3',
+			'TXDistortion3St',
+			'TXDistortionMB',
+			'TXDistortionMBSt',
+			'TXDualFilter',
+			'TXDualFilterSt',
+			'TXEnv16Stage',
+			'TXEnvCurve',
+			'TXEnvDADSR4',
+			'TXEnvDADSSR',
+			'TXEnvFollow',
+			'TXEnvFollowSt',
+			'TXEQ6',
+			'TXEQ6St',
+			'TXEQ6M',
+			'TXEQ6MSt',
+			'TXEQGraphic',
+			'TXEQGraphicSt',
+			'TXEQMorph',
+			'TXEQMorphSt',
+			'TXEQPara',
+			'TXEQParaSt',
+			'TXEQShelf',
+			'TXEQShelfSt',
+			'TXFilePlayer6',
+			'TXFilePlayer6St',
+			'TXFileRecorder2',
+			'TXFileRecorder2St',
+			'TXFilterExt2',
+			'TXFilterExt2St',
+			'TXFilterSynth2',
+			'TXFlanger3',
+			'TXFlanger3St',
+			'TXFMDrone',
+			'TXFMFilter',
+			'TXFMFilterSt',
+			'TXFMSynth5',
+			'TXFormlets',
+			'TXFreqShift',
+			'TXFreqShiftSt',
+			'TXGain',
+			'TXGain16Stage',
+			'TXGain16StageSt',
+			'TXGainCurve',
+			'TXGainCurveSt',
+			'TXGainDADSR',
+			'TXGainDADSRSt',
+			'TXGainDADSSR',
+			'TXGainDADSSRSt',
+			'TXGainSt',
+			'TXGameTrak',
+			'TXGaussClock',
+			'TXGranulator2',
+			'TXGranulatorFM',
+			'TXGreyhole',
+			'TXGreyholeSt',
+			'TXGroupMorph',
+			'TXHarmoniser',
+			'TXInfinity',
+			'TXInfinitySt',
+			'TXInterference',
+			'TXInterferenceSt',
+			'TXKlank',
+			'TXJPverb',
+			'TXJPverbSt',
+			'TXLFOMulti2',
+			'TXLFOCurve',
+			'TXLFOPulse',
+			'TXLimiter',
+			'TXLimiterSt',
+			'TXLiveGrain',
+			'TXLiveLooper2',
+			'TXLogicBool',
+			'TXLogicNonBin',
+			'TXLoopPlayer',
+			'TXLoopPlayerSt2',
+			'TXMatrixAudio8x8',
+			'TXMatrixControl8x8',
+			'TXMembrane',
+			'TXMIDIController2',
+			'TXMIDIControlOut3',
+			'TXMIDINote2',
+			'TXMIDIOut',
+			'TXMIDIPitchbend2',
+			'TXMIDIVelocity2',
+			'TXMixAudio8to1',
+			'TXMixAudio16to2',
+			'TXMixControl8to1',
+			'TXModSequencer',
+			'TXMonoToStereo',
+			'TXMidSideDecoder',
+			'TXMidSideEncoder',
+			'TXMonoEnv16Stage',
+			'TXMonoEnvCurve',
+			'TXMonoEnvDADSR',
+			'TXMonoEnvDADSSR',
+			'TXMultiTapDelay2',
+			'TXMultiTrackSeq',
+			'TXNoiseGate',
+			'TXNoiseGateSt',
+			'TXNoiseWhitePink',
+			'TXNormalizer',
+			'TXNormalizerSt',
+			'TXNotchPhaser',
+			'TXNotchPhaserSt',
+			'TXNoteMultiply',
+			'TXNoteStacker',
+			'TXOnOffSwitch',
+			'TXOSCController',
+			'TXOSCController2D',
+			'TXOSCControlOut',
+			'TXOSCOut',
+			'TXOSCRemote',
+			'TXOSCTrigger',
+			'TXPatternCode',
+			'TXPerlinNoise',
+			'TXPhaser',
+			'TXPhaserSt',
+			'TXPianoResSt',
+			'TXPianoStringSt',
+			'TXPItchFollower4',
+			'TXPitchShift2',
+			'TXPitchShiftSt2',
+			'TXPingPong',
+			'TXPingPongSt',
+			'TXPluckSynth',
+			'TXPolyNoteTrigger',
+			'TXPulseDivider',
+			'TXPulseDividerV',
+			'TXReverb2',
+			'TXReverbSt2',
+			'TXReverbA',
+			'TXReverbF',
+			'TXReverbFSt',
+			'TXReverbG',
+			'TXRingMod2',
+			'TXRotateSt',
+			// 'TXQCParticles2', // not working
+			// 'TXQCPlayer4', // not working
+			'TXQuantise',
+			'TXSampleHold',
+			'TXSamplePlayer5a',
+			'TXSamplePlayerSt6',
+			'TXSamplePlayerPlus3',
+			'TXSamplePlayerPlus3St',
+			'TXScaleChord',
+			'TXScaleQuantise',
+			'TXSimpleSlider2',
+			'TXSlope',
+			'TXSmooth2',
+			'TXSoftKneeComp',
+			'TXSoftKneeCompSt',
+			'TXSoftKneeCompMB',
+			'TXSoftKneeCompMBSt',
+			'TXSpectralFX',
+			'TXSpectralDelay',
+			'TXSplit2Band',
+			'TXSplit2BandSt',
+			'TXSplit4Band',
+			'TXSplit4BandSt',
+			'TXSplit8Band',
+			'TXSplit8BandSt',
+			'TXSpring',
+			'TXStepSequencer',
+			'TXStereoToMono2',
+			'TXStereoWidth',
+			'TXStrings',
+			'TXStrum',
+			'TXSubHarm',
+			'TXSubHarmSt',
+			'TXTableDrone',
+			'TXTableDroneSt',
+			'TXTableSynth5',
+			'TXToggleSwitch',
+			'TXTNoiseRing',
+			'TXTRandom',
+			'TXTRandomChoice',
+			'TXTRandomWalk',
+			'TXTransientShape',
+			'TXTransientShapeSt',
+			'TXTrig2Gate',
+			'TXTrigImpulse',
+			'TXTubes',
+			//'TXV_System', // not working
+			'TXVocoder2',
+			'TXVocoderFX2',
+			'TXVosim',
+			'TXVowelMorph',
+			'TXVowelMorphSt',
+			'TXWarp2',
+			'TXWarpMorph',
+			'TXWaveFold',
+			'TXWaveFoldSt',
+			'TXWaveform5',
+			'TXWaveform5St',
+			'TXWaveshaper',
+			'TXWaveshaperSt',
+			'TXWaveshaperX',
+			'TXWaveshaperXSt',
+			'TXWaveSynth8',
+			'TXWaveSynthPlus4',
+			'TXWaveTerrain',
+			'TXWiiController',
+			'TXWiiControllerOSC3',
+			'TXWiiTrigger',
+			'TXWiiTrigOSC2',
+			'TXXDistort',
+			'TXXDistortSt',
+			'TXXFader2to1',
+			'TXXFader2to1C',
+			'TXXFader4to2',
 		];
+	}
+
+	*buildArrays2 {
 		// the following strings are formatted as popup item with categories and modules
 		dataBank.arrSourceModulesByCategory = [
 			["Audio: Conversion", "Convert To Audio", TXConvertToAudio],
@@ -377,6 +402,12 @@ TXSystem1 {		// system module 1
 			["Audio: Polyphonic", "Table Synth", TXTableSynth5],
 			["Audio: Polyphonic", "Wave Synth", TXWaveSynth8],
 			["Audio: Polyphonic", "Wave Synth+", TXWaveSynthPlus4],
+			["Audio: Split", "Split 2-Band", TXSplit2Band],
+			["Audio: Split", "Split 2-Band St", TXSplit2BandSt],
+			["Audio: Split", "Split 4-Band", TXSplit4Band],
+			["Audio: Split", "Split 4-Band St", TXSplit4BandSt],
+			["Audio: Split", "Split 8-Band", TXSplit8Band],
+			["Audio: Split", "Split 8-Band St", TXSplit8BandSt],
 			["Audio: SuperCollider", "Code Source A", TXCodeSourceAu],
 			["Audio: SuperCollider", "Code Source A St", TXCodeSourceAuSt],
 			["Control: Analysis", "Amp Follower", TXAmpFollower3],
@@ -418,6 +449,7 @@ TXSystem1 {		// system module 1
 			["Control: Mixing", "X-Fader 2-1 C", TXXFader2to1C],
 			["Control: Modulation", "LFO", TXLFOMulti2],
 			["Control: Modulation", "LFO Curve", TXLFOCurve],
+			["Control: Modulation", "LFO Pulse", TXLFOPulse],
 			["Control: Modulation", "Perlin Noise", TXPerlinNoise],
 			["Control: Modulation", "T Noise Ring", TXTNoiseRing],
 			["Control: Modulation", "T Random", TXTRandom],
@@ -425,7 +457,9 @@ TXSystem1 {		// system module 1
 			["Control: Modulation", "T Random Walk", TXTRandomWalk],
 			["Control: Note Tools", "Note Multiply", TXNoteMultiply],
 			["Control: Note Tools", "Note Stacker", TXNoteStacker],
+			["Control: Note Tools", "PolyNote Trigger", TXPolyNoteTrigger],
 			["Control: Note Tools", "Scale Chord", TXScaleChord],
+			["Control: Note Tools", "Strum", TXStrum],
 			["Control: OSC", "OSC Controller", TXOSCController],
 			["Control: OSC", "OSC Control 2D ", TXOSCController2D],
 			["Control: OSC", "OSC Control Out", TXOSCControlOut],
@@ -455,10 +489,14 @@ TXSystem1 {		// system module 1
 		.sort({ arg a, b; a[1] < b[1] })
 		++ dataBank.arrSourceModulesByCategory;
 
+	}
+
+	*buildArrays3 {
 		dataBank.arrAudioInsertModulesByCategory = [
 			[">AUDIO INSERTS: ", nil, "audio"],
-			[">Channel tools ", nil, "audio"],
+			[">Channel Tools ", nil, "audio"],
 			["   Mono to Stereo", TXMonoToStereo, "audio"],
+			["   Rotate St", TXRotateSt, "audio"],
 			["   Stereo To Mono", TXStereoToMono2, "audio"],
 			["   Stereo Width", TXStereoWidth, "audio"],
 			[">Delay ", nil, "audio"],
@@ -477,6 +515,8 @@ TXSystem1 {		// system module 1
 			["   Disintegrator St", TXDisintegratorSt, "audio"],
 			["   Distortion", TXDistortion3, "audio"],
 			["   Distortion St", TXDistortion3St, "audio"],
+			["   DistortionMB", TXDistortionMB, "audio"],
+			["   DistortionMB St", TXDistortionMBSt, "audio"],
 			["   Interference", TXInterference, "audio"],
 			["   Interference St", TXInterferenceSt, "audio"],
 			["   WaveFold", TXWaveFold, "audio"],
@@ -494,6 +534,8 @@ TXSystem1 {		// system module 1
 			["   Balance St", TXBalanceSt, "audio"],
 			["   Compander", TXCompander3, "audio"],
 			["   Compander St", TXCompander3St, "audio"],
+			["   CompanderMB", TXCompanderMB, "audio"],
+			["   CompanderMB St", TXCompanderMBSt, "audio"],
 			["   Env Follow", TXEnvFollow, "audio"],
 			["   Env Follow St", TXEnvFollowSt, "audio"],
 			["   Gain", TXGain, "audio"],
@@ -506,6 +548,8 @@ TXSystem1 {		// system module 1
 			["   Noise Gate St", TXNoiseGateSt, "audio"],
 			["   SoftKnee Comp", TXSoftKneeComp, "audio"],
 			["   SoftKnee Comp St", TXSoftKneeCompSt, "audio"],
+			["   SoftKnee CompMB", TXSoftKneeCompMB, "audio"],
+			["   SoftKnee CompMB St", TXSoftKneeCompMBSt, "audio"],
 			["   Transient Shape", TXTransientShape, "audio"],
 			["   Transient Shape St", TXTransientShapeSt, "audio"],
 			[">EQ & Filter ", nil, "audio"],
@@ -529,6 +573,8 @@ TXSystem1 {		// system module 1
 			["   EQ Shelf St", TXEQShelfSt, "audio"],
 			["   Filter", TXFilterExt2, "audio"],
 			["   Filter St", TXFilterExt2St, "audio"],
+			["   FM Filter", TXFMFilter, "audio"],
+			["   FM Filter St", TXFMFilterSt, "audio"],
 			[">Gain Envelope ", nil, "audio"],
 			["   Gain 16-stage", TXGain16Stage, "audio"],
 			["   Gain 16-stage St", TXGain16StageSt, "audio"],
@@ -550,9 +596,11 @@ TXSystem1 {		// system module 1
 			["   Phaser", TXPhaser, "audio"],
 			["   Phaser St", TXPhaserSt, "audio"],
 			["   Ring Modulator", TXRingMod2, "audio"],
-			[">Pitch Shift ", nil, "audio"],
-			["   Pitch Shifter", TXPitchShifter, "audio"],
-			["   Pitch Shifter St", TXPitchShifterSt, "audio"],
+			[">Pitch & Freq Shift ", nil, "audio"],
+			["   Freq Shift", TXFreqShift, "audio"],
+			["   Freq Shift St", TXFreqShiftSt, "audio"],
+			["   Pitch Shift", TXPitchShift2, "audio"],
+			["   Pitch Shift St", TXPitchShiftSt2, "audio"],
 			[">Recording ", nil, "audio"],
 			["   File Recorder", TXFileRecorder2, "audio"],
 			["   File Recorder St", TXFileRecorder2St, "audio"],
@@ -605,6 +653,7 @@ TXSystem1 {		// system module 1
 			["   Sample and Hold", TXSampleHold, "control"],
 			["   Scale Quantise", TXScaleQuantise, "control"],
 			["   Smooth", TXSmooth2, "control"],
+			["   Trig to Gate ", TXTrig2Gate, "control"],
 			["   Warp ", TXWarp2, "control"],
 			["   Warp Morph ", TXWarpMorph, "control"],
 			[">SuperCollider ", nil, "control"],
@@ -638,6 +687,7 @@ TXSystem1 {		// system module 1
 		});
 
 		// init
+		Font.default = Font("Helvetica", 12);
 		dataBank.windowVisibleOrigin = Point.new(0,0);
 		//this.closeAllHIDDevices; // testing with/out
 
@@ -705,8 +755,8 @@ TXSystem1 {		// system module 1
 
 		// adjust for osx
 		// if (thisProcess.platform.name != \osx, {
-		// 	arrAllPossModules.remove(TXQCParticles2);
-		// 	arrAllPossModules.remove(TXQCPlayer4);
+		// 	arrAllPossModules.remove('TXQCParticles2');
+		// 	arrAllPossModules.remove('TXQCPlayer4');
 		// 	dataBank.arrSourceModulesByCategory.remove(["Control: Visual", "QC Particles", TXQCParticles2]);
 		// 	dataBank.arrSourceModulesByCategory.remove(["Control: Visual", "Quartz Player", TXQCPlayer4]);
 		// });
@@ -770,7 +820,8 @@ TXSystem1 {		// system module 1
 		//dataBank.holdServerOptions.zeroConf = true;
 		dataBank.holdServerOptions.zeroConf = false;
 		dataBank.holdServerOptions.verbosity = -1;
-		dataBank.holdServerOptions.device = dataBank.audioDevice;
+		//dataBank.holdServerOptions.device = dataBank.audioDevice;
+		dataBank.holdServerOptions.device = dataBank.audioDevice ?? {Server.default.options.device};
 		dataBank.holdServerOptions.hardwareBufferSize = dataBank.bufferSize;
 
 		// TESTING XXX  - if using iMac internal audio card, defSampleRate often causes error:
@@ -829,7 +880,7 @@ TXSystem1 {		// system module 1
 										holdName = this.getSnapshotName(item);
 										if (holdName == "", {holdName = "EMPTY"});
 										"Snapshot " ++ item.asString ++ ": " ++ holdName;
-									});},
+								});},
 								"Snapshot",
 								{arg view;
 									this.loadSnapshot(view.value);
@@ -897,11 +948,12 @@ TXSystem1 {		// system module 1
 
 						// initialise all module classes
 						arrAllPossModules.do({ arg item, i;
-							item.initClass;
-							item.system = this;
-							if (item.moduleType == "channel",
-								{item.group = groupChannels;},
-								{item.group = groupModules;}
+							var thisClass = item.asClass;
+							thisClass.initClass;
+							thisClass.system = this;
+							if (thisClass.moduleType == "channel",
+								{thisClass.group = groupChannels;},
+								{thisClass.group = groupModules;}
 							);
 						});
 						// initialise other classes
@@ -1015,6 +1067,7 @@ TXSystem1 {		// system module 1
 			TXColor.closePickerWindow;
 			// empty system
 			this.emptySystem;
+			this.removeOldSynthDefs;
 			//	NOTE - removed for now, can cause crashes
 			//		// stop mouse synth
 			//		mouseButtonSynth.free;
@@ -1036,6 +1089,7 @@ TXSystem1 {		// system module 1
 	}
 
 	*quitStandalone {
+		this.removeOldSynthDefs;
 		//0.exit;
 		//"killall SuperCollider".unixCmd;
 		("killall " ++ dataBank.standaloneName).unixCmd;
@@ -1257,34 +1311,34 @@ TXSystem1 {		// system module 1
 	////////////////////////////////////////////////////////////////////////////////////
 
 	/*	NOTE - removed for now, can cause crashes
-		*startMouseSynth{
-		var mouseTrigID;
-		// create unique id
-		mouseTrigID = UniqueID.next;
-		// defer
-		{
-		SynthDef("mouseButtonTrig",{|rate= 10|
-		var trig, mouseVal;
-		mouseVal = MouseButton.kr(0, 1, 0);
-		// trigger mouse value to be sent when value changes
-		trig = Trig.kr(HPZ1.kr(mouseVal).abs, 0.1);
-		SendTrig.kr( trig, mouseTrigID, mouseVal);
-		}).send(server);
-		mouseButtonResponder = OSCresponder(server.addr,'/tr',{ arg time,responder,msg;
-		if (msg[2] == mouseTrigID,{
-		if ( msg[3] == 1, {
-		{globalMouseDown = true;}.defer(0.05);
-		},{
-		{globalMouseDown = false;}.defer(0.05);
-		});
-		});
-		}).add;
-		}.defer(1);
-		// defer
-		{
-		mouseButtonSynth = Synth("mouseButtonTrig");
-		}.defer(2);
-		}
+	*startMouseSynth{
+	var mouseTrigID;
+	// create unique id
+	mouseTrigID = UniqueID.next;
+	// defer
+	{
+	SynthDef("mouseButtonTrig",{|rate= 10|
+	var trig, mouseVal;
+	mouseVal = MouseButton.kr(0, 1, 0);
+	// trigger mouse value to be sent when value changes
+	trig = Trig.kr(HPZ1.kr(mouseVal).abs, 0.1);
+	SendTrig.kr( trig, mouseTrigID, mouseVal);
+	}).send(server);
+	mouseButtonResponder = OSCresponder(server.addr,'/tr',{ arg time,responder,msg;
+	if (msg[2] == mouseTrigID,{
+	if ( msg[3] == 1, {
+	{globalMouseDown = true;}.defer(0.05);
+	},{
+	{globalMouseDown = false;}.defer(0.05);
+	});
+	});
+	}).add;
+	}.defer(1);
+	// defer
+	{
+	mouseButtonSynth = Synth("mouseButtonTrig");
+	}.defer(2);
+	}
 	*/
 	////////////////////////////////////////////////////////////////////////////////////
 
@@ -1387,8 +1441,8 @@ TXSystem1 {		// system module 1
 					var holdValCount, holdEvent, arrValNames;
 					if (argActionSpec.guiObjectType == \checkbox, {
 						holdValCount = 1;
-						},{
-							holdValCount = argActionSpec.arrControlSpecFuncs.size;
+					},{
+						holdValCount = argActionSpec.arrControlSpecFuncs.size;
 					});
 					holdEvent =  ( // new event
 						moduleName: argModule.instName,
@@ -1407,14 +1461,14 @@ TXSystem1 {		// system module 1
 								argActionSpec.arrControlSpecFuncs.do({arg argSpec, i;
 									holdArrNewVals[i] = argSpec.value.constrain(holdArrOldVals[i])
 								});
-								},{
-									holdArrNewVals[0] = ControlSpec(0, 1, step: 1).constrain(holdArrOldVals[0]);
+							},{
+								holdArrNewVals[0] = ControlSpec(0, 1, step: 1).constrain(holdArrOldVals[0]);
 							});
 							if (argActionSpec.actionType == \commandAction, {
 								argActionSpec.actionFunction.value(holdArrNewVals[0],holdArrNewVals[1],
 									holdArrNewVals[2], holdArrNewVals[3]);
-								},{
-									argActionSpec.setValueFunction.value(holdArrNewVals[0]);
+							},{
+								argActionSpec.setValueFunction.value(holdArrNewVals[0]);
 							});
 						}
 					);
@@ -1568,13 +1622,14 @@ TXSystem1 {		// system module 1
 			this.arrSampleBanks[0][0] = arrData.at(6).deepCopy;
 			this.arrLoopBanks[0][0] = arrData.at(7).deepCopy;
 		});
+		this.verifySampleLoopBanks;
 		arrNotes  = arrData.at(8) ? Array.newClear(8);
 		arrFrontScreenData = arrData.at(9).deepCopy;
 		arrSnapshots  = arrData.at(10).deepCopy ? Array.newClear(100);
 		arrModuleLayoutData = arrData.at(11).deepCopy;
 		if (arrModuleLayoutData.notNil,
 			{TXSignalFlow.loadData(arrModuleLayoutData);
-			});
+		});
 		if (arrData.at(13).notNil, {
 			dataBank.imageFileName = arrData.at(13);
 			dataBank.holdImage = nil;
@@ -1650,9 +1705,10 @@ TXSystem1 {		// system module 1
 				newModule.loadModuleID(item);
 				newModule.loadData(item);
 				// flag if legacy module
-				if (arrAllPossModules.indexOf(holdModuleClass).isNil && (holdModuleClass.asString.keep(4) != "TXV_"), {
-					//("Info: Opening " ++ holdModuleClass.name.asString ++ " - this is an older TX module.").postln;
-					newModule.legacyModule = true;
+				if (arrAllPossModules.indexOf(holdModuleClass.name).isNil
+					&& (holdModuleClass.asString.keep(4) != "TXV_"), {
+						//("Info: Opening " ++ holdModuleClass.name.asString ++ " - this is an older TX module.").postln;
+						newModule.legacyModule = true;
 				});
 
 				// remove condition from load queue
@@ -1688,8 +1744,8 @@ TXSystem1 {		// system module 1
 			// the following are extra inits for specific classes & modules:
 			// restore outputs on relevant modules
 			arrAllPossModules.do ({ arg item, i;
-				if (item.respondsTo('restoreAllOutputs'), {
-					item.restoreAllOutputs;
+				if (item.asClass.respondsTo('restoreAllOutputs'), {
+					item.asClass.restoreAllOutputs;
 				});
 			});
 			// resync TXOSCRemote modules
@@ -1850,7 +1906,7 @@ TXSystem1 {		// system module 1
 			or: (argModClass.moduleType == "insert"), {
 				// set module index no in arrSystemModules
 				moduleIndex = arrSystemModules.size - 1;
-			});
+		});
 		// if module type is Source or groupsource then add channel to routing
 		if ((argModClass.moduleType == "source") or: (argModClass.moduleType == "groupsource"), {
 			// set position
@@ -1996,6 +2052,10 @@ TXSystem1 {		// system module 1
 		^TXBankBuilder2.arrLoopBanks.collect({arg item, i; i.asString + "-" + item[1]});
 	}
 
+	*verifySampleLoopBanks{
+		^TXBankBuilder2.verifySampleLoopBanks;
+	}
+
 	*sampleBank{ arg bankNo=0;
 		// get bank
 		^TXBankBuilder2.sampleBank(bankNo);
@@ -2023,52 +2083,39 @@ TXSystem1 {		// system module 1
 		^this.sampleFiles(bankNo).select({arg item, i; item.at(2) == 2;});
 	}
 
-	*sampleFileNames{ arg bankNo=0, cleanForPopup = false;
-		// get bank
-		^this.sampleFiles(bankNo).collect({arg item, i;
+	*extractBankFileNames{ arg bank, cleanForPopup = false;
+		^bank.collect({arg item, i;
 			var errorText, nameString;
+			var holdPath = item.at(0);
 			errorText = "";
-			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
+			holdPath = TXPath.convert(holdPath);
+			if (File.exists(holdPath).not and: {holdPath != "REMOVED"}, {
+				errorText = "** MISSING FILE: ";
+			});
+			if (item.at(3) == false and: {holdPath != "REMOVED"}, {
 				errorText = "** INVALID FILE: ";
 			});
-			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
+			nameString = i.asString + "-" + errorText ++ holdPath.basename;
 			if (cleanForPopup == true, {
 				nameString = TXString.removePopupSpecialCharacters(nameString);
 			});
 			nameString;
 		});
+	}
+
+	*sampleFileNames{ arg bankNo=0, cleanForPopup = false;
+		// get bank
+		^this.extractBankFileNames(this.sampleFiles(bankNo), cleanForPopup);
 	}
 
 	*sampleMonoFileNames{ arg bankNo=0, cleanForPopup = false;
 		// get bank
-		^this.sampleFilesMono(bankNo).collect({arg item, i;
-			var errorText, nameString;
-			errorText = "";
-			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: ";
-			});
-			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
-			if (cleanForPopup == true, {
-				nameString = TXString.removePopupSpecialCharacters(nameString);
-			});
-			nameString;
-		});
+		^this.extractBankFileNames(this.sampleFilesMono(bankNo), cleanForPopup);
 	}
 
 	*sampleStereoFileNames{ arg bankNo=0, cleanForPopup = false;
 		// get bank
-		^this.sampleFilesStereo(bankNo).collect({arg item, i;
-			var errorText, nameString;
-			errorText = "";
-			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: ";
-			});
-			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
-			if (cleanForPopup == true, {
-				nameString = TXString.removePopupSpecialCharacters(nameString);
-			});
-			nameString;
-		});
+		^this.extractBankFileNames(this.sampleFilesStereo(bankNo), cleanForPopup);
 	}
 	*loopBank{ arg bankNo=0;
 		// get bank
@@ -2099,49 +2146,41 @@ TXSystem1 {		// system module 1
 
 	*loopFileNames{ arg bankNo=0, cleanForPopup = false;
 		// get bank
-		^this.loopFiles(bankNo).collect({arg item, i;
-			var errorText, nameString;
-			errorText = "";
-			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: ";
-			});
-			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
-			if (cleanForPopup == true, {
-				nameString = TXString.removePopupSpecialCharacters(nameString);
-			});
-			nameString;
-		});
+		^this.extractBankFileNames(this.loopFiles(bankNo), cleanForPopup);
 	}
 
 	*loopMonoFileNames{ arg bankNo=0, cleanForPopup = false;
 		// get bank
-		^this.loopFilesMono(bankNo).collect({arg item, i;
-			var errorText, nameString;
-			errorText = "";
-			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: ";
-			});
-			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
-			if (cleanForPopup == true, {
-				nameString = TXString.removePopupSpecialCharacters(nameString);
-			});
-			nameString;
-		});
+		^this.extractBankFileNames(this.loopFilesMono(bankNo), cleanForPopup);
 	}
 
 	*loopStereoFileNames{ arg bankNo=0, cleanForPopup = false;
 		// get bank
-		^this.loopFilesStereo(bankNo).collect({arg item, i;
-			var errorText, nameString;
-			errorText = "";
-			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
-				errorText = "** INVALID FILE: ";
-			});
-			nameString = i.asString + "-" + errorText ++ item.at(0).basename;
-			if (cleanForPopup == true, {
-				nameString = TXString.removePopupSpecialCharacters(nameString);
-			});
-			nameString;
+		^this.extractBankFileNames(this.loopFilesStereo(bankNo), cleanForPopup);
+	}
+
+	*reloadAllLoops{arg bankNo;
+		// reload in all modules which use loops
+		[
+			TXLoopPlayer,
+			TXLoopPlayerSt2,
+		].do({arg item, i;
+			item.reloadAllLoops(bankNo);
+		});
+	}
+
+	*reloadAllSamples{arg bankNo;
+		[
+			// reload in all modules which use loops
+			TXConvolution,
+			TXConvolutionSt,
+			TXGranulator2,
+			TXSamplePlayer5a,
+			TXSamplePlayerSt6,
+			TXSamplePlayerPlus3,
+			TXSamplePlayerPlus3St,
+		].do({arg item, i;
+			item.reloadAllSamples(bankNo);
 		});
 	}
 

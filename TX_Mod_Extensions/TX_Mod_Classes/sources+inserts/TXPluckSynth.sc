@@ -19,8 +19,11 @@ TXPluckSynth : TXModuleBase {
 		classData.defaultName = "Pluck Synth";
 		classData.moduleRate = "audio";
 		classData.moduleType = "groupsource";
+		classData.arrAudSCInBusSpecs = [
+			["Pluck input", 1, "sideChain"]
+		];
 		classData.arrCtlSCInBusSpecs = [
-			["Pick noise", 1, "modNoiseshape", 0],
+			["Pick morph", 1, "modNoiseshape", 0],
 			["Filtering", 1, "modFiltershape", 0],
 			["Pitch bend", 1, "modPitchbend", 0],
 			["Decay", 1, "modDecay", 0],
@@ -41,12 +44,14 @@ TXPluckSynth : TXModuleBase {
 		//	set  class specific instance variables
 		displayOption = "showPluck";
 		arrSynthArgSpecs = [
+			["sideChain", 0, 0],
 			["out", 0, 0],
 			["gate", 1, 0],
 			["note", 0, 0],
 			["velocity", 0, 0],
 			["keytrack", 1, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -78,36 +83,41 @@ TXPluckSynth : TXModuleBase {
 			TXEnvLookup.arrSlopeOptionData,
 			TXEnvLookup.arrDADSRSustainOptionData,
 			[
-				["Noise:    Pink Noise <-> White Noise",
+				["Noise:  Morph between Pink & White Noise",
 					{arg outFreq, outNoiseshape;
 						(PinkNoise.ar(0.75) * (1-outNoiseshape))
 						+ (WhiteNoise.ar(0.5) * outNoiseshape);
 					}
 				],
-				["Waveform:    Square <-> Sawtooth",
+				["Waveform:  Morph between Square & Sawtooth",
 					{arg outFreq, outNoiseshape;
 						(Pulse.ar(outFreq, 0.5, 0.5) * (1-outNoiseshape))
 						+ (Saw.ar(outFreq, 0.5) * outNoiseshape);
 					}
 				],
-				["Waveform + distortion:    Square <-> Sawtooth",
+				["Waveform + distortion:  Morph between Square & Sawtooth",
 					{arg outFreq, outNoiseshape;
 						((Pulse.ar(outFreq, 0.5, 0.5) * (1-outNoiseshape))
 							+ (Saw.ar(outFreq, 0.5) * outNoiseshape)).distort;
 					}
 				],
-				["Waveform + soft clipping:    Square <-> Sawtooth",
+				["Waveform + soft clipping:  Morph between Square & Sawtooth",
 					{arg outFreq, outNoiseshape;
 						((Pulse.ar(outFreq, 0.5, 0.5) * (1-outNoiseshape))
 							+ (Saw.ar(outFreq, 0.5) * outNoiseshape)).softclip;
 					}
-				]
+				],
+				["Pluck input:  Use Pluck input for pick sound",
+					{arg outFreq, outNoiseshape, sideChain; InFeedback.ar(sideChain, 1);
+					}
+				],
 			],
 			// amp compensation
 			TXAmpComp.arrOptionData,
 		];
 		synthDefFunc = {
-			arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			arg sideChain, out, gate, note, velocity, keytrack, transpose,
+			pitchOffset, pitchbend, pitchbendMin, pitchbendMax,
 			filtershape, filtershapeMin, filtershapeMax, noiseshape, noiseshapeMin, noiseshapeMax,
 			level, envtime, decay, decayMin, decayMax,
 			release, releaseMin, releaseMax, intKey,
@@ -135,10 +145,10 @@ TXPluckSynth : TXModuleBase {
 			outFreq = (intonationFunc.value(
 				(note + transpose), intKey) * keytrack) + ((48 + transpose).midicps * (1-keytrack));
 			pickFunction = this.getSynthOption(4);
-			outPick = (pickFunction.value(outFreq, outNoiseshape));
+			outPick = (pickFunction.value(outFreq, outNoiseshape, sideChain));
 			oddharms = this.getSynthOption(0);
 			outPluck = Pluck.ar(outPick, 1, 8.reciprocal,
-				(outFreq *  (2 ** (pbend /12))).reciprocal, dec * oddharms, outFiltershape);
+				(outFreq *  (2 ** ((pitchOffset + pbend) /12))).reciprocal, dec * oddharms, outFiltershape);
 			ampCompFunction = this.getSynthOption(5);
 			outAmpComp = ampCompFunction.value(outFreq);
 			Out.ar(out, TXClean.ar(outEnv * outPluck * outAmpComp * level * (velocity * 0.007874) ));
@@ -201,26 +211,30 @@ TXPluckSynth : TXModuleBase {
 		if (displayOption == "showPluck", {
 			guiSpecArray = guiSpecArray ++[
 				["SynthOptionPopupPlusMinus", "Pick type", arrOptionData, 4, nil, {system.flagGuiUpd}],
+				["SpacerLine", 2],
 				["TXMinMaxSliderSplit", "Pick morph", \unipolar, "noiseshape", "noiseshapeMin", "noiseshapeMax"],
+				["SpacerLine", 2],
 				["TXMinMaxSliderSplit", "Filtering", ControlSpec(-1, 1), "filtershape", "filtershapeMin", "filtershapeMax", nil,
 					[["Presets:", []], ["range 0 to 1", [0, 1]], ["range 0 to 0.9", [0, 0.9]], ["range 0 to 0.1", [0, 0.1]],
 						["range -0.1 to 0", [-0.1, 0]], ]
 				],
-				["SynthOptionCheckBox", "Boost odd partials", arrOptionData, 0],
+				["SpacerLine", 2],
+				["SynthOptionCheckBox", "Boost odd partials", arrOptionData, 0, 200],
 				["DividingLine"],
 				["SpacerLine", 4],
 				["TXMinMaxSliderSplit", "Decay", classData.timeSpec, "decay", "decayMin", "decayMax",
 					{{this.updateEnvView;}.defer;}],
+				["SpacerLine", 2],
 				["TXMinMaxSliderSplit", "Release", classData.timeSpec, "release", "releaseMin", "releaseMax",
 					{{this.updateEnvView;}.defer;}],
 				["NextLine"],
 				["SynthOptionPopup", "Curve", arrOptionData, 2, 200, {system.showView;}],
-				["NextLine"],
+				["SpacerLine", 2],
 				["SynthOptionPopup", "Env Type", arrOptionData, 3, 300],
 				["DividingLine"],
 				["SpacerLine", 4],
 				["EZslider", "Level", ControlSpec(0, 1), "level"],
-				["SpacerLine", 4],
+				["SpacerLine", 2],
 				["SynthOptionPopupPlusMinus", "Amp Comp", arrOptionData, 5],
 			];
 		});

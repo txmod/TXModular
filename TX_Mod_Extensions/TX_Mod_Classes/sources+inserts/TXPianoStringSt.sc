@@ -88,6 +88,7 @@ TXPianoStringSt : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 1, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -165,7 +166,8 @@ TXPianoStringSt : TXModuleBase {
 			TXAmpComp.arrOptionData,
 		];
 		synthDefFunc = {
-			arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			arg out, gate, note, velocity, keytrack, transpose,
+			pitchOffset,  pitchbend, pitchbendMin, pitchbendMax,
 			detune, detuneMin, detuneMax,
 			minStringRatio, minStringRatioMin, minStringRatioMax,
 			maxStringRatio, maxStringRatioMin, maxStringRatioMax,
@@ -201,7 +203,7 @@ TXPianoStringSt : TXModuleBase {
 			intonationFunc = this.getSynthOption(1);
 			outFreq = (intonationFunc.value(
 				(note + transpose), intKey) * keytrack) + ((48 + transpose).midicps * (1-keytrack));
-			outFreq = outFreq *  (2 ** (pbend /12));
+			outFreq = outFreq *  (2 ** ((pitchOffset + pbend) /12));
 			hammerType = this.getSynthOption(0);
 
 			// limit velocity

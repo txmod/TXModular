@@ -54,6 +54,14 @@ TXSamplePlayerSt6 : TXModuleBase {
 		^super.new.init(argInstName);
 	}
 
+	*reloadAllSamples{arg argbankNo, argindex;
+		classData.arrInstances.do({ arg item, i;
+			if (argbankNo.isNil or: {argbankNo == item.bankNo}, {
+				item.loadSample(item.sampleNo);
+			});
+		});
+	}
+
 	init {arg argInstName;
 		//	set  class specific instance variables
 		timeSpec = ControlSpec(0.01, 20);
@@ -65,6 +73,7 @@ TXSamplePlayerSt6 : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 1, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -200,7 +209,8 @@ TXSamplePlayerSt6 : TXModuleBase {
 			TXAmpComp.arrOptionData,
 		];
 		synthDefFunc = {
-			arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			arg out, gate, note, velocity, keytrack, transpose,
+			pitchOffset,  pitchbend, pitchbendMin, pitchbendMax,
 			bufnumSampleStereo, bufnumSampleMono, sampleIsStereo,
 			bankNo, sampleNo, sampleFreq, start, end, reverse, level,
 			envtime=0, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain, sustain2,
@@ -232,7 +242,7 @@ TXSamplePlayerSt6 : TXModuleBase {
 			outFreq = (intonationFunc.value((note + transpose), intKey) * keytrack) + ((sampleFreq.cpsmidi
 				+ transpose).midicps * (1-keytrack));
 			pbend = pitchbendMin + ((pitchbendMax - pitchbendMin) * (pitchbend + modPitchbend).max(0).min(1));
-			outRate = ((outFreq *  (2 ** (pbend /12))) / sampleFreq) * (rev-0.5).neg.sign;
+			outRate = ((outFreq *  (2 ** ((pitchOffset + pbend) /12))) / sampleFreq) * (rev-0.5).neg.sign;
 			outFunction = this.getSynthOption(0);
 			outSample = outFunction.value(outRate, bufnumSampleStereo, bufnumSampleMono, sStart, sEnd) * level * 2;
 			// amplitude is vel *  0.00315 approx. == 1 / 127
@@ -445,6 +455,20 @@ TXSamplePlayerSt6 : TXModuleBase {
 		});
 	}
 
+	clearBuffer {
+		// clear the current buffer & filename
+		buffers.at(0).zero;
+		buffers.at(1).zero;
+		sampleFileName = "";
+		sampleNumChannels = 0;
+		sampleFreq = 440;
+		// store Freq to synthArgSpecs
+		this.setSynthArgSpec("sampleFreq", sampleFreq);
+		this.setSynthArgSpec("sampleIsStereo", 1);
+		//	rebuild synth to update stereo/mono
+		this.rebuildSynth;
+	}
+
 	loadSample { arg argIndex; // method to load samples into buffer
 		var holdBuffer, holdBufferNum, holdBufferString, holdSampleInd, holdModCondition, holdPath;
 		Routine.run {
@@ -460,17 +484,7 @@ TXSamplePlayerSt6 : TXModuleBase {
 			holdSampleInd = (argIndex - 1).min(system.sampleFiles(bankNo).size-1);
 			// check for invalid samples
 			if (argIndex == 0 or: {system.sampleFiles(bankNo).at(holdSampleInd).at(3) == false}, {
-				// if argIndex is 0, clear the current buffer & filename
-				buffers.at(0).zero;
-				buffers.at(1).zero;
-				sampleFileName = "";
-				sampleNumChannels = 0;
-				sampleFreq = 440;
-				// store Freq to synthArgSpecs
-				this.setSynthArgSpec("sampleFreq", sampleFreq);
-				this.setSynthArgSpec("sampleIsStereo", 1);
-				//	rebuild synth to update stereo/mono
-				this.rebuildSynth;
+				this.clearBuffer;
 			},{
 				// otherwise,  try to load sample.  if it fails, display error message and clear
 				// check for stereo
@@ -486,35 +500,40 @@ TXSamplePlayerSt6 : TXModuleBase {
 				holdPath = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
 				// Convert path
 				holdPath = TXPath.convert(holdPath);
-				holdBuffer = Buffer.read(system.server, holdPath,
-					action: { arg argBuffer;
-						{
-							//	if file loaded ok
-							if (argBuffer.notNil, {
-								this.setSynthArgSpec(holdBufferString, argBuffer.bufnum);
-								sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
-								sampleNumChannels = argBuffer.numChannels;
-								sampleFreq = system.sampleFiles(bankNo).at(holdSampleInd).at(1);
-								// store Freq to synthArgSpecs
-								this.setSynthArgSpec("sampleFreq", sampleFreq);
-							},{
-								buffers.at(0).zero;
-								buffers.at(1).zero;
-								sampleFileName = "";
-								sampleNumChannels = 0;
-								sampleFreq = 440;
-								// store Freq to synthArgSpecs
-								this.setSynthArgSpec("sampleFreq", sampleFreq);
-								TXInfoScreen.new("Invalid Sample File"
-									++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
-							});
-							//	rebuild synth to update stereo/mono
-							this.rebuildSynth;
-						}.defer;	// defer because gui process
-					},
-					// pass buffer number
-					bufnum: holdBufferNum
-				);
+				if (File.exists(holdPath), {
+					holdBuffer = Buffer.read(system.server, holdPath,
+						action: { arg argBuffer;
+							{
+								//	if file loaded ok
+								if (argBuffer.notNil, {
+									this.setSynthArgSpec(holdBufferString, argBuffer.bufnum);
+									sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
+									sampleNumChannels = argBuffer.numChannels;
+									sampleFreq = system.sampleFiles(bankNo).at(holdSampleInd).at(1);
+									// store Freq to synthArgSpecs
+									this.setSynthArgSpec("sampleFreq", sampleFreq);
+								},{
+									buffers.at(0).zero;
+									buffers.at(1).zero;
+									sampleFileName = "";
+									sampleNumChannels = 0;
+									sampleFreq = 440;
+									// store Freq to synthArgSpecs
+									this.setSynthArgSpec("sampleFreq", sampleFreq);
+									TXInfoScreen.new("Invalid Sample File"
+										++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
+								});
+								//	rebuild synth to update stereo/mono
+								this.rebuildSynth;
+							}.defer;	// defer because gui process
+						},
+						// pass buffer number
+						bufnum: holdBufferNum
+					);
+				},{
+					// if file not found, clear the current buffer & filename
+					this.clearBuffer;
+				});
 			});
 			// remove condition from load queue
 			system.holdLoadQueue.removeCondition(holdModCondition);

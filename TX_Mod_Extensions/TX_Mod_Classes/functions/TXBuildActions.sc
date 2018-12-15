@@ -596,6 +596,38 @@ TXBuildActions {		// Action Builder
 				arrActionSpecs = arrActionSpecs.add(holdAction);
 			});
 
+			// SynthOptionCheckBox
+			// arguments- index1 is checkbox text, index2 is synth arg name to be updated,
+			// 	index3 is an optional ACTION function to be valued in views action, index 4 is optional width
+			// e.g. ["SynthOptionCheckBox", "Frequency Modulation", arrOptionData, 3]
+			if (item.at(0) == "SynthOptionCheckBox", {
+				holdAction = TXAction.new(\valueAction, "Set " ++ item.at(1));
+				holdAction.legacyType = 0;
+				holdAction.getValueFunction = {argModule.arrOptions.at(item.at(3))};
+				holdAction.setValueFunction = {arg argValue;
+					argModule.arrOptions.put(item.at(3), argValue);
+					// run action function passing it value as arg
+					item.at(3).value(argValue);
+					// must rebuild synth as synth options have changed
+					argModule.rebuildSynth;
+				};
+				holdAction.guiObjectType = \checkbox;
+				arrActionSpecs = arrActionSpecs.add(holdAction);
+				// add commandAction to toggle value
+				holdActionFunc = {
+					var holdCurVal;
+					// get current val and update with opposite value
+					holdCurVal = argModule.arrOptions.at(item.at(3));
+					argModule.arrOptions.put(item.at(3), (1 - holdCurVal));
+					// run action function passing it value as arg
+					item.at(3).value((1 - holdCurVal));
+					// must rebuild synth as synth options have changed
+					argModule.rebuildSynth;
+				};
+				holdAction = TXAction.new(\commandAction, "Toggle " ++ item.at(1), holdActionFunc);
+				arrActionSpecs = arrActionSpecs.add(holdAction);
+			});
+
 			// TXCheckBox
 			// arguments- index1 is checkbox text, index2 is synth arg name to be updated,
 			// 	index3 is an optional ACTION function to be valued in views action, index 4 is optional width

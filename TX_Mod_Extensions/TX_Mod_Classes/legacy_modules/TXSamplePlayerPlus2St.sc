@@ -77,6 +77,12 @@ TXSamplePlayerPlus2St : TXModuleBase {
 		^super.new.init(argInstName);
 	}
 
+	*reloadAllSamples{
+		classData.arrInstances.do({ arg item, i;
+			item.loadSample(item.sampleNo);
+		});
+	}
+
 	init {arg argInstName;
 		//	set  class specific instance variables
 		displayOption = "showSample";
@@ -1155,6 +1161,20 @@ TXSamplePlayerPlus2St : TXModuleBase {
 		arrSlotData = argData.at(10);
 	}
 
+	clearBuffer {
+		// clear the current buffer & filename
+		buffers.at(0).zero;
+		buffers.at(1).zero;
+		sampleFileName = "";
+		sampleNumChannels = 0;
+		sampleFreq = 440;
+		// store Freq to synthArgSpecs
+		this.setSynthArgSpec("sampleFreq", sampleFreq);
+		this.setSynthArgSpec("sampleIsStereo", 1);
+		//	rebuild synth to update stereo/mono
+		this.rebuildSynth;
+	}
+
 	loadSample { arg argIndex; // method to load samples into buffer
 		var holdBuffer, holdBufferNum, holdBufferString, holdSampleInd, holdModCondition, holdPath;
 		Routine.run {
@@ -1170,17 +1190,7 @@ TXSamplePlayerPlus2St : TXModuleBase {
 			holdSampleInd = (argIndex - 1).min(system.sampleFiles(bankNo).size-1);
 			// check for invalid samples
 			if (argIndex == 0 or: {system.sampleFiles(bankNo).at(holdSampleInd).at(3) == false}, {
-				// if argIndex is 0, clear the current buffer & filename
-				buffers.at(0).zero;
-				buffers.at(1).zero;
-				sampleFileName = "";
-				sampleNumChannels = 0;
-				sampleFreq = 440;
-				// store Freq to synthArgSpecs
-				this.setSynthArgSpec("sampleFreq", sampleFreq);
-				this.setSynthArgSpec("sampleIsStereo", 1);
-				//	rebuild synth to update stereo/mono
-				this.rebuildSynth;
+				this.clearBuffer;
 			},{
 				// otherwise,  try to load sample.  if it fails, display error message and clear
 				// check for stereo
@@ -1196,35 +1206,40 @@ TXSamplePlayerPlus2St : TXModuleBase {
 				holdPath = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
 				// Convert path
 				holdPath = TXPath.convert(holdPath);
-				holdBuffer = Buffer.read(system.server, holdPath,
-					action: { arg argBuffer;
-						{
-							//	if file loaded ok
-							if (argBuffer.notNil, {
-								this.setSynthArgSpec(holdBufferString, argBuffer.bufnum);
-								sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
-								sampleNumChannels = argBuffer.numChannels;
-								sampleFreq = system.sampleFiles(bankNo).at(holdSampleInd).at(1);
-								// store Freq to synthArgSpecs
-								this.setSynthArgSpec("sampleFreq", sampleFreq);
-							},{
-								buffers.at(0).zero;
-								buffers.at(1).zero;
-								sampleFileName = "";
-								sampleNumChannels = 0;
-								sampleFreq = 440;
-								// store Freq to synthArgSpecs
-								this.setSynthArgSpec("sampleFreq", sampleFreq);
-								TXInfoScreen.new("Invalid Sample File"
-									++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
-							});
-							//	rebuild synth to update stereo/mono
-							this.rebuildSynth;
-						}.defer;	// defer because gui process
-					},
-					// pass buffer number
-					bufnum: holdBufferNum
-				);
+				if (File.exists(holdPath), {
+					holdBuffer = Buffer.read(system.server, holdPath,
+						action: { arg argBuffer;
+							{
+								//	if file loaded ok
+								if (argBuffer.notNil, {
+									this.setSynthArgSpec(holdBufferString, argBuffer.bufnum);
+									sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
+									sampleNumChannels = argBuffer.numChannels;
+									sampleFreq = system.sampleFiles(bankNo).at(holdSampleInd).at(1);
+									// store Freq to synthArgSpecs
+									this.setSynthArgSpec("sampleFreq", sampleFreq);
+								},{
+									buffers.at(0).zero;
+									buffers.at(1).zero;
+									sampleFileName = "";
+									sampleNumChannels = 0;
+									sampleFreq = 440;
+									// store Freq to synthArgSpecs
+									this.setSynthArgSpec("sampleFreq", sampleFreq);
+									TXInfoScreen.new("Invalid Sample File"
+										++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
+								});
+								//	rebuild synth to update stereo/mono
+								this.rebuildSynth;
+							}.defer;	// defer because gui process
+						},
+						// pass buffer number
+						bufnum: holdBufferNum
+					);
+				},{
+					// if file not found, clear the current buffer & filename
+					this.clearBuffer;
+				});
 			});
 			// remove condition from load queue
 			system.holdLoadQueue.removeCondition(holdModCondition);

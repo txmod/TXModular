@@ -100,6 +100,7 @@ TXWaveSynthPlus4 : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 1, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -391,7 +392,7 @@ TXWaveSynthPlus4 : TXModuleBase {
 		];
 		synthDefFunc = {
 			arg inmodulator, out, bufnumCurve1, bufnumCurve2, gate, note, velocity, keytrack, transpose,
-			pitchbend, pitchbendMin, pitchbendMax,
+			pitchOffset, pitchbend, pitchbendMin, pitchbendMax,
 			modify1, modify1Min, modify1Max, modify2, modify2Min, modify2Max,
 			level,
 			envtime, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain, sustain2,
@@ -562,7 +563,7 @@ TXWaveSynthPlus4 : TXModuleBase {
 
 			waveFunction = this.getSynthOption(0);
 			outWave = waveFunction.value(
-				(outFreq * fmOut *  (2 ** (pbend /12))).max(0.midicps),
+				(outFreq * fmOut *  (2 ** ((pitchOffset + pbend) /12))).max(0.midicps),
 				mod1,
 				mod2
 			);

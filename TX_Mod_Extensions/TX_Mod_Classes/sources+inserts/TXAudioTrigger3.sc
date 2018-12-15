@@ -69,16 +69,28 @@ TXAudioTrigger3 : TXModuleBase {
 	buildGuiSpecArray {
 		guiSpecArray = [
 			["ActionButton", "Trigger", {displayOption = "showTrigger";
-				this.buildGuiSpecArray; system.showView;}, 130,
+				this.buildGuiSpecArray; system.showView;}, 100,
 			TXColor.white, this.getButtonColour(displayOption == "showTrigger")],
 			["Spacer", 3],
-			["ActionButton", "Actions 1-5", {displayOption = "showActions1-5";
-				this.buildGuiSpecArray; system.showView;}, 130,
-			TXColor.white, this.getButtonColour(displayOption == "showActions1-5")],
+			["ActionButton", "Actions 1-2", {displayOption = "showActions1-2";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions1-2")],
 			["Spacer", 3],
-			["ActionButton", "Actions 6-10", {displayOption = "showActions6-10";
-				this.buildGuiSpecArray; system.showView;}, 130,
-			TXColor.white, this.getButtonColour(displayOption == "showActions6-10")],
+			["ActionButton", "Actions 3-4", {displayOption = "showActions3-4";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions3-4")],
+			["Spacer", 3],
+			["ActionButton", "Actions 5-6", {displayOption = "showActions5-6";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions5-6")],
+			["Spacer", 3],
+			["ActionButton", "Actions 7-8", {displayOption = "showActions7-8";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions7-8")],
+			["Spacer", 3],
+			["ActionButton", "Actions 9-10", {displayOption = "showActions9-10";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions9-10")],
 			["Spacer", 3],
 			["DividingLine"],
 			["SpacerLine", 6],
@@ -90,30 +102,47 @@ TXAudioTrigger3 : TXModuleBase {
 				["EZslider", "Reload time", ControlSpec(0.01, 1), "trigHoldTime"],
 			];
 		});
-		if (displayOption == "showActions1-5", {
+		if (displayOption == "showActions1-2", {
 			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 0],
 				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 1],
-				["DividingLine"],
-				["TXActionView", arrActions, 2],
-				["DividingLine"],
-				["TXActionView", arrActions, 3],
-				["DividingLine"],
-				["TXActionView", arrActions, 4],
 				["DividingLine"],
 			];
 		});
-		if (displayOption == "showActions6-10", {
+		if (displayOption == "showActions3-4", {
 			guiSpecArray = guiSpecArray ++[
+				["TXActionView", arrActions, 2],
+				["DividingLine"],
+				["SpacerLine", 4],
+				["TXActionView", arrActions, 3],
+				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions5-6", {
+			guiSpecArray = guiSpecArray ++[
+				["TXActionView", arrActions, 4],
+				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 5],
 				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions7-8", {
+			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 6],
 				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 7],
 				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions9-10", {
+			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 8],
 				["DividingLine"],
+				["SpacerLine", 4],
 				["TXActionView", arrActions, 9],
 				["DividingLine"],
 			];

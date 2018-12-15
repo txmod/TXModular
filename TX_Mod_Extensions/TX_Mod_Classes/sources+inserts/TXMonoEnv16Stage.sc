@@ -20,9 +20,10 @@ TXMonoEnv16Stage : TXModuleBase {
 			["Gate close time", 1, "modGateCloseTime", 0],
 			["Level scale", 1, "modLevelScale", 0],
 		];
-		classData.noOutChannels = 1;
+		classData.noOutChannels = 2;
 		classData.arrOutBusSpecs = [
-			["Out", [0]]
+			["Env Out", [0]],
+			["Env End Trig", [1]],
 		];
 		classData.guiWidth = 900;
 	}
@@ -222,7 +223,7 @@ TXMonoEnv16Stage : TXModuleBase {
 			time0, time1, time2, time3, time4, time5, time6, time7, time8, time9, time10,
 			time11, time12, time13, time14, time15, time16, levelScale, modGate=0, modGateCloseTime=0, modLevelScale=0;
 
-			var gt, outGate, gateFunction, arrEnvCurves, envFunction, arrLevels, arrTimes, outEnv, levelSc;
+			var gt, outGate, gateFunction, arrEnvCurves, envFunction, arrLevels, arrTimes, outEnv, envEnd, levelSc;
 
 			gt = (gate + modGate).max(0).min(1);
 			gateFunction = this.getSynthOption(5);
@@ -240,10 +241,11 @@ TXMonoEnv16Stage : TXModuleBase {
 					this.getSynthOption(3)-1, this.getSynthOption(4)-1),
 				outGate,
 				doneAction: 0
-			)
-			- 0.001; // remove exponential offset
+			);
 			levelSc = (levelScale + modLevelScale).max(0).min(1);
-			Out.kr(out, outEnv * levelSc);
+			envEnd = Trig1.kr(Done.kr(outEnv), ControlDur.ir);
+			// - 0.001 : remove exponential offset in env function
+			Out.kr(out, [(outEnv - 0.001) * levelSc, envEnd]);
 		};
 		this.buildGuiSpecArray;
 		arrActionSpecs = this.buildActionSpecs([

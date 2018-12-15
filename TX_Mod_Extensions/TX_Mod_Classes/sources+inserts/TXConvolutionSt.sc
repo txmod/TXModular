@@ -45,6 +45,14 @@ TXConvolutionSt : TXModuleBase {
 		^super.new.init(argInstName);
 	}
 
+	*reloadAllSamples{arg argbankNo, argindex;
+		classData.arrInstances.do({ arg item, i;
+			if (argbankNo.isNil or: {argbankNo == item.bankNo}, {
+				item.loadSample(item.sampleNo);
+			});
+		});
+	}
+
 	init {arg argInstName;
 		//	set  class specific instance variables
 		extraLatency = 0.2;	// allow extra time when recreating
@@ -150,7 +158,7 @@ TXConvolutionSt : TXModuleBase {
 
 	loadSample { arg argIndex; // method to load samples into buffer
 		var holdBufferL, holdBufferR, holdSpectrumBufSize, holdSpectrumBufL, holdSpectrumBufR,
-		holdSampleInd, holdModCondition, holdPath, holdNoChannels = 1, maxSampleTime;
+		holdSampleInd, holdModCondition, holdPath, holdNoChannels = 1, maxSampleTime, sampleIsValid;
 
 		Routine.run {
 			// max is 10 secs
@@ -167,103 +175,115 @@ TXConvolutionSt : TXModuleBase {
 				holdNoChannels = system.sampleFiles(bankNo).at(holdSampleInd).at(2);
 			});
 			// check for invalid samples
+			sampleIsValid = false;
 			if (argIndex == 0 or: {system.sampleFiles(bankNo).at(holdSampleInd).at(3) == false}, {
-				// if argIndex is 0, clear the current buffers & filename
-				holdBufferL = Buffer.alloc(system.server, 2048, 1,
-					bufnum: buffers.at(0).bufnum);
-				holdBufferR = Buffer.alloc(system.server, 2048, 1,
-					bufnum: buffers.at(1).bufnum);
 				sampleFileName = "";
 			},{
 				// otherwise,  try to load sample.  if it fails, display error message and clear
 				holdPath = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
 				// Convert path
 				holdPath = TXPath.convert(holdPath);
-				// check if sample is mono/stereo
-				if (holdNoChannels == 1, {
-					holdBufferL = Buffer.read(system.server, holdPath,
-						numFrames: maxSampleTime * system.server.sampleRate, // max time is 10 secs
-						action: { arg argBuffer;
-							{
-								//	if file loaded ok
-								if (argBuffer.notNil, {
-									this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
-									sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
-									sampleNumChannels = argBuffer.numChannels;
-								},{
-									buffers.at(0).zero;
-									sampleFileName = "";
-									TXInfoScreen.new("Invalid Sample File"
-										++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
-								});
-							}.defer;	// defer because gui process
-						},
-						// pass buffer number
-						bufnum: buffers.at(0).bufnum
-					);
-					holdBufferR = Buffer.read(system.server, holdPath,
-						numFrames: maxSampleTime * system.server.sampleRate,
-						action: { arg argBuffer;
-							{
-								//	if file loaded ok
-								if (argBuffer.notNil, {
-									this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
-									sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
-									sampleNumChannels = argBuffer.numChannels;
-								},{
-									buffers.at(1).zero;
-									sampleFileName = "";
-									TXInfoScreen.new("Invalid Sample File"
-										++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
-								});
-							}.defer;	// defer because gui process
-						},
-						// pass buffer number
-						bufnum: buffers.at(1).bufnum
-					);
+				if (File.exists(holdPath), {
+					sampleIsValid = true;
+					// check if sample is mono/stereo
+					if (holdNoChannels == 1, {
+						holdBufferL = Buffer.read(system.server, holdPath,
+							numFrames: maxSampleTime * system.server.sampleRate, // max time is 10 secs
+							action: { arg argBuffer;
+								{
+									//	if file loaded ok
+									if (argBuffer.notNil, {
+										this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
+										sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
+										sampleNumChannels = argBuffer.numChannels;
+									},{
+										buffers.at(0).zero;
+										sampleFileName = "";
+										TXInfoScreen.new("Invalid Sample File"
+											++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
+									});
+								}.defer;	// defer because gui process
+							},
+							// pass buffer number
+							bufnum: buffers.at(0).bufnum
+						);
+						holdBufferR = Buffer.read(system.server, holdPath,
+							numFrames: maxSampleTime * system.server.sampleRate,
+							action: { arg argBuffer;
+								{
+									//	if file loaded ok
+									if (argBuffer.notNil, {
+										this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
+										sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
+										sampleNumChannels = argBuffer.numChannels;
+									},{
+										buffers.at(1).zero;
+										sampleFileName = "";
+										TXInfoScreen.new("Invalid Sample File"
+											++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
+									});
+								}.defer;	// defer because gui process
+							},
+							// pass buffer number
+							bufnum: buffers.at(1).bufnum
+						);
+					},{
+						// for stereo
+						holdBufferL = Buffer.readChannel(system.server, holdPath, channels: [0],
+							numFrames: 20 * system.server.sampleRate,
+							action: { arg argBuffer;
+								{
+									//	if file loaded ok
+									if (argBuffer.notNil, {
+										this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
+										sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
+										sampleNumChannels = argBuffer.numChannels;
+										sampleIsValid = true;
+									},{
+										buffers.at(0).zero;
+										sampleFileName = "";
+										TXInfoScreen.new("Invalid Sample File"
+											++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
+									});
+								}.defer;	// defer because gui process
+							},
+							// pass buffer number
+							bufnum: buffers.at(0).bufnum
+						);
+						holdBufferR = Buffer.readChannel(system.server, holdPath, channels: [1],
+							numFrames: 20 * system.server.sampleRate,
+							action: { arg argBuffer;
+								{
+									//	if file loaded ok
+									if (argBuffer.notNil, {
+										this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
+										sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
+										sampleNumChannels = argBuffer.numChannels;
+										sampleIsValid = true;
+									},{
+										buffers.at(1).zero;
+										sampleFileName = "";
+										TXInfoScreen.new("Invalid Sample File"
+											++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
+									});
+								}.defer;	// defer because gui process
+							},
+							// pass buffer number
+							bufnum: buffers.at(1).bufnum
+						);
+					});
 				},{
-					// for stereo
-					holdBufferL = Buffer.readChannel(system.server, holdPath, channels: [0],
-						numFrames: 20 * system.server.sampleRate,
-						action: { arg argBuffer;
-							{
-								//	if file loaded ok
-								if (argBuffer.notNil, {
-									this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
-									sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
-									sampleNumChannels = argBuffer.numChannels;
-								},{
-									buffers.at(0).zero;
-									sampleFileName = "";
-									TXInfoScreen.new("Invalid Sample File"
-										++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
-								});
-							}.defer;	// defer because gui process
-						},
-						// pass buffer number
-						bufnum: buffers.at(0).bufnum
-					);
-					holdBufferR = Buffer.readChannel(system.server, holdPath, channels: [1],
-						numFrames: 20 * system.server.sampleRate,
-						action: { arg argBuffer;
-							{
-								//	if file loaded ok
-								if (argBuffer.notNil, {
-									this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
-									sampleFileName = system.sampleFiles(bankNo).at(holdSampleInd).at(0);
-									sampleNumChannels = argBuffer.numChannels;
-								},{
-									buffers.at(1).zero;
-									sampleFileName = "";
-									TXInfoScreen.new("Invalid Sample File"
-										++ system.sampleFiles(bankNo).at(holdSampleInd).at(0));
-								});
-							}.defer;	// defer because gui process
-						},
-						// pass buffer number
-						bufnum: buffers.at(1).bufnum
-					);
+					// if file not found, clear filename
+					sampleFileName = "";
 				});
+			});
+			if (sampleIsValid.not, {
+				// if argIndex is 0, clear the current buffers & filename
+				holdBufferL = Buffer.alloc(system.server, 2048, 1,
+					bufnum: buffers.at(0).bufnum);
+				holdBufferR = Buffer.alloc(system.server, 2048, 1,
+					bufnum: buffers.at(1).bufnum);
+				sampleFileName = "";
 			});
 
 			// pause

@@ -112,6 +112,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// TXListViewAction
 	// TXListViewActionPlusMinus
 	// TXMidiNoteKeybGrid
+	// TXMidiNoteSliderSplit
 	// TXMinMaxSlider
 	// TXMinMaxSliderSplit
 	// TXMultiButton
@@ -337,14 +338,14 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTitleBar { arg item, w;
 		//		classData.holdView = StaticText(w, 150 @ 30);
 		//		classData.holdView.string = argModule.instName;
-		//		classData.holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColour.sysModuleName);
+		//		classData.holdView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.sysModuleName);
 		//		classData.holdView.setProperty(\align,\center);
 
 		classData.holdView = PopUpMenu(w, 170 @ 27);
 		classData.holdView.items = system.arrSystemModules.copy
 		.sort({ arg a, b; a.instSortingName < b.instSortingName })
 		.collect({arg item, i; item.instDisplayName;});
-		classData.holdView.stringColor_(TXColour.black).background_(TXColour.sysModuleName);
+		classData.holdView.stringColor_(TXColor.black).background_(TXColor.sysModuleName);
 		classData.holdView.action = { arg view;
 			// change current display module to new one
 			TXChannelRouting.displayModule =
@@ -369,7 +370,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTextBar { arg item, w;
 		classData.holdView = StaticText(w, (item.at(2) ? 80) @ (item.at(3) ? 20));
 		classData.holdView.string = item.at(1).value;
-		classData.holdView.stringColor_(item.at(4) ? TXColour.sysGuiCol1)
+		classData.holdView.stringColor_(item.at(4) ? TXColor.sysGuiCol1)
 		.background_(item.at(5) ? TXColor.white);
 		classData.holdView.align_(item.at(6) ? \center);
 	}
@@ -382,7 +383,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTextBarLeft { arg item, w;
 		classData.holdView = StaticText(w, (item.at(2) ? classData.viewWidth) @ (item.at(3) ? 20));
 		classData.holdView.string = item.at(1).value;
-		classData.holdView.stringColor_(TXColour.sysGuiCol1).background_(item.at(4) ? TXColor.white);
+		classData.holdView.stringColor_(TXColor.sysGuiCol1).background_(item.at(4) ? TXColor.white);
 		classData.holdView.setProperty(\align,\left);
 	}
 
@@ -396,7 +397,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTextViewDisplay { arg item, w;
 		classData.holdView = TextView(w, (item.at(2) ? classData.viewWidth) @ (item.at(3) ? 100));
 		classData.holdView.string = item.at(1).value;
-		classData.holdView.stringColor_(TXColour.black);
+		classData.holdView.stringColor_(TXColor.black);
 		classData.holdView.background_(TXColor.white);
 		classData.holdView.font_(Font.new("Helvetica",12));
 		classData.holdView.canFocus = false;
@@ -424,7 +425,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		var holdView;
 		holdView = TextView(w, (item.at(3) ? classData.viewWidth) @ (item.at(4)-24 ? 100));
 		holdView.string = item.at(1).value;
-		holdView.stringColor_(TXColour.black);
+		holdView.stringColor_(TXColor.black);
 		holdView.background_(TXColor.white);
 		holdView.font_(Font.new("Helvetica",12));
 		holdView.usesTabToFocusNextView = false;
@@ -493,7 +494,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		if (argModule.legacyModule == true, {
 			classData.holdView = StaticText(w, 280 @ 18);
 			classData.holdView.string = " * this is an earlier version of this type of module";
-			classData.holdView.stringColor_(TXColour.sysGuiCol1)
+			classData.holdView.stringColor_(TXColor.sysGuiCol1)
 			.background_(TXColor.white);
 			classData.holdView.align_(\left);
 		});
@@ -562,7 +563,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			"Delete ALL stored presets",
 		]
 		;
-		classData.holdView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.stringColor_(TXColor.black).background_(TXColor.white);
 		classData.holdView.action = { arg view;
 			if (view.value > 1 and: (view.value <= (1 + totPresets)), {
 				argModule.loadPreset(argModule, view.value - 2);
@@ -597,7 +598,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiActionPopup { arg item, w;
 		classData.holdView = PopUpMenu(w, (item.at(3) ?? classData.viewWidth) @ 20);
 		classData.holdView.items = item.at(1);
-		classData.holdView.stringColor_(item.at(4) ?? TXColour.black).background_(item.at(5) ?? TXColor.white);
+		classData.holdView.stringColor_(item.at(4) ?? TXColor.black).background_(item.at(5) ?? TXColor.white);
 		classData.holdView.value = item.at(6) ? 0;
 		classData.holdView.action = { arg view;
 			// run action function passing it view as arg
@@ -829,9 +830,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		);
 		// set controlspec variables
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -850,7 +851,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		StaticText(w, classData.holdVal @ 18)
 		.string_("Modulation options:")
 		.align_(\centre)
-		.stringColor_(TXColour.white).background_(TXColor.sysGuiCol2);
+		.stringColor_(TXColor.white).background_(TXColor.sysGuiCol2);
 		// new line
 		this.nextline(w);
 		// add line for each option
@@ -861,7 +862,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			if (item.at(3).notNil, {
 				// TXCheckBox: arg argParent, bounds, text, offStringColor, offBackground,
 				// onStringColor, onBackground, onOffTextType=0;
-				classData.holdView = TXCheckBox(w, classData.holdVal @ 18, item.at(0), TXColor.sysGuiCol1, TXColour.white,
+				classData.holdView = TXCheckBox(w, classData.holdVal @ 18, item.at(0), TXColor.sysGuiCol1, TXColor.white,
 					TXColor.white, TXColor.sysGuiCol1);
 				classData.holdView.value =  item.at(3);
 				classData.holdView.action = {|view|
@@ -906,7 +907,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		)
 		.round_(0.001);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.numberView.scroll_step = classData.holdView.numberView.step = item.at(7) ? 1;
 
 		// add screen update function
@@ -948,7 +949,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		)
 		.round_(0.001);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.numberView.scroll_step = classData.holdView.numberView.step = item.at(7) ? 1;
 		// add screen update function
 		system.addScreenUpdFunc(
@@ -1073,7 +1074,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(8)
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1)
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1)
 		.background_(item.at(9) ? TXColor.white);
 		classData.holdView.numberView.background_(item.at(9) ? TXColor.white);
 		classData.holdView.round_(0.001);
@@ -1115,8 +1116,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		)
 		.round_(0.001);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1161,8 +1162,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		)
 		.round_(0.001);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1201,8 +1202,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		)
 		.round_(0.001);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1241,8 +1242,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		)
 		.round_(0.001);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1272,8 +1273,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 60
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1295,7 +1296,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// e.g. ["TXCheckBox", "Loop", "loop", {some action}, 150, 20]
 	*guiTXCheckBox { arg item, w;
 		classData.holdView = TXCheckBox(w, (item.at(4) ? 150) @ (item.at(5) ? 20),
-			item.at(1), item.at(8) ? TXColor.sysGuiCol1, TXColour.grey(0.9),
+			item.at(1), item.at(8) ? TXColor.sysGuiCol1, TXColor.grey(0.9),
 			item.at(7) ? TXColor.white, item.at(8) ? TXColor.sysGuiCol1, item.at(6) ? 0);
 		classData.holdView.action = {|view|
 			// set current value on node
@@ -1346,9 +1347,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1383,10 +1384,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			sliderWidth: item[5] ? 230;
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1420,10 +1421,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView4.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView4.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1465,8 +1466,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(6) // presets
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.rangeView.background_(item.at(8) ? TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.rangeView.background_(item.at(8) ? TXColor.sysGuiCol1);
 
 		// add screen update function
 		system.addScreenUpdFunc(
@@ -1507,7 +1508,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			showButtons: item.at(5) ? false
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.rangeView.background_(TXColor.sysGuiCol1).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
@@ -1542,8 +1543,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				item.at(3).value(view);
 			});
 		})
-		.background_(TXColour.sysGuiCol1)
-		.knobColor_(TXColour.white)
+		.background_(TXColor.sysGuiCol1)
+		.knobColor_(TXColor.white)
 		.thumbSize_(item.at(5) ? 5)
 		.value_(spec.unmap(argModule.getSynthArgSpec(item.at(2))));
 		// add screen update function
@@ -1578,8 +1579,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				item.at(3).value(view);
 			});
 		})
-		.background_(TXColour.sysGuiCol1)
-		.knobColor_(TXColour.white)
+		.background_(TXColor.sysGuiCol1)
+		.knobColor_(TXColor.white)
 		.thumbSize_(item.at(5) ? 5)
 		.value_(argModule.getSynthArgSpec(item.at(2)));
 		// add screen update function
@@ -1618,9 +1619,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(4))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView1.background_(TXColour.sysGuiCol1);
-		classData.holdView.sliderView2.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView1.background_(TXColor.sysGuiCol1);
+		classData.holdView.sliderView2.background_(TXColor.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1662,10 +1663,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(8) ? false
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
-		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
-		classData.holdView.hold2DSlider.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.hold2DSlider.background_(TXColor.sysGuiCol1);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1691,7 +1692,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiMaxChannel
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1718,7 +1719,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1744,7 +1745,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiMaxNoteNo
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1770,7 +1771,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiMaxVel
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1784,7 +1785,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// MIDIListenCheckBox
 	// N.B. no arguments
 	*guiMIDIListenCheckBox { arg item, w;
-		classData.holdView = TXCheckBox(w, (150) @ 20, "Midi listen", TXColor.sysGuiCol1, TXColour.grey(0.9),
+		classData.holdView = TXCheckBox(w, (150) @ 20, "Midi listen", TXColor.sysGuiCol1, TXColor.grey(0.9),
 			TXColor.white, TXColor.sysGuiCol1);
 		classData.holdView.action = {|view|
 			// set current value
@@ -1816,7 +1817,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiMinControlNo
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1840,7 +1841,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiMinChannel
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1865,7 +1866,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.midiOutPort
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1888,7 +1889,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.groupPolyphony
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1911,12 +1912,20 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		classData.holdView = TXStaticText(w, (item.at(4) ? classData.viewWidth) @ (item.at(7) ? 20), item.at(1), item.at(2).value,
 			item.at(5) ? 80 );
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(item.at(6) ? TXColor.white);
-		classData.holdView.textView.stringColor_(TXColour.black).background_(item.at(6) ? TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(item.at(6) ? TXColor.white);
+		classData.holdView.textView.stringColor_(TXColor.black).background_(item.at(6) ? TXColor.white);
 		// value function
 		if (item.at(3).notNil, {
 			item.at(3).value(classData.holdView);
 		});
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView],
+			{ arg argArray;
+				var argView = argArray.at(0);
+				argView.textView.string_(item.at(2).value);
+			}
+		);
 	}
 
 	// TXTextBox
@@ -1943,7 +1952,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		if (classData.holdView.labelView.notNil, {
-			classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		});
 		// add screen update function
 		system.addScreenUpdFunc(
@@ -1971,7 +1980,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec("OSCString")
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -1994,7 +2003,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.moduleInfoTxt;
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 	}
 
 	// TXNetAddress
@@ -2019,7 +2028,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, item.at(4)
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2056,9 +2065,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		if (item.at(6) != 0, {
-			classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		});
-		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColor.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2094,8 +2103,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(6) ? 80
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColor.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2134,8 +2143,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			0
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColor.black).background_(TXColor.white);
 	}
 
 	// TXListViewAction
@@ -2160,8 +2169,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.listView.stringColor_(TXColor.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2194,8 +2203,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.listView.stringColor_(TXColor.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2213,7 +2222,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index6 is optional onOffTextType
 	// e.g. ["SynthOptionCheckBox", "Filter", arrOptionData, 0, 250]
 	*guiSynthOptionCheckBox { arg item, w;
-		classData.holdView = TXCheckBox(w, (item.at(4) ? 350) @ 20, "*"++item.at(1), TXColor.sysGuiCol1, TXColour.grey(0.9),
+		classData.holdView = TXCheckBox(w, (item.at(4) ? 350) @ 20, "*"++item.at(1), TXColor.sysGuiCol1, TXColor.grey(0.9),
 			TXColor.white, TXColor.sysGuiCol1, item.at(6) ? 2);
 		classData.holdView.action = {|view|
 			// store current data to arrOptions
@@ -2268,9 +2277,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		if (classData.holdView.labelView.notNil, {
-			classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
+			classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white)
 		});
-		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColor.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2304,8 +2313,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.arrOptions.at(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColor.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2340,8 +2349,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.arrOptions.at(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.listView.stringColor_(TXColor.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2376,8 +2385,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.arrOptions.at(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.listView.stringColor_(TXColour.black).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.listView.stringColor_(TXColor.black).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2410,12 +2419,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		classData.holdView.value_(argModule.getSynthArgSpec(item.at(3)));
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
-		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
-		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
+		classData.holdView.rangeView.background_(TXColor.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2464,12 +2473,70 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(4)),
 			argModule.getSynthArgSpec(item.at(5))
 		]);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
-		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
-		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
+		classData.holdView.rangeView.background_(TXColor.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView, argModule],
+			{ arg argArray;
+				var argView = argArray.at(0), argMod = argArray.at(1);
+				argView.valueSplit_([
+					argMod.getSynthArgSpec(item.at(3)),
+					argMod.getSynthArgSpec(item.at(4)),
+					argMod.getSynthArgSpec(item.at(5))
+				]);
+			}
+		);
+	}
+
+	// TXMinMaxMidiNoteSldr - separate values are given for each of the 3 gui objects
+	// arguments- index1 is slider text, index2 is controlSpec, index3/4/5 are synth arg names to
+	//	be updated for slider, min & max
+	// 	index6 is an optional ACTION function to be valued in views action function
+	// 	index7 is an optional preset array in the form:
+	//		[["Presets:", []], ["1-16", [1,16]], ["17-32", [17,32]], ]
+	// 	index 8 is optional label width, index 9 is optional number width,
+	// 	index 10 is optional overall width,
+	// e.g. ["TXMinMaxMidiNoteSldr", "Note", classData.noteSpec, "note", "noteMin", "noteMax"]
+	*guiTXMinMaxMidiNoteSldr { arg item, w;
+		classData.holdView = TXMinMaxMidiNoteSldr(w, (item.at(10) ? classData.viewWidth) @ 44, item.at(1), item.at(2),
+			{|view|
+				var holdValueSplit;
+				holdValueSplit = view.valueSplit;
+				// set current value on synth
+				if (argModule.moduleNode.notNil, {
+					argModule.moduleNode.set(item.at(3), holdValueSplit.at(0),
+						item.at(4), holdValueSplit.at(1), item.at(5), holdValueSplit.at(2) );
+				});
+				// store current data to synthArgSpecs
+				argModule.setSynthArgSpec(item.at(3), holdValueSplit.at(0));
+				argModule.setSynthArgSpec(item.at(4), holdValueSplit.at(1));
+				argModule.setSynthArgSpec(item.at(5), holdValueSplit.at(2));
+				// if action function passed then value it
+				if (item.at(6).notNil, {
+					// run action function passing it view as arg
+					item.at(6).value(view);
+				});
+			},
+			nil, false, item.at(8) ? 80, item.at(9) ? 120,
+			item.at(7)
+		);
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
+		classData.holdView.valueSplit_([
+			argModule.getSynthArgSpec(item.at(3)),
+			argModule.getSynthArgSpec(item.at(4)),
+			argModule.getSynthArgSpec(item.at(5))
+		]);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
+		classData.holdView.rangeView.background_(TXColor.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2520,12 +2587,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(4)),
 			argModule.getSynthArgSpec(item.at(5))
 		]);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
-		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
-		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
+		classData.holdView.rangeView.background_(TXColor.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2572,13 +2639,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(4)),
 			argModule.getSynthArgSpec(item.at(5))
 		]);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
-		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
-		classData.holdView.bpmNumberView.background_(TXColour.paleBlue2);
-		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
+		classData.holdView.bpmNumberView.background_(TXColor.paleBlue2);
+		classData.holdView.rangeView.background_(TXColor.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2631,13 +2698,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(4)),
 			argModule.getSynthArgSpec(item.at(5))
 		]);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.9));
-		classData.holdView.minNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.maxNumberView.stringColor_(TXColour.black).background_(TXColor.grey(0.9));
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
-		classData.holdView.bpmNumberView.background_(TXColour.paleBlue2);
-		classData.holdView.rangeView.background_(TXColour.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.9));
+		classData.holdView.minNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.maxNumberView.stringColor_(TXColor.black).background_(TXColor.grey(0.9));
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
+		classData.holdView.bpmNumberView.background_(TXColor.paleBlue2);
+		classData.holdView.rangeView.background_(TXColor.sysGuiCol1.blend(TXColor.grey(0.55), 0.75)).knobColor_(TXColor.grey(0.75));
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -2701,7 +2768,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			gridRows: item.at(11), gridCols: item.at(12)
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1.copy.alpha_(0.5));
 		classData.holdView.multiSliderView.valueThumbSize_(1);
 		if (item.at(7) == "Vertical", {
@@ -2792,7 +2859,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 							.copyRange(holdStartIndex, holdStartIndex + item.at(4).value - 1));
 					}
 				);
-				classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+				classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 				// button to show multislider
 				Button(w, 20 @ 20)
 				.states_([
@@ -2849,7 +2916,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 						.copyRange(holdStartIndex, holdStartIndex + item.at(4).value - 1));
 				}
 			);
-			classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 			classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
 			classData.holdView.multiSliderView.valueThumbSize_(1);
 			classData.holdView.multiSliderView.indexThumbSize_(19);
@@ -2913,7 +2980,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				);
 			}
 		);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
 		classData.holdView.multiSliderView.valueThumbSize_(1);
 		classData.holdView.multiSliderView.indexThumbSize_(
@@ -2967,7 +3034,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(6).value(classData.holdView.scrollView);
 		});
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
 		// classData.holdView.multiSliderView.valueThumbSize_(0.1);
 		// classData.holdView.multiSliderView.indexThumbSize_(23);
@@ -3073,7 +3140,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(7).value(classData.holdView.scrollView);
 		});
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -3112,7 +3179,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(2))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -3156,7 +3223,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			});
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -3204,7 +3271,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			numSpacers: (item.at(6) ? 0)
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -3254,7 +3321,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			knobWidth: knobWidth
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -3300,7 +3367,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			});
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -3327,7 +3394,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// 	index10 is an optional synth arg name for no. of grid columns (1-99)
 	// 	index11 is an optional label for the x-axis
 	// 	index12 is an optional label for the y-axis
-	// 	index13 is an optional Event for local data storage
+	// 	index13 is an optional Event function for local data storage
+	// 	index14 is an optional drawVertical (default false)
 	// e.g. ["TXCurveDraw", "Warp curve", {arrCurveValues}, {arg view; arrCurveValues = view.value; this.bufferStore(view.value);}],
 
 	*guiTXCurveDraw { arg item, w;
@@ -3351,12 +3419,13 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			gridColsFunc: {argModule.getSynthArgSpec(item.at(10))},
 			xLabel: item.at(11),
 			yLabel: item.at(12),
-			dataEvent: item.at(13)
+			dataEvent: item.at(13).value,
+			drawVertical: item.at(14)
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		//	classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-		//classData.holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
+		//classData.holdView.multiSliderView.strokeColor_(TXColor.sysGuiCol1);
 	}
 
 	// TXEQCurveDraw
@@ -3383,9 +3452,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			arrSlotFreqs: item.at(5)
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		//	classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-		classData.holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
+		classData.holdView.multiSliderView.strokeColor_(TXColor.sysGuiCol1);
 	}
 
 	// TXWaveTableSpecs
@@ -3417,9 +3486,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argDataEvent: (item.at(8).value),
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		//	classData.holdView.multiSliderView.isFilled_(true).fillColor_(TXColor.sysGuiCol1);
-		classData.holdView.multiSliderView.strokeColor_(TXColour.sysGuiCol1);
+		classData.holdView.multiSliderView.strokeColor_(TXColor.sysGuiCol1);
 	}
 
 	// MIDINote
@@ -3443,10 +3512,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 44
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// create text string for note base
 		classData.holdNoteString = StaticText(w, 44 @ 20)
-		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdNoteString.string = TXGetMidiNoteString(classData.holdView.value);
 		// add screen update function
 		system.addScreenUpdFunc(
@@ -3469,9 +3538,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		this.nextline(w);
 		// create row for note shift steps
 		classData.holdNoteTexts = TXMultiTextBox(w, classData.viewWidth @ 20, "Note text", Array.fill(item.at(3).value," "));
-		classData.holdNoteTexts.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdNoteTexts.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdNoteTexts.arrTextViews.do({ arg item, i;
-			item.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			item.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		});
 		// start on new line
 		this.nextline(w);
@@ -3508,7 +3577,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			scrollInc: 1
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdNoteShiftRow);
-		classData.holdNoteShiftRow.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdNoteShiftRow.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// start on new line
 		this.nextline(w);
 		// create row for note base
@@ -3533,10 +3602,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 44
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdNoteBase);
-		classData.holdNoteBase.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdNoteBase.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// create text string for note base
 		classData.holdNoteString = StaticText(w, 44 @ 20)
-		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdNoteString.string = TXGetMidiNoteString(classData.holdNoteBase.value);
 		// create buttons to move note base up/down 1/12
 		Button(w, 32 @ 20)
@@ -3619,9 +3688,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		// create row for note shift steps
 		classData.holdNoteTexts = TXMultiTextBox(w, classData.viewWidth @ 20, item.at(5).value ? "Note text",
 			Array.fill(item.at(3).value," "), scrollViewWidth: holdScrollWidth);
-		classData.holdNoteTexts.labelView.stringColor_(TXColour.sysGuiCol1).background_(holdColour);
+		classData.holdNoteTexts.labelView.stringColor_(TXColor.sysGuiCol1).background_(holdColour);
 		classData.holdNoteTexts.arrTextViews.do({ arg item, i;
-			item.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			item.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		});
 		if (item.at(8).notNil, {
 			item.at(8).value(classData.holdNoteTexts.scrollView);
@@ -3817,7 +3886,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			item.at(8), // presets
 			item.at(9) ? true
 		);
-		classData.holdSeqRangeView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdSeqRangeView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// disable rangeView if requested
 		if (item.at(7) == false, {classData.holdSeqRangeView.rangeView.enabled_(false);});
 		argModule.arrControls = argModule.arrControls.add(classData.holdSeqRangeView);
@@ -3833,7 +3902,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 		// if arg index 3 not nil, add loop checkbox
 		if (item.at(3).notNil, {
-			classData.holdView2 = TXCheckBox(w, 54 @ 20, "Loop", TXColour.sysGuiCol1,
+			classData.holdView2 = TXCheckBox(w, 54 @ 20, "Loop", TXColor.sysGuiCol1,
 				TXColor.grey(0.9), TXColor.white, TXColor.sysGuiCol1);
 			classData.holdView2.action = {|view|
 				// store current data to synthArgSpecs
@@ -3866,7 +3935,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		this.nextline(w);
 		classData.holdView = TXMultiTextBox(w, classData.viewWidth @ 20, item.at(0) ? "Step", Array.series(item.at(1).value,1) );
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 	}
 
 	// SeqScrollStep
@@ -3896,7 +3965,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			});
 		});
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// add screen update function
 		system.addScreenUpdFunc(
 			[classData.holdView, argModule],
@@ -3931,7 +4000,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		classData.holdVal = argModule.getSynthArgSpec(item.at(2)) + 1;  // add 1 for display so step no.s start from 1
 		classData.holdView = TXMultiTextBox(w, classData.viewWidth @ 20, "Step", Array.series(item.at(1), classData.holdVal););
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// create buttons to move start step up/down 16
 		Button(w, 18 @ 20)
 		.states_([["<<", TXColor.white, TXColor.sysGuiCol1]])
@@ -4015,8 +4084,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			TXColor.paleYellow2
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.paleYellow2);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.paleYellow2);
 	}
 
 	// SeqSelect3GroupModules
@@ -4078,7 +4147,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// SeqSyncStartCheckBox
 	*guiSeqSyncStartCheckBox { arg item, w;
 		// N.B. no arguments - assumes arrSynthArgSpecs contains "syncStart"
-		classData.holdView = TXCheckBox(w, 90 @ 20, "Sync Start", TXColor.sysGuiCol1, TXColour.grey(0.9),
+		classData.holdView = TXCheckBox(w, 90 @ 20, "Sync Start", TXColor.sysGuiCol1, TXColor.grey(0.9),
 			TXColor.white, TXColor.sysGuiCol1);
 		classData.holdView.action = {|view|
 			// store current data to synthArgSpecs
@@ -4092,7 +4161,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// SeqSyncStopCheckBox
 	*guiSeqSyncStopCheckBox { arg item, w;
 		// N.B. no arguments - assumes arrSynthArgSpecs contains "syncStop"
-		classData.holdView = TXCheckBox(w, 90 @ 20, "Sync Stop", TXColor.sysGuiCol1, TXColour.grey(0.9),
+		classData.holdView = TXCheckBox(w, 90 @ 20, "Sync Stop", TXColor.sysGuiCol1, TXColor.grey(0.9),
 			TXColor.white, TXColor.sysGuiCol1);
 		classData.holdView.action = {|view|
 			// store current data to synthArgSpecs
@@ -4113,10 +4182,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		classData.holdView = TXSlotGui(w, 90 @ 20, "Pattern slots", item.at(1).value,
 			[item.at(3), item.at(4), item.at(5), item.at(6), item.at(7)], item.at(2).value);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView4.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView4.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 	}
 
 	// TXEnvGui
@@ -4139,7 +4208,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item);
 		});
 		classData.holdView = TXEnvGui(w, classData.viewWidth @ (item.at(6) ? 100), ControlSpec(0, 100),
-			TXColor.sysGuiCol1, TXColour.white,
+			TXColor.sysGuiCol1, TXColor.white,
 			// view action
 			{|view|
 				var holdArr, holdArr2;
@@ -4231,12 +4300,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 	// TXSoundFileView
 	// arguments- index1 is filename path function,
-	// 	index2 is an optional function to get sampleData
-	// 	index3 is an optional function to set sampleData
+	// 	index2 - NO LONGER USED is an optional function to get sampleData - NO LONGER USED
+	// 	index3 - NO LONGER USED is an optional function to set sampleData - NO LONGER USED
 	// 	index4 is an optional ACTION function to be valued in views action
 	// 	index5 is an optional function (val 0 or 1) for whether to display the file or not (to save CPU if not needed)
 	// 	index6 is an optional height
-	// e.g. ["TXSoundFileView", {sampleFileName}, "start", "end"]
+	// e.g. ["TXSoundFileView", {sampleFileName},]
 	*guiTXSoundFileView { arg item, w;
 		classData.holdSFView = TXSoundFile(w, 450 @ (item.at(6) ?? 150),
 			{|view|
@@ -4293,7 +4362,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3)),
 			false,
 			item.at(1).value,
-			item.at(5).value
+			item.at(5).value,
+			item.at(7),
+			item.at(8)
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdSFView);
 		// next line
@@ -4322,7 +4393,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdRangeView);
-		classData.holdRangeView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdRangeView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 	}	// end of TXSoundFileViewRange
 
 	// TXSoundFileViewFraction
@@ -4332,9 +4403,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	//     display the file or not (to save CPU if not needed)
 	// 	index6 is an optional function to get sampleData
 	// 	index7 is an optional function to set sampleData
+	// 	index8 is an optional width
 	// e.g. ["TXSoundFileViewFraction", {loopFileName}, "start", "end"]
 	*guiTXSoundFileViewFraction { arg item, w;
-		classData.holdSFView = TXSoundFile(w, 450 @ 150,
+		classData.holdSFView = TXSoundFile(w, item.at(8) ? 450 @ 150,
 			{|view|
 				// set current value on node
 				if (argModule.moduleNode.notNil, {
@@ -4374,8 +4446,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(2), view.value);
-				// store value to TXSoundFile
+				// store both lo & hi values to TXSoundFile
 				classData.holdSFView.lo = view.value;
+				classData.holdSFView.hi = argModule.getSynthArgSpec(item.at(3));
 				// if action function passed then value it
 				if (item.at(4).notNil, {
 					// run action function passing it view as arg
@@ -4386,9 +4459,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(2))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdTXFraction1);
-		classData.holdTXFraction1.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdTXFraction1.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdTXFraction1.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction1.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction1.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction1.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// TXFraction2
 		classData.holdTXFraction2 = TXFraction(w, classData.viewWidth @ 20, "End", nil,
 			{|view|
@@ -4398,7 +4471,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				});
 				// store current data to synthArgSpecs
 				argModule.setSynthArgSpec(item.at(3), view.value);
-				// store value to TXSoundFile
+				// store both lo & hi values to TXSoundFile
+				classData.holdSFView.lo = argModule.getSynthArgSpec(item.at(2));
 				classData.holdSFView.hi = view.value;
 				// if action function passed then value it
 				if (item.at(4).notNil, {
@@ -4410,9 +4484,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(3))
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdTXFraction2);
-		classData.holdTXFraction2.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdTXFraction2.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdTXFraction2.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction2.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction2.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdTXFraction2.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 	}	// end of TXSoundFileViewFraction
 
 	// TestNoteVals
@@ -4420,7 +4494,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTestNoteVals { arg item, w;
 		classData.holdView = StaticText(w, 150 @ 20);
 		classData.holdView.string = "Test Note Settings:";
-		classData.holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.setProperty(\align,\center);
 		// start on new line
 		this.nextline(w);
@@ -4436,10 +4510,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 44
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdNoteNo);
-		classData.holdNoteNo.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdNoteNo.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// create text string for note
 		classData.holdNoteString = StaticText(w, 44 @ 20)
-		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdNoteString.string = TXGetMidiNoteString(classData.holdNoteNo.value);
 		// create buttons to move note up/down 1/12
 		Button(w, 32 @ 20)
@@ -4474,7 +4548,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 60
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		// start on new line
 		this.nextline(w);
 		classData.holdView = TXSlider(w, classData.viewWidth @ 20, "Time",  ControlSpec(0.1, 20, 'db'),
@@ -4487,7 +4561,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 60
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 	}	// end of TestNoteVals
 
 	// TestLoopVals
@@ -4495,7 +4569,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiTestLoopVals { arg item, w;
 		classData.holdView = StaticText(w, 150 @ 20);
 		classData.holdView.string = "Test Loop Settings:";
-		classData.holdView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.setProperty(\align,\center);
 		// start on new line
 		this.nextline(w);
@@ -4509,8 +4583,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 60
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 		// start on new line
 		this.nextline(w);
 		classData.holdView = TXSlider(w, classData.viewWidth @ 20, "Time",  ControlSpec(0.1, 20, 'db'),
@@ -4523,8 +4597,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false, 80, 60
 		);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 	}	// end of TestLoopVals
 
 	// TXActionSteps
@@ -4631,9 +4705,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		this.nextline(w);
 		classData.holdView = TXActionView(w, classData.viewWidth @ 20, item.at(1).value, item.at(2).value, 80, system);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.labelView3.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView3.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 	}
 
 	// TXGridGreyZone
@@ -4764,8 +4838,8 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		controlSpec = item.at(5).value;
 		classData.holdView = TXNumOrString(w, classData.viewWidth @ 20, item.at(1), controlSpec, getTypeFunc, setTypeFunc,
 			getNumFunc, setNumFunc, getStringFunc, setStringFunc, 80, 60, 330);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.valueAll_([getTypeFunc.value, getNumFunc.value, getStringFunc.value]);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
@@ -4821,10 +4895,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		};
 		classData.holdView = TXQCArgGui(w, classData.viewWidth @ 20, label, getNumFunc, setNumFunc, setActiveFunc,
 			arrArgs, argIndex, setArgValFunc, 110, 60, 330);
-		classData.holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.label2View.stringColor_(TXColour.sysGuiCol1).background_(TXColor.grey(0.85));
-		classData.holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.presetPopup.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.label2View.stringColor_(TXColor.sysGuiCol1).background_(TXColor.grey(0.85));
+		classData.holdView.popupMenuView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.presetPopup.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.valueAll_(arrValsFunc.value);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
@@ -4932,9 +5006,9 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		setMMValueFunc = {arg argVal; argModule.setSynthValue(item.at(5), argVal)};
 		classData.holdView = ModMatrixRow(w, classData.viewWidth @ 20, arrMMSourceNames, arrMMDestNames, getSourceFunc, setSourceFunc,
 			getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc);
-		classData.holdView.popupMenuView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.popupMenuView2.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.popupMenuView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.popupMenuView2.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 		classData.holdView.valueAll_([getSourceFunc.value, getDestFunc.value, getMMValueFunc.value]);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
@@ -4988,10 +5062,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 		classData.holdView = ModMatrixRowScale(w, classData.viewWidth @ 20, arrMMSourceNames, arrMMDestNames, getSourceFunc,
 			setSourceFunc, getDestFunc, setDestFunc, getMMValueFunc, setMMValueFunc, arrMMScaleNames, getScaleFunc,
 			setScaleFunc, item.at(8) ? 115);
-		classData.holdView.popupMenuView.stringColor_(TXColour.black).background_(TXColor.white);
-		classData.holdView.popupMenuView2.stringColor_(TXColour.black).background_(TXColor.white);
-		classData.holdView.popupMenuView3.stringColor_(TXColour.black).background_(TXColor.white);
-		classData.holdView.sliderView.background_(TXColour.sysGuiCol1);
+		classData.holdView.popupMenuView.stringColor_(TXColor.black).background_(TXColor.white);
+		classData.holdView.popupMenuView2.stringColor_(TXColor.black).background_(TXColor.white);
+		classData.holdView.popupMenuView3.stringColor_(TXColor.black).background_(TXColor.white);
+		classData.holdView.sliderView.background_(TXColor.sysGuiCol1);
 		classData.holdView.valueAll_([getSourceFunc.value, getDestFunc.value, getMMValueFunc.value, getScaleFunc.value]);
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		// add screen update function
@@ -5016,28 +5090,39 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// index9 is the optional function for scale semitones to be highlit
 	//   - e.g. for major scale: [ 0, 2, 4, 5, 7, 9, 11 ], default [0]
 	// index10 is the optional function for key 0-11, 0 = key C (default), 11 == B, that is used with the scale
+	// index11 is the optional function for an array of notes to be highlit
+	//   - e.g. custom scale which isn't the same in each octave
 
 
 	*guiMIDIKeyboard { arg item, w;
-		var holdView, holdPos, holdMarginX;
+		var sliderView, holdPos, holdMarginX, scaleFunc, keyFunc, noteArrayFunc;
 		holdPos = classData.win.asView.decorator.left;
 		holdMarginX = classData.win.asView.decorator.gap.x;
 		// Midi Keyboard
-		holdView = TXMIDIKeyboard.new(w, Rect(0, 0, item.at(4) ? classData.viewWidth, item.at(3) ? 60),
+		classData.holdView = TXMIDIKeyboard.new(w, Rect(0, 0, item.at(4) ? classData.viewWidth, item.at(3) ? 60),
 			item.at(2) ? 4, item.at(5) ? 48);
-		holdView.keyDownAction_(item.at(1));
-		holdView.keyUpAction_(item.at(6));
-		holdView.keyTrackAction_({arg newNote, oldNote;
+		classData.holdView.keyDownAction_(item.at(1));
+		classData.holdView.keyUpAction_(item.at(6));
+		classData.holdView.keyTrackAction_({arg newNote, oldNote;
 			item.at(6).value(oldNote);
 			item.at(1).value(newNote);
 		});
-		if (item.at(9).notNil, {
+		scaleFunc = item.at(9);
+		keyFunc = item.at(10);
+		noteArrayFunc = item.at(11);
+		if (scaleFunc.notNil, {
 			// show scale
-			holdView.showScale (item.at(9).value, item.at(10).value ? 0, TXColour.yellow);
+			classData.holdView.showScale (scaleFunc.value, keyFunc.value ? 0, TXColor.yellow);
+		});
+		if (noteArrayFunc.notNil, {
+			// show notes
+			noteArrayFunc.value.do({arg note, i;
+				classData.holdView.setColor(note.asInteger, TXColor.yellow);
+			});
 		});
 		// show middle C
-		holdView.setColor(60, holdView.getColor(60).blend(TXColour.red, 0.5));
-		argModule.arrControls = argModule.arrControls.add(holdView);
+		classData.holdView.setColor(60, classData.holdView.getColor(60).blend(TXColor.red, 0.5));
+		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 
 		// new line & shift
 		this.nextline(w);
@@ -5045,12 +5130,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 
 		// label
 		StaticText(w, 160 @ 20)
-		.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white)
+		.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white)
 		.string_(item.at(7) ? "Notes: C1 - B6")
 		.align_('center');
 		// if note off action not given then display Note Time slider
 		if (item.at(6).isNil, {
-			holdView = TXSlider(w, 180 @ 20, "Note time",  ControlSpec(0.1, 20, 'db'),
+			sliderView = TXSlider(w, 180 @ 20, "Note time",  ControlSpec(0.1, 20, 'db'),
 				{|view|
 					// store current data
 					argModule.testMIDITime = view.value;
@@ -5059,12 +5144,12 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argModule.testMIDITime,
 				false, 60, 30
 			);
-			argModule.arrControls = argModule.arrControls.add(holdView);
-			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			argModule.arrControls = argModule.arrControls.add(sliderView);
+			sliderView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		});
 		if (item.at(8).isNil or: (item.at(8) == true), {
 			// Velocity slider
-			holdView = TXSlider(w, 180 @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
+			sliderView = TXSlider(w, 180 @ 20, "Velocity",  ControlSpec(0, 127, step: 1),
 				{|view|
 					// store current data
 					argModule.testMIDIVel = view.value;
@@ -5073,9 +5158,31 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 				argModule.testMIDIVel,
 				false, 60, 30
 			);
-			argModule.arrControls = argModule.arrControls.add(holdView);
-			holdView.labelView.stringColor_(TXColour.sysGuiCol1).background_(TXColor.white);
+			argModule.arrControls = argModule.arrControls.add(sliderView);
+			sliderView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		});
+		// add screen update function
+		system.addScreenUpdFunc(
+			[classData.holdView],
+			{ arg argArray;
+				var argView = argArray.at(0);
+				if (scaleFunc.notNil or: noteArrayFunc.notNil, {
+					argView.clear;
+					if (scaleFunc.notNil, {
+						// show scale
+						argView.showScale (scaleFunc.value, keyFunc.value ? 0, TXColor.yellow);
+					});
+					if (noteArrayFunc.notNil, {
+						// show notes
+						noteArrayFunc.value.do({arg note, i;
+							argView.setColor(note.asInteger, TXColor.yellow);
+						});
+					});
+					// show middle C
+					argView.setColor(60, argView.getColor(60).blend(TXColor.red, 0.5));
+				});
+			}
+		);
 	}
 
 }

@@ -88,6 +88,7 @@ TXBowed : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 1, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -172,7 +173,8 @@ TXBowed : TXModuleBase {
 			TXAmpComp.arrOptionData,
 		];
 		synthDefFunc = {
-			arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			arg out, gate, note, velocity, keytrack, transpose,
+			pitchOffset,  pitchbend, pitchbendMin, pitchbendMax,
 			bowForce, bowForceMin, bowForceMax,
 			bowPos, bowPosMin, bowPosMax,
 			dcDecay, dcDecayMin, dcDecayMax, hFLoss, hFLossMin, hFLossMax, stringImped,
@@ -213,7 +215,7 @@ TXBowed : TXModuleBase {
 			intonationFunc = this.getSynthOption(1);
 			hold_freq = (intonationFunc.value(
 				(note + transpose), intKey) * keytrack) + ((48 + transpose).midicps * (1-keytrack));
-			hold_freq = hold_freq *  (2 ** (pbend /12));
+			hold_freq = hold_freq *  (2 ** ((pitchOffset + pbend) /12));
 
 			// DWGBowedTor.ar(freq: 440, velb: 0.5, force: 1, gate: 1, pos: 0.14, release: 0.1,
 			// c1: 1, c3: 3, impZ: 0.55, fB: 2, mistune: 5.2, c1tor: 1, c3tor: 3000, iZtor: 1.8);

@@ -78,6 +78,7 @@ TXTableSynth5 : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 1, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["maxHarmonicsInd", 1, \ir],
 			["harmonicGap", 1, \ir],
 			["scaling", 1, \ir],
@@ -359,7 +360,7 @@ TXTableSynth5 : TXModuleBase {
 		];
 		synthDefFunc = {
 			arg inmodulator, inExtSync, out, gate, note, velocity, keytrack, transpose,
-			maxHarmonicsInd, harmonicGap, scaling, pitchbend, pitchbendMin, pitchbendMax,
+			pitchOffset, maxHarmonicsInd, harmonicGap, scaling, pitchbend, pitchbendMin, pitchbendMax,
 			syncRatio, syncRatioMin, syncRatioMax, syncThreshold,
 			phaseDistort, phaseDistortMin, phaseDistortMax, fmDepth, fmDepthMin, fmDepthMax,
 			bufnumFirstTable, tablePosition, tablePositionMin, tablePositionMax, level,
@@ -421,7 +422,7 @@ TXTableSynth5 : TXModuleBase {
 			freqModFunc = this.getSynthOption(4);
 			outFreq = (intonationFunc.value((note + transpose), intKey) * keytrack)
 			+ ((48 + transpose).midicps * (1-keytrack));
-			outFreq = outFreq * (2 ** (pbend /12)); // apply pitchbend
+			outFreq = outFreq * (2 ** ((pitchOffset + pbend) /12)); // apply pitchbend
 
 			// OLD
 			// outWave = VOsc.ar(

@@ -75,6 +75,7 @@ TXGranulatorFM : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 1, 0],
 			["transpose", 0, 0],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -230,7 +231,8 @@ TXGranulatorFM : TXModuleBase {
 			],
 		];
 		synthDefFunc = {
-			arg extTrigger = 0, out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax, bufnumGrainEnv,
+			arg extTrigger = 0, out, gate, note, velocity, keytrack, transpose,
+			pitchOffset,  pitchbend, pitchbendMin, pitchbendMax, bufnumGrainEnv,
 			carrierFreq, carrierFreqMin, carrierFreqMax, carrierRatio, carrierRatioMin, carrierRatioMax,
 			modulatorFreq, modulatorFreqMin, modulatorFreqMax, modulatorRatio, modulatorRatioMin, modulatorRatioMax,
 			modulatorIndex, modulatorIndexMin, modulatorIndexMax,
@@ -268,7 +270,7 @@ TXGranulatorFM : TXModuleBase {
 			pbend = pitchbendMin + ((pitchbendMax - pitchbendMin) * (pitchbend + modPitchbend).max(0).min(1));
 			midiNoteFreq = ((intonationFunc.value((note + transpose), intKey) * keytrack)
 				+ ((48 + transpose).midicps * (1-keytrack)));
-			midiNoteFreqPb = midiNoteFreq * (2 ** (pbend /12));
+			midiNoteFreqPb = midiNoteFreq * (2 ** ((pitchOffset + pbend) /12));
 			sDurTime = (durTimeMin + ((durTimeMax - durTimeMin) * (durTime + modDurTime))).max(1).min(20000) / 1000;
 			sRandDur = (randDur + modRandDur).max(0).min(1);
 			outDur = sDurTime * (2 ** (sRandDur * WhiteNoise.kr.range(-2,2)));

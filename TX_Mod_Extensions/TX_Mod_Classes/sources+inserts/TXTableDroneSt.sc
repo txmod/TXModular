@@ -44,7 +44,7 @@ TXTableDroneSt : TXModuleBase {
 		];
 		classData.arrBufferSpecs = [ ["bufnumFirstTable", 1024, 1, 8] ]; // allocate 8 consecutive mono buffers
 		classData.timeSpec = ControlSpec(0.01, 30, \exp, 0, 1, units: " secs");
-		classData.freqSpec = ControlSpec(0.midicps, 20000, \exponential);
+		classData.freqSpec = ControlSpec(5, 20000, \exponential);
 		classData.syncRatioSpec = ControlSpec(0.01, 20);
 		classData.syncFreqSpec = ControlSpec(0.1, 10000, \exp);
 		classData.phaseDistortSpec = ControlSpec(-5, 5);
@@ -420,7 +420,6 @@ TXTableDroneSt : TXModuleBase {
 
 			ampCompFunction = this.getSynthOption(4);
 			outAmpComp = ampCompFunction.value(outFreqLag);
-			// amplitude is vel *  0.00315 approx. == 1 / 127
 			// use TXClean to stop blowups
 			Out.ar(out, TXClean.ar(startEnv * outSmoothed * outAmpComp * level));
 		};
@@ -432,7 +431,7 @@ TXTableDroneSt : TXModuleBase {
 			["SynthOptionPopup", "Stepping", arrOptionData, 0, 200],
 			["EZslider", "Level", ControlSpec(0, 1), "level"],
 			["SynthOptionPopupPlusMinus", "Amp Comp", arrOptionData, 4],
-			["TXMinMaxFreqNoteSldr", "Freq", ControlSpec(0.midicps, 20000, \exponential),
+			["TXMinMaxFreqNoteSldr", "Freq", classData.freqSpec,
 				"freq", "freqMin", "freqMax", nil, TXFreqRangePresets.arrFreqRanges],
 			["SynthOptionCheckBox", "Use note list instead of variable frequency", arrOptionData, 1, 400],
 			["EZslider", "Note select", ControlSpec(0, 1), "freqSelector"],
@@ -448,6 +447,8 @@ TXTableDroneSt : TXModuleBase {
 			["TXMinMaxSliderSplit", "Time 2", classData.timeSpec, "lag2", "lag2Min", "lag2Max"],
 			["SynthOptionPopupPlusMinus", "Sync mode", arrOptionData, 6, 300],
 			["SynthOptionPopupPlusMinus", "Sync trigger", arrOptionData, 5, 300],
+			["TXMinMaxFreqNoteSldr", "Sync freq", classData.syncFreqSpec,
+				"syncFreq", "syncFreqMin", "syncFreqMax", nil, TXFreqRangePresets.arrFreqRanges],
 			["TXMinMaxSliderSplit", "Sync ratio", classData.syncRatioSpec, "syncRatio", "syncRatioMin", "syncRatioMax",  ],
 			["EZslider", "Sync threshold", ControlSpec(0, 1), "syncThreshold"],
 			["SynthOptionCheckBox", "Add Phase Distortion (PD)", arrOptionData, 8, 200],
@@ -612,7 +613,7 @@ TXTableDroneSt : TXModuleBase {
 				["SpacerLine", 4],
 				["SynthOptionPopupPlusMinus", "Sync trigger", arrOptionData, 5, 470],
 				["SpacerLine", 4],
-				["TXMinMaxFreqNoteSldr", "Sync Freq", classData.syncFreqSpec,
+				["TXMinMaxFreqNoteSldr", "Sync freq", classData.syncFreqSpec,
 					"syncFreq", "syncFreqMin", "syncFreqMax", nil, TXFreqRangePresets.arrFreqRanges],
 				["SpacerLine", 4],
 				["TXMinMaxSliderSplit", "Sync ratio", classData.syncRatioSpec, "syncRatio",

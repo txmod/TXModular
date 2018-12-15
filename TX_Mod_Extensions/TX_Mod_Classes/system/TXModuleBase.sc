@@ -811,6 +811,9 @@ TXModuleBase {		// Base Class for all modules
 				system.server.sync;
 				this.rebuiltStatus = false;
 			};
+		}, {
+			//if groupsource then update mappings
+			moduleNode.set(*(arrCtlSCInBusMappings ++ arrAudSCInBusMappings));
 		});
 	}
 
@@ -991,16 +994,18 @@ TXModuleBase {		// Base Class for all modules
 	}
 
 	allNotesOff {
-		// clear all held notes
-		arrHeldMidiNotes.do ({arg item, i;
-			this.releaseSynthGate(item);
+		if(moduleNode.class == Group, {
+			// clear all held notes
+			arrHeldMidiNotes.do ({arg item, i;
+				this.releaseSynthGate(item);
+			});
+			//	release all synths at node.
+			moduleNode.set(\gate, 0);
+			arrHeldMidiNotes = [];
+			// reset pedal
+			midiSustainPedalState = 0;
+			midiNotes = [] ! 128;
 		});
-		//	release all synths at node.
-		moduleNode.set(\gate, 0);
-		arrHeldMidiNotes = [];
-		// reset pedal
-		midiSustainPedalState = 0;
-		midiNotes = [] ! 128;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////
@@ -1185,7 +1190,11 @@ TXModuleBase {		// Base Class for all modules
 				// build arrSynthArgs
 				arrSynthArgs = [];
 				arrSynthArgSpecs.do({ arg item, i;
-					arrSynthArgs = arrSynthArgs.addAll([item.at(0), item.at(1)]);
+					var arrIgnore = [\note, \velocity, \envtime, \pitchOffset];
+					var holdSymbol = item.at(0).asSymbol;
+					if (arrIgnore.indexOf(holdSymbol).isNil, {
+						arrSynthArgs = arrSynthArgs.addAll([holdSymbol, item.at(1)]);
+					});
 				});
 				arrSynthArgs = arrSynthArgs
 				++ arrCtlSCInBusMappings
@@ -1198,24 +1207,30 @@ TXModuleBase {		// Base Class for all modules
 				this.checkPolyphony;
 				// return a synth that plays the note
 				holdSynth = Synth.new(synthDefName,
-					arrSynthArgs ++ [\note, argNote + argNoteDetune, \velocity, argVeloc, \envtime, argEnvTime],
+					arrSynthArgs ++ [\note, argNote, \velocity, argVeloc, \envtime, argEnvTime, \pitchOffset, argNoteDetune],
 					moduleNode,
 					\addToTail ;
 				);
 				// register node
 				NodeWatcher.register(holdSynth, true);
 				if (midiNoteStatus == true, {
-					// save it in array to free later
+					// save synth in array to free later
 					midiNotes[argNote] = midiNotes[argNote].add(holdSynth);
 				});
-				// add it to groupNodes
+				// add synth to groupNodes
 				groupNodes = groupNodes.add(holdSynth);
 				// if envtime not 0 schedule note off after Env time
 				if (argEnvTime > 0, {
-					// allow for latency
-					if (seqLatencyOn == 1, {latencyTime = system.latency});
-					SystemClock.sched(argEnvTime + latencyTime, {
-						this.releaseSynthGate(argNote);
+					// OLD CODE - now latency moved inside releaseSynthGate method
+					// // allow for latency
+					// if (seqLatencyOn == 1, {latencyTime = system.latency});
+					// SystemClock.sched(argEnvTime + latencyTime, {
+					// 	this.releaseSynthGate(argNote);
+					// 	nil
+					// });
+					// NEW
+					SystemClock.sched(argEnvTime, {
+						this.releaseSynthGate(argNote, seqLatencyOn);
 						nil
 					});
 				});
@@ -1223,15 +1238,24 @@ TXModuleBase {		// Base Class for all modules
 		});
 	}
 
-	releaseSynthGate { arg argNote=60;
-		var holdSynth;
+	releaseSynthGate { arg argNote=60, seqLatencyOn=0;
+		var holdSynth, latencyTime=0;
 		if (midiNotes[argNote][0].notNil, {
 			holdSynth = midiNotes[argNote].removeAt(0);    //  free
 		});
 		// release node
 		if (holdSynth.notNil,{
 			if (holdSynth.isPlaying, {
-				holdSynth.set(\gate, 0);
+				// OLD CODE
+				// holdSynth.set(\gate, 0);
+				// NEW CODE
+				// allow for latency
+				if (seqLatencyOn == 1, {latencyTime = system.latency});
+				system.server.makeBundle(latencyTime, {
+					system.server.sendMsg('/error', -1); // suppress errors
+					holdSynth.set(\gate, 0);
+					system.server.sendMsg('/error', -2);
+				});
 			});
 		});
 	}

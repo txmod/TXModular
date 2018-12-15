@@ -315,7 +315,7 @@ TXDualFilterSt : TXModuleBase {
 				["SynthOptionPopupPlusMinus", "Filter Mode", arrOptionData, 4],
 				["EZslider", "Morph/Mix", ControlSpec(0, 1), "morph"],
 				["DividingLine"],
-				["SynthOptionListPlusMinus", "Filter type B", arrOptionData, 1, nil, 160],
+				["SynthOptionListPlusMinus", "Filter type B", arrOptionData, 1, nil, 116],
 				["SpacerLine", 4],
 				["TXMinMaxFreqNoteSldr", "Frequency B", classData.freqSpec,
 					"freqB", "freqBMin", "freqBMax", nil, TXFilter.arrFreqRanges],

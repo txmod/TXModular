@@ -79,7 +79,7 @@ TXCodeInsertAuSt : TXModuleBase {
 			outChange4 = change4Min + ((change4Max - change4Min) * (change4 + modChange4).max(0).min(1));
 			// use TXClean to stop blowups
 			Out.ar(out, TXClean.ar(startEnv *
-				validFunctionString.compile.value.value(outChange1, outChange2, outChange3, outChange4)
+				validFunctionString.compile.value.value(inSignalL, inSignalR, outChange1, outChange2, outChange3, outChange4)
 			));
 		};
 		guiSpecArray = [

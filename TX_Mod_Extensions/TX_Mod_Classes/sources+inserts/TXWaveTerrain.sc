@@ -41,6 +41,7 @@ TXWaveTerrain : TXModuleBase {
 		//
 		classData.arrBufferSpecs = [ ["bufnumTerrain", (classData.terrainWidth * classData.terrainWidth), 1] ];
 		classData.guiWidth = 680;
+		classData.freqSpec = ControlSpec(5, 20000, \exponential);
 	}
 
 	*new{ arg argInstName;
@@ -513,7 +514,7 @@ y = mod2.max(0.001) * sin(t);
 			["SynthOptionPopupPlusMinus", "Filter", arrOptionData, 2, 360, {this.rebuildSynth;}],
 			["EZSlider", "Out Level", \unipolar, "outLevel", nil, 500],
 			["SynthOptionPopupPlusMinus", "Amp Comp", arrOptionData, 3],
-			["TXMinMaxFreqNoteSldr", "Freq", ControlSpec(0.midicps, 20000, \exponential),
+			["TXMinMaxFreqNoteSldr", "Freq", classData.freqSpec,
 				"freq", "freqMin", "freqMax", nil, TXFreqRangePresets.arrFreqRanges, 500],
 		]);
 		//	use base class initialise
@@ -556,7 +557,7 @@ y = mod2.max(0.001) * sin(t);
 		];
 		if (displayOption == "showOrbitControls", {
 			guiSpecArray = guiSpecArray ++[
-				["TXMinMaxFreqNoteSldr", "Freq", ControlSpec(0.midicps, 20000, \exponential),
+				["TXMinMaxFreqNoteSldr", "Freq", classData.freqSpec,
 					"freq", "freqMin", "freqMax", nil, TXFreqRangePresets.arrFreqRanges, 500],
 				["SpacerLine", 16],
 				["TXMinMaxSliderSplit", "Modify 1", \unipolar, "change1", "change1Min", "change1Max",

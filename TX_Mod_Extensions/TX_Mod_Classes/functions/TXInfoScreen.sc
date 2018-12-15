@@ -35,13 +35,15 @@ TXInfoScreen {		// Information Screen module
 			w.view.decorator.shift(30,30);
 			StaticText(w, 760 @ 40)
 			.string_(message)
-			.background_(TXColour.white);
+			.background_(TXColour.white)
+			.stringColor_(TXColour.black);
 			arrInfoLines.do({ arg item, i;
 				// only for first 20 items
 				if (i < 20, {
 					StaticText(w, 760 @ 20)
 					.string_(item)
-					.background_(TXColour.white);
+					.background_(TXColour.white)
+					.stringColor_(TXColour.black);
 				});
 			});
 			if (showCloseBtn==1, {
@@ -82,7 +84,8 @@ TXInfoScreen {		// Information Screen module
 			w.view.decorator.shift(30,30);
 			StaticText(w, 760 @ 40)
 			.string_(message)
-			.background_(TXColour.white);
+			.background_(TXColour.white)
+			.stringColor_(TXColour.black);
 
 			// confirm button
 			w.view.decorator.nextLine;

@@ -43,8 +43,8 @@ TXLFOMulti2 : TXModuleBase {
 			var outFreq, outFunction, rangeFunction, outSignal;
 			outFreq = ( (freqMax/freqMin) ** ((freq + modFreq).max(0.001).min(1)) ) * freqMin;
 			// select function based on arrOptions
-			outFunction = arrOptionData.at(0).at(arrOptions.at(0)).at(1);
-			rangeFunction = arrOptionData.at(1).at(arrOptions.at(1)).at(1);
+			outFunction = this.getSynthOption(0);
+			rangeFunction = this.getSynthOption(1);
 			outSignal = rangeFunction.value(outFunction.value(outFreq));
 			Out.kr(out, TXClean.kr(outSignal));
 		};
@@ -60,7 +60,7 @@ TXLFOMulti2 : TXModuleBase {
 			["TXFreqBpmMinMaxSldr", "Frequency", holdControlSpec, "freq", "freqMin", "freqMax",
 				nil, TXLFO.arrLFOFreqRanges],
 			["SpacerLine", 10],
-			["SynthOptionPopupPlusMinus", "Waveform", arrOptionData, 0],
+			["SynthOptionListPlusMinus", "Waveform", arrOptionData, 0],
 			["SpacerLine", 10],
 			["SynthOptionPopupPlusMinus", "Output range", arrOptionData, 1],
 		];

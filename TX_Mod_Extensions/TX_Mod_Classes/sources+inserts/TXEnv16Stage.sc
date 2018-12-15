@@ -17,9 +17,10 @@ TXEnv16Stage : TXModuleBase {
 		classData.moduleType = "groupsource";
 		classData.arrCtlSCInBusSpecs = [
 		];
-		classData.noOutChannels = 1;
+		classData.noOutChannels = 2;
 		classData.arrOutBusSpecs = [
-			["Out", [0]]
+			["Env Out", [0]],
+			["Env End Trig", [1]],
 		];
 		classData.guiWidth = 900;
 	}
@@ -200,7 +201,7 @@ TXEnv16Stage : TXModuleBase {
 			level9, level10, level11, level12, level13, level14, level15, level16,
 			time0, time1, time2, time3, time4, time5, time6, time7, time8, time9, time10,
 			time11, time12, time13, time14, time15, time16, velocityScaling;
-			var arrLevels, arrTimes, arrEnvCurves, envFunction, outEnv;
+			var arrLevels, arrTimes, arrEnvCurves, envFunction, outEnv, envEnd;
 			arrEnvCurves = this.getArrCurves;
 			arrLevels = [level0, level1, level2, level3, level4, level5, level6, level7, level8,
 				level9, level10, level11, level12, level13, level14, level15, level16]
@@ -213,10 +214,10 @@ TXEnv16Stage : TXModuleBase {
 				envFunction.value(arrLevels + 0.001, arrTimes, arrEnvCurves, this.getSynthOption(3)-1, this.getSynthOption(4)-1),
 				gate,
 				doneAction: 2
-			)
-			- 0.001; // remove exponential offset
-			// amplitude is vel *  0.007874 approx. == 1 / 127
-			Out.kr(out, outEnv * ((velocity * 0.007874) + (1-velocityScaling)).min(1));
+			);
+			envEnd = Trig1.kr(Done.kr(outEnv), ControlDur.ir);
+			// outEnv - 0.001 : remove exponential offset in env function
+			Out.kr(out, [(outEnv - 0.001) * ((velocity * 0.007874) + (1-velocityScaling)).min(1), envEnd]);
 		};
 		this.buildGuiSpecArray;
 		arrActionSpecs = this.buildActionSpecs([

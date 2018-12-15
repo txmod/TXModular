@@ -3,6 +3,9 @@
 TXHelpScreen {
 	classvar <>classData;
 
+	// for testing
+	// TXHelpScreen.open;
+
 	*initClass {
 		classData = ();
 		classData.alwaysOnTop = 1;
@@ -77,7 +80,7 @@ TXHelpScreen {
 
 				classData.window.view.decorator.shift(26,0);
 
-				h = TXCheckBox(classData.window, Rect(0, 0, 120, 24), "window on top", TXColor.sysGuiCol1,
+				h = TXCheckBox(classData.window, Rect(0, 0, 126, 24), "window on top", TXColor.sysGuiCol1,
 					TXColour.white, TXColor.white, TXColor.sysGuiCol1);
 				h.value =  classData.alwaysOnTop;
 				h.action = {|view|
@@ -87,7 +90,7 @@ TXHelpScreen {
 
 				classData.window.view.decorator.shift(26,0);
 
-				j = TXCheckBox(classData.window, Rect(0, 0, 100, 24), "wide window", TXColor.sysGuiCol1,
+				j = TXCheckBox(classData.window, Rect(0, 0, 116, 24), "wide window", TXColor.sysGuiCol1,
 					TXColour.white, TXColor.white, TXColor.sysGuiCol1);
 				j.value =  classData.wideView;
 				j.action = {|view|
@@ -155,12 +158,12 @@ TXHelpScreen {
 				classData.imageView = UserView(classData.compositeView, Rect(0,0, 1860, 1440));
 				//classData.imageView.background_(Color.white);
 
-				// adjust for width
-				if (classData.wideView == 1, {
-					this.changeTextWidth;
-				});
 				this.goToIndex;
 				this.updateImageView;
+				// adjust for width
+				if (classData.wideView == 1, {
+					{this.changeTextWidth}.defer(0.03);
+				});
 			}, {
 				classData.window.front;
 			});
@@ -248,9 +251,6 @@ TXHelpScreen {
 	*changeTextWidth {
 		var holdBounds;
 		if (classData.wideView == 1, {
-			classData.defaultWidth = 1228;
-			classData.webViewWidth = 680;
-			classData.imageViewWidth = 508;
 			// adjust text
 			holdBounds = classData.helpNameView.bounds;
 			holdBounds.width = holdBounds.width + 200;
@@ -270,12 +270,10 @@ TXHelpScreen {
 			holdBounds.width = (holdBounds.width - 200).max(1);
 			holdBounds.left = holdBounds.left + 200;
 			classData.imageScrollView.bounds = holdBounds;
+			// adjust window
 			classData.window.setInnerExtent(classData.window.bounds.width + 200,
 				classData.window.bounds.height);
 		}, {
-			classData.defaultWidth = 1028;
-			classData.webViewWidth = 480;
-			classData.imageViewWidth = 508;
 			// adjust text
 			holdBounds = classData.helpNameView.bounds;
 			holdBounds.width = holdBounds.width - 200;
@@ -293,8 +291,9 @@ TXHelpScreen {
 			// adjust imageScrollView
 			holdBounds = classData.imageScrollView.bounds;
 			holdBounds.width = holdBounds.width + 200;
-			holdBounds.left = holdBounds.left - 200;
+			holdBounds.left = (holdBounds.left - 200).max(1);
 			classData.imageScrollView.bounds = holdBounds;
+			// adjust window
 			classData.window.setInnerExtent(classData.window.bounds.width - 200,
 				classData.window.bounds.height);
 		});

@@ -613,17 +613,34 @@ TXWSlider : TXWidget {
 		^holdValue;
 	}
 	getControlSpec {  arg argArrActions;
-		var holdModuleID, holdModule, holdActionInd, holdAction, holdControlSpec;
+		var holdModuleID, holdModule, holdActionInd, holdAction, holdControlSpec,
+		holdArrActionItems, holdActionText, holdActionSpecs;
 		// use arrActions if argument is nil
 		argArrActions = argArrActions ? arrActions;
 		holdModuleID = argArrActions.at(0).at(0);
 		holdActionInd = argArrActions.at(0).at(1);
+		holdActionText = argArrActions.at(0).at(7);
 		holdModule = system.getModuleFromID(holdModuleID);
 		if (holdModule != 0, {
-			holdAction = holdModule.arrActionSpecs
+			holdActionSpecs = holdModule.arrActionSpecs
 				.select({arg action, i; action.actionType == \valueAction; })
-				.select({arg action, i; action.guiObjectType == this.guiObjectType})
-				.at(holdActionInd);
+				.select({arg action, i; action.guiObjectType == this.guiObjectType});
+			// if text found, match action string with text, else use numerical value
+			holdArrActionItems = holdActionSpecs.collect({arg item, i; item.actionName;});
+			if (holdActionText.notNil, {
+				holdActionInd = holdArrActionItems.indexOfEqual(holdActionText) ? holdActionInd;
+				holdAction = holdModule.arrActionSpecs
+					.select({arg action, i; action.actionType == \valueAction; })
+					.select({arg action, i; action.guiObjectType == this.guiObjectType})
+					.at(holdActionInd);
+			},{
+				// if text not found, use number but only select older actions with legacyType == 1
+				holdAction = holdModule.arrActionSpecs
+					.select({arg item, i; item.legacyType == 1})
+					.select({arg action, i; action.actionType == \valueAction; })
+					.select({arg action, i; action.guiObjectType == this.guiObjectType})
+					.at(holdActionInd);
+			});
 			if (holdAction.notNil, {holdControlSpec = holdAction.arrControlSpecFuncs.at(0).value;});
 		});
 		^(holdControlSpec ? nil.asSpec);

@@ -42,9 +42,9 @@ TXDelay4St : TXModuleBase {		// delay stereo
 	init {arg argInstName;
 		//	set  class specific instance variables
 		extraLatency = 0.2;	// allow extra time when recreating
-		arrOptions = [0,0];
+		arrOptions = [0, 0, 0, 0];
 		arrOptionData = [
-			[
+			[ // 0 - max delay
 				["15 seconds", 15],
 				["30 seconds", 30],
 				["1 minute", 60],
@@ -53,9 +53,17 @@ TXDelay4St : TXModuleBase {		// delay stereo
 				["4 minutes", 240],
 				["5 minutes", 300],
 			],
-			[
-				["Positive", 1],
-				["Negative", -1],
+			[ // 1 - feedback type
+				["Positive Feedback", 1],
+				["Negative Feedback", -1],
+			],
+			[ // 2 - use Delay Time L for R
+				["Off", 0],
+				["On", 1],
+			],
+			[ // 3 - use Feedback L for R
+				["Off", 0],
+				["On", 1],
 			],
 		];
 		arrSynthArgSpecs = [
@@ -78,13 +86,13 @@ TXDelay4St : TXModuleBase {		// delay stereo
 			["freeze", 0, 0],
 			["smoothTime", 0.2, 0],
 			["wetDryMix", 1.0, defLagTime],
-			["modDelayL", 0, defLagTime],
-			["modDelayR", 0, defLagTime],
-			["modFeedbackL", 0, defLagTime],
-			["modFeedbackR", 0, defLagTime],
+			["modDelayL", 0, 0],
+			["modDelayR", 0, 0],
+			["modFeedbackL", 0, 0],
+			["modFeedbackR", 0, 0],
 			["modFreeze", 0, 0],
 			["modSmoothTime", 0, 0],
-			["modWetDryMix", 0, defLagTime],
+			["modWetDryMix", 0, 0],
 			// N.B. arg below not used in synthdef, just kept here for convenience
 			["autoTapTempo", 0, \ir],
 		];
@@ -103,16 +111,26 @@ TXDelay4St : TXModuleBase {		// delay stereo
 			inputL = TXClean.ar(startEnv * InFeedback.ar(in,1));
 			inputR = TXClean.ar(startEnv * InFeedback.ar(in+1,1));
 			delaytimeL = Lag2.kr(
-				(( (delayMaxL/delayMinL) ** ((delayL + modDelayL).max(0.0001).min(1)) ) * delayMinL / 1000),
+				( (delayMaxL/delayMinL) ** (delayL + modDelayL).max(0.0001).min(1) ) * delayMinL / 1000,
+				// (delayL + modDelayL).max(0.0001).min(1).linexp(0, 1, delayMinL, delayMaxL);
 				smoothTimeCombined
 			);
-			delaytimeR = Lag2.kr(
-				(( (delayMaxR/delayMinR) ** ((delayR + modDelayR).max(0.0001).min(1)) ) * delayMinR / 1000),
-				smoothTimeCombined
-			);
+			if (arrOptions[2] == 1, { // SynthOption 2 - use Delay Time L for R
+				delaytimeR = delaytimeL;
+			}, {
+				delaytimeR = Lag2.kr(
+					( (delayMaxR/delayMinR) ** (delayR + modDelayR).max(0.0001).min(1) ) * delayMinR / 1000,
+					// (delayR + modDelayR).max(0.0001).min(1).linexp(0, 1, delayMinR, delayMaxR);
+					smoothTimeCombined
+				);
+			});
 			feedbackType = this.getSynthOption(1);
 			feedbackValL = feedbackMinL + ( (feedbackMaxL-feedbackMinL) * (feedbackL + modFeedbackL).max(0).min(1) );
-			feedbackValR = feedbackMinR + ( (feedbackMaxR-feedbackMinR) * (feedbackR + modFeedbackR).max(0).min(1) );
+			if (arrOptions[3] == 1, { // SynthOption 3 - use Feedback L for R
+				feedbackValR = feedbackValL;
+			}, {
+				feedbackValR = feedbackMinR + ( (feedbackMaxR-feedbackMinR) * (feedbackR + modFeedbackR).max(0).min(1) );
+			});
 			decaytimeL = (( (100/delaytimeL) ** feedbackValL.sin) * delaytimeL)
 			+ (freezeCombined * 3600); // if freeze is on add 60 minutes to decaytimeL
 			decaytimeR = (( (100/delaytimeR) ** feedbackValR.sin) * delaytimeR)
@@ -168,13 +186,17 @@ TXDelay4St : TXModuleBase {		// delay stereo
 			["ActionButton", "time x 3", {this.delayTimeMultiplyR(3);}, 60],
 			["ActionButton", "time / 2", {this.delayTimeMultiplyR(0.5);}, 60],
 			["ActionButton", "time / 3", {this.delayTimeMultiplyR(1/3);}, 60],
+			["Spacer", 10],
+			["SynthOptionCheckBox", "use Delay Time L for R", arrOptionData, 2, 190],
 			["SpacerLine", 6],
 			["EZslider", "Smooth time", ControlSpec(0, 1), "smoothTime"],
 			["SpacerLine", 6],
 			["TXMinMaxSliderSplit", "Feedback L", holdControlSpec2, "feedbackL", "feedbackMinL", "feedbackMaxL"],
 			["TXMinMaxSliderSplit", "Feedback R ", holdControlSpec2, "feedbackR", "feedbackMinR", "feedbackMaxR"],
 			["SpacerLine", 6],
-			["SynthOptionPopupPlusMinus", "FB type", arrOptionData, 1, 300],
+			["SynthOptionPopupPlusMinus", "FB type", arrOptionData, 1, 260],
+			["Spacer", 10],
+			["SynthOptionCheckBox", "use Feedback L for R", arrOptionData, 3, 180],
 			["SpacerLine", 4],
 			["WetDryMixSlider"],
 			["SpacerLine", 6],

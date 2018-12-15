@@ -86,27 +86,32 @@ TXCyclOSCCol : TXModuleBase {
 		arrResolutions = ["8 X 8", "16 X 16", "32 X 32", ];
 		guiSpecArray = [
 			["ActionButton", "Target settings", {displayOption = "showTarget";
-				this.buildGuiSpecArray; system.showView;}, 130,
+				this.buildGuiSpecArray; system.showView;}, 100,
 			TXColor.white, this.getButtonColour(displayOption == "showTarget")],
 			["Spacer", 3],
 			["ActionButton", "Zone settings", {displayOption = "showZone";
 				this.buildGuiSpecArray; system.showView;}, 130,
 			TXColor.white, this.getButtonColour(displayOption == "showZone")],
 			["Spacer", 3],
-			["ActionButton", "Actions 1-4", {displayOption = "showActions1-4";
-				this.buildGuiSpecArray; system.showView;}, 130,
-			TXColor.white, this.getButtonColour(displayOption == "showActions1-4")],
+			["ActionButton", "Actions 1-2", {displayOption = "showActions1-2";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions1-2")],
 			["Spacer", 3],
-			["ActionButton", "Actions 5-8", {displayOption = "showActions5-8";
-				this.buildGuiSpecArray; system.showView;}, 130,
-			TXColor.white, this.getButtonColour(displayOption == "showActions5-8")],
+			["ActionButton", "Actions 3-4", {displayOption = "showActions3-4";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions3-4")],
+			["Spacer", 3],
+			["ActionButton", "Actions 5-6", {displayOption = "showActions5-6";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions5-6")],
+			["Spacer", 3],
+			["ActionButton", "Actions 7-8", {displayOption = "showActions7-8";
+				this.buildGuiSpecArray; system.showView;}, 100,
+			TXColor.white, this.getButtonColour(displayOption == "showActions7-8")],
 			["Spacer", 3],
 			["ActionButton", "Actions 9-10", {displayOption = "showActions9-10";
-				this.buildGuiSpecArray; system.showView;}, 130,
+				this.buildGuiSpecArray; system.showView;}, 100,
 			TXColor.white, this.getButtonColour(displayOption == "showActions9-10")],
-			//		["Spacer", 3],
-			//		["ActionButton", "Test Actions", {this.performActions},
-			//			130, TXColor.white, TXColor.sysGuiCol2],
 			["DividingLine"],
 			["SpacerLine", 6],
 		];
@@ -130,19 +135,25 @@ TXCyclOSCCol : TXModuleBase {
 				["DividingLine"],
 			];
 		});
-		if (displayOption == "showActions1-4", {
+		if (displayOption == "showActions1-2", {
 			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 0],
 				["NextLine"],
 				["TXPopupAction", "Action type", arrActionTypes, "runAction1", nil, 350],
+				["SpacerLine", 4],
 				["DividingLine"],
 				["TXActionView", arrActions, 1],
 				["NextLine"],
 				["TXPopupAction", "Action type", arrActionTypes, "runAction2", nil, 350],
 				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions3-4", {
+			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 2],
 				["NextLine"],
 				["TXPopupAction", "Action type", arrActionTypes, "runAction3", nil, 350],
+				["SpacerLine", 4],
 				["DividingLine"],
 				["TXActionView", arrActions, 3],
 				["NextLine"],
@@ -150,19 +161,25 @@ TXCyclOSCCol : TXModuleBase {
 				["DividingLine"],
 			];
 		});
-		if (displayOption == "showActions5-8", {
+		if (displayOption == "showActions5-6", {
 			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 4],
 				["NextLine"],
 				["TXPopupAction", "Action type", arrActionTypes, "runAction5", nil, 350],
+				["SpacerLine", 4],
 				["DividingLine"],
 				["TXActionView", arrActions, 5],
 				["NextLine"],
 				["TXPopupAction", "Action type", arrActionTypes, "runAction6", nil, 350],
 				["DividingLine"],
+			];
+		});
+		if (displayOption == "showActions7-8", {
+			guiSpecArray = guiSpecArray ++[
 				["TXActionView", arrActions, 6],
 				["NextLine"],
 				["TXPopupAction", "Action type", arrActionTypes, "runAction7", nil, 350],
+				["SpacerLine", 4],
 				["DividingLine"],
 				["TXActionView", arrActions, 7],
 				["NextLine"],
@@ -175,6 +192,7 @@ TXCyclOSCCol : TXModuleBase {
 				["TXActionView", arrActions, 8],
 				["NextLine"],
 				["TXPopupAction", "Action type", arrActionTypes, "runAction9", nil, 350],
+				["SpacerLine", 4],
 				["DividingLine"],
 				["TXActionView", arrActions, 9],
 				["NextLine"],

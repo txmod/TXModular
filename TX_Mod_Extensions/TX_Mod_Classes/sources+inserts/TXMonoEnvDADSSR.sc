@@ -25,9 +25,10 @@ TXMonoEnvDADSSR : TXModuleBase {
 			["Release", 1, "modRelease", 0],
 			["Level scale", 1, "modLevelScale", 0],
 		];
-		classData.noOutChannels = 1;
+		classData.noOutChannels = 2;
 		classData.arrOutBusSpecs = [
-			["Out", [0]]
+			["Env Out", [0]],
+			["Env End Trig", [1]],
 		];
 		classData.timeSpec = ControlSpec(0.01, 20);
 	}
@@ -61,7 +62,6 @@ TXMonoEnvDADSSR : TXModuleBase {
 			["releaseMax", 5, 0],
 			["levelScale", 1, 0],
 			["modGate", 0, 0],
-			["modGateCloseTime", 0, 0],
 			["modDelay", 0, 0],
 			["modAttack", 0, 0],
 			["modDecay", 0, 0],
@@ -76,15 +76,15 @@ TXMonoEnvDADSSR : TXModuleBase {
 			TXEnvLookup.arrDADSSRSlopeOptionData,
 			TXEnvLookup.arrDADSSRSustainOptionData,
 		];
-		synthDefFunc = {arg out, gate, gateCloseTime, gateCloseTimeMin, gateCloseTimeMax, note, envtime=0,
+		synthDefFunc = {arg out, gate, note, envtime=0,
 			delay, attack, attackMin, attackMax, decay, decayMin, decayMax,
 			sustain, sustain2, sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax, levelScale,
-			modGate = 0, modGateCloseTime = 0, modDelay = 0, modAttack = 0, modDecay = 0, modSustain = 0, modSustain2 = 0,
+			modGate = 0, modDelay = 0, modAttack = 0, modDecay = 0, modSustain = 0, modSustain2 = 0,
 			modSustainTime = 0, modRelease = 0, modLevelScale = 0;
 
 			var outEnv, outFreq, outFunction, outWave, gt;
 			var del, att, dec, sus, sus2, sustime, rel, timeMult;
-			var levelSc, envCurve, envFunction;
+			var levelSc, envCurve, envFunction, envEnd;
 
 			envCurve = this.getSynthOption(0);
 			envFunction = this.getSynthOption(1);
@@ -101,10 +101,11 @@ TXMonoEnvDADSSR : TXModuleBase {
 				envFunction.value(del, att, dec, sus, sus2, sustime, rel, envCurve),
 				gt,
 				doneAction: 0
-			)
-			- 0.001; // remove exponential offset in env function
+			);
 			levelSc = (levelScale + modLevelScale).max(0).min(1);
-			Out.kr(out, outEnv * levelSc);
+			envEnd = Trig1.kr(Done.kr(outEnv), ControlDur.ir);
+			// - 0.001 : remove exponential offset in env function
+			Out.kr(out, [(outEnv - 0.001) * levelSc, envEnd]);
 		};
 		guiSpecArray = [
 			["NextLine"],

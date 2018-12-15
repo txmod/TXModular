@@ -540,6 +540,8 @@ TXWaveTerrainBuilder {
 			["(x < y).asInteger", {arg x, y; (x < y).asInteger}],
 			["(x >= y).asInteger", {arg x, y; (x >= y).asInteger}],
 			["(x <= y).asInteger", {arg x, y; (x <= y).asInteger}],
+			["x [y ignored]", {arg x, y; x}],
+			["y [x ignored]", {arg x, y; y}],
 		];
 
 		classData.arrLayerPostFuncs = [

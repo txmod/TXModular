@@ -224,11 +224,14 @@ TXMIDIKeyboard {
 	}
 
 	setColor {arg note, color;
+		var newcolor;
 
-		var newcolor = keys[note - startnote].color.blend(color, 0.5);
-		keys[note - startnote].color = newcolor;
-		keys[note - startnote].scalecolor = newcolor;
-		this.refresh;
+		if ((note >= startnote) and: {(note - startnote) < keys.size}, {
+			newcolor = keys[note - startnote].color.blend(color, 0.5);
+			keys[note - startnote].color = newcolor;
+			keys[note - startnote].scalecolor = newcolor;
+			this.refresh;
+		});
 	}
 
 	getColor { arg note;

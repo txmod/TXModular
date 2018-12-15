@@ -65,6 +65,14 @@ TXGranulator2 : TXModuleBase {
 		^super.new.init(argInstName);
 	}
 
+	*reloadAllSamples{arg argbankNo, argindex;
+		classData.arrInstances.do({ arg item, i;
+			if (argbankNo.isNil or: {argbankNo == item.bankNo}, {
+				item.loadSample(item.sampleNo);
+			});
+		});
+	}
+
 	init {arg argInstName;
 		//	set  class specific instance variables
 		curveDataEvent = ();
@@ -77,6 +85,7 @@ TXGranulator2 : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 0, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -196,7 +205,8 @@ TXGranulator2 : TXModuleBase {
 			],
 		];
 		synthDefFunc = {
-			arg extTrigger = 0, out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			arg extTrigger = 0, out, gate, note, velocity, keytrack, transpose,
+			pitchOffset,  pitchbend, pitchbendMin, pitchbendMax,
 			bufnumSample, bufnumGrainEnv, bankNo, sampleNo, sampleFreq, start, end,
 			pos, randPos, randPitch, randTrig, randDur, randPan, durTime, durTimeMin, durTimeMax,
 			density, densityMin, densityMax, grainPan, grainPanMin, grainPanMax, reverse, level,
@@ -208,17 +218,18 @@ TXGranulator2 : TXModuleBase {
 
 			var outEnv, envFunction, outFreq, outFreqPb, intonationFunc, pbend, outRate, outSample,
 			envCurve, sStart, sEnd, rev, del, att, dec, sus, sus2, sustime, rel;
-			var trigFunction, trigRate, outTrig, outPos, sDurTime, outDur, outPan, sPos, sRandPos, sRandPitch, sRandPan,
-			sRandTrig, sRandDur, sTotalPos, outDensity, ampCompFunction, outAmpComp, grainFunc, maxGrains;
+			var trigFunction, trigRate, outTrig, outPos, sDurTime, outDur, sGrainPan, outPan, sPos,
+			sRandPos, sRandPitch, sRandPan, sRandTrig, sRandDur, sTotalPos,
+			outDensity, ampCompFunction, outAmpComp, grainFunc, maxGrains;
 
 			rev = (reverse + modReverse).max(0).min(1);
 			del = (delay + modDelay).max(0).min(1);
-			att = (attackMin + ((attackMax - attackMin) * (attack + modAttack))).max(0.01).min(20);
-			dec = (decayMin + ((decayMax - decayMin) * (decay + modDecay))).max(0.01).min(20);
+			att = (attackMin + ((attackMax - attackMin) * (attack + modAttack).max(0).min(1))).max(0.01).min(20);
+			dec = (decayMin + ((decayMax - decayMin) * (decay + modDecay).max(0).min(1))).max(0.01).min(20);
 			sus = (sustain + modSustain).max(0).min(1);
 			sus2 = (sustain2 + modSustain2).max(0).min(1);
 			sustime = (sustainTimeMin +
-				((sustainTimeMax - sustainTimeMin) * (sustainTime + modSustainTime))).max(0.01).min(20);
+				((sustainTimeMax - sustainTimeMin) * (sustainTime + modSustainTime).max(0).min(1))).max(0.01).min(20);
 			rel = (releaseMin + ((releaseMax - releaseMin) * (release + modRelease))).max(0.01).min(20);
 			envCurve = this.getSynthOption(2);
 			envFunction = this.getSynthOption(3);
@@ -231,7 +242,7 @@ TXGranulator2 : TXModuleBase {
 			outFreq = (intonationFunc.value((note + transpose), intKey) * keytrack)
 			+ ((sampleFreq.cpsmidi + transpose).midicps * (1-keytrack));
 			pbend = pitchbendMin + ((pitchbendMax - pitchbendMin) * (pitchbend + modPitchbend).max(0).min(1));
-			outFreqPb = outFreq *  (2 ** (pbend /12));
+			outFreqPb = outFreq *  (2 ** ((pitchOffset + pbend) /12));
 			sRandPitch = (randPitch + modRandPitch).max(0).min(1);
 			outRate = (outFreqPb + WhiteNoise.kr(sRandPitch.squared * outFreqPb * 2) / sampleFreq) * (rev-0.5).neg.sign;
 			sStart = (start + modStart).max(0).min(1);
@@ -239,12 +250,14 @@ TXGranulator2 : TXModuleBase {
 			sPos = (pos + modPos).max(0).min(1);
 			sRandPos = (randPos + modRandPos).max(0).min(1);
 			sTotalPos = (sPos + WhiteNoise.kr(sRandPos)).wrap(0, 1);
-			outPos = (sStart + (sTotalPos * (sEnd - sStart))).abs * BufDur.kr(bufnumSample);
+			// outPos = (sStart + (sTotalPos * (sEnd - sStart))).abs * BufDur.kr(bufnumSample);
+			outPos = (sStart + (sTotalPos * (sEnd - sStart))).abs;
 			sDurTime = (durTimeMin + ((durTimeMax - durTimeMin) * (durTime + modDurTime))).max(1).min(20000) / 1000;
 			sRandDur = (randDur + modRandDur).max(0).min(1);
 			outDur = sDurTime * (2 ** (sRandDur * WhiteNoise.kr.range(-2,2)));
 			sRandPan = (randPan + modRandPan).max(0).min(1);
-			outPan = (sRandPan * WhiteNoise.kr.unipolar) + ((1 - sRandPan) * grainPan).linlin(0, 1, grainPanMin, grainPanMax);
+			sGrainPan = (grainPan + modGrainPan).max(0).min(1);
+			outPan = (sRandPan * WhiteNoise.kr.unipolar) + ((1 - sRandPan) * sGrainPan).linlin(0, 1, grainPanMin, grainPanMax);
 
 			if (arrOptions[7] == 0, {
 				// internal triggering
@@ -544,6 +557,16 @@ TXGranulator2 : TXModuleBase {
 		});
 	}
 
+	clearBuffer {
+		// clear the current buffer & filename
+		buffers.at(0).zero;
+		sampleFileName = "";
+		sampleNumChannels = 0;
+		sampleFreq = 440;
+		// store Freq to synthArgSpecs
+		this.setSynthArgSpec("sampleFreq", sampleFreq);
+	}
+
 	loadSample { arg argIndex; // method to load samples into buffer
 		var holdBuffer, holdSampleInd, holdModCondition, holdPath;
 		Routine.run {
@@ -558,44 +581,43 @@ TXGranulator2 : TXModuleBase {
 			holdSampleInd = (argIndex - 1).min(system.sampleFilesMono(bankNo).size-1);
 			// check for invalid samples
 			if (argIndex == 0 or: {system.sampleFilesMono(bankNo).at(holdSampleInd).at(3) == false}, {
-				// if argIndex is 0, clear the current buffer & filename
-				buffers.at(0).zero;
-				sampleFileName = "";
-				sampleNumChannels = 0;
-				sampleFreq = 440;
-				// store Freq to synthArgSpecs
-				this.setSynthArgSpec("sampleFreq", sampleFreq);
+				this.clearBuffer;
 			},{
 				// otherwise,  try to load sample.  if it fails, display error message and clear
 				holdPath = system.sampleFilesMono(bankNo).at(holdSampleInd).at(0);
 				// Convert path
 				holdPath = TXPath.convert(holdPath);
-				holdBuffer = Buffer.read(system.server, holdPath,
-					action: { arg argBuffer;
-						{
-							//	if file loaded ok
-							if (argBuffer.notNil, {
-								this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
-								sampleFileName = system.sampleFilesMono(bankNo).at(holdSampleInd).at(0);
-								sampleNumChannels = argBuffer.numChannels;
-								sampleFreq = system.sampleFilesMono(bankNo).at(holdSampleInd).at(1);
-								// store Freq to synthArgSpecs
-								this.setSynthArgSpec("sampleFreq", sampleFreq);
-							},{
-								buffers.at(0).zero;
-								sampleFileName = "";
-								sampleNumChannels = 0;
-								sampleFreq = 440;
-								// store Freq to synthArgSpecs
-								this.setSynthArgSpec("sampleFreq", sampleFreq);
-								TXInfoScreen.new("Invalid Sample File"
-									++ system.sampleFilesMono(bankNo).at(holdSampleInd).at(0));
-							});
-						}.defer;	// defer because gui process
-					},
-					// pass buffer number
-					bufnum: buffers.at(0).bufnum
-				);
+				if (File.exists(holdPath), {
+					holdBuffer = Buffer.read(system.server, holdPath,
+						action: { arg argBuffer;
+							{
+								//	if file loaded ok
+								if (argBuffer.notNil, {
+									this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
+									sampleFileName = system.sampleFilesMono(bankNo).at(holdSampleInd).at(0);
+									sampleNumChannels = argBuffer.numChannels;
+									sampleFreq = system.sampleFilesMono(bankNo).at(holdSampleInd).at(1);
+									// store Freq to synthArgSpecs
+									this.setSynthArgSpec("sampleFreq", sampleFreq);
+								},{
+									buffers.at(0).zero;
+									sampleFileName = "";
+									sampleNumChannels = 0;
+									sampleFreq = 440;
+									// store Freq to synthArgSpecs
+									this.setSynthArgSpec("sampleFreq", sampleFreq);
+									TXInfoScreen.new("Invalid Sample File"
+										++ system.sampleFilesMono(bankNo).at(holdSampleInd).at(0));
+								});
+							}.defer;	// defer because gui process
+						},
+						// pass buffer number
+						bufnum: buffers.at(0).bufnum
+					);
+				},{
+					// if file not found, clear the current buffer & filename
+					this.clearBuffer;
+				});
 			});
 			// remove condition from load queue
 			system.holdLoadQueue.removeCondition(holdModCondition);

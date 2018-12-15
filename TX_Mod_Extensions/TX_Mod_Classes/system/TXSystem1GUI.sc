@@ -22,6 +22,7 @@ TXSystem1GUI {		// system module 1 GUI
 		w.view.mouseWheelAction = {arg view; TXSystem1.dataBank.windowVisibleOrigin = view.visibleOrigin;};
 		w.alpha = TXSystem1.dataBank.windowAlpha;
 		w.acceptsMouseOver = true;
+		w.alwaysOnTop = TXSystem1.dataBank.alwaysOnTop.asBoolean;
 		this.setWindowImage;
 
 		w.onClose = {
@@ -95,7 +96,7 @@ TXSystem1GUI {		// system module 1 GUI
 		var btnTitle, buttonLabels, sliderVol, btnVol;
 		var btnHelp, btnOpenSystem, btnOpenRecent, btnSaveSystem, btnNewSystem, btnRebuildSystem, btnCloseSystem;
 		var btnAllNotesOff, popNewModule, btnAddModule, btnFrontBack, frontText, backText;
-		var btnBack, btnForward, btnClipboard, popupTools;
+		var btnBack, btnForward, btnClipboard, popupTools, chkBoxAlwaysOnTop;
 		var frontColour, backColour, frontTextColour, backTextColour, holdColor;
 		var popMeters, holdMeter, txtArrow, btnTestNote, volumeSpec;
 
@@ -314,6 +315,16 @@ TXSystem1GUI {		// system module 1 GUI
 						sliderVol.value_(volumeSpec.unmap(0));
 						btnVol.states = [["0 dB", TXColor.white, TXColor.sysGuiCol2]];
 					};
+					TXSystem1.dataBank.headerBox.decorator.shift(20, 0);
+					// checkbox alwaysOnTop
+					chkBoxAlwaysOnTop = TXCheckBox(TXSystem1.dataBank.headerBox, Rect(0, 0, 110, 24),
+						"window on top", TXColor.sysGuiCol2, TXColour.white, TXColor.white, TXColor.sysGuiCol2);
+					chkBoxAlwaysOnTop.value =  TXSystem1.dataBank.alwaysOnTop;
+					chkBoxAlwaysOnTop.action = {|view|
+						TXSystem1.dataBank.alwaysOnTop = view.value;
+						w.alwaysOnTop = TXSystem1.dataBank.alwaysOnTop.asBoolean;
+					};
+
 					// spacing
 					TXSystem1.dataBank.headerBox.decorator.nextLine;
 					TXSystem1.dataBank.headerBox.decorator.shift(0, 6);

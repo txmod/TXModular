@@ -55,6 +55,7 @@ TXFilterSynth2 : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 1, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -104,7 +105,8 @@ TXFilterSynth2 : TXModuleBase {
 			TXAmpComp.arrOptionData,
 		];
 		synthDefFunc = {
-			arg insignal, out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			arg insignal, out, gate, note, velocity, keytrack, transpose,
+			pitchOffset,  pitchbend, pitchbendMin, pitchbendMax,
 			res, resMin, resMax, sat, satMin, satMax,
 			level, envtime=0, delay, attack, attackMin, attackMax, decay, decayMin, decayMax, sustain, sustain2,
 			sustainTime, sustainTimeMin, sustainTimeMax, release, releaseMin, releaseMax, intKey,
@@ -141,7 +143,7 @@ TXFilterSynth2 : TXModuleBase {
 			input = InFeedback.ar(insignal,1);
 			outFilter = filterFunc.value(
 				input,
-				outFreq *  (2 ** (pbend /12)),
+				outFreq *  (2 ** ((pitchOffset + pbend) /12)),
 				sumres,
 				sumsat
 			);

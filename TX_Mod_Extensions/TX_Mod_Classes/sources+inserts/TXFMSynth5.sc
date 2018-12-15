@@ -83,7 +83,7 @@ TXFMSynth5 : TXModuleBase {
 			["Op 2 Env Sustain level", 1, "modSustainOp2", 0],
 			["Op 2 Env Sustain level 2", 1, "modSustain2Op2", 0],
 			["Op 2 Env Sustain time", 1, "modSustainTimeOp2", 0],
-			["Op 2 Env Release", 1, "modReleaseOp2", 0],
+			//["Op 2 Env Release", 1, "modReleaseOp2", 0],  // removed
 		];
 		classData.noOutChannels = 1;
 		classData.arrOutBusSpecs = [
@@ -356,6 +356,7 @@ TXFMSynth5 : TXModuleBase {
 			["velocity", 0, 0],
 			["keytrack", 1, \ir],
 			["transpose", 0, \ir],
+			["pitchOffset", 0, \ir],
 			["pitchbend", 0.5, defLagTime],
 			["pitchbendMin", -2, defLagTime],
 			["pitchbendMax", 2, defLagTime],
@@ -520,7 +521,7 @@ TXFMSynth5 : TXModuleBase {
 			["modSustainOp2", 0, \ir],
 			["modSustain2Op2", 0, \ir],
 			["modSustainTimeOp2", 0, \ir],
-			["modReleaseOp2", 0, \ir],
+			//["modReleaseOp2", 0, \ir],  // removed
 
 			["modOp1FreqRatio", 0, defLagTime],
 			["modOp1FixedFreq", 0, defLagTime],
@@ -633,7 +634,8 @@ TXFMSynth5 : TXModuleBase {
 			classData.fixedFreqOptionData,
 		];
 		synthDefFunc = {
-			arg out, gate, note, velocity, keytrack, transpose, pitchbend, pitchbendMin, pitchbendMax,
+			arg out, gate, note, velocity, keytrack, transpose,
+			pitchOffset, pitchbend, pitchbendMin, pitchbendMax,
 			level,
 
 			op1FreqRatio, op1FixedFreq, op1Detune, op1Phase, op1Amp,
@@ -670,7 +672,8 @@ TXFMSynth5 : TXModuleBase {
 			modEnvAmountOp1=0, modDelayOp1=0, modAttackOp1=0, modDecayOp1=0, modSustainOp1=0, modSustain2Op1=0,
 			modSustainTimeOp1=0, modReleaseOp1=0,
 			modEnvAmountOp2=0, modDelayOp2=0, modAttackOp2=0, modDecayOp2=0, modSustainOp2=0, modSustain2Op2=0,
-			modSustainTimeOp2=0, modReleaseOp2=0,
+			modSustainTimeOp2=0,
+			//modReleaseOp2=0,  // removed
 
 			modOp1FreqRatio=0, modOp1FixedFreq=0, modOp1Detune=0, modOp1Phase=0, modOp1Amp=0,
 			modOp2FreqRatio=0, modOp2FixedFreq=0, modOp2Detune=0, modOp2Phase=0, modOp2Amp=0,
@@ -732,7 +735,7 @@ TXFMSynth5 : TXModuleBase {
 			sus2Op2 = (sustain2Op2 + modSustain2Op2).max(0).min(1);
 			sustimeOp2 = (sustainTimeMinOp2 +
 				((sustainTimeMaxOp2 - sustainTimeMinOp2) * (sustainTimeOp2 + modSustainTimeOp2))).max(0.01).min(20);
-			relOp2 = (releaseMinOp2 + ((releaseMaxOp2 - releaseMinOp2) * (releaseOp2 + modReleaseOp2))).max(0.01).min(20);
+			relOp2 = (releaseMinOp2 + ((releaseMaxOp2 - releaseMinOp2) * (releaseOp2 /* + modReleaseOp2*/ ))).max(0.01).min(20);
 			envCurveOp2 = this.getSynthOption(12);
 			envFunctionOp2 = this.getSynthOption(13);
 			envGenFunctionOp2 = this.getSynthOption(14);
@@ -743,7 +746,7 @@ TXFMSynth5 : TXModuleBase {
 				* (pitchbend + modPitchbend).max(0).min(1));
 
 			intonationFunc = this.getSynthOption(0);
-			outFreq = (2 ** (pbend /12)) * ((intonationFunc.value((note + transpose), intKey) * keytrack)
+			outFreq = (2 ** ((pitchOffset + pbend) /12)) * ((intonationFunc.value((note + transpose), intKey) * keytrack)
 				+ ((48 + transpose).midicps * (1-keytrack)));
 
 			op1FreqFunc = this.getSynthOption(16);
@@ -1211,6 +1214,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = 0;
 							arrOptions[20] = 0;
 							arrOptions[21] = 0;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 2 }   {
@@ -1220,6 +1224,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = 1;
 							arrOptions[20] = 1;
 							arrOptions[21] = 1;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 3 }   {
@@ -1229,6 +1234,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = [0,1].choose;
 							arrOptions[20] = [0,1].choose;
 							arrOptions[21] = [0,1].choose;
+							this.rebuildSynth;
 							system.showView;
 						};
 					}, 80],
@@ -1433,6 +1439,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = 0;
 							arrOptions[20] = 0;
 							arrOptions[21] = 0;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 2 }   {
@@ -1442,6 +1449,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = 1;
 							arrOptions[20] = 1;
 							arrOptions[21] = 1;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 3 }   {
@@ -1451,6 +1459,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = [0,1].choose;
 							arrOptions[20] = [0,1].choose;
 							arrOptions[21] = [0,1].choose;
+							this.rebuildSynth;
 							system.showView;
 						};
 					}, 80],
@@ -1665,6 +1674,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = 0;
 							arrOptions[20] = 0;
 							arrOptions[21] = 0;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 2 }   {
@@ -1674,6 +1684,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = 1;
 							arrOptions[20] = 1;
 							arrOptions[21] = 1;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 3 }   {
@@ -1683,6 +1694,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = [0,1].choose;
 							arrOptions[20] = [0,1].choose;
 							arrOptions[21] = [0,1].choose;
+							this.rebuildSynth;
 							system.showView;
 						};
 					}, 80],
@@ -1726,6 +1738,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = 0;
 							arrOptions[20] = 0;
 							arrOptions[21] = 0;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 2 }   {
@@ -1735,6 +1748,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = 1;
 							arrOptions[20] = 1;
 							arrOptions[21] = 1;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 3 }   {
@@ -1744,6 +1758,7 @@ TXFMSynth5 : TXModuleBase {
 							arrOptions[19] = [0,1].choose;
 							arrOptions[20] = [0,1].choose;
 							arrOptions[21] = [0,1].choose;
+							this.rebuildSynth;
 							system.showView;
 						};
 					}, 80],
@@ -2203,7 +2218,7 @@ TXFMSynth5 : TXModuleBase {
 	}
 
 	// overwrite base class to set note levels first
-	createSynthNote { arg note, vel, argEnvTime=1, seqLatencyOn=1;
+	createSynthNote { arg note, vel, argEnvTime=1, seqLatencyOn=1, argNoteDetune=0;
 		var noteIndex;
 		// adjust noteIndex to note range C0-B6 for table lookups
 		noteIndex = (note - 24).max(0).min(71);
@@ -2215,7 +2230,7 @@ TXFMSynth5 : TXModuleBase {
 		this.setSynthArgSpec("noteLevelOp5", 2 * arrVelocityCurves[4][vel] * this.getSynthArgSpec("noteCurveOp5")[noteIndex]);
 		this.setSynthArgSpec("noteLevelOp6", 2 * arrVelocityCurves[5][vel] * this.getSynthArgSpec("noteCurveOp6")[noteIndex]);
 		// create note
-		super.createSynthNote(note, arrVelocityCurves[6][vel] * 127, argEnvTime, seqLatencyOn);
+		super.createSynthNote(note, arrVelocityCurves[6][vel] * 127, argEnvTime, seqLatencyOn, argNoteDetune);
 	}
 
 }

@@ -35,7 +35,7 @@ TXWarp2 : TXModuleBase {		// Warp module
 
 	*arrOutputRanges {
 		^ [
-			["Presets: ", [0, 1]],
+			["Range presets: ", [0, 1]],
 			["Full range -1 to 1", [-1, 1]],
 			["Half range -0.5 to 0.5", [-0.5, 0.5]],
 			["Positive range 0 to 1", [0, 1]],

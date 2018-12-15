@@ -18,9 +18,10 @@ TXEnvCurve : TXModuleBase {
 		classData.arrCtlSCInBusSpecs = [
 			["Env Time", 1, "modEnvTotalTime", 0],
 		];
-		classData.noOutChannels = 1;
+		classData.noOutChannels = 2;
 		classData.arrOutBusSpecs = [
-			["Out", [0]]
+			["Env Out", [0]],
+			["Env End Trig", [1]],
 		];
 		classData.arrBufferSpecs = [ ["bufnumCurve", 700, 1] ];
 		classData.guiWidth = 950;
@@ -59,18 +60,19 @@ TXEnvCurve : TXModuleBase {
 		synthDefFunc = {
 			arg out, bufnumCurve, note, velocity, envTotalTime, envTotalTimeMin, envTotalTimeMax, velocityScaling,
 			modEnvTotalTime = 0;
-			var envTime, outCurve, rangeFunction, outSignal;
+			var envTime, outCurve, rangeFunction, outSignal, envEnd, phase;
 			// adjust endpoint so BufRd doesn't go back to start of buffer
 			envTime = (envTotalTime + modEnvTotalTime).linlin(0, 1, envTotalTimeMin, envTotalTimeMax);
-			outCurve = BufRd.kr(1, bufnumCurve,
-				Line.kr(0, 699, envTime, doneAction: 2));
+			phase = Line.kr(0, 699, envTime, doneAction: 2);
+			outCurve = BufRd.kr(1, bufnumCurve, phase);
 			// select function based on arrOptions
 			rangeFunction = arrOptionData.at(0).at(arrOptions.at(0)).at(1);
 			// amplitude is vel *  0.007874 approx. == 1 / 127
 			outSignal = rangeFunction.value(
 				outCurve * ((velocity * 0.007874) + (1-velocityScaling)).min(1)
 			);
-			Out.kr(out, outSignal);
+			envEnd = Trig1.kr(Done.kr(phase), ControlDur.ir);
+			Out.kr(out, [outSignal, envEnd]);
 		};
 		arrGridPresetNames = ["1 x 1", "2 x 2", "3 x 3", "4 x 4", "5 x 5", "6 x 6", "8 x 8", "9 x 9",
 			"10 x 10", "12 x 12", "16 x 16", "24 x 24", "32 x 32"];

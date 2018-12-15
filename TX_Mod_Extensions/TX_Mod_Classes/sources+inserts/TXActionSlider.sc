@@ -65,7 +65,8 @@ TXActionSlider : TXModuleBase {
 			]
 		];
 		synthDefFunc = {
-			arg out, sliderVal, threshold, trigHoldTime, modSliderVal, modThreshold;
+			arg out, sliderVal, threshold, trigHoldTime, modSliderVal=0, modThreshold=0;
+
 			var sliderValCombined, threshlevel, holdTrig, trigFunction;
 
 			sliderValCombined = (sliderVal + modSliderVal).max(0).min(1);

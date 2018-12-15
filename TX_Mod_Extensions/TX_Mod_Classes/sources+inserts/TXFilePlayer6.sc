@@ -123,6 +123,7 @@ TXFilePlayer6 : TXModuleBase {	// Disk File Player
 		];
 		arrActionSpecs = this.buildActionSpecs([
 			["commandAction", "Open new file", {this.openNewFile}],
+			["commandAction", "Open file path", {arg argFileName; this.cueSample(argFileName)}, nil, \textedit],
 			["NextLine"],
 			["TXStaticText", "File name",
 				{this.sampleFileName}, {arg view; sampleFileNameView = view}],
@@ -259,8 +260,6 @@ TXFilePlayer6 : TXModuleBase {	// Disk File Player
 				});
 				// remove condition from load queue
 				system.holdLoadQueue.removeCondition(holdModCondition);
-				// update view
-				system.showView;
 			};
 		},{
 			{TXInfoScreen.new("File not found: " ++ argFileName);}.defer; // defer because gui process

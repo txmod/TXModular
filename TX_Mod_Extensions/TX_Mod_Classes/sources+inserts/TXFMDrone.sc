@@ -1038,6 +1038,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = 0;
 							arrOptions[7] = 0;
 							arrOptions[8] = 0;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 2 }   {
@@ -1047,6 +1048,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = 1;
 							arrOptions[7] = 1;
 							arrOptions[8] = 1;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 3 }   {
@@ -1056,6 +1058,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = [0,1].choose;
 							arrOptions[7] = [0,1].choose;
 							arrOptions[8] = [0,1].choose;
+							this.rebuildSynth;
 							system.showView;
 						};
 					}, 80],
@@ -1260,6 +1263,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = 0;
 							arrOptions[7] = 0;
 							arrOptions[8] = 0;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 2 }   {
@@ -1269,6 +1273,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = 1;
 							arrOptions[7] = 1;
 							arrOptions[8] = 1;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 3 }   {
@@ -1278,6 +1283,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = [0,1].choose;
 							arrOptions[7] = [0,1].choose;
 							arrOptions[8] = [0,1].choose;
+							this.rebuildSynth;
 							system.showView;
 						};
 					}, 80],
@@ -1492,6 +1498,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = 0;
 							arrOptions[7] = 0;
 							arrOptions[8] = 0;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 2 }   {
@@ -1501,6 +1508,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = 1;
 							arrOptions[7] = 1;
 							arrOptions[8] = 1;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 3 }   {
@@ -1510,6 +1518,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = [0,1].choose;
 							arrOptions[7] = [0,1].choose;
 							arrOptions[8] = [0,1].choose;
+							this.rebuildSynth;
 							system.showView;
 						};
 					}, 80],
@@ -1553,6 +1562,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = 0;
 							arrOptions[7] = 0;
 							arrOptions[8] = 0;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 2 }   {
@@ -1562,6 +1572,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = 1;
 							arrOptions[7] = 1;
 							arrOptions[8] = 1;
+							this.rebuildSynth;
 							system.showView;
 						}
 						{ view.value == 3 }   {
@@ -1571,6 +1582,7 @@ TXFMDrone : TXModuleBase {
 							arrOptions[6] = [0,1].choose;
 							arrOptions[7] = [0,1].choose;
 							arrOptions[8] = [0,1].choose;
+							this.rebuildSynth;
 							system.showView;
 						};
 					}, 80],

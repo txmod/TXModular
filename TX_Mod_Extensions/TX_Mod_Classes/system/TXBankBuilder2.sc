@@ -53,6 +53,52 @@ TXBankBuilder2 {
 		});
 	}
 
+	*verifyBank{arg bank;
+		var invalidPaths, invalidIndices;
+		invalidPaths = [];
+		bank.do({ arg item, i;
+			var holdPath;
+			if (item.size > 0, {
+				holdPath = item[0];
+				if (holdPath != "REMOVED", {
+					// Convert path
+					holdPath = TXPath.convert(holdPath);
+					if (File.exists(holdPath).not, {
+						invalidPaths = invalidPaths.add(holdPath);
+						invalidIndices = invalidIndices.add(i);
+					});
+				});
+			});
+		});
+		^[invalidPaths, invalidIndices];
+	}
+
+	*verifySampleLoopBanks{
+		var invalidPaths, holdPaths;
+		invalidPaths = [];
+		arrSampleBanks.do({arg bank;
+			holdPaths = this.verifyBank(bank[0])[0];
+			invalidPaths = invalidPaths ++ holdPaths;
+		});
+		if (invalidPaths.size > 0, {
+			TXInfoScreen.new(
+				"Sample Bank Error - the following files were not found:",
+				arrInfoLines: invalidPaths
+			);
+		});
+		invalidPaths = [];
+		arrLoopBanks.do({arg bank;
+			holdPaths = this.verifyBank(bank[0])[0];
+			invalidPaths = invalidPaths ++ holdPaths;
+		});
+		if (invalidPaths.size > 0, {
+			TXInfoScreen.new(
+				"Loop Bank Error - the following files were not found:",
+				arrInfoLines: invalidPaths
+			);
+		});
+	}
+
 	*makeSampleGui{arg argView;  this.makeGui(argView, "Sample"); }
 
 	*makeLoopGui{arg argView;  this.makeGui(argView, "Loop"); }
@@ -61,8 +107,8 @@ TXBankBuilder2 {
 		var parent, holdSampleNo, arrSaveData, arrOutput, strBankType;
 
 		var numBankNo, btnBankMinus, btnBankPlus, strBankNameLabel, textBankName;
-		var btnSaveBank, btnOpenBank, btnEmptyBank, btnAddSamples, btnPlaySample;
-		var btnStopPlay, btnDeleteSample;
+		var btnSaveBank, btnOpenBank, btnEmptyBank, btnAddSamples, btnSearchFolder, btnPlaySample, dragSink;
+		var btnStopPlay, btnDeleteSample, btnReplaceSample;
 		var strSampleLoop, signalViewSample, strFileNameTxt;
 		var freqOrBeatsTitle;
 		var strBPMtxt;
@@ -88,9 +134,9 @@ TXBankBuilder2 {
 		parent.decorator = FlowLayout(parent.bounds);
 
 		if (classData.bankType == "Sample", {
-			specFreqOrBeats = [1, 2000, \linear, 0].asSpec;
+			specFreqOrBeats = [1, 20000, \linear, 0].asSpec;
 		}, {
-			specFreqOrBeats = [1, 128, \linear, 1].asSpec;
+			specFreqOrBeats = [1, 1000, \linear, 0].asSpec;
 		});
 
 		// spacing
@@ -151,7 +197,7 @@ TXBankBuilder2 {
 		parent.decorator.nextLine;
 
 		// no. samples
-		classData.strNoElements = StaticText(parent, 240 @ 24)
+		classData.strNoElements = StaticText(parent, 210 @ 24)
 		.string_(" Total no. of Samples in Bank: 0")
 		.align_(\left)
 		.background_(TXColor.white)
@@ -159,26 +205,48 @@ TXBankBuilder2 {
 
 		// spacing
 		parent.decorator.shift(10, 0);
+		// Drag & Drop samples/loops
+		dragSink = DragSink(parent, 130 @ 24).align_(\center).background_(TXColor.paleYellow2);
+		dragSink.string = "Drag & drop to add";
+		dragSink.receiveDragHandler = { arg view;
+			var inArray = View.currentDrag;
+			if (inArray.class == String, {
+				inArray = [inArray];
+			});
+			this.loadPaths(inArray, classData.bankType);
+			system.showView;
+		};
+
+		// spacing
+		parent.decorator.shift(10, 0);
 		// button
-		btnAddSamples = Button(parent, 150 @ 24);
+		btnAddSamples = Button(parent, 130 @ 24);
 		if (classData.bankType == "Sample", {
 			btnAddSamples.states = [["Add Samples to Bank", TXColor.white, TXColor.sysGuiCol1]];
 		}, {
 			btnAddSamples.states = [["Add Loops to Bank", TXColor.white, TXColor.sysGuiCol1]];
 		});
-
 		// spacing
 		parent.decorator.shift(10, 0);
 		// button
-		btnOpenBank = Button(parent, 150 @ 24).states = [["Load Bank", TXColor.white, TXColor.sysGuiCol2]];
+		btnSearchFolder = Button(parent, 200 @ 24);
+		if (classData.bankType == "Sample", {
+			btnSearchFolder.states = [["Search a folder for missing samples", TXColor.white, TXColor.sysGuiCol1]];
+		}, {
+			btnSearchFolder.states = [["Search a folder for missing loops", TXColor.white, TXColor.sysGuiCol1]];
+		});
 		// spacing
 		parent.decorator.shift(10, 0);
 		// button
-		btnSaveBank = Button(parent, 150 @ 24).states = [["Save Bank", TXColor.white, TXColor.sysGuiCol2]];
+		btnOpenBank = Button(parent, 90 @ 24).states = [["Load Bank", TXColor.white, TXColor.sysGuiCol2]];
 		// spacing
 		parent.decorator.shift(10, 0);
 		// button
-		btnEmptyBank = Button(parent, 150 @ 24).states = [["Empty Bank", TXColor.white, TXColor.sysDeleteCol]];
+		btnSaveBank = Button(parent, 90 @ 24).states = [["Save Bank", TXColor.white, TXColor.sysGuiCol2]];
+		// spacing
+		parent.decorator.shift(10, 0);
+		// button
+		btnEmptyBank = Button(parent, 90 @ 24).states = [["Empty Bank", TXColor.white, TXColor.sysDeleteCol]];
 
 		// spacing
 		parent.decorator.shift(0, 5);
@@ -202,9 +270,13 @@ TXBankBuilder2 {
 			strListTitle.string = "Select Loop:";
 		});
 		classData.listSamples = classData.holdArray.collect({ arg item, i;
-			var errorText;
-			errorText = "";
-			if (item.at(3) == false and: {item.at(0) != "REMOVED"}, {
+			var errorText = "";
+			var holdPath = item.at(0);
+			holdPath = TXPath.convert(holdPath);
+			if (File.exists(holdPath).not and: {holdPath != "REMOVED"}, {
+				errorText = "** MISSING FILE: ";
+			});
+			if (item.at(3) == false and: {holdPath != "REMOVED"}, {
 				errorText = "** INVALID FILE: ";
 			});
 			errorText ++ item.at(0);
@@ -303,7 +375,7 @@ TXBankBuilder2 {
 		parent.decorator.nextLine;
 
 		// button
-		btnPlaySample = Button(parent, 200 @ 24);
+		btnPlaySample = Button(parent, 100 @ 24);
 		if (classData.bankType == "Sample", {
 			btnPlaySample.states = [["Play Sample", TXColor.white, TXColor.sysGuiCol1]];
 		},{
@@ -313,22 +385,33 @@ TXBankBuilder2 {
 		// spacing
 		parent.decorator.shift(10, 0);
 		// button
-		btnStopPlay = Button(parent, 200 @ 24).states = [["Stop Playing", TXColor.white, TXColor.sysGuiCol1]];
+		btnStopPlay = Button(parent, 100 @ 24).states = [["Stop Playing", TXColor.white, TXColor.sysGuiCol1]];
 		// spacing
 		parent.decorator.shift(10, 0);
 		// volume slider
 		sldVolume = EZSlider(parent, 190 @ 24, "Volume", labelWidth: 45, numberWidth: 40)
 		.setColors(TXColor.white, TXColor.sysGuiCol1)
 		.value_(0.5);
+		sldVolume.sliderView.thumbSize_(10);
 
 		// spacing
 		parent.decorator.shift(20, 0);
 		// button
-		btnDeleteSample = Button(parent, 200 @ 24);
+		btnDeleteSample = Button(parent, 160 @ 24);
 		if (classData.bankType == "Sample", {
 			btnDeleteSample.states = [["Remove Sample from Bank", TXColor.white, TXColor.sysDeleteCol]];
 		}, {
 			btnDeleteSample.states = [["Remove Loop from Bank", TXColor.white, TXColor.sysDeleteCol]];
+		});
+
+		// spacing
+		parent.decorator.shift(20, 0);
+		// button
+		btnReplaceSample = Button(parent, 160 @ 24);
+		if (classData.bankType == "Sample", {
+			btnReplaceSample.states = [["Replace Selected Sample", TXColor.white, TXColor.sysGuiCol2]];
+		}, {
+			btnReplaceSample.states = [["Replace Selected Loop", TXColor.white, TXColor.sysGuiCol2]];
 		});
 
 		// spacing
@@ -417,24 +500,16 @@ TXBankBuilder2 {
 		// Freq Or Beats
 		classData.numFreqOrBeats = NumberBox (parent, 76 @ 24).scroll_(false);
 
-		// spacing
-		parent.decorator.shift(10, 0);
-		// set frequency/ no. Beats
-		btnChangeValue = Button(parent, 120 @ 24);
 		if (classData.bankType == "Sample", {
-			btnChangeValue.states = [["Set Frequency to:", TXColor.white, TXColor.sysGuiCol1]]
-		}, {
-			btnChangeValue.states = [["Set Total Beats to:", TXColor.white, TXColor.sysGuiCol1]]
-		});
+			// spacing
+			parent.decorator.shift(10, 0);
+			// set frequency/ no. Beats
+			btnChangeValue = Button(parent, 120 @ 24);
+			btnChangeValue.states = [["Set Frequency to:", TXColor.white, TXColor.sysGuiCol1]];
 
-		classData.numNewFreqOrBeats = NumberBox (parent, 76 @ 24).scroll_(false);
-		if (classData.bankType == "Sample", {
+			classData.numNewFreqOrBeats = NumberBox (parent, 76 @ 24).scroll_(false);
 			classData.numNewFreqOrBeats.value = classData.holdNewFreq;
-		}, {
-			classData.numNewFreqOrBeats.value = classData.holdNewBeats;
-		});
 
-		if (classData.bankType == "Sample", {
 			classData.popupMidiNote = PopUpMenu(parent, 50 @ 24)
 			.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 			classData.popupMidiNote.items = ["notes"]
@@ -445,6 +520,16 @@ TXBankBuilder2 {
 				});
 			};
 			classData.popupMidiNote.value = 46;
+		}, {
+			32.do({arg index;
+				var btn;
+				btn = Button(parent, 20 @ 24);
+				btn.states = [[(index + 1).asString, TXColor.white, TXColor.sysGuiCol1]];
+				btn.action = {
+					classData.numFreqOrBeats.valueAction = (index + 1);
+					system.reloadAllLoops(classData.currLoopBankNo);
+				};
+			});
 		});
 
 		// spacing
@@ -456,9 +541,23 @@ TXBankBuilder2 {
 			.align_(\center)
 			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
 			strBPMtxt.string =  "Equivalent BPM: ";
-			classData.strBPM = StaticText(parent, 76 @ 24).string_(" ")
-			.align_(\center)
-			.background_(TXColor.white).stringColor_(TXColor.sysGuiCol1);
+
+			classData.numBPM = NumberBox (parent, 76 @ 24).scroll_(false);
+			this.updateBPM;
+
+			classData.btnDoubleBPM = Button(parent, 64 @ 24);
+			classData.btnDoubleBPM.states = [["BPM X 2", TXColor.white, TXColor.sysGuiCol1]];
+			classData.btnDoubleBPM.action = {
+				classData.numFreqOrBeats.valueAction = classData.numFreqOrBeats.value * 2;
+				system.reloadAllLoops(classData.currLoopBankNo);
+			};
+
+			classData.btnHalfBPM = Button(parent, 64 @ 24);
+			classData.btnHalfBPM.states = [["BPM / 2", TXColor.white, TXColor.sysGuiCol1]];
+			classData.btnHalfBPM.action = {
+				classData.numFreqOrBeats.valueAction = classData.numFreqOrBeats.value * 0.5;
+				system.reloadAllLoops(classData.currLoopBankNo);
+			};
 		}); // end of if banktype == "Loop"
 
 		// spacing
@@ -532,7 +631,8 @@ TXBankBuilder2 {
 			});
 			// Show error screen if error found
 			if (errFound==1, {
-				errorScreen = TXInfoScreen.new("ERROR: invalid " ++ fileType ++ ": " ++ newFile.path);		});
+				errorScreen = TXInfoScreen.new("ERROR: invalid " ++ fileType ++ ": " ++ newFile.path);
+			});
 			this.sizeChange;
 		};
 		btnSaveBank.action =
@@ -568,14 +668,20 @@ TXBankBuilder2 {
 
 		btnAddSamples.action = {this.addSampleDialog(classData.bankType); };
 
+		btnSearchFolder.action = {this.searchFolderDialog; };
+
 		btnDeleteSample.action = {
-			classData.holdArray[classData.numSampleNo.value][0] = "REMOVED";
-			classData.holdArray[classData.numSampleNo.value][3] = false;
-			this.updateBank;
-			classData.showWaveform = 0;
-			// recreate view
-			system.showView;
+			if (classData.holdArray.size > 0, {
+				classData.holdArray[classData.numSampleNo.value][0] = "REMOVED";
+				classData.holdArray[classData.numSampleNo.value][3] = false;
+				this.updateBank;
+				classData.showWaveform = 0;
+				// recreate view
+				system.showView;
+			});
 		};
+
+		btnReplaceSample.action = {this.replaceSampleDialog; };
 
 		classData.displayWaveform.action = {arg view; classData.showWaveform = view.value; system.showView};
 
@@ -597,34 +703,51 @@ TXBankBuilder2 {
 		classData.numFreqOrBeats.action = {arg view;
 			if (classData.holdArray.notEmpty, {
 				classData.holdArray.at(classData.numSampleNo.value.asInteger).put(1, specFreqOrBeats.constrain(view.value));
+				system.reloadAllSamples(classData.currSampleBankNo);
 				this.updateBank;
 				this.loadSample;
 			});
 		};
 
-		btnChangeValue.action = {
-			if (classData.holdArray.notEmpty, {
-				classData.holdArray.at(classData.numSampleNo.value.asInteger).put(1, classData.numNewFreqOrBeats.value);
-				this.updateBank;
-				this.loadSample;
-			});
-		};
+		if (classData.bankType == "Loop", {
+			classData.numBPM.action = {arg view;
+				this.updateBeatsFromBPM(view.value);
+			};
+		});
 
-		classData.numNewFreqOrBeats.action = {arg view;
-			if (classData.bankType == "Sample", {
-				classData.holdNewFreq = specFreqOrBeats.constrain(view.value);
-			}, {
-				classData.holdNewBeats = specFreqOrBeats.constrain(view.value);
-			});
+		if (classData.bankType == "Sample", {
+			btnChangeValue.action = {
+				if (classData.holdArray.notEmpty, {
+					classData.holdArray.at(classData.numSampleNo.value.asInteger).put(1, classData.numNewFreqOrBeats.value);
+					system.reloadAllSamples(classData.currSampleBankNo);
+					this.updateBank;
+					this.loadSample;
+				});
+			};
 
-		};
+			classData.numNewFreqOrBeats.action = {arg view;
+				if (classData.bankType == "Sample", {
+					classData.holdNewFreq = specFreqOrBeats.constrain(view.value);
+				}, {
+					classData.holdNewBeats = specFreqOrBeats.constrain(view.value);
+				});
+
+			};
+		});
 
 		btnPlaySample.action = {
 			// release any synth running
 			btnStopPlay.doAction;
 			if (classData.holdArray.notEmpty and: classData.holdBuffer.notNil, {
-				holdSynth = { sldVolume.value *
-					PlayBuf.ar(1, classData.holdBuffer.bufnum, BufRateScale.kr(classData.holdBuffer.bufnum)) }.play;
+				if (classData.holdBuffer.numChannels == 1, {
+					holdSynth = { sldVolume.value *
+						PlayBuf.ar(1, classData.holdBuffer.bufnum, BufRateScale.kr(classData.holdBuffer.bufnum)) ! 2;
+					}.play;
+				},{
+					holdSynth = { sldVolume.value *
+						PlayBuf.ar(2, classData.holdBuffer.bufnum, BufRateScale.kr(classData.holdBuffer.bufnum));
+					}.play;
+				});
 			});
 		};
 
@@ -652,7 +775,6 @@ TXBankBuilder2 {
 	}
 
 	*addSampleDialog { arg argBankType = "Sample", argBankNo;
-		var holdString;
 		// set classData.bankType so updates are correct when adding samples
 		classData.bankType = argBankType ?? classData.bankType;
 		// set bank no if given
@@ -666,44 +788,162 @@ TXBankBuilder2 {
 
 		// get path/filenames
 		Dialog.openPanel({ arg paths;
-			var validPaths, validPathsNumChannels, invalidPaths;
-			// check validity of pathnames
-			paths.asArray.do({ arg item, i;
-				var holdFile;
+			this.loadPaths(paths, argBankType);
+			// recreate view
+			system.showView;
+		}, nil, true);
+	}
+
+	*searchFolderDialog {
+		if (classData.holdArray.size > 0, {
+			// get path/filename
+			FileDialog.new({ arg paths;
+				var holdFolder, missingFileNames, missingIndices, folderFiles, verify, folderFilesIndex, filesFound;
+				// search folder for missing files
+				holdFolder = PathName.new(paths.asArray[0]);
+				folderFiles = holdFolder.files;
+				verify = this.verifyBank(classData.holdArray);
+				missingFileNames = verify[0].collect({arg item, i; PathName.new(item).fileName;});
+				missingIndices = verify[1];
+				folderFilesIndex = 0;
+				filesFound = 0;
+				while ( {(missingFileNames.size > 0) and: {folderFilesIndex < folderFiles.size}}, {
+					var replaceIndex, path, pathData, validPath, validPathNumChannels;
+					var holdFile = folderFiles[folderFilesIndex];
+					var missingIndex = missingFileNames.indexOfEqual(holdFile.fileName);
+					if (missingIndex.notNil, {
+						replaceIndex = missingIndices[missingIndex];
+						path = holdFile.fullPath;
+						pathData = this.validatePaths([path], classData.bankType);
+						validPath = pathData[0][0];
+						validPathNumChannels = pathData[1][0];
+						if (validPath.size > 0, {
+							classData.holdArray[replaceIndex][0] = holdFile.fullPath;
+							classData.holdArray[replaceIndex][2] = validPathNumChannels;
+							classData.holdArray[replaceIndex][3] = true;
+						});
+						// remove from missing arrays
+						missingFileNames.removeAt(missingIndex);
+						missingIndices.removeAt(missingIndex);
+						filesFound = filesFound + 1;
+					});
+					folderFilesIndex = folderFilesIndex + 1;
+				});
+				if (filesFound > 0, {
+					if (classData.bankType == "Sample", {
+						system.reloadAllSamples;
+					},{
+						system.reloadAllLoops;
+					});
+					this.updateBank;
+					// recreate view
+					system.showView;
+				}, {
+					TXInfoScreen.new("Error: no missing files were found in folder: " ++ paths.asArray[0]);
+				});
+			}, nil, 2, 0, stripResult: false);
+		});
+	}
+
+	*replaceSampleDialog {
+		if (classData.holdArray.size > 0, {
+			// get path/filename
+			Dialog.openPanel({ arg path;
+				var pathData = this.validatePaths([path], classData.bankType);
+				var validPaths = pathData[0];
+				var validPathsNumChannels = pathData[1];
+				if (validPaths.size > 0, {
+					if (classData.bankType == "Sample", {
+						classData.holdArray[classData.displaySampleNo] =
+						[path, 440, validPathsNumChannels.at(0), true];
+						system.reloadAllSamples(classData.currSampleBankNo);
+					},{
+						classData.holdArray[classData.displayLoopNo] =
+						[path, 4, validPathsNumChannels.at(0), true];
+						system.reloadAllLoops(classData.currLoopBankNo);
+					});
+					this.updateBank;
+					// recreate view
+					system.showView;
+				});
+			}, nil, false);
+		});
+	}
+
+	*loadPaths { arg paths, argBankType;
+		var holdString;
+		var pathData = this.validatePaths(paths, argBankType);
+		var validPaths = pathData[0];
+		var validPathsNumChannels = pathData[1];
+		var validPathsNumBeats; // only used for loops
+		if (argBankType == "Sample", {
+			classData.holdArray = arrSampleBanks[classData.currSampleBankNo][0]
+			++ validPaths.collect({ arg item, i;  [item, 440, validPathsNumChannels.at(i), true]; });
+			holdString = " Total no. of  Samples in Bank:  " ++ classData.holdArray.size.asString;
+		},{
+			validPathsNumBeats = pathData[2];
+			classData.holdArray = arrLoopBanks[classData.currLoopBankNo][0]
+			++ validPaths.collect({ arg item, i;  [item, validPathsNumBeats.at(i),
+				validPathsNumChannels.at(i), true]; });
+			holdString = " Total no. of  Loops in Bank:  " ++ classData.holdArray.size.asString;
+		});
+		this.updateBank;
+		if ((system.showWindow == 'Sample bank') or:
+			(system.showWindow == 'Loop bank'),
+			{
+				classData.strNoElements.string = holdString;
+		});
+	}
+
+	*validatePaths { arg paths, argBankType;
+		var validPaths, validPathsNumChannels, validPathsNumBeats, invalidPaths, numBeats;
+		validPaths = [];
+		validPathsNumChannels = [];
+		validPathsNumBeats = [];
+		// check validity of pathnames
+		paths.asArray.do({ arg item, i;
+			var holdFile;
+			if (item != "REMOVED", {
 				holdFile = SoundFile.new;
-				if (holdFile.openRead(item), {
+				if (File.exists(item) and: {holdFile.openRead(item)}, {
 					validPaths = validPaths.add(item);
 					validPathsNumChannels = validPathsNumChannels.add(holdFile.numChannels);
+					if (argBankType == "Loop", {
+						numBeats = this.guessNumBeats(holdFile.numFrames, holdFile.sampleRate);
+						validPathsNumBeats = validPathsNumBeats.add(numBeats);
+					});
 				},{
 					invalidPaths = invalidPaths.add(item);
 				});
 				holdFile.close;
 			});
-			if (invalidPaths.notNil, {
-				TXInfoScreen.new(
-					"Error: the following are not valid sound files.",
-					arrInfoLines: invalidPaths
-				);
-			});
+		});
+		if (invalidPaths.notNil, {
+			TXInfoScreen.new(
+				"Error: the following are not valid sound files.",
+				arrInfoLines: invalidPaths
+			);
+		});
+		^[validPaths, validPathsNumChannels, validPathsNumBeats];
+	}
 
-			if (argBankType == "Sample", {
-				classData.holdArray = arrSampleBanks[classData.currSampleBankNo][0]
-				++ validPaths.collect({ arg item, i;  [item, 440, validPathsNumChannels.at(i), true]; });
-				holdString = " Total no. of  Samples in Bank:  " ++ classData.holdArray.size.asString;
-			},{
-				classData.holdArray = arrLoopBanks[classData.currLoopBankNo][0]
-				++ validPaths.collect({ arg item, i;  [item, 4, validPathsNumChannels.at(i), true]; });
-				holdString = " Total no. of  Loops in Bank:  " ++ classData.holdArray.size.asString;
-			});
-			this.updateBank;
-			if ((system.showWindow == 'Sample bank') or:
-				(system.showWindow == 'Loop bank'),
-				{
-					classData.strNoElements.string = holdString;
-			});
-			// recreate view
-			system.showView;
-		}, nil, true);
+	*guessNumBeats{arg numFrames, sampleRate;
+		var length = numFrames / sampleRate;
+		var numbeats, count = 0, scale = 1, testBpm = 0, beatTime;
+		// aim for multiple of 4 beats with bpm from 80 to 160
+		// 4 beats at 80 bpm = 4 * 60/80 = 3 secs
+		if (length > 3, {
+			while ( { (count < 100) and: (testBpm <= 80) }, {
+				count = count + 1;
+				scale = scale * 2;
+				numbeats = 4 * scale;
+				beatTime = length/numbeats;
+				testBpm = 60 / beatTime;
+			} );
+		}, {
+			numbeats = 4;
+		});
+		^numbeats;
 	}
 
 	*updateBank { // method to be run whenever classData.holdArray is updated
@@ -753,7 +993,7 @@ TXBankBuilder2 {
 			}, { // else for loops
 				classData.strNoElements.string = " Total no. of Loops in Bank:  0";
 				classData.numFreqOrBeats.value = 8;
-				classData.numNewFreqOrBeats.value = 8;
+				//classData.numNewFreqOrBeats.value = 8;
 			});
 		}, { // load sample/loop details for current sample number
 			this.setSampleNo(holdSampleNo.min(classData.holdArray.size-1));
@@ -766,51 +1006,69 @@ TXBankBuilder2 {
 	} 		// end of class method sizeChange
 
 	*loadSample { 			// method to load samples into buffer
-		var holdSampleNo;
+		var holdSampleNo, holdPath;
 		if (classData.bankType == "Sample", {
 			holdSampleNo = classData.displaySampleNo;
 		},{
 			holdSampleNo = classData.displayLoopNo;
 		});
-		if (classData.holdArray.isNil or: classData.holdArray.isEmpty or: {classData.holdArray.at(holdSampleNo).at(3) == false}, {
-			classData.strSampleFileName.string =  "";
-			classData.strLength.string = "";
-			classData.strNumChannels.string = "";
-			if (classData.bankType == "Loop", {classData.strBPM.string =  ""; });
-		},{
-			classData.holdBuffer =
-			Buffer.read(system.server,classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0), action: { arg buffer;
-				{
-					//	if file loaded ok
-					if (buffer.notNil, {
-						classData.strSampleFileName.string =  classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0).asString;
-						classData.soundFileView.soundfile = SoundFile.new(classData.strSampleFileName.string);
-						if (classData.showWaveform == 1, {
-							classData.soundFileView.readWithTask( block: 16, showProgress: false);
+		if (classData.holdArray.isNil
+			or: classData.holdArray.isEmpty
+			or: {classData.holdArray.at(holdSampleNo).at(3) == false}
+			or: {File.exists(classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0)).not},
+			{
+				classData.strSampleFileName.string =  "";
+				classData.strLength.string = "";
+				classData.strNumChannels.string = "";
+			},{
+				holdPath = classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0);
+				classData.holdBuffer = Buffer.read(system.server, holdPath, action: { arg buffer;
+					{
+						//	if file loaded ok
+						if (buffer.notNil, {
+							classData.strSampleFileName.string =
+								classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0).asString;
+							classData.soundFileView.soundfile = SoundFile.new(classData.strSampleFileName.string);
+							if (classData.showWaveform == 1, {
+								classData.soundFileView.readWithTask( block: 16, showProgress: false);
+							});
+							classData.numFreqOrBeats.value = classData.holdArray.at(classData.numSampleNo.value.asInteger).at(1);
+							classData.strLength.string =
+							((buffer.numFrames / buffer.sampleRate).round(0.001) * 1000).asString;
+							classData.strNumChannels.string = buffer.numChannels.asString;
+							this.updateBPM;
+						},{
+							classData.strSampleFileName.string =
+							classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0) ++ "-  NOT FOUND";
+							classData.strLength.string = "";
+							classData.strNumChannels.string = "";
 						});
-						classData.numFreqOrBeats.value = classData.holdArray.at(classData.numSampleNo.value.asInteger).at(1);
-						classData.strLength.string =
-						((buffer.numFrames / buffer.sampleRate).round(0.001) * 1000).asString;
-						classData.strNumChannels.string = buffer.numChannels.asString;
-						if (classData.bankType == "Loop", {
-							classData.strBPM.string =
-							((60 * buffer.sampleRate * classData.holdArray.at(classData.numSampleNo.value.asInteger).at(1))
-								/ buffer.numFrames ).round(0.01).asString;
-						});
-					},{
-						classData.strSampleFileName.string =
-						classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0) ++ "-  NOT FOUND";
-						classData.strLength.string = "";
-						classData.strNumChannels.string = "";
-						if (classData.bankType == "Loop", {classData.strBPM.string =  ""; });
-					});
-				}.defer;	// defer because gui process
-			});
-			if (classData.holdBuffer.isNil, {
-				TXInfoScreen.new("Invalid Sample File" ++ classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0));
-			});
+					}.defer;	// defer because gui process
+				});
+				if (classData.holdBuffer.isNil, {
+					TXInfoScreen.new("Invalid Sample File" ++ classData.holdArray.at(classData.numSampleNo.value.asInteger).at(0));
+				});
 		});
 	}	// end of class method loadSample
+
+	*updateBPM {
+		var sampleArr, beats;
+		if (classData.holdBuffer.notNil && classData.numBPM.notNil && (classData.bankType == "Loop"), {
+			sampleArr = classData.holdArray.at(classData.numSampleNo.value.asInteger);
+			if (sampleArr.notNil, {
+				beats =  sampleArr.at(1);
+				classData.numBPM.value = 60 * beats * classData.holdBuffer.sampleRate / classData.holdBuffer.numFrames;
+			});
+		});
+	}
+
+	*updateBeatsFromBPM {arg argBPM;
+		var bufferTime;
+		if (classData.holdBuffer.notNil && classData.numFreqOrBeats.notNil && (classData.bankType == "Loop"), {
+			bufferTime = classData.holdBuffer.numFrames / classData.holdBuffer.sampleRate;
+			classData.numFreqOrBeats.valueAction = bufferTime  * argBPM/ 60;
+		});
+	}
 
 	*checkSndFilePaths { arg argBank, bankTypeString, showMessages = true;
 		var newBank, holdSoundFile, invalidPaths;
@@ -821,7 +1079,7 @@ TXBankBuilder2 {
 			holdPath = item.at(0);
 			// Convert path
 			holdPath = TXPath.convert(holdPath);
-			if (holdSoundFile.openRead(holdPath), {
+			if (File.exists(holdPath) and: {holdSoundFile.openRead(holdPath)}, {
 				newData = item.keep(3).add(true);
 			},{
 				newData = item.keep(3).add(false);

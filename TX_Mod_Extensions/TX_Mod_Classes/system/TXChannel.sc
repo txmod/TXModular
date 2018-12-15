@@ -109,7 +109,7 @@ TXChannel : TXModuleBase { //  Channel module
 					SendTrig.kr(trig, 0 , mixout);
 					Out.kr((out+i), mixout);
 				});
-			}, [0, 0, \ir, \ir, defLagTime, defLagTime, defLagTime, defLagTime] // lag rates
+			}, [0, 0, \ir, \ir, 0, 0, 0, 0] // lag rates
 		).add;
 		//	send the SynthDef for FX sends
 		SynthDef("TXChannelFX1",
@@ -705,6 +705,7 @@ TXChannel : TXModuleBase { //  Channel module
 		PopUpMenu(column, 88 @ guiRowHeight)
 		.items_(arrPositions)
 		.background_(TXColor.white)
+		.stringColor_(TXColor.black)
 		.action_({arg view;
 			this.channelHighlight;
 			case

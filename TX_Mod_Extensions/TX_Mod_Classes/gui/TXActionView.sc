@@ -131,19 +131,19 @@ TXActionView {	// self-building module popup, action popup, and value fields
 			if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size == 1, {
 			// slider - value 1
 				holdControlSpec1 =
-					holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
+					holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0).value;
 				val1Slider = Slider(argParent, Rect(0, 0, 175, 20))
 				.action_({arg view;
 					holdArrActions.at(i)
-						.put(2, holdControlSpec1.value.map(view.value));
+						.put(2, holdControlSpec1.map(view.value));
 					if (val1NumberBox.class.respondsTo('value'),
-						{val1NumberBox.value = holdControlSpec1.value.map(view.value);})
+						{val1NumberBox.value = holdControlSpec1.map(view.value);})
 				});
-				if (holdControlSpec1.value.step != 0, {
-					val1Slider.step = (holdControlSpec1.value.step
-						/ (holdControlSpec1.value.maxval - holdControlSpec1.value.minval));
+				if (holdControlSpec1.step != 0, {
+					val1Slider.step = (holdControlSpec1.step
+						/ (holdControlSpec1.maxval - holdControlSpec1.minval));
 				});
-				val1Slider.value = holdControlSpec1.value.unmap(
+				val1Slider.value = holdControlSpec1.unmap(
 					holdArrActions.at(i).at(2) ? 0);
 			});
 			// if object type is number
@@ -151,18 +151,18 @@ TXActionView {	// self-building module popup, action popup, and value fields
 				// if at least 1 controlspec is given, then create numberbox
 				if (holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 0, {
 					holdControlSpec1 =
-						 holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
+						 holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0).value;
 					val1NumberBox = TXScrollNumBox(argParent, Rect(0, 0, 55, 20))
 					.maxDecimals_(4)
 					.action_({arg view;
-						view.value = holdControlSpec1.value.constrain(view.value);
+						view.value = holdControlSpec1.constrain(view.value);
 						holdArrActions.at(i).put(2, view.value);
 						if (val1Slider.class == Slider,
-							{val1Slider.value = holdControlSpec1.value.unmap(view.value);})
+							{val1Slider.value = holdControlSpec1.unmap(view.value);})
 					});
 					TXScrollNumBox.updateNumberBoxFromSpec(val1NumberBox, holdControlSpec1);
-					val1NumberBox.value = holdControlSpec1.value.constrain(
-						holdArrActions.at(i).at(2) ? holdControlSpec1.value.default);
+					val1NumberBox.value = holdControlSpec1.constrain(
+						holdArrActions.at(i).at(2) ? holdControlSpec1.default);
 				});
 			});
 			// popup
@@ -207,15 +207,15 @@ TXActionView {	// self-building module popup, action popup, and value fields
 			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 1, {
 			// numberbox - value 2
 				holdControlSpec2 =
-					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(1);
+					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(1).value;
 				val2NumberBox = TXScrollNumBox(argParent, Rect(0, 0, 55, 20))
 				.maxDecimals_(4)
 				.action_({arg view;
-					view.value = holdControlSpec2.value.constrain(view.value);
+					view.value = holdControlSpec2.constrain(view.value);
 					holdArrActions.at(i).put(3, view.value);
 				});
 				if (holdArrActions.at(i).at(3).notNil, {
-					val2NumberBox.value = holdControlSpec2.value.constrain(
+					val2NumberBox.value = holdControlSpec2.constrain(
 						holdArrActions.at(i).at(3));
 					holdArrActions.at(i).put(3, val2NumberBox.value);
 				},{
@@ -229,15 +229,15 @@ TXActionView {	// self-building module popup, action popup, and value fields
 			// if more than 2 controlspecs given, then create extra numberbox
 			if (holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.size > 2, {
 				holdControlSpec3 =
-					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(2);
+					holdArrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(2).value;
 				val3NumberBox = TXScrollNumBox(argParent, Rect(0, 0, 55, 20))
 				.maxDecimals_(4)
 				.action_({arg view;
-					view.value = holdControlSpec3.value.constrain(view.value);
+					view.value = holdControlSpec3.constrain(view.value);
 					holdArrActions.at(i).put(4, view.value);
 				});
 				if (holdArrActions.at(i).at(4).notNil, {
-					val3NumberBox.value = holdControlSpec3.value.constrain(
+					val3NumberBox.value = holdControlSpec3.constrain(
 						holdArrActions.at(i).at(4));
 					holdArrActions.at(i).put(4, val3NumberBox.value);
 				},{

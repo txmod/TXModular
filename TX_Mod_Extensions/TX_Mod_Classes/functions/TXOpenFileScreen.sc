@@ -82,6 +82,7 @@ TXOpenFileScreen {
 
 			popUpFileNames = TXListView(w, 800 @ 290).resize_(5); // stretchable
 			popUpFileNames.background = TXColor.white;
+			popUpFileNames.stringColor = TXColor.black;
 			popUpFileNames.items = [firstItem] ++ arrFileNames;
 			popUpFileNames.action = {arg view;
 				w.alwaysOnTop_(false);

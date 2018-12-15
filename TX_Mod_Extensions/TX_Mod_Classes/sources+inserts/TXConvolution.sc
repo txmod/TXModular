@@ -40,6 +40,14 @@ TXConvolution : TXModuleBase {
 		^super.new.init(argInstName);
 	}
 
+	*reloadAllSamples{arg argbankNo;
+		classData.arrInstances.do({ arg item, i;
+			if (argbankNo.isNil or: {argbankNo == item.bankNo}, {
+				item.loadSample(item.sampleNo);
+			});
+		});
+	}
+
 	init {arg argInstName;
 		//	set  class specific instance variables
 		extraLatency = 0.2;	// allow extra time when recreating
@@ -139,7 +147,7 @@ TXConvolution : TXModuleBase {
 
 	loadSample { arg argIndex; // method to load samples into buffer
 		var holdBuffer, holdSpectrumBufSize, holdSpectrumBuf, holdSampleInd,
-		holdModCondition, holdPath, maxSampleTime;
+		holdModCondition, holdPath, maxSampleTime, sampleIsValid;
 
 		Routine.run {
 			// max is 10 secs
@@ -153,37 +161,46 @@ TXConvolution : TXModuleBase {
 			// adjust index
 			holdSampleInd = (argIndex - 1).min(system.sampleFilesMono(bankNo).size-1);
 			// check for invalid samples
+			sampleIsValid = false;
 			if (argIndex == 0 or: {system.sampleFilesMono(bankNo).at(holdSampleInd).at(3) == false}, {
-				// if argIndex is 0, clear the current buffer & filename
-				holdBuffer = Buffer.alloc(system.server, 2048, 1,
-					bufnum: buffers.at(0).bufnum);
 				sampleFileName = "";
 			},{
 				// otherwise,  try to load sample.  if it fails, display error message and clear
 				holdPath = system.sampleFilesMono(bankNo).at(holdSampleInd).at(0);
 				// Convert path
 				holdPath = TXPath.convert(holdPath);
-				holdBuffer = Buffer.read(system.server, holdPath,
-					numFrames: maxSampleTime * system.server.sampleRate,
-					action: { arg argBuffer;
-						{
-							//	if file loaded ok
-							if (argBuffer.notNil, {
-								this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
-								sampleFileName = system.sampleFilesMono(bankNo).at(holdSampleInd).at(0);
-								sampleNumChannels = argBuffer.numChannels;
-							},{
-								buffers.at(0).zero;
-								sampleFileName = "";
-								sampleNumChannels = 0;
-								TXInfoScreen.new("Invalid Sample File"
-									++ system.sampleFilesMono(bankNo).at(holdSampleInd).at(0));
-							});
-						}.defer;	// defer because gui process
-					},
-					// pass buffer number
-					bufnum: buffers.at(0).bufnum
-				);
+				if (File.exists(holdPath), {
+					sampleIsValid = true;
+					holdBuffer = Buffer.read(system.server, holdPath,
+						numFrames: maxSampleTime * system.server.sampleRate,
+						action: { arg argBuffer;
+							{
+								//	if file loaded ok
+								if (argBuffer.notNil, {
+									this.setSynthArgSpec("bufnumSample", argBuffer.bufnum);
+									sampleFileName = system.sampleFilesMono(bankNo).at(holdSampleInd).at(0);
+									sampleNumChannels = argBuffer.numChannels;
+								},{
+									buffers.at(0).zero;
+									sampleFileName = "";
+									sampleNumChannels = 0;
+									TXInfoScreen.new("Invalid Sample File"
+										++ system.sampleFilesMono(bankNo).at(holdSampleInd).at(0));
+								});
+							}.defer;	// defer because gui process
+						},
+						// pass buffer number
+						bufnum: buffers.at(0).bufnum
+					);
+				},{
+					// if file not found, clear filename
+					sampleFileName = "";
+				});
+			});
+			if (sampleIsValid.not, {
+				holdBuffer = Buffer.alloc(system.server, 2048, 1,
+					bufnum: buffers.at(0).bufnum);
+				sampleFileName = "";
 			});
 
 			// pause

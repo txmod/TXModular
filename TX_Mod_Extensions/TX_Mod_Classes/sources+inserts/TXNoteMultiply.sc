@@ -704,7 +704,7 @@ TXNoteMultiply : TXModuleBase {
 
 	////////////////////////////////////
 
-	createSynthNote { arg note, vel, argEnvTime=1, seqLatencyOn=1;
+	createSynthNote { arg note, vel, argEnvTime=1, seqLatencyOn=1, argDetune=0;
 		var holdCurrIndices, holdProbVals, holdVelVals, holdGateBeatsVals, holdTransposeVals, holdScaleVels;
 		var holdBpm, holdBeatTime, holdStepTime;
 		var holdGateBeatsMin, holdGateBeatsMax, holdGateBeatsQuant;
@@ -770,7 +770,8 @@ TXNoteMultiply : TXModuleBase {
 					if (i == 0 and: {this.getSynthArgSpec("ignoreFirstStepTranspose") == 1}, {
 						holdTranspose = 0;
 					}, {
-						holdTranspose = holdTransposeVals[i].linlin(0, 1, holdTransposeMin, holdTransposeMax).round(holdTransposeQuant);
+						holdTranspose = holdTransposeVals[i].linlin(0, 1, holdTransposeMin,
+							holdTransposeMax).round(holdTransposeQuant);
 					});
 					// delay
 					swingMultiply = [0, 1].at(i % 2) * 0.5;
@@ -788,7 +789,7 @@ TXNoteMultiply : TXModuleBase {
 						// use clock instead
 						SystemClock.sched(holdDelay, {
 							item.createSynthNote(note + holdTranspose, holdVel * this.getCurrGlobalVelScale,
-								holdEnvTime, seqLatencyOn);
+								holdEnvTime, seqLatencyOn, argDetune);
 						});
 					});
 					// output midi with delay

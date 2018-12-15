@@ -2,37 +2,46 @@
 
 TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user slots for saving curves
 	classvar <>classData;
-	var <>localData, <labelView, <dragView, <userView, <popupView, <popupView2;
-	//var <multiSliderView, <lineDrawView;
+	var <>localData, <labelView, <dragView, <userView, <popupView, <popupView2, <txSoundFile;
 	var <>action, <value, <arrSlotData;
-	var <drawModeBtn, <histNextBtn, <histPrevBtn, <curveList, <lineQuantChBox;
-	var linearArray, resetArray, tableSize, gridRows, gridCols, holdDrawCurve, isDrawing;
+	var <drawModeBtn, <histNextBtn, <histPrevBtn, <curveList, <lineQuantPopup;
+	//var <multiSliderView, <lineDrawView;
+	var linearArray, resetArray, tableSize, gridRows, gridCols, holdDrawCurve, isDrawing, isVertical;
+	var holdFunction1, holdFunction2, holdSoundFile, holdMouseData, holdLastDrawPoint;
 
 	*initClass{
 		classData = ();
 		classData.drawMode = 'point';   // 'point' or 'line'
 		classData.lineWarpInd = 0;
-		classData.lineQuant = 0;   // 0 or 1
+		classData.lineQuant = 0;   // 0/1/2/3 ["quant off", "quant x+y", "quant x", "quant y"]
 	}
 
 	*new { arg window, dimensions, label, action, initVal, initAction=false, labelWidth=80, initSlotVals,
 		showPresets, curveWidth=270, curveHeight=257, resetAction="Ramp",
 		gridRowsFunc, gridColsFunc, xLabel, yLabel, curveThumbSize=1,
-		showBuilderButton = true, dataEvent;
+		showBuilderButton = true, dataEvent, drawVertical=false;
 
 		^super.new.init(window, dimensions, label, action, initVal, initAction, labelWidth, initSlotVals,
 			showPresets, curveWidth, curveHeight, resetAction, gridRowsFunc, gridColsFunc,
-			xLabel, yLabel, curveThumbSize, showBuilderButton, dataEvent);
+			xLabel, yLabel, curveThumbSize, showBuilderButton, dataEvent, drawVertical);
 	}
 
 	init { arg window, dimensions, label, argAction, initVal, initAction, labelWidth, initSlotVals,
 		showPresets, curveWidth, curveHeight, resetAction,gridRowsFunc, gridColsFunc,
-		xLabel, yLabel, curveThumbSize, showBuilderButton = true, dataEvent;
+		xLabel, yLabel, curveThumbSize, showBuilderButton = true, dataEvent, drawVertical;
 
 		var arrGenFunctions, arrModifyFunctions, popItems, popAction, newArray, holdLastX, holdLastY;
-		var holdTop, holdLeft, columnView, userViewWidth, userViewHeight, curveListHeight;
+		var holdTop, holdLeft, columnView, userViewWidth, userViewHeight, curveListHeight, curveBackground;
 		var dragStartPoint, dragEndPoint, dragStartPointNorm, dragEndPointNorm, dragLabelWidth;
+		var holdSFData, holdMouseData;
 
+		// init
+		holdMouseData = ();
+		holdMouseData.scaledXPos = 0.0;
+		holdMouseData.scaledYPos = 0.0;
+		holdMouseData.xPos = 0.0;
+		holdMouseData.yPos = 0.0;
+		holdMouseData.mouseIsDown = false;
 		// use local data if Event passed
 		if (dataEvent.notNil and: {dataEvent.class == Event}, {
 			localData = dataEvent;
@@ -63,7 +72,7 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 		});
 		if (resetAction == "Sine", {
 			resetArray = Signal.sineFill(tableSize, [1.0],[1.5pi])
-				.collect({arg item, i; (item.value + 1) * 0.5;});
+			.collect({arg item, i; (item.value + 1) * 0.5;});
 		});
 		initSlotVals = initSlotVals ? resetArray.dup(5);
 		arrSlotData = initSlotVals;
@@ -75,6 +84,8 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 		userViewWidth = curveWidth - 4;
 		userViewHeight = curveHeight - 4;
 		isDrawing = false;
+		curveBackground = Color.grey(0.7);
+		isVertical = drawVertical ? false;
 
 		// columnView
 		columnView = CompositeView(window, labelWidth @ userViewHeight);
@@ -160,11 +171,17 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 			drawModeBtn.value = 0;
 		});
 
-		// Line Quant checkbox
-		lineQuantChBox = TXCheckBox(columnView, labelWidth @ 20, "Line Quant", TXColor.sysGuiCol1, TXColour.white,
-					TXColor.white, TXColor.sysGuiCol1)
-		.value_(this.getLineQuant)
-		.action_({arg view;
+		// Line Quant
+		// lineQuantPopup = TXCheckBox(columnView, labelWidth @ 20, "Line Quant",
+		// TXColor.sysGuiCol1, TXColour.white, TXColor.white, TXColor.sysGuiCol1)
+		// .value_(this.getLineQuant)
+		// .action_({arg view;
+		// 	this.setLineQuant(view.value);
+		// });
+		lineQuantPopup = PopUpMenu(columnView, labelWidth @ 20);
+		lineQuantPopup.items_(["quant off", "quant x+y", "quant x", "quant y"]);
+		lineQuantPopup.value_(this.getLineQuant);
+		lineQuantPopup.action_({arg view;
 			this.setLineQuant(view.value);
 		});
 
@@ -177,24 +194,64 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 			this.setLineWarpInd(view.value);
 		});
 
+		// soundfile
+		if (localData.notNil and: {localData.showSoundFile == 1}, {
+			holdLeft = window.asView.decorator.left;
+			holdTop = window.asView.decorator.top;
+			/* OLD
+			txSoundFile = TXSoundFile(window, (userViewWidth - 14)@ (userViewHeight - 14), {},
+			localData.soundFileStartPos, localData.soundFileEndPos,
+			false, localData.soundFileName, showZoomControls: 0,
+			onLoadAction: {
+			txSoundFile.soundFileView.zoomSelection(0);
+			txSoundFile.soundFileView.yZoom(1.1);
+			});
+			*/
+			// store data & use
+			if (localData.soundFileData.isNil, {
+				holdSoundFile = SoundFile.new;
+				holdSoundFile.openRead(localData.soundFileName);
+				localData.soundFileNumChannels = holdSoundFile.numChannels;
+				localData.soundFileSampleRate = holdSoundFile.sampleRate;
+				holdSFData = FloatArray.newClear(holdSoundFile.numFrames * holdSoundFile.numChannels);
+				holdSoundFile.readData(holdSFData);
+				localData.soundFileData = holdSFData;
+			});
+			txSoundFile = TXSoundFile(window, (userViewWidth - 14)@ (userViewHeight - 14), {},
+				localData.soundFileStartPos, localData.soundFileEndPos,
+				false, nil, showZoomControls: 0,
+			);
+			if (localData.soundFileData.asArray.size > 0, {
+				txSoundFile.soundFileView.setData(localData.soundFileData.asArray, 1024, 0,
+					localData.soundFileNumChannels, localData.soundFileSampleRate);
+				txSoundFile.lo = localData.soundFileStartPos;
+				txSoundFile.hi = localData.soundFileEndPos;
+				txSoundFile.soundFileView.zoomSelection(0);
+				txSoundFile.soundFileView.yZoom(1.1);
+			});
+			window.asView.decorator.left = holdLeft;
+			window.asView.decorator.top = holdTop;
+			curveBackground = Color.grey(0.3).alpha_(0.3);
+		});
+
 		/*   ------------- OLD CODE -------
 		// create grid
 		userView = UserView(window, userViewWidth @ userViewHeight);
 		userView.drawFunc = {arg view;
-			Pen.color = TXColor.white;
-			gridRows.do({arg item, i;
-				var holdHeight;
-				holdHeight = ((userViewHeight * (i + 1)) / gridRows).asInteger;
-				Pen.line(0 @ holdHeight, userViewWidth @ holdHeight);
-			});
-			gridCols.do({arg item, i;
-				var holdWidth;
-				holdWidth = ((userViewWidth * (i + 1)) / gridCols).asInteger;
-				Pen.line(holdWidth @ 0, holdWidth @ userViewHeight);
-			});
-			Pen.stringAtPoint(yLabel, 18 @ (userViewHeight/2)-10 );
-			Pen.stringAtPoint(xLabel, userViewWidth/2 @ userViewHeight-18 );
-			Pen.stroke;
+		Pen.color = TXColor.white;
+		gridRows.do({arg item, i;
+		var holdHeight;
+		holdHeight = ((userViewHeight * (i + 1)) / gridRows).asInteger;
+		Pen.line(0 @ holdHeight, userViewWidth @ holdHeight);
+		});
+		gridCols.do({arg item, i;
+		var holdWidth;
+		holdWidth = ((userViewWidth * (i + 1)) / gridCols).asInteger;
+		Pen.line(holdWidth @ 0, holdWidth @ userViewHeight);
+		});
+		Pen.stringAtPoint(yLabel, 18 @ (userViewHeight/2)-10 );
+		Pen.stringAtPoint(xLabel, userViewWidth/2 @ userViewHeight-18 );
+		Pen.stroke;
 		};
 		// // decorator shift
 		// if (window.class == Window, {
@@ -215,7 +272,7 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 		multiSliderView.background_(Color.new(1,1,1,0));
 		// multiSliderView.action = {
 		multiSliderView.mouseUpAction = {arg view;
-			this.valueAction_(view.value);
+		this.valueAction_(view.value);
 		};
 		// multiSliderView.canReceiveDragHandler = {View.currentDrag.isKindOf(Array);};
 		multiSliderView.canReceiveDragHandler = false;
@@ -227,57 +284,58 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 		// };
 
 
-				// lineDrawView
+		// lineDrawView
 		//lineDrawView = UserView(multiSliderView, Rect(2, 2, userViewWidth, userViewHeight));
 		lineDrawView = UserView(userView.view, Rect(0, 0, userViewWidth, userViewHeight));
 		lineDrawView.background_(Color.clear);
 		lineDrawView.drawFunc = {arg view;
-			var pt1, pt2;
-			if (dragEndPoint.notNil, {
-				Pen.color = TXColor.red;
-				Pen.line(dragStartPoint, dragEndPoint);
-				Pen.circle(Rect.aboutPoint(dragStartPoint, 2, 2));
-				Pen.circle(Rect.aboutPoint(dragEndPoint, 2, 2));
-				Pen.stroke;
-				if (this.getLineQuant == 1, {
-					Pen.color = TXColor.orange;
-					pt1 = Point(dragStartPointNorm.x.round(gridCols.reciprocal) * view.bounds.width,
-						dragStartPointNorm.y.round(gridRows.reciprocal) * userViewHeight);
-					pt2 = Point(dragEndPointNorm.x.round(gridCols.reciprocal) * view.bounds.width,
-						dragEndPointNorm.y.round(gridRows.reciprocal) * userViewHeight);
-					Pen.line(pt1, pt2);
-					Pen.circle(Rect.aboutPoint(pt1, 2, 2));
-					Pen.circle(Rect.aboutPoint(pt2, 2, 2));
-					Pen.stroke;
-				});
-			});
+		var pt1, pt2;
+		if (dragEndPoint.notNil, {
+		Pen.color = TXColor.red;
+		Pen.line(dragStartPoint, dragEndPoint);
+		Pen.circle(Rect.aboutPoint(dragStartPoint, 2, 2));
+		Pen.circle(Rect.aboutPoint(dragEndPoint, 2, 2));
+		Pen.stroke;
+		if (this.getLineQuant == 1, {
+		Pen.color = TXColor.orange;
+		pt1 = Point(dragStartPointNorm.x.round(gridCols.reciprocal) * view.bounds.width,
+		dragStartPointNorm.y.round(gridRows.reciprocal) * userViewHeight);
+		pt2 = Point(dragEndPointNorm.x.round(gridCols.reciprocal) * view.bounds.width,
+		dragEndPointNorm.y.round(gridRows.reciprocal) * userViewHeight);
+		Pen.line(pt1, pt2);
+		Pen.circle(Rect.aboutPoint(pt1, 2, 2));
+		Pen.circle(Rect.aboutPoint(pt2, 2, 2));
+		Pen.stroke;
+		});
+		});
 		};
 		lineDrawView.mouseDownAction = {arg view, x, y;
-			x = x.min(userViewWidth);
-			y = y.min(userViewHeight);
-			dragStartPoint = Point(x, y);
-			dragStartPointNorm = Point(x / userViewWidth, y / userViewHeight);
+		x = x.min(userViewWidth);
+		y = y.min(userViewHeight);
+		dragStartPoint = Point(x, y);
+		dragStartPointNorm = Point(x / userViewWidth, y / userViewHeight);
 		};
 		lineDrawView.mouseMoveAction = {arg view, x, y;
-			dragEndPoint = Point(x, y);
-			dragEndPointNorm = Point(x / userViewWidth, y / userViewHeight);
-			lineDrawView.refresh;
+		dragEndPoint = Point(x, y);
+		dragEndPointNorm = Point(x / userViewWidth, y / userViewHeight);
+		lineDrawView.refresh;
 		};
 		lineDrawView.mouseUpAction = {arg view, x, y;
-			if (dragEndPoint.notNil, {
-				this.addLineToCurve(dragStartPointNorm, dragEndPointNorm);
-			});
-			dragStartPoint = nil;
-			dragEndPoint = nil;
-			lineDrawView.refresh;
+		if (dragEndPoint.notNil, {
+		this.addLineToCurve(dragStartPointNorm, dragEndPointNorm);
+		});
+		dragStartPoint = nil;
+		dragEndPoint = nil;
+		lineDrawView.refresh;
 		};
 
 		--------------------- END OF OLD CODE ----------------
 		*/
 
 		// create ScaledUserView
-		userView = ScaledUserViewContainer(window, userViewWidth @ userViewHeight, Rect(-0.001,-0.001,1.001,1.001));
-		userView.view.background_(Color.grey(0.7));
+		userView = ScaledUserViewContainer(window, userViewWidth @ userViewHeight,
+			Rect(-0.001,-0.001,1.001,1.001));
+		userView.view.background_(curveBackground);
 		userView.drawFunc = {arg view;
 			var fixWidth = view.pixelScale.x;
 			var fixWidth2 = fixWidth * 2;
@@ -301,13 +359,41 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 		};
 		userView.unscaledDrawFunc = {arg view;
 			var lastIndex = value.size - 1;
-			var pt1, pt2, holdArray;
+			var holdQuant, pt1, pt2, startX, startY, endX, endY, holdArray, holdOrientation;
+			var xOffset, yOffset, pointString;
 			// axis labels
-			Pen.color = TXColor.white;
-			Pen.stringAtPoint("size: " ++ value.size, 10 @ 10);
+			if (isVertical, {
+				holdOrientation = "    direction: vertical";
+			}, {
+				holdOrientation = "    direction: horizontal";
+			});
+			Pen.color = Color(0.6, 0.4, 0);
+			//Pen.color = TXColor.orange2;
+			Pen.stringAtPoint("size: " ++ value.size.asString ++ holdOrientation, 10 @ 10);
 			Pen.stringAtPoint(yLabel, 18 @ (userViewHeight/2)-10 );
 			Pen.stringAtPoint(xLabel, userViewWidth/2 @ userViewHeight-30 );
 			Pen.stroke;
+
+			// draw mouse point
+			if (holdMouseData.mouseIsDown, {
+				// xOffset = 10 - (100 * (holdMouseData.xPos / userViewWidth));
+				// yOffset = -20 + (40 * (holdMouseData.yPos / userViewHeight));
+				if (holdMouseData.xPos > (userViewWidth * 0.5), {
+					xOffset = -90;
+				}, {
+					xOffset = 10;
+				});
+				if (holdMouseData.yPos < (userViewHeight * 0.5), {
+					yOffset = -20;
+				}, {
+					yOffset = 20;
+				});
+				Pen.color = TXColor.black;
+				pointString = "( " ++ holdMouseData.scaledXPos.round(0.001).asString ++ ", "
+				++ holdMouseData.scaledYPos.round(0.001).asString ++ " )";
+				Pen.stringAtPoint(pointString,
+					(holdMouseData.xPos + xOffset) @ (userViewHeight - holdMouseData.yPos + yOffset) );
+			});
 
 			// draw curve
 			if (isDrawing, {
@@ -320,18 +406,28 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 			},{
 				Pen.width = 2;
 			});
+			Pen.color = TXColor.white;
 			holdArray.do({arg item, i;
 				var holdPoint1, holdPoint2, holdColor;
+				// draw translucent line for shading
+				if (isVertical, {
+					holdPoint1 = view.translateScale( Point(item, (i / lastIndex)) );
+					holdPoint2 = view.translateScale( Point(0, (i + 1) / lastIndex) );
+				}, {
+					holdPoint1 = view.translateScale( Point(i / lastIndex, 1 - item) );
+					holdPoint2 = view.translateScale( Point((i + 1) / lastIndex, 127) );
+				});
 				holdColor = TXColor.sysGuiCol1.blend(Color.black, 0.5);
-				holdPoint1 = view.translateScale( Point(i / lastIndex, 1 - item) );
-				// draw translucent line to bottom for shading
 				Pen.color = holdColor.alpha_(0.15);
-				holdPoint2 = view.translateScale( Point((i + 1) / lastIndex, 127) );
 				Pen.line(holdPoint1, holdPoint2);
 				Pen.stroke;
 				// draw line between every pair
 				if (i < lastIndex, {
-					holdPoint2 = view.translateScale( Point((i + 1) / lastIndex, 1 - holdArray[i + 1]) );
+					if (isVertical, {
+						holdPoint2 = view.translateScale( Point( holdArray[i + 1], ((i + 1) / lastIndex)) );
+					}, {
+						holdPoint2 = view.translateScale( Point((i + 1) / lastIndex, 1 - holdArray[i + 1]) );
+					});
 					Pen.color = TXColor.black.blend(TXColor.red, 0.35);
 					Pen.line(holdPoint1, holdPoint2);
 					Pen.stroke;
@@ -353,12 +449,30 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 					Pen.circle(Rect.aboutPoint(pt1, 2, 2));
 					Pen.circle(Rect.aboutPoint(pt2, 2, 2));
 					Pen.stroke;
-					if (this.getLineQuant == 1, {
+					holdQuant = this.getLineQuant;
+					if (holdQuant > 0, {
+						case
+						{holdQuant == 1} { //quant x + y
+							startX = dragStartPoint.x.round(gridCols.reciprocal);
+							startY = dragStartPoint.y.round(gridRows.reciprocal);
+							endX = dragEndPoint.x.round(gridCols.reciprocal);
+							endY = dragEndPoint.y.round(gridRows.reciprocal);
+						}
+						{holdQuant == 2} { //quant x
+							startX = dragStartPoint.x.round(gridCols.reciprocal);
+							startY = dragStartPoint.y;
+							endX = dragEndPoint.x.round(gridCols.reciprocal);
+							endY = dragEndPoint.y;
+						}
+						{holdQuant == 3} { //quant y
+							startX = dragStartPoint.x;
+							startY = dragStartPoint.y.round(gridRows.reciprocal);
+							endX = dragEndPoint.x;
+							endY = dragEndPoint.y.round(gridRows.reciprocal);
+						};
+						pt1 = view.translateScale(Point(startX, startY));
+						pt2 = view.translateScale(Point(endX, endY));
 						Pen.color = TXColor.orange;
-						pt1 = view.translateScale(Point(dragStartPoint.x.round(gridCols.reciprocal),
-							dragStartPoint.y.round(gridRows.reciprocal)));
-						pt2 = view.translateScale(Point(dragEndPoint.x.round(gridCols.reciprocal),
-							dragEndPoint.y.round(gridRows.reciprocal)));
 						Pen.line(pt1, pt2);
 						Pen.circle(Rect.aboutPoint(pt1, 2, 2));
 						Pen.circle(Rect.aboutPoint(pt2, 2, 2));
@@ -368,10 +482,20 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 			});
 		};
 		userView.mouseDownAction = { |v, sx, sy, m, x, y, inside|
+			var sXYPoint;
 			sx = sx.max(0).min(1);
 			sy = sy.max(0).min(1);
+			sXYPoint = Point(sx, sy);
+			holdMouseData.scaledXPos = sx;
+			holdMouseData.scaledYPos = 1 - sy;
+			holdMouseData.xPos = x.max(0).min(userViewWidth);
+			holdMouseData.yPos = userViewHeight - y.max(0).min(userViewHeight);
+			holdMouseData.mouseIsDown = true;
 			if (this.getDrawMode == 'line', {
-				dragStartPoint = Point(sx, sy);
+				dragStartPoint = sXYPoint;
+				if (m.isShift and: {holdLastDrawPoint.notNil}) {
+					this.addLineToCurve(holdLastDrawPoint, sXYPoint);
+				};
 			},{
 				isDrawing = true;
 				holdDrawCurve = value.copy;
@@ -379,21 +503,33 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 				holdLastY = sy;
 				this.applyMouseDrag(sx, sy, sx, sy);
 			});
+			holdLastDrawPoint = sXYPoint;
+			userView.refresh;
 		};
 		userView.mouseMoveAction = { |v, sx, sy, m, x, y, inside|
+			var sXYPoint;
 			sx = sx.max(0).min(1);
 			sy = sy.max(0).min(1);
+			sXYPoint = Point(sx, sy);
+			holdMouseData.scaledXPos = sx;
+			holdMouseData.scaledYPos = 1 - sy;
+			holdMouseData.xPos = x.max(0).min(userViewWidth);
+			holdMouseData.yPos = userViewHeight - y.max(0).min(userViewHeight);
 			if (this.getDrawMode == 'line', {
-				dragEndPoint = Point(sx, sy);
-				userView.refresh;
+				dragEndPoint = sXYPoint;
 			},{
 				this.applyMouseDrag(holdLastX, holdLastY, sx, sy);
 				holdLastX = sx;
 				holdLastY = sy;
-				userView.refresh;
 			});
+			userView.refresh;
 		};
 		userView.mouseUpAction = { |v, sx, sy, m, x, y, inside|
+			var sXYPoint;
+			sx = sx.max(0).min(1);
+			sy = sy.max(0).min(1);
+			sXYPoint = Point(sx, sy);
+			holdMouseData.mouseIsDown = false;
 			if (this.getDrawMode == 'line', {
 				if (dragEndPoint.notNil, {
 					this.addLineToCurve(dragStartPoint, dragEndPoint);
@@ -406,7 +542,23 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 				//run action
 				this.finishMouseDrag;
 			});
+			holdLastDrawPoint = sXYPoint;
 		};
+		// when zoom changes, update sound file zoom
+		if (txSoundFile.notNil, {
+			holdFunction1 = userView.scaleSliders[0].action;
+			userView.scaleSliders[0].action = {arg view;
+				// run original action first
+				holdFunction1.value(userView.scaleSliders[0]);
+				this.updateSoundFileZoom;
+			};
+			holdFunction2 = userView.moveSliders[0].action;
+			userView.moveSliders[0].action = {arg view;
+				// run original action first
+				holdFunction2.value(userView.moveSliders[0]);
+				this.updateSoundFileZoom;
+			};
+		});
 
 		// decorator store settings
 		if (window.class == Window, {
@@ -460,7 +612,7 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 			inArr = this.value;
 			inArr.size.do({arg item, i;
 				if ((i > 0) and: (i < (inArr.size-1)), {
-		//			outArr = outArr.add((inArr.at(i) + inArr.at(i-1)) / 2);
+					//			outArr = outArr.add((inArr.at(i) + inArr.at(i-1)) / 2);
 					outArr = outArr.add((inArr.at(i) + inArr.at(i-1)+ inArr.at(i+1)) / 3);
 				},{
 					outArr = outArr.add(inArr.at(i));
@@ -479,8 +631,8 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 					if ((i > 0) and: (i < (inArr.size-1)), {
 						//			outArr = outArr.add((inArr.at(i) + inArr.at(i-1)) / 2);
 						outArr = outArr.add((inArr.at(i) + inArr.at(i-1)+ inArr.at(i+1)) / 3);
-						},{
-							outArr = outArr.add(inArr.at(i));
+					},{
+						outArr = outArr.add(inArr.at(i));
 					});
 				});
 				inArr = outArr;
@@ -505,6 +657,7 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 		.action_({
 			userView.scale_([1, 1]);
 			userView.move_([0.5, 0.5]);
+			this.updateSoundFileZoom;
 		});
 		// decorator shift
 		if (window.class == Window, {
@@ -547,182 +700,7 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 			window.decorator.nextLine;
 		});
 
-		if (showPresets == "Warp", {
-			arrGenFunctions = [
-				["Preset Curves ...", {this.value;}],
-				["Linear (Ramp)", linearArray],
-				["Sine", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, \sin).map(item); });}],
-				["Exponential", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0.0001, 1, \exp).map(item).linlin(0.0001, 1, 0, 1)});}],
-				["-Exponential", {linearArray.deepCopy.collect({arg item, i; 1-ControlSpec(0.0001, 1, \exp).map(1-item).linlin(0.0001, 1, 0, 1)});}],
-				["Cosine", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, \cos).map(item); });}],
-				["Curve -8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
-				["Curve -7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
-				["Curve -6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
-				["Curve -5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
-				["Curve -4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
-				["Curve -3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
-				["Curve -2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
-				["Curve -1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
-				["Curve +1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
-				["Curve +2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
-				["Curve +3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
-				["Curve +4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
-				["Curve +5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
-				["Curve +6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
-				["Curve +7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
-				["Curve +8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
-				["Sine Cycle Phase 0 deg.", {Signal.sineFill(tableSize, [1.0],[0.0]).collect({arg item, i; (item.value + 1) * 0.5;});}],
-				["Sine Cycle Phase 90 deg.", {Signal.sineFill(tableSize, [1.0],[0.5pi]).collect({arg item, i; (item.value + 1) * 0.5;});}],
-				["Sine Cycle Phase 180 deg.", {Signal.sineFill(tableSize, [1.0],[pi]).collect({arg item, i; (item.value + 1) * 0.5;});}],
-				["Sine Cycle Phase 270 deg.", {Signal.sineFill(tableSize, [1.0],[1.5pi]).collect({arg item, i; (item.value + 1) * 0.5;});}],
-				["Double Ramp", {var ramp, rampSize, outArr;
-					rampSize = (tableSize/2).asInteger;
-					ramp = Array.newClear(rampSize).seriesFill(0, 1/(rampSize-1));
-					outArr = (ramp ++ ramp ++ [0, 0, 0, 0]).keep(tableSize);
-				}],
-				["Triple Ramp", {var ramp, rampSize, outArr;
-					rampSize = (tableSize/3).asInteger;
-					ramp = Array.newClear(rampSize).seriesFill(0, 1/(rampSize-1));
-					outArr = (ramp ++ ramp ++ ramp ++ [0, 0, 0, 0]).keep(tableSize);
-				}],
-				["Quadruple Ramp", {var ramp, rampSize, outArr;
-					rampSize = (tableSize/4).asInteger;
-					ramp = Array.newClear(rampSize).seriesFill(0, 1/(rampSize-1));
-					outArr = (ramp ++ ramp ++ ramp ++ ramp ++ [0, 0, 0, 0]).keep(tableSize);
-				}],
-			];
-		});
-		if (showPresets == "Curve", {
-			arrGenFunctions = [
-				["Preset Curves ...", {this.value;}],
-				["All Maximum",{1 ! tableSize;}],
-				["All 0.5",{0.5 ! tableSize;}],
-				["All Minimum",{0 ! tableSize;}],
-				["Ramp", linearArray],
-				["Sine", {Signal.sineFill(tableSize, [1.0],[0.0]).collect({arg item, i; (item.value + 1) * 0.5;});}],
-				["Exponential", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0.0001, 1, \exp).map(item).linlin(0.0001, 1, 0, 1)});}],
-				["-Exponential", {linearArray.deepCopy.collect({arg item, i; 1-ControlSpec(0.0001, 1, \exp).map(1-item).linlin(0.0001, 1, 0, 1)});}],
-				["Triangle", { var holdArr;
-					holdArr = Array.newClear(tableSize/2).seriesFill(0, 2 / (tableSize - 1));
-					holdArr ++ holdArr.copy.reverse;}],
-				["Curve -8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
-				["Curve -7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
-				["Curve -6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
-				["Curve -5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
-				["Curve -4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
-				["Curve -3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
-				["Curve -2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
-				["Curve -1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
-				["Curve +1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
-				["Curve +2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
-				["Curve +3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
-				["Curve +4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
-				["Curve +5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
-				["Curve +6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
-				["Curve +7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
-				["Curve +8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
-			];
-		});
-		if (showPresets == "LFO", {
-			arrGenFunctions = [
-				["Preset Curves ...", {this.value;}],
-				["Sawtooth", linearArray],
-				["Sine", {Signal.sineFill(tableSize, [1.0],[0.0]).collect({arg item, i; (item.value + 1) * 0.5;});}],
-				["Exponential", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0.0001, 1, \exp).map(item).linlin(0.0001, 1, 0, 1)});}],
-				["-Exponential", {linearArray.deepCopy.collect({arg item, i; 1-ControlSpec(0.0001, 1, \exp).map(1-item).linlin(0.0001, 1, 0, 1)});}],
-				["Triangle", { var holdArr;
-					holdArr = Array.newClear(tableSize/2).seriesFill(0, 2 / (tableSize - 1));
-					holdArr ++ holdArr.copy.reverse;}],
-				["Curve -8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
-				["Curve -7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
-				["Curve -6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
-				["Curve -5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
-				["Curve -4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
-				["Curve -3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
-				["Curve -2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
-				["Curve -1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
-				["Curve +1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
-				["Curve +2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
-				["Curve +3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
-				["Curve +4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
-				["Curve +5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
-				["Curve +6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
-				["Curve +7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
-				["Curve +8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
-			];
-		});
-		if (showPresets == "Velocity", {
-			arrGenFunctions = [
-				["Preset Curves ...", {this.value;}],
-				["Linear (Ramp)", {linearArray.deepCopy;}],
-				["All Maximum, like an organ",{1 ! tableSize;}],
-				["All 0.5",{0.5 ! tableSize;}],
-				["Heavy 8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
-				["Heavy 7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
-				["Heavy 6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
-				["Heavy 5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
-				["Heavy 4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
-				["Heavy 3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
-				["Heavy 2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
-				["Heavy 1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
-				["Light 1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
-				["Light 2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
-				["Light 3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
-				["Light 4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
-				["Light 5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
-				["Light 6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
-				["Light 7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
-				["Light 8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
-				["Custom 1",{TXCustomVelCurves.arrCurves[0];}],
-				["Custom 2",{TXCustomVelCurves.arrCurves[1];}],
-				["Custom 3",{TXCustomVelCurves.arrCurves[2];}],
-				["Custom 4",{TXCustomVelCurves.arrCurves[3];}],
-				["Custom 5",{TXCustomVelCurves.arrCurves[4];}],
-				["Custom 6",{TXCustomVelCurves.arrCurves[5];}],
-				["Custom 7",{TXCustomVelCurves.arrCurves[6];}],
-				["Custom 8",{TXCustomVelCurves.arrCurves[7];}],
-			];
-		});
-		if (showPresets == "Waveshaper", {
-			arrGenFunctions = [
-				["Preset Curves ...", {this.value;}],
-				["Linear (Ramp)", linearArray],
-				["Sine-shaped Compress", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, \cos).map(item); });}],
-				["Compress 8", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });)}],
-				["Compress 7", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });)}],
-				["Compress 6", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });)}],
-				["Compress 5", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });)}],
-				["Compress 4", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });)}],
-				["Compress 3", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });)}],
-				["Compress 2", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });)}],
-				["Compress 1", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });)}],
-				["Expand 1", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });)}],
-				["Expand 2", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });)}],
-				["Expand 3", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });)}],
-				["Expand 4", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });)}],
-				["Expand 5", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });)}],
-				["Expand 6", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });)}],
-				["Expand 7", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });)}],
-				["Expand 8", {this.mirrorInvert(
-					linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });)}],
-			];
-		});
-
+		arrGenFunctions = this.getGenFunctions(showPresets);
 		if (arrGenFunctions.notNil, {
 			popItems = arrGenFunctions.collect({arg item, i; item.at(0);});
 			popAction = {arg view;
@@ -1002,40 +980,81 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 		if (holdMode == 'point', {
 			//lineDrawView.visible_(false);
 			curveList.visible_(false);
-			lineQuantChBox.visible_(false);
+			lineQuantPopup.visible_(false);
 		});
 		if (holdMode == 'line', {
 			//lineDrawView.visible_(true);
 			curveList.visible_(true);
-			lineQuantChBox.visible_(true);
+			lineQuantPopup.visible_(true);
 		});
 	}
 
 	addLineToCurve{arg point1, point2;
+		var holdQuant, startInd, endInd, noSteps, mult, p1X, p1Y, p2X, p2Y;
 		var outCurve = value.copy;
 		var grainSize = outCurve.size.reciprocal;
-		var startInd, endInd, noSteps, mult;
-		if (this.getLineQuant == 1, {
-			point1 = Point(point1.x.round(gridCols.reciprocal), point1.y.round(gridRows.reciprocal));
-			point2 = Point(point2.x.round(gridCols.reciprocal), point2.y.round(gridRows.reciprocal));
+		holdQuant = this.getLineQuant;
+		if (holdQuant > 0, {
+			case
+			{holdQuant == 1} { //quant x + y
+				p1X = point1.x.round(gridCols.reciprocal);
+				p1Y = point1.y.round(gridRows.reciprocal);
+				p2X = point2.x.round(gridCols.reciprocal);
+				p2Y = point2.y.round(gridRows.reciprocal);
+			}
+			{holdQuant == 2} { //quant x
+				p1X = point1.x.round(gridCols.reciprocal);
+				p1Y = point1.y;
+				p2X = point2.x.round(gridCols.reciprocal);
+				p2Y = point2.y;
+			}
+			{holdQuant == 3} { //quant y
+				p1X = point1.x;
+				p1Y = point1.y.round(gridRows.reciprocal);
+				p2X = point2.x;
+				p2Y = point2.y.round(gridRows.reciprocal);
+			};
+			point1 = Point(p1X, p1Y);
+			point2 = Point(p2X, p2Y);
 		});
-		startInd = (point1.x / grainSize).asInteger.max(0).min(outCurve.size - 1);
-		endInd = (point2.x / grainSize).asInteger.max(0).min(outCurve.size - 1);
-		if (startInd < endInd, {
-			mult = 1;
-		},{
-			mult = -1;
-		});
-		noSteps = abs(endInd - startInd)+1;
-		noSteps.do({arg item, i;
-			var prop, holdVal;
-			if (noSteps == 1, {
-				holdVal = point2.y;
+		if (isVertical, {
+			startInd = (point1.y / grainSize).asInteger.max(0).min(outCurve.size - 1);
+			endInd = (point2.y / grainSize).asInteger.max(0).min(outCurve.size - 1);
+			if (startInd < endInd, {
+				mult = 1;
 			},{
-				prop = TXLineWarp.getLineWarpVal(i / (noSteps - 1), this.getLineWarpInd);
-				holdVal = point1.y + (prop * (point2.y - point1.y));
+				mult = -1;
 			});
-			outCurve[startInd + (i * mult)] = 1 - holdVal; // invert y
+			noSteps = abs(endInd - startInd)+1;
+			noSteps.do({arg item, i;
+				var prop, holdVal;
+				if (noSteps == 1, {
+					holdVal = 1 - point2.x;
+				},{
+					prop = TXLineWarp.getLineWarpVal(i / (noSteps - 1), this.getLineWarpInd);
+					holdVal = (1 - point1.x) + (prop * ((1 - point2.x) - (1 - point1.x)));
+				});
+				outCurve[startInd + (i * mult)] = 1 - holdVal; // invert y
+			});
+		},{
+			startInd = (point1.x / grainSize).asInteger.max(0).min(outCurve.size - 1);
+			endInd = (point2.x / grainSize).asInteger.max(0).min(outCurve.size - 1);
+			if (startInd < endInd, {
+				mult = 1;
+			},{
+				mult = -1;
+			});
+			noSteps = abs(endInd - startInd)+1;
+			noSteps.do({arg item, i;
+				var prop, holdVal;
+				if (noSteps == 1, {
+					holdVal = point2.y;
+				},{
+					prop = TXLineWarp.getLineWarpVal(i / (noSteps - 1), this.getLineWarpInd);
+					holdVal = point1.y + (prop * (point2.y - point1.y));
+				});
+				outCurve[startInd + (i * mult)] = 1 - holdVal; // invert y
+			});
 		});
 		this.valueAction = outCurve;
 	}
@@ -1054,28 +1073,306 @@ TXCurveDraw {	// MultiSlider, popup and buttons for curve drawing with 5 user sl
 	}
 
 	applyMouseDrag{arg point1X, point1Y, point2X, point2Y;
-		var maxInd = value.size - 1;
-		var startInd = point1X * maxInd;
-		var endInd = point2X * maxInd;
-		var numPoints = abs(endInd - startInd) + 1;
-		var inc;
-
-		if (endInd == startInd, {
-			holdDrawCurve[endInd] = 1 - point2Y;
-		}, {
-			if (endInd > startInd, {
-				inc = 1;
-			},{
-				inc = -1;
+		var maxInd, startInd, endInd, numPoints, inc;
+		maxInd = value.size - 1;
+		if (isVertical, {
+			startInd = point1Y * maxInd;
+			endInd = point2Y * maxInd;
+			numPoints = abs(endInd - startInd) + 1;
+			if (endInd == startInd, {
+				holdDrawCurve[endInd] = point2X;
+			}, {
+				if (endInd > startInd, {
+					inc = 1;
+				},{
+					inc = -1;
+				});
+				numPoints.do({ arg i;
+					holdDrawCurve[startInd + (i * inc)] = (point1X + ((i / numPoints) * (point2X - point1X)));
+				});
 			});
-			numPoints.do({ arg i;
-				holdDrawCurve[startInd + (i * inc)] = 1 - (point1Y + ((i / numPoints) * (point2Y - point1Y)));
+		}, {
+			startInd = point1X * maxInd;
+			endInd = point2X * maxInd;
+			numPoints = abs(endInd - startInd) + 1;
+			if (endInd == startInd, {
+				holdDrawCurve[endInd] = 1 - point2Y;
+			}, {
+				if (endInd > startInd, {
+					inc = 1;
+				},{
+					inc = -1;
+				});
+				numPoints.do({ arg i;
+					holdDrawCurve[startInd + (i * inc)] = 1 - (point1Y + ((i / numPoints) * (point2Y - point1Y)));
+				});
 			});
 		});
 	}
 
 	finishMouseDrag{
 		this.valueAction = holdDrawCurve.copy;
+	}
+
+	updateSoundFileZoom {
+		var scale, minVal, maxVal, maxLength, scaleRecip, offsetMax, offset;
+		if (txSoundFile.notNil, {
+			scale = userView.userView.scaleH;
+			maxLength = localData.soundFileEndPos - localData.soundFileStartPos;
+			scaleRecip = scale.reciprocal;
+			offsetMax = maxLength * (1 - scaleRecip);
+			offset = userView.userView.moveH * offsetMax;
+			minVal = localData.soundFileStartPos + offset;
+			maxVal = minVal + (maxLength * scaleRecip);
+			txSoundFile.lo = minVal;
+			txSoundFile.hi = maxVal;
+			txSoundFile.soundFileView.zoomSelection(0);
+		});
+	}
+
+	getGenFunctions {arg showPresets;
+		var arrGenFunctions;
+		switch (showPresets.asSymbol,
+			//
+			\Warp, {
+				arrGenFunctions = [
+					["Preset Curves ...", {this.value;}],
+					["Linear (Ramp)", linearArray],
+					["Sine", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, \sin).map(item); });}],
+					["Exponential", {linearArray.deepCopy.collect({arg item, i;
+						ControlSpec(0.0001, 1, \exp).map(item).linlin(0.0001, 1, 0, 1)});}],
+					["-Exponential", {linearArray.deepCopy.collect({arg item, i;
+						1-ControlSpec(0.0001, 1, \exp).map(1-item).linlin(0.0001, 1, 0, 1)});}],
+					["Cosine", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, \cos).map(item); });}],
+					["Curve -8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
+					["Curve -7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
+					["Curve -6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
+					["Curve -5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
+					["Curve -4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
+					["Curve -3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
+					["Curve -2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
+					["Curve -1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
+					["Curve +1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
+					["Curve +2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
+					["Curve +3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
+					["Curve +4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
+					["Curve +5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
+					["Curve +6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
+					["Curve +7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
+					["Curve +8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
+					["Sine Cycle Phase 0 deg.",
+						{Signal.sineFill(tableSize, [1.0],[0.0]).collect({arg item, i; (item.value + 1) * 0.5;});}],
+					["Sine Cycle Phase 90 deg.",
+						{Signal.sineFill(tableSize, [1.0],[0.5pi]).collect({arg item, i; (item.value + 1) * 0.5;});}],
+					["Sine Cycle Phase 180 deg.",
+						{Signal.sineFill(tableSize, [1.0],[pi]).collect({arg item, i; (item.value + 1) * 0.5;});}],
+					["Sine Cycle Phase 270 deg.",
+						{Signal.sineFill(tableSize, [1.0],[1.5pi]).collect({arg item, i; (item.value + 1) * 0.5;});}],
+					["Double Ramp", {var ramp, rampSize, outArr;
+						rampSize = (tableSize/2).asInteger;
+						ramp = Array.newClear(rampSize).seriesFill(0, 1/(rampSize-1));
+						outArr = (ramp ++ ramp ++ [0, 0, 0, 0]).keep(tableSize);
+					}],
+					["Triple Ramp", {var ramp, rampSize, outArr;
+						rampSize = (tableSize/3).asInteger;
+						ramp = Array.newClear(rampSize).seriesFill(0, 1/(rampSize-1));
+						outArr = (ramp ++ ramp ++ ramp ++ [0, 0, 0, 0]).keep(tableSize);
+					}],
+					["Quadruple Ramp", {var ramp, rampSize, outArr;
+						rampSize = (tableSize/4).asInteger;
+						ramp = Array.newClear(rampSize).seriesFill(0, 1/(rampSize-1));
+						outArr = (ramp ++ ramp ++ ramp ++ ramp ++ [0, 0, 0, 0]).keep(tableSize);
+					}],
+				];
+			},
+			//
+			\Curve, {
+				arrGenFunctions = [
+					["Preset Curves ...", {this.value;}],
+					["All Maximum",{1 ! tableSize;}],
+					["All 0.5",{0.5 ! tableSize;}],
+					["All Minimum",{0 ! tableSize;}],
+					["Ramp", linearArray],
+					["Sine", {Signal.sineFill(tableSize, [1.0],[0.0]).collect({arg item, i; (item.value + 1) * 0.5;});}],
+					["Sine+1, last point = first", {
+						var arr = Signal.sineFill(tableSize-1, [1.0],[0.0]).collect({arg item, i; (item.value + 1) * 0.5;});
+						arr = arr.asArray;
+						arr = arr.add(arr[0]);
+					}],
+					["Cosine", {Signal.sineFill(tableSize, [1.0],[0.5pi]).collect({arg item, i; (item.value + 1) * 0.5;});}],
+					["Cosine+1, last point = first", {
+						var arr = Signal.sineFill(tableSize-1, [1.0],[0.5pi]).collect({arg item, i; (item.value + 1) * 0.5;});
+						arr = arr.asArray;
+						arr = arr.add(arr[0]);
+					}],
+					["Exponential", {linearArray.deepCopy.collect({arg item, i;
+						ControlSpec(0.0001, 1, \exp).map(item).linlin(0.0001, 1, 0, 1)});}],
+					["-Exponential", {linearArray.deepCopy.collect({arg item, i;
+						1-ControlSpec(0.0001, 1, \exp).map(1-item).linlin(0.0001, 1, 0, 1)});}],
+					["Triangle", { var holdArr;
+						holdArr = Array.newClear(tableSize/2).seriesFill(0, 2 / (tableSize - 1));
+						holdArr ++ holdArr.copy.reverse;}],
+					["Curve -8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
+					["Curve -7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
+					["Curve -6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
+					["Curve -5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
+					["Curve -4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
+					["Curve -3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
+					["Curve -2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
+					["Curve -1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
+					["Curve +1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
+					["Curve +2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
+					["Curve +3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
+					["Curve +4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
+					["Curve +5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
+					["Curve +6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
+					["Curve +7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
+					["Curve +8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
+				];
+			},
+			//
+			\XFade, {
+				arrGenFunctions = [
+					["Preset Curves ...", {this.value;}],
+					["Linear", linearArray],
+					["DJ Smooth", Env([0, 1], [1], -2).arrayFill(128)],
+					["DJ Full", Env([0, 1, 1], [0.5, 0.5], \lin).arrayFill(128)],
+					["DJ Cut", Env([0, 0, 1, 1], [0.5, 0, 0.5], \lin).arrayFill(128)],
+					["DJ Scratch 99%", Env([0, 1, 1], [1, 127], \lin).arrayFill(128)],
+					["DJ Scratch 95%", Env([0, 1, 1], [5, 95], \lin).arrayFill(128)],
+					["DJ Scratch 90%", Env([0, 1, 1], [1, 9], \lin).arrayFill(128)],
+					["DJ Scratch 80%", Env([0, 1, 1], [2, 8], \lin).arrayFill(128)],
+					["DJ Scratch 70%", Env([0, 1, 1], [3, 7], \lin).arrayFill(128)],
+					["Exponential", {linearArray.deepCopy.collect({arg item, i;
+						ControlSpec(0.0001, 1, \exp).map(item).linlin(0.0001, 1, 0, 1)});}],
+					["-Exponential", {linearArray.deepCopy.collect({arg item, i;
+						1-ControlSpec(0.0001, 1, \exp).map(1-item).linlin(0.0001, 1, 0, 1)});}],
+					["Curve -8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
+					["Curve -7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
+					["Curve -6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
+					["Curve -5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
+					["Curve -4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
+					["Curve -3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
+					["Curve -2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
+					["Curve -1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
+					["Curve +1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
+					["Curve +2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
+					["Curve +3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
+					["Curve +4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
+					["Curve +5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
+					["Curve +6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
+					["Curve +7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
+					["Curve +8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
+				];
+			},
+			//
+			\LFO, {
+				arrGenFunctions = [
+					["Preset Curves ...", {this.value;}],
+					["Sawtooth", linearArray],
+					["Sine", {Signal.sineFill(tableSize, [1.0],[0.0]).collect({arg item, i; (item.value + 1) * 0.5;});}],
+					["Cosine", {Signal.sineFill(tableSize, [1.0],[0.5pi]).collect({arg item, i; (item.value + 1) * 0.5;});}],
+					["Exponential", {linearArray.deepCopy.collect({arg item, i;
+						ControlSpec(0.0001, 1, \exp).map(item).linlin(0.0001, 1, 0, 1)});}],
+					["-Exponential", {linearArray.deepCopy.collect({arg item, i;
+						1-ControlSpec(0.0001, 1, \exp).map(1-item).linlin(0.0001, 1, 0, 1)});}],
+					["Triangle", { var holdArr;
+						holdArr = Array.newClear(tableSize/2).seriesFill(0, 2 / (tableSize - 1));
+						holdArr ++ holdArr.copy.reverse;}],
+					["Curve -8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
+					["Curve -7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
+					["Curve -6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
+					["Curve -5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
+					["Curve -4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
+					["Curve -3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
+					["Curve -2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
+					["Curve -1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
+					["Curve +1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
+					["Curve +2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
+					["Curve +3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
+					["Curve +4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
+					["Curve +5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
+					["Curve +6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
+					["Curve +7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
+					["Curve +8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
+				];
+			},
+			//
+			\Velocity, {
+				arrGenFunctions = [
+					["Preset Curves ...", {this.value;}],
+					["Linear (Ramp)", {linearArray.deepCopy;}],
+					["All Maximum, like an organ",{1 ! tableSize;}],
+					["All 0.5",{0.5 ! tableSize;}],
+					["Heavy 8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });}],
+					["Heavy 7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });}],
+					["Heavy 6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });}],
+					["Heavy 5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });}],
+					["Heavy 4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });}],
+					["Heavy 3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });}],
+					["Heavy 2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });}],
+					["Heavy 1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });}],
+					["Light 1", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });}],
+					["Light 2", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });}],
+					["Light 3", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });}],
+					["Light 4", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });}],
+					["Light 5", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });}],
+					["Light 6", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });}],
+					["Light 7", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });}],
+					["Light 8", {linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });}],
+					["Custom 1",{TXCustomVelCurves.arrCurves[0];}],
+					["Custom 2",{TXCustomVelCurves.arrCurves[1];}],
+					["Custom 3",{TXCustomVelCurves.arrCurves[2];}],
+					["Custom 4",{TXCustomVelCurves.arrCurves[3];}],
+					["Custom 5",{TXCustomVelCurves.arrCurves[4];}],
+					["Custom 6",{TXCustomVelCurves.arrCurves[5];}],
+					["Custom 7",{TXCustomVelCurves.arrCurves[6];}],
+					["Custom 8",{TXCustomVelCurves.arrCurves[7];}],
+				];
+			},
+			//
+			\Waveshaper, {
+				arrGenFunctions = [
+					["Preset Curves ...", {this.value;}],
+					["Linear (Ramp)", linearArray],
+					["Sine-shaped Compress", {linearArray.deepCopy.collect({arg item, i;
+						ControlSpec(0, 1, \cos).map(item); });}],
+					["Compress 8", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -8).map(item); });)}],
+					["Compress 7", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -7).map(item); });)}],
+					["Compress 6", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -6).map(item); });)}],
+					["Compress 5", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -5).map(item); });)}],
+					["Compress 4", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -4).map(item); });)}],
+					["Compress 3", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -3).map(item); });)}],
+					["Compress 2", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -2).map(item); });)}],
+					["Compress 1", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, -1).map(item); });)}],
+					["Expand 1", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 1).map(item); });)}],
+					["Expand 2", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 2).map(item); });)}],
+					["Expand 3", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 3).map(item); });)}],
+					["Expand 4", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 4).map(item); });)}],
+					["Expand 5", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 5).map(item); });)}],
+					["Expand 6", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 6).map(item); });)}],
+					["Expand 7", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 7).map(item); });)}],
+					["Expand 8", {this.mirrorInvert(
+						linearArray.deepCopy.collect({arg item, i; ControlSpec(0, 1, 8).map(item); });)}],
+				];
+			}
+		);  // end of switch
+		^arrGenFunctions;
 	}
 
 }

@@ -1,4 +1,4 @@
-// Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
+// Copyright (C) 2018  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXSimpleSlider2 : TXModuleBase {
 
@@ -18,6 +18,13 @@ TXSimpleSlider2 : TXModuleBase {
 		classData.arrOutBusSpecs = [
 			["Out", [0]]
 		];
+		classData.arrOutputRanges = [
+			["Range presets: ", [0, 1]],
+			["Full range -1 to 1", [-1, 1]],
+			["Half range -0.5 to 0.5", [-0.5, 0.5]],
+			["Positive range 0 to 1", [0, 1]],
+			["Negative range -1 to 0", [-1, 0]],
+		];
 	}
 
 	*new{ arg argInstName;
@@ -28,10 +35,10 @@ TXSimpleSlider2 : TXModuleBase {
 		//	set  class specific instance variables
 		arrSynthArgSpecs = [
 			["out", 0, 0],
-			["sliderVal", 0, 0],
-			["sliderValMin", 0, 0],
-			["sliderValMax", 1, 0],
-			["modSliderVal", 0, 0],
+			["sliderVal", 0, defLagTime],
+			["sliderValMin", 0, defLagTime],
+			["sliderValMax", 1, defLagTime],
+			["modSliderVal", 0, defLagTime],
 		];
 		synthDefFunc = {
 			arg out, sliderVal, sliderValMin, sliderValMax, modSliderVal=0;
@@ -40,7 +47,7 @@ TXSimpleSlider2 : TXModuleBase {
 			Out.kr(out, sliderValCombined);
 		};
 		guiSpecArray = [
-			["TXMinMaxSliderSplit", "Value", nil.asSpec, "sliderVal", "sliderValMin", "sliderValMax"],
+			["TXMinMaxSliderSplit", "Value", ControlSpec.new(-1, 1), "sliderVal", "sliderValMin", "sliderValMax", nil, classData.arrOutputRanges],
 		];
 		arrActionSpecs = this.buildActionSpecs(guiSpecArray);
 		//	use base class initialise

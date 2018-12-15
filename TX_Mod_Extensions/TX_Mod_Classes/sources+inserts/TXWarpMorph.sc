@@ -37,7 +37,7 @@ TXWarpMorph : TXModuleBase {		// Warp Morph module
 
 	*arrOutputRanges {
 		^ [
-			["Presets: ", [0, 1]],
+			["Range presets: ", [0, 1]],
 			["Full range -1 to 1", [-1, 1]],
 			["Half range -0.5 to 0.5", [-0.5, 0.5]],
 			["Positive range 0 to 1", [0, 1]],
@@ -288,14 +288,14 @@ TXWarpMorph : TXModuleBase {		// Warp Morph module
 				jump = cols.reciprocal;
 				startRange = (item * jump * maxVal).round(1);
 				endRange = ((item + 1) * jump * maxVal).round(1) - 1;
-				meanVal = arrCurve1Values.copyRange(startRange.asInteger, endRange.asInteger).mean;
+				meanVal = inputArray.copyRange(startRange.asInteger, endRange.asInteger).mean;
 				if (quantizeRows, {
 					meanVal = meanVal.round(rows.reciprocal);
 				});
 				holdArray[startRange.asInteger..endRange.asInteger] = meanVal;
 			});
 		},{
-			holdArray = arrCurve1Values.collect({arg item;
+			holdArray = inputArray.collect({arg item;
 				var outVal = item;
 				if (quantizeRows, {
 					outVal = outVal.round(rows.reciprocal);

@@ -572,7 +572,7 @@ TXNoteStacker : TXModuleBase {
 		];
 	}
 
-	createSynthNote { arg note, vel, argEnvTime=1, seqLatencyOn=1;
+	createSynthNote { arg note, vel, argEnvTime=1, seqLatencyOn=1, argDetune=0;
 		var transpose, outDetune, outVel, noteIndex, trigtype, randDetune, randVel;
 		var arrValidModules, arrPlayModules, latencyTime=0;
 		// adjust noteIndex to note range C0-b7 for table lookups
@@ -613,6 +613,7 @@ TXNoteStacker : TXModuleBase {
 								outDetune = ((1-randDetune) * outDetune) + (randDetune * 1.0.rand2);
 							});
 							outDetune = outDetune * this.getSynthArgSpec(item[4]);
+							outDetune = argDetune + outDetune;
 							arrPlayModules.do({arg module, k;
 								// create note in module
 								module.createSynthNote(note, outVel, argEnvTime, seqLatencyOn,

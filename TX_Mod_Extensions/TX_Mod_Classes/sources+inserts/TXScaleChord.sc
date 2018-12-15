@@ -105,9 +105,9 @@ TXScaleChord : TXModuleBase {
 		sendTrigID_RandVel = UniqueID.next;
 		arrSynthArgSpecs = [
 			["modActive", 0, 0],
-			["modActive", 0, 0],
-			["modActive", 0, 0],
-			["modActive", 0, 0],
+			["modPlayChord", 0, 0],
+			["modInversion", 0, 0],
+			["modOpenChord", 0, 0],
 			["modTransposeOcts", 0, 0],
 			["modGlobalVelScale", 0, 0],
 			["modRandVel", 0, 0],
@@ -778,7 +778,7 @@ TXScaleChord : TXModuleBase {
 
 	////////////////////////////////////
 
-	createSynthNote { arg note, vel, argEnvTime=1, seqLatencyOn=1;
+	createSynthNote { arg note, vel, argEnvTime=1, seqLatencyOn, argDetune=1;
 		var holdCurrIndices, holdScaleSemis, holdKeySemis, holdNoteSemis, holdOctTranspose;
 		var holdNoteTranspVals, holdOpenTranspVals, holdInvTranspVals, holdProbVals;
 		var holdKey, holdIgnoreKey, holdVelVals, adjustedNote, velNorm, holdGlobalVelScale, holdRandVel, holdScaleVels;
@@ -812,7 +812,7 @@ TXScaleChord : TXModuleBase {
 					holdNote = adjustedNote + holdOctTranspose;
 					// for all active modules create note
 					activeModules.do({ arg item, i;
-						item.createSynthNote(holdNote, vel, argEnvTime, seqLatencyOn);
+						item.createSynthNote(holdNote, vel, argEnvTime, seqLatencyOn, argDetune);
 					});
 					// output midi
 					this.sendMIDINoteOn(holdNote, vel, argEnvTime);
@@ -856,7 +856,7 @@ TXScaleChord : TXModuleBase {
 							).clip(0, 127);
 							// for all active modules create note
 							activeModules.do({ arg item, i;
-								item.createSynthNote(holdNote, holdVel, argEnvTime, seqLatencyOn);
+								item.createSynthNote(holdNote, holdVel, argEnvTime, seqLatencyOn, argDetune);
 							});
 							// output midi
 							this.sendMIDINoteOn(holdNote, holdVel, argEnvTime);

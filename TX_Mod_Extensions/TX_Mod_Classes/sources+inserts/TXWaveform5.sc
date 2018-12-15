@@ -33,7 +33,7 @@ TXWaveform5 : TXModuleBase {
 			["Out", [0]]
 		];
 		classData.timeSpec = ControlSpec(0.01, 30, \exp, 0, 1, units: " secs");
-		classData.freqSpec = ControlSpec(0.midicps, 20000, \exponential);
+		classData.freqSpec = ControlSpec(5, 20000, \exponential);
 		classData.fmFreqSpec = ControlSpec(0.01, 20000, \exponential);
 		classData.fmRatioSpec = ControlSpec(0.01, 10);
 		classData.fmDepthSpec = ControlSpec(0, 4);

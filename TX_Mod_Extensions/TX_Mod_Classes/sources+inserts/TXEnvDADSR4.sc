@@ -22,9 +22,10 @@ TXEnvDADSR4 : TXModuleBase {
 			["Sustain time", 1, "modSustainTime", 0],
 			["Release", 1, "modRelease", 0],
 		];
-		classData.noOutChannels = 1;
+		classData.noOutChannels = 2;
 		classData.arrOutBusSpecs = [
-			["Out", [0]]
+			["Env Out", [0]],
+			["Env End Trig", [1]],
 		];
 		classData.timeSpec = ControlSpec(0.01, 20);
 	}
@@ -75,7 +76,7 @@ TXEnvDADSR4 : TXModuleBase {
 			velocityScaling,
 			modDelay = 0, modAttack = 0, modDecay = 0, modSustain = 0, modSustainTime = 0, modRelease = 0;
 
-			var outEnv, outFreq, outFunction, outWave, del, att, dec, sus, sustime, rel, timeMult, envCurve, envFunction;
+			var outEnv, outFreq, outFunction, outWave, del, att, dec, sus, sustime, rel, timeMult, envCurve, envFunction, envEnd;
 			del = (delay + modDelay).max(0).min(1);
 			att = (attackMin + ((attackMax - attackMin) * (attack + modAttack).max(0).min(1))).max(0.001).min(20);
 			dec = (decayMin + ((decayMax - decayMin) * (decay + modDecay).max(0).min(1))).max(0.001).min(20);
@@ -89,10 +90,10 @@ TXEnvDADSR4 : TXModuleBase {
 				envFunction.value(del, att, dec, sus, sustime, rel, envCurve),
 				gate,
 				doneAction: 2
-			)
-			- 0.001; // remove exponential offset in env function
-			// amplitude is vel *  0.00315 approx. == 1 / 127
-			Out.kr(out, outEnv * ((velocity * 0.007874) + (1-velocityScaling)).min(1));
+			);
+			envEnd = Trig1.kr(Done.kr(outEnv), ControlDur.ir);
+			// outEnv - 0.001 : remove exponential offset in env function
+			Out.kr(out, [(outEnv - 0.001) * ((velocity * 0.007874) + (1-velocityScaling)).min(1), envEnd]);
 		};
 		arrActionSpecs = this.buildActionSpecs([
 			["commandAction", "Trigger envelope", {this.createSynthNote(60, 100, 1);}],
