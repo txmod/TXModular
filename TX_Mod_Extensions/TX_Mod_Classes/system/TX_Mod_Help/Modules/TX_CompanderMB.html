@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+  </style>
+</head>
+<body>
+<p class="p1"><b>CompanderMB (Multi-Band)</b></p>
+<p class="p1"><b></b><br></p>
+<p class="p1"><b>Module type: Audio Insert (mono input, mono output)</b></p>
+<p class="p1"><b></b><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module splits the input signal into 4 frequency bands and responds to the amplitude (volume level) of each band. </p>
+<p class="p1">Each band's compander can function as a <b>compressor</b> or <b>expander/gate</b>.</p>
+<p class="p1">A <b>compressor</b> reduces the level of the louder parts of signal. It has the effect of evening out the volume.</p>
+<p class="p1">An <b>expander/gate </b>reduces the level of the quieter parts of signal. It can be used to remove the low level noise in a signal.</p>
+<p class="p1">To make it act as an <b>expander</b> or noise gate, increase the <b>expander ratio</b> to greater than 1 and it will reduce the amplitude if it below the <b>threshold</b>.</p>
+<p class="p1">To make it act as a <b>compressor</b>, increase the <b>compressor ratio</b> to greater than 1 and it will reduce the amplitude if it above the <b>threshold</b>. Then increase the <b>Out gain</b> to bring the level up to what you want.</p>
+<p class="p1">There is the option to use a side-chain audio input to control the compander, instead of the main input signal. If the side-chain is used, then on another audio channel, the destination can be set to the Compander module's Side-chain bus (see Audio Input Busses below).</p>
+<p class="p1">A lookahead delay can also be added. Take care to set appropriate clamp and relax times if using a lookahead delay.</p>
+<p class="p1"><br></p>
+<p class="p1">Note: Split frequencies cannot be modulated or automated.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b>All Bands & Band 1/2/3/4 buttons</b></p>
+<p class="p1"><b>Compander On/Off</b> - sets whether the compander is active.</p>
+<p class="p1"><b>Side-chain</b> - sets whether the main input signal or the side-chain signal will be used to control the compander.</p>
+<p class="p1"><b>Threshold</b> - adjust to get required effect.</p>
+<p class="p1"><b>Presets</b> - when using presets, make sure to adjust the threshold and set the out gain as needed.</p>
+<p class="p1"><b>Expand ratio</b> - expander ratio.</p>
+<p class="p1"><b>Comp. ratio</b> - compression ratio.</p>
+<p class="p1"><b>Clamp time</b> - how quickly the module responds to amplitude changes past the threshold.</p>
+<p class="p1"><b>Relax time</b> - how quickly it releases after responding.</p>
+<p class="p1"><b>Make-up gain</b> - boosts the level of the companded signal.</p>
+<p class="p1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal.</p>
+<p class="p1"><b>Band level</b> - this sets the output level of the band.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Global button</b></p>
+<p class="p1"><b>Lookahead</b> - a lookahead delay can be added to input signal to allow transients to be detected early.</p>
+<p class="p1"><b>S-chain mode</b> - sets whether or not the side chain signal will be split into 4 bands. </p>
+<p class="p1"><b>Expand range</b> - sets the range of values allowed for each band's expander ratio.</p>
+<p class="p1"><b>Comp range</b> - sets the range of values allowed for each band's compression ratio.</p>
+<p class="p1"><b>Clamp max</b> - sets the maximum value of each band's clamp time.</p>
+<p class="p1"><b>Relax max</b> - sets the maximum value of each band's relax time.</p>
+<p class="p1"><b>Split Freq 1</b> - sets the frequency to split bands 1 & 2.</p>
+<p class="p1"><b>Split Freq 2</b> - sets the frequency to split bands 2 & 3.</p>
+<p class="p1"><b>Split Freq 3</b> - sets the frequency to split bands 3 & 4.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>Side-chain</b> - mono audio signal which can be used to control the companders.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Threshold 1/2/3/4</b></p>
+<p class="p1"><b>Expand Ratio 1/2/3/4</b></p>
+<p class="p1"><b>Compress Ratio 1/2/3/4</b></p>
+<p class="p1"><b>Attack 1/2/3/4</b></p>
+<p class="p1"><b>Release 1/2/3/4</b></p>
+<p class="p1"><b>Out gain 1/2/3/4</b></p>
+<p class="p1"><b>Dry-Wet Mix 1/2/3/4</b></p>
+<p class="p1"><b>Band level 1/2/3/4</b></p>
+<p class="p1"><br></p>
+</body>
+</html>
