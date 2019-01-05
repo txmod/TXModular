@@ -680,6 +680,8 @@ TXSystem1 {		// system module 1
 		var holdString;
 		var classError = "";
 
+		Font.default =  Font("Helvetica", 12);
+
 		// if open already, window to front and return
 		if (TXSystem1GUI.w.notNil and: {TXSystem1GUI.w.isClosed != true}, {
 			TXSystem1GUI.w.front;
