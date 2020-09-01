@@ -1,0 +1,138 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf130
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10880\viewh9780\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs26 \cf0 Building TXV in openFrameworks\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\b0 \cf0 - The following notes are about what is required to build TXV and hopefully this will work on all platforms (so far this has only been tested on MacOS 10.11.1 and Windows 10)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\b \cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\b0 \cf0 - to build TXV you will need to following:\
+\
+- Download 
+\b openFrameworks 0.9.8
+\b0  for your platform (https://openframeworks.cc)\
+(note: 
+\b  0.9.8
+\b0  is 
+\b not
+\b0  the latest version of 
+\b openFrameworks
+\b0  but is the one currently used for TXV.)\
+\
+- Download  the
+\b  TXV 
+\b0 project
+\b  
+\b0 folder which contains
+\b  Addons_modified_for_TXV,  src
+\b0  & 
+\b data 
+\b0 folders
+\b .\
+
+\b0 All required OF addons are in the folder \'93
+\b Addons_modified_for_TXV
+\b0 \'94 and should be added to the 
+\b OF addons
+\b0  folder:
+\b \
+
+\b0 - Use TXV version of the following 
+\b addons
+\b0 , with changes marked below:\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\b \cf0 ofxAssimpModelLoader\
+ofxImageSequenceRecorder\
+ofxMathMesh -
+\b0  TXV version has changes to
+\b  ofxParametricSurface.cpp
+\b0  (search for \'93Paul\'94)
+\b \
+ofxMSACore\
+ofxMSAFluid\
+ofxMSAPerlin\
+ofxOrnament -
+\b0  TXV version has various changes in order to add 
+\b zoomX/Y, shiftX/Y 
+\b0 &
+\b  rotate\
+ofxOSC\
+ofxSvg 
+\b0 - TXV version has 
+\b new method clear()\
+ofxThreadedImageLoader\
+ofxTweenLite\
+ofxVideoRecorder 
+\b0 - On Mac, use TXV version with changes for latest ffmpeg
+\b  . 
+\b0 On Windows, download this modified version: 
+\i\b http://github.com/DomAmato/ofxVideoRecorder
+\i0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\b0 \cf0 - TXV is currently untested on Linux.\
+\
+- using the 
+\b OF Project Generator
+\b0 , build an 
+\b empty project
+\b0  called 
+\b TXV
+\b0  adding in all the required 
+\b addons
+\b0  listed before.
+\b \
+- NOTE:
+\b0  you may later need to add the addon 
+\b ofxTweenLite
+\b0  into the project yourself - it may not have worked by adding it with the Project Generator
+\b .\
+
+\b0 \
+- Once the
+\b  TXV Project
+\b0  has been created, add in the 
+\b TXV src
+\b0  
+\b folder 
+\b0 and put the TXV 
+\b data folder 
+\b0 into the 
+\b bin folder.\
+\
+
+\b0 - Download the latest version of 
+\b ffmpeg
+\b0  (
+\i\b http://ffmpeg.org/download
+\i0\b0 )
+\b  
+\b0 for your platform and 
+\b add
+\b0  it to the /
+\b bin/data
+\b0  
+\b folder 
+\b0 in the
+\b  TXV OF project
+\b0 . \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\b \cf0 ffmpeg
+\b0  is used by TXV to save video files.
+\b \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\b0 \cf0 \
+Hopefully now you will have everything you need to build TXV for your platform.\
+\
+}

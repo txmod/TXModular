@@ -1,0 +1,28 @@
+// Copyright (C) 2020  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
+
+The TX Modular System - Adding TX Classes to SuperCollider  3
+
+The TX Modular system uses various classes which SuperCollider needs to know about in order to run the system.
+
+First, download the latest TX Modular SuperCollider classes from: http://palemoonrising.co.uk
+ 
+To add TX Modular system classes to SuperCollider, first open SuperCollider and in the File menu click on “Open user support directory”.
+From inside that, open the “Extensions” folder.
+If you have an older “TX_Mod_Extensions” folder there then delete it first.
+Then copy the supplied folder “TX_Mod_Extensions” into your “Extensions” folder .
+
+You also need to add the sc3-plugins folder into your Extensions folder. Download the latest version for your platform from: https://supercollider.github.io/sc3-plugins).
+
+You also need to install a SuperCollider Quark called wslib. 
+To install wslib, in SuperCollider, run the code:
+     Quarks.gui;
+This opens the Quarks window. 
+Now go to the end of the  list of quarks and click on the + button next to wslib
+ (see Quarks help file for more details)
+
+After all the previous steps, you need to recompile SuperCollider:
+In SuperCollider, click on the menu option Language and select “Recompile class library” (or if you prefer, quit and restart SuperCollider).
+
+Now you have everything installed, to open TX Modular, in SuperCollider open the file “Start_TX_Modular.scd” and run the code:
+   TXSystem1.start;
+
