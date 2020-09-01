@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>SoftKnee CompMB St  (Multi-Band)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Audio Insert (stereo input, stereo output)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module splits the input signal into 4 frequency bands and responds to the amplitude (volume level) of each band. </span></p>
+<p class="p1"><span class="s1">A compressor reduces the level of the louder parts of signal. It has the effect of evening out the volume.</span></p>
+<p class="p1"><span class="s1">There is the option to use a side-chain audio input to control the compressor, instead of the main input signal. If the side-chain is used, then on another audio channel, the destination can be set to the compressor module's Side-chain bus (see Audio Input Busses below).</span></p>
+<p class="p1"><span class="s1">The type of compression can be changed from Peak Compression to RMS Compression, which responds to a signal over a settable averaging time of 12-1000 ms.</span></p>
+<p class="p1">A lookahead delay can also be added. Take care to set appropriate clamp and relax times if using a lookahead delay.</p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1">Note: Split frequencies cannot be modulated or automated.</span></p>
+<p class="p1"><br></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><br></span></p>
+<p class="p1"><span class="s1"><b>All Bands & Band 1/2/3/4 buttons</b></span></p>
+<p class="p1"><span class="s1"><b>Compressor On/Off</b> - sets whether the compressor is active.</span></p>
+<p class="p1"><span class="s1"><b>Side-chain</b> - sets whether the main input signal or the side-chain signal will be used to control the compressor.</span></p>
+<p class="p1"><span class="s1"><b>Threshold</b> - adjust to get required effect. </span></p>
+<p class="p1"><span class="s1"><b>Knee db</b> - the size of the knee in db (default is 6db). </span></p>
+<p class="p1"><span class="s1"><b>Ratio</b> - compression ratio. </span></p>
+<p class="p1"><span class="s1"><b>Clamp time</b> - how quickly the module responds to amplitude changes past the threshold. </span></p>
+<p class="p1"><span class="s1"><b>Relax time</b> - how quickly it releases after responding.  </span></p>
+<p class="p1"><span class="s1"><b>Make-up gain</b> - boosts the output level after compression. </span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b> - sets the mix of the original signal with the affected signal. For send effects this will usually be set to 1 - i.e. 100% affected signal.</span></p>
+<p class="p1"><span class="s1"><b>Band level</b> - sets the output level of the band.</span></p>
+<p class="p1"><span class="s1"><br></span></p>
+<p class="p1"><span class="s1"><b>Global button</b></span></p>
+<p class="p1"><span class="s1"><b>Channel link</b> - sets whether the left and right channels are linked together (the default setting) or independent of each other while being affected by the compressor. </span></p>
+<p class="p1"><span class="s1"><b>Compression</b> - selects Peak Compression or RMS Compression with averaging time 12-1000ms. </span></p>
+<p class="p1"><b>Lookahead</b> - a lookahead delay can be added to input signal to allow transients to be detected early. </p>
+<p class="p1"><b>S-chain mode</b> - sets whether or not the side chain signal will be split into 4 bands. </p>
+<p class="p1"><b>Knee max</b> - sets the maximum value in dB of each band's knee.</p>
+<p class="p1"><b>Ratio range</b> - sets the range of values allowed for each band's compression ratio.</p>
+<p class="p1"><b>Clamp max</b> - sets the maximum value of each band's clamp time.</p>
+<p class="p1"><b>Relax max</b> - sets the maximum value of each band's relax time.</p>
+<p class="p1"><b>Split Freq 1</b> - sets the frequency to split bands 1 & 2.</p>
+<p class="p1"><b>Split Freq 2</b> - sets the frequency to split bands 2 & 3.</p>
+<p class="p1"><b>Split Freq 3</b> - sets the frequency to split bands 3 & 4.</p>
+<p class="p1"><span class="s1"><br></span></p>
+<p class="p1"><span class="s1"><b><i>Audio Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Side-chain</b> - mono audio signal which can be used to control the compressor (see <b>Side-chain</b> above). </span></p>
+<p class="p1"><span class="s1"><br></span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Threshold 1/2/3/4</b></span></p>
+<p class="p1"><span class="s1"><b>Knee 1/2/3/4</b></span></p>
+<p class="p1"><span class="s1"><b>Ratio 1/2/3/4</b></span></p>
+<p class="p1"><span class="s1"><b>Attack 1/2/3/4</b></span></p>
+<p class="p1"><span class="s1"><b>Release 1/2/3/4</b></span></p>
+<p class="p1"><span class="s1"><b>Make-Up Gain 1/2/3/4</b></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix 1/2/3/4</b></span></p>
+<p class="p1"><span class="s1"><b>Band level 1/2/3/4</b></span></p>
+</body>
+</html>

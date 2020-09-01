@@ -3,40 +3,36 @@
 TXRangeSlider {
 	var <>labelView, <>rangeView, <>minNumberView, <>maxNumberView, <>presetPopupView;
 	var <>controlSpec, <>action, <lo, <hi, <>round = 0.0001;
-	
-	*new { arg window, dimensions, label, controlSpec, action, initMinVal, initMaxVal, 
+
+	*new { arg window, dimensions, label, controlSpec, action, initMinVal, initMaxVal,
 			initAction=false, labelWidth=80, numberWidth = 120, arrPresets, boolScroll=true;
-		^super.new.init(window, dimensions, label, controlSpec, action, initMinVal, initMaxVal, 
+		^super.new.init(window, dimensions, label, controlSpec, action, initMinVal, initMaxVal,
 			initAction, labelWidth, numberWidth, arrPresets, boolScroll);
 	}
-	init { arg window, dimensions, label, argControlSpec, argAction, initMinVal, initMaxVal, 
+	init { arg window, dimensions, label, argControlSpec, argAction, initMinVal, initMaxVal,
 			initAction, labelWidth, numberWidth, arrPresets, boolScroll;
-		var height, spacingX, presetWidth;
-		
+		var height, spacingX;
+
 		if (window.class == Window, {
 			spacingX = window.view.decorator.gap.x;
 		}, {
 			spacingX = window.decorator.gap.x;
 		});
-		if (arrPresets.notNil, {
-			presetWidth = 16 + spacingX;
-		}, {
-			presetWidth = 0;
-		});
 
 		height = dimensions.y;
-		
+
 		controlSpec = argControlSpec.asSpec;
 		initMinVal = initMinVal ? controlSpec.minval;
 		initMaxVal = initMaxVal ? controlSpec.maxval;
-		
+
 		action = argAction;
-		
+
 		labelView = StaticText(window, labelWidth @ height);
 		labelView.string = label;
 		labelView.align = \right;
-		
+
 		rangeView = RangeSlider(window, (dimensions.x - labelWidth - numberWidth - (2 * spacingX)) @ height );
+		rangeView.background_(TXColor.sysGuiCol1).knobColor_(TXColor.grey(0.75));
 		rangeView.action = { arg view;
 			minNumberView.value = controlSpec.map(rangeView.lo);
 			maxNumberView.value = controlSpec.map(rangeView.hi);
@@ -44,8 +40,8 @@ TXRangeSlider {
 			hi = maxNumberView.value;
 			action.value(this);
 		};
-		
-		minNumberView = TXScrollNumBox(window, ((numberWidth - presetWidth - spacingX)/2).asInteger @ height, controlSpec);
+
+		minNumberView = TXScrollNumBox(window, ((numberWidth - spacingX)/2).asInteger @ height, controlSpec).maxDecimals_(4);
 		if (boolScroll==false, {minNumberView.scroll = false});
 		minNumberView.action = {
 			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
@@ -53,8 +49,8 @@ TXRangeSlider {
 			rangeView.lo = controlSpec.unmap(minNumberView.value);
 			action.value(this);
 		};
-		
-		maxNumberView = TXScrollNumBox(window, ((numberWidth - presetWidth - spacingX)/2).asInteger @ height, controlSpec);
+
+		maxNumberView = TXScrollNumBox(window, ((numberWidth - spacingX)/2).asInteger @ height, controlSpec).maxDecimals_(4);
 		if (boolScroll==false, {maxNumberView.scroll = false});
 		maxNumberView.action = {
 			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
@@ -62,13 +58,23 @@ TXRangeSlider {
 			hi = maxNumberView.value;
 			action.value(this);
 		};
-		
+
 		if (controlSpec.step != 0) {
 			rangeView.step = (controlSpec.step / (controlSpec.maxval - controlSpec.minval));
 		};
 
 		if (arrPresets.notNil, {
-			presetPopupView = PopUpMenu(window, 16 @ height)
+
+			// decorator next line & shift
+			if (window.class == Window, {
+				window.view.decorator.nextLine;
+				window.view.decorator.shift(labelWidth + spacingX, 0);
+			}, {
+				window.decorator.nextLine;
+				window.decorator.shift(labelWidth + spacingX, 0);
+			});
+
+			presetPopupView = PopUpMenu(window, (dimensions.x - labelWidth - spacingX) @ (height * 0.8))
 						.background_(Color.white)
 						.items_(arrPresets.collect({arg item, i; item.at(0);}))
 						.action_({ arg view;
@@ -88,50 +94,70 @@ TXRangeSlider {
 		};
 	}
 
-	value {  
-		^lo; 
+	makeRangePositive {
+		var holdMin, holdMaX;
+		if (this.range < 0, {
+			holdMin = this.minVal;
+			holdMaX = this.maxVal;
+			this.valueBothNoAction_([holdMin, holdMaX]);
+		});
 	}
-	
-	valueBoth {  
-		^[lo, hi]; 
+
+	value {
+		^lo;
 	}
-	
-	range {  
-		^hi - lo; 
+
+	valueBoth {
+		^[lo, hi];
 	}
-	
-	value_ { arg value; 
+
+	minVal {
+		^min(lo, hi);
+	}
+
+	maxVal {
+		^max(lo, hi);
+	}
+
+	range {
+		^hi - lo;
+	}
+
+	value_ { arg value;
 		lo = controlSpec.constrain(value);
 		minNumberView.valueAction = lo.round(round);
 	}
-	
-	valueBoth_ { arg valueArray; 
-		lo = controlSpec.constrain(valueArray.at(0));
-		minNumberView.valueAction = lo.round(round);
-		hi = controlSpec.constrain(valueArray.at(1));
-		maxNumberView.valueAction = hi.round(round);
+
+	valueBoth_ { arg valueArray;
+			lo = controlSpec.constrain(valueArray.at(0));
+			hi = controlSpec.constrain(valueArray.at(1));
+			minNumberView.value = lo;
+			maxNumberView.value = hi;
+			rangeView.lo = controlSpec.unmap(lo);
+			rangeView.hi = controlSpec.unmap(hi);
+			action.value(this);
 	}
-	
+
 	valueBothNoAction_  { arg valueArray;
-			minNumberView.value = controlSpec.constrain(valueArray.at(0));
-			maxNumberView.value = controlSpec.constrain(valueArray.at(1));
-			rangeView.lo = controlSpec.unmap(minNumberView.value);
-			rangeView.hi = controlSpec.unmap(maxNumberView.value);
-			lo = minNumberView.value;
-			hi = maxNumberView.value;
+			lo = controlSpec.constrain(valueArray.at(0));
+			hi = controlSpec.constrain(valueArray.at(1));
+			minNumberView.value = lo;
+			maxNumberView.value = hi;
+			rangeView.lo = controlSpec.unmap(lo);
+			rangeView.hi = controlSpec.unmap(hi);
 	}
 
-	lo_ {arg value; 
+	lo_ {arg value;
 		lo = controlSpec.constrain(value);
 		minNumberView.valueAction = lo.round(round);
 	}
 
-	hi_ {  arg value; 
+	hi_ {  arg value;
 		hi = controlSpec.constrain(value);
 		maxNumberView.valueAction = hi.round(round);
 	}
-	
-	range_ {arg value; 
+
+	range_ {arg value;
 		hi = controlSpec.constrain(lo + value.abs);
 		maxNumberView.valueAction = hi.round(round);
 	}
@@ -142,7 +168,7 @@ TXRangeSlider {
 		initMaxVal =  initMaxVal ? controlSpec.maxval;
 
 		action = argAction;
-	
+
 		minNumberView.value = controlSpec.constrain(initMinVal).round(round);
 		rangeView.lo = controlSpec.unmap(initMinVal);
 		maxNumberView.value = controlSpec.constrain(initMaxVal).round(round);
@@ -150,6 +176,10 @@ TXRangeSlider {
 		if (initAction) {
 			action.value(this);
 		};
+	}
+
+	hasFocus {
+		^rangeView.hasFocus || minNumberView.hasFocus || maxNumberView.hasFocus;
 	}
 }
 

@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Leap Motion</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: ModulationSource</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1"><b><i>Note: Broken module!</i></b> - not currently working.</p>
+<p class="p1">This module connects to a Leap Motion sensor for sensing left and right hand positions and outputs modulation signals for various hand and finger measurements.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Main Button</i></b></p>
+<p class="p1"><b>active</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>handMode</b> - index with modulation (def: 0, range: 0 : 2) options: <b> [0]</b>_2 hands, separate spaces, <b> [1]</b>_2 hands, shared space, <b> [2]</b>_1 hand. </p>
+<p class="p1"><b>swapHands</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>getFingerData</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>stabilizePalmPosition</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>velocityScaling</b> - float with modulation (def: 1, range: 0.01 : 10). </p>
+<p class="p1"><b>palmPositionCentreBias</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>palmRotationCentreBias</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Curves Button</i></b></p>
+<p class="p1"><b>grabCurve</b> - drawable curve (size: 256 points). </p>
+<p class="p1"><b>pinchCurve</b> - drawable curve (size: 256 points). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Smoothing Button</i></b></p>
+<p class="p1"><b>positionSmoothTime</b> - float with modulation (def: 0, range: 0 : 10). </p>
+<p class="p1"><b>rotationSmoothTime</b> - float with modulation (def: 0, range: 0 : 10). </p>
+<p class="p1"><b>velocitySmoothTime</b> - float with modulation (def: 0, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Interaction Box Button</i></b></p>
+<p class="p1"><b>XAxisMinMM</b> - integer (def: -250, range: -1000 : 1000). </p>
+<p class="p1"><b>XAxisMaxMM</b> - integer (def: 250, range: -1000 : 1000). </p>
+<p class="p1"><b>YAxisMinMM</b> - integer (def: 200, range: 90 : 1000). </p>
+<p class="p1"><b>YAxisMaxMM</b> - integer (def: 500, range: 90 : 1000). </p>
+<p class="p1"><b>ZAxisMinMM</b> - integer (def: -150, range: -1000 : 1000). </p>
+<p class="p1"><b>ZAxisMaxMM</b> - integer (def: 150, range: -1000 : 1000). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Send OSC to SC Button</i></b></p>
+<p class="p1"><b>sendLeftHandDataToSC</b> - switch (def: 0). </p>
+<p class="p1"><b>sendRightHandDataToSC</b> - switch (def: 0). </p>
+<p class="p1"><b>sendPositionToSC</b> - switch (def: 1). </p>
+<p class="p1"><b>sendPinchGrabToSC</b> - switch (def: 1). </p>
+<p class="p1"><b>sendRotationToSC</b> - switch (def: 1). </p>
+<p class="p1"><b>sendVelocityToSC</b> - switch (def: 0). </p>
+<p class="p1"><b>sendFingerDataToSC</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Outputs:</i></b></p>
+<p class="p1"><b>leftHandFingersExtended0</b></p>
+<p class="p1"><b>leftHandFingersExtended1</b></p>
+<p class="p1"><b>leftHandFingersExtended2</b></p>
+<p class="p1"><b>leftHandFingersExtended3</b></p>
+<p class="p1"><b>leftHandFingersExtended4</b></p>
+<p class="p1"><b>leftHandFingersExtended5</b></p>
+<p class="p1"><b>leftHandFound</b></p>
+<p class="p1"><b>leftHandGrab</b></p>
+<p class="p1"><b>leftHandIndexFingerExtend</b></p>
+<p class="p1"><b>leftHandIndexFingerPosX</b></p>
+<p class="p1"><b>leftHandIndexFingerPosY</b></p>
+<p class="p1"><b>leftHandIndexFingerPosZ</b></p>
+<p class="p1"><b>leftHandMiddleFingerExtend</b></p>
+<p class="p1"><b>leftHandMiddleFingerPosX</b></p>
+<p class="p1"><b>leftHandMiddleFingerPosY</b></p>
+<p class="p1"><b>leftHandMiddleFingerPosZ</b></p>
+<p class="p1"><b>leftHandPalmPosX</b></p>
+<p class="p1"><b>leftHandPalmPosY</b></p>
+<p class="p1"><b>leftHandPalmPosZ</b></p>
+<p class="p1"><b>leftHandPalmRotX</b></p>
+<p class="p1"><b>leftHandPalmRotY</b></p>
+<p class="p1"><b>leftHandPalmRotZ</b></p>
+<p class="p1"><b>leftHandPalmVelocityX</b></p>
+<p class="p1"><b>leftHandPalmVelocityY</b></p>
+<p class="p1"><b>leftHandPalmVelocityZ</b></p>
+<p class="p1"><b>leftHandPinch</b></p>
+<p class="p1"><b>leftHandPinkyFingerExtend</b></p>
+<p class="p1"><b>leftHandPinkyFingerPosX</b></p>
+<p class="p1"><b>leftHandPinkyFingerPosY</b></p>
+<p class="p1"><b>leftHandPinkyFingerPosZ</b></p>
+<p class="p1"><b>leftHandRingFingerExtend</b></p>
+<p class="p1"><b>leftHandRingFingerPosX</b></p>
+<p class="p1"><b>leftHandRingFingerPosY</b></p>
+<p class="p1"><b>leftHandRingFingerPosZ</b></p>
+<p class="p1"><b>leftHandThumbExtend</b></p>
+<p class="p1"><b>leftHandThumbPosX</b></p>
+<p class="p1"><b>leftHandThumbPosY</b></p>
+<p class="p1"><b>leftHandThumbPosZ</b></p>
+<p class="p1"><b>rightHandFingersExtended0</b></p>
+<p class="p1"><b>rightHandFingersExtended1</b></p>
+<p class="p1"><b>rightHandFingersExtended2</b></p>
+<p class="p1"><b>rightHandFingersExtended3</b></p>
+<p class="p1"><b>rightHandFingersExtended4</b></p>
+<p class="p1"><b>rightHandFingersExtended5</b></p>
+<p class="p1"><b>rightHandFound</b></p>
+<p class="p1"><b>rightHandGrab</b></p>
+<p class="p1"><b>rightHandIndexFingerExtend</b></p>
+<p class="p1"><b>rightHandIndexFingerPosX</b></p>
+<p class="p1"><b>rightHandIndexFingerPosY</b></p>
+<p class="p1"><b>rightHandIndexFingerPosZ</b></p>
+<p class="p1"><b>rightHandMiddleFingerExtend</b></p>
+<p class="p1"><b>rightHandMiddleFingerPosX</b></p>
+<p class="p1"><b>rightHandMiddleFingerPosY</b></p>
+<p class="p1"><b>rightHandMiddleFingerPosZ</b></p>
+<p class="p1"><b>rightHandPalmPosX</b></p>
+<p class="p1"><b>rightHandPalmPosY</b></p>
+<p class="p1"><b>rightHandPalmPosZ</b></p>
+<p class="p1"><b>rightHandPalmRotX</b></p>
+<p class="p1"><b>rightHandPalmRotY</b></p>
+<p class="p1"><b>rightHandPalmRotZ</b></p>
+<p class="p1"><b>rightHandPalmVelocityX</b></p>
+<p class="p1"><b>rightHandPalmVelocityY</b></p>
+<p class="p1"><b>rightHandPalmVelocityZ</b></p>
+<p class="p1"><b>rightHandPinch</b></p>
+<p class="p1"><b>rightHandPinkyFingerExtend</b></p>
+<p class="p1"><b>rightHandPinkyFingerPosX</b></p>
+<p class="p1"><b>rightHandPinkyFingerPosY</b></p>
+<p class="p1"><b>rightHandPinkyFingerPosZ</b></p>
+<p class="p1"><b>rightHandRingFingerExtend</b></p>
+<p class="p1"><b>rightHandRingFingerPosX</b></p>
+<p class="p1"><b>rightHandRingFingerPosY</b></p>
+<p class="p1"><b>rightHandRingFingerPosZ</b></p>
+<p class="p1"><b>rightHandThumbExtend</b></p>
+<p class="p1"><b>rightHandThumbPosX</b></p>
+<p class="p1"><b>rightHandThumbPosY</b></p>
+<p class="p1"><b>rightHandThumbPosZ</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>active</b></p>
+<p class="p1"><b>handMode</b></p>
+<p class="p1"><b>swapHands</b></p>
+<p class="p1"><b>getFingerData</b></p>
+<p class="p1"><b>stabilizePalmPosition</b></p>
+<p class="p1"><b>positionSmoothTime</b></p>
+<p class="p1"><b>rotationSmoothTime</b></p>
+<p class="p1"><b>velocitySmoothTime</b></p>
+<p class="p1"><b>velocityScaling</b></p>
+<p class="p1"><b>palmPositionCentreBias</b></p>
+<p class="p1"><b>palmRotationCentreBias</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

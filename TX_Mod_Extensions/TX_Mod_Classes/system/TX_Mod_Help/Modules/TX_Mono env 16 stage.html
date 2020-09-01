@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font: 15.0px Helvetica; font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Mono env</b></span><span class="s1"><b> 16 stage</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Control Source (triggered)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module creates a </span><span class="s1">mono </span><span class="s1">16-stage envelope as a control signal. </span></p>
+<p class="p1"><span class="s1">It can be triggered in various ways such as by modulation of the gate input, by other modules (such as an <b>Action Sequencer</b>) or by action buttons on an interface screen. </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>No. Stages</b> - the total number of stages in the envelope (3-16) </span></p>
+<p class="p1"><span class="s1"><b>Trigger Envelope</b> - this will trigger an envelope for 1 second whenever it is pressed.</span></p>
+<p class="p1"><span class="s1"><b>Loop stage</b> - which stage the loop stages - this is only relevant when the envelope type is "Sustain Looped".</span></p>
+<p class="p1"><span class="s1"><b>Release stage</b> - which stage the release part of the envelope begins from - this is only relevant when the envelope type is "Sustain Looped" or "Sustain Unlooped".</span></p>
+<p class="p1"><span class="s1"><b>Env. Type</b> - this can be "sustain looped", "sustain unlooped" or "fixed length". A "sustain looped" envelope will keep looping from the release stage to the loop stage until the end of the gate. A "sustain unlooped" envelope will remain at the release stage level until the end of the gate. A "fixed length" envelope will play through all its stages according to the stage times.</span></p>
+<p class="p1"><span class="s1"><b>Envelope display box</b> - this shows each stage of the envelope by level (up-down) and time (left-right). The stages can be moved by dragging them with a mouse. </span></p>
+<p class="p1"><b>Levels/Times/Curves</b> - settings for each stage.<br>
+Curve types are: Linear, Exponential, Sine, Welch, Step, Slope +10, Slope +9, ... Slope -9, Slope -10</p>
+<p class="p1"><span class="s1"><b>Total Time</b> - for the whole envelope. </span></p>
+<p class="p1"><b>Use Curve 1 for all stages</b> - to use one curve for the whole envelope. </p>
+<p class="p1"><span class="s1"><b>Level scale</b> - scales the level of the curve.</span></p>
+<p class="p1"><span class="s1"><b>Gate</b> - sets the gate to trigger or stop the envelope.</span></p>
+<p class="p1"><span class="s1"><b>Gate Mode </b>- This controls how the gate affects the envelope .</span></p>
+<p class="p1"><span class="s1"><i>“Fixed length”</i> means the gate will start the envelope and it will play its whole length. The final envelope value will be left at whatever value is at the end of the curve.</span></p>
+<p class="p1"><span class="s1"><i> “Forced release” </i>means the gate will start the envelope and it will play its whole length or, if the gate is turned off before then, it will fade the curve to its minimum value using <b>Close time</b> as the fade out time. </span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Gate</b></span></p>
+<p class="p1"><span class="s1"><b>Gate close time</b></span></p>
+<p class="p1"><span class="s1"><b>Level scale</b></span></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Output Busses:</i></b></p>
+<p class="p1"><b>Env Out</b> - the envelope signal</p>
+<p class="p1"><b>Env End Trig</b> - outputs a trigger when the envelope ends</p>
+<p class="p1"><br></p>
+</body>
+</html>

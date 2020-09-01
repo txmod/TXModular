@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Vowel Morph</b></p>
+<p class="p1"><br>
+</p>
+<p class="p1"><b>Module type: Audio Source (mono output)</b></p>
+<p class="p1"><br>
+</p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module generates a mono audio signal based on Vowel sounds. </p>
+<p class="p1">It can morph between 2-5 Vowel presets, where 5 formants create the character of each vowel preset, either by directly synthesising the formants, or by filtering a source waveform (using 5 band-pass filters).</p>
+<p class="p1">Different source sounds are available which change the character of the overall sound. If Formant is chosen, the character is most like a human voice. Other pitched or noisy waveforms give very different characters, depending on the mix of frequencies they contain.</p>
+<p class="p1">An external input is available for using this module as a vowel filter, which adds the vowel character to a signal sent to it from another module.</p>
+<p class="p1">There are 5 buttons for Vowel settings (Vowel 1-5) which can be set to create different Vowel presets. Then you can morph between 2-5 Vowel presets using the morph controls, and the morph can also be modulated.</p>
+<p class="p1"><br>
+</p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Output </b>- sets the outputs to use the Vowel Morph settings or else Solo one of the Vowel presets 1-5. In normal use, it should be set to <b><i>Vowel Morph</i></b>. The others choices are only used when changing the settings for a particular Vowel preset.</p>
+<p class="p1"><b>Source sound</b> - select between different source sounds including formant, external input, and various noise and pitched waveforms. <br>
+<b><i>Note:</i></b> For noise waveforms or external input, Frequency and Smoothing aren't relevant and will be ignored.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Vowel Morph button</b></p>
+<p class="p1"><b>Morph Type</b> - select between different types of morph, 2-D or Linear, using 2 to 5 Vowel presets.</p>
+<p class="p1"><b>Morph X-Y / Morph X</b> - depending on the Morph Type chosen either a 2D slider or a normal slider will be displayed for morphing between different Vowel presets.</p>
+<p class="p1"><b>Out Level</b> - sets the output level of the module.</p>
+<p class="p1"><b>Amp Comp</b> - select a preset for the type of amplitude compensation to use - see help file <A href="TX_Amp Comp.html">Amp Comp<A> for details. Can be set to off when not needed.</p>
+<p class="p1"><br>
+</p>
+<p class="p1"><b>Vowel 1/2/3/4/5 buttons</b></p>
+<p class="p1">Settings for each of the 5 formants:</p>
+<p class="p1"><b>Frequency</b> - the centre or cut-off frequency of each formant. </p>
+<p class="p1"><b>Width</b> - the bandwith in cycles per second (cps), which is how focussed the formant is around the centre frequency.</p>
+<p class="p1"><b>Gain</b> - the formant level (in db).</p>
+<p class="p1"><b>Presets</b> - choose between various vowel presets.</p>
+<p class="p1"><b>Load</b> - loads the vowel preset.</p>
+<p class="p1"><b>Out Level</b> - sets the output level of the module.</p>
+<p class="p1"><b>Amp Comp</b> - select a preset for the type of amplitude compensation to use - see help file <A href="TX_Amp Comp.html">Amp Comp<A> for details. Can be set to off when not needed.</p>
+<p class="p1"><br>
+</p>
+<p class="p1"><b>Frequency button</b></p>
+<p class="p1"><b>Frequency</b> - sets the pitch or frequency of the source sound waveform (not relevant for noise waveforms or external input).</p>
+<p class="p1"><b>notes</b> - this popup allows you to select a MIDI note name (e.g. D3) to set the frequency.</p>
+<p class="p1"><b>OFF/ON Use note list instead of variable frequency </b>- if set on, this uses a specific note list which the waveform's frequency is chosen from. The controls below allow you to specify which notes will be in the note list.</p>
+<p class="p1"><b>Scale type </b>- sets the interval, scale, mode or chord used for the note list.</p>
+<p class="p1"><b>Key / root </b>- sets the key or root of the above scale.</p>
+<p class="p1"><b>Note range </b>- sets the min and max of notes in the note list using MIDI note numbers.</p>
+<p class="p1"><b>Note count </b>- shows the total number of notes in the current note list.</p>
+<p class="p1"><b>Note select </b>- this slider selects one of the notes in the current note list. The lowest note is with the slider set to 0, with the highest at 1, and all others in between. The more notes there are in the note list, the more closely they will be packed along the length of the slider. This can be modulated.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Freq Smoothing button</b></p>
+<p class="p1">This allows you to add smoothing to the frequency parameter (not relevant for noise waveforms or external input).</p>
+<p class="p1">See help file <a href="file:../Modules/TX_Smooth.html">Smooth</a></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>External Input</b> - mono audio signal which can be used as the source sound.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Frequency</b> </p>
+<p class="p1"><b>Note select</b> </p>
+<p class="p1"><b>Smoothtime 1</b> </p>
+<p class="p1"><b>Smoothtime 2</b> </p>
+<p class="p1"><b>Morph X</b> </p>
+<p class="p1"><b>Morph Y</b> </p>
+<p class="p1"><b>Out Level</b> </p>
+<p class="p1"><br>
+</p>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica}
+    span.s1 {font-kerning: none}
+    span.s2 {font-kerning: none; color: #000000}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>MultiTrack Seq</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Action</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module can be used to record, edit, and play back multiple Controller and Note Tracks to control parameters of other modules or send them note triggers. </span></p>
+<p class="p1"><span class="s1">Each track can record from MIDI input and have up to 6 output modules, as well as MIDI output.</span></p>
+<p class="p1"><span class="s1">Controller Tracks can also record direct input - from a slider, for example on the interface, or from one of 16 available modulation inputs. </span></p>
+<p class="p1"><span class="s1">Note tracks can send output to polyphonic source modules, such as synths or polyphonic envelopes.</span></p>
+<p class="p1"><span class="s1">Basic MIDI file import/export is available with BPM on a separate tempo track, although time signature changes in MIDI files are ignored when importing.</span></p>
+<p class="p1"><span class="s1">There are several examples that come with TX Modular system which show various ways to use the MultiTrack Sequencer <br>
+<i>(see TX_Mod_Examples/Specific_examples/MultTrackSeq...)</i>.</span></p>
+<p class="p1">Other  help that might be useful: <a href="../TX_Modulation_Vs_Automation.html">Modulation Vs Automation</a></p>
+<p class="p1"><span class="s1"><br>
+<br>
+<b><i>Global Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Rewind </b>- sets the current <b>Time</b> position to be at the start position.</span></p>
+<p class="p1"><span class="s1"><b>Play </b>- button to start the sequencer <b>playing</b> from the current <b>Time</b> position.</span></p>
+<p class="p1"><span class="s1"><b>Stop</b> - button to stop the sequencer. </span></p>
+<p class="p1"><span class="s1"><b>Record</b> - button to start the sequencer <b>recording</b> from the current <b>Time</b> position. Only tracks with Record set on will record.</span></p>
+<p class="p1"><span class="s1"><b>Sync Start</b> - this checkbox sets whether the sequencer will be started when the "Sync Start" button is pressed. The "Sync Start" button, at the top of the main screen, is used to start multiple modules at the same time.</span></p>
+<p class="p1"><span class="s1"><b>Sync Stop</b> - this checkbox sets whether the sequencer will be stopped when the "Sync Stop" button is pressed. The "Sync Stop" button, at the top of the main screen, is used to stop multiple modules at the same time.</span></p>
+<p class="p1"><span class="s1"><b>Mute all tracks</b> - this will not stop a sequencer if it is running, just temporarily mute all the tracks.<br>
+—</span></p>
+<p class="p1"><span class="s1"><b>Track</b> popup - select whether to show all tracks or edit a single track</span></p>
+<p class="p1"><span class="s1"><b>All Tracks</b> button - quick way to show all tracks</span></p>
+<p class="p1"><span class="s1"><b>Add Note</b> <b>Track </b>button - </span></p>
+<p class="p1"><span class="s1"><b>Add Controller</b> <b>Track </b>button - </span></p>
+<p class="p1"><span class="s1"><b>BPM</b> - sets the tempo in beats per minute. </span></p>
+<p class="p1"><span class="s1"><b>Beats per bar</b>  </span></p>
+<p class="p1"><span class="s1"><b>Tap tempo button</b> - this displays measures the tempo when it is clicked with a mouse on each beat. Use the Command (Apple) key with a mouse drag to copy the BPM to the sequencer BPM.</span></p>
+<p class="p1"><span class="s1"><b>Auto copy </b>- when set on, this automatically copies the tap tempo to the sequencer BPM as long as the tap tempo is within the min-max range of BPM values.</span></p>
+<p class="p1"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b>Play From Start</b> checkbox - when on this forces playback to start from the start position</span></p>
+<p class="p1"><span class="s1"><b>Start</b> &amp; <b>Stop</b> positions, shown as <b>bars</b> : <b>beats</b></span></p>
+<p class="p1"><span class="s1"><b>Selection Start</b> &amp; <b>End</b> positions, shown as <b>bars</b> : <b>beats</b> - the selected area is shown as a yellow box on the timeline and in all selected tracks</span></p>
+<p class="p1"><span class="s1"><b>Loop</b> checkbox, <b>Loop Start</b> &amp; <b>End</b> positions, shown as <b>bars</b> : <b>beats</b> - the looped area of the timeline is shown as a green line. If the loop is on, the green line is thicker and the word “Loop” will appear at the start of the loop.<br>
+<br>
+</span></p>
+<p class="p1"><span class="s1"><br>
+<b><i>Track Controls:</i></b><br>
+- there are 3 main views of Tracks:</span></p>
+<p class="p1"><span class="s1">- <b>Multi-Track Edit</b> - shows multiple tracks on the timeline. You have the ability to set many track properties here an run processes such as copying, cutting, pasting, multiple tracks.</span></p>
+<p class="p1"><span class="s1">- <b>Note Track Edit</b> - shows a single track on the timeline. notes are shown on a frequency grid with note velocity optionally shown below</span></p>
+<p class="p1"><span class="s1">- <b>Controller Track Edit</b> - shows a single track on the timeline. controller values are shown as connected points on a grid</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><br>
+<b><i>Multi-Track Edit Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Snap To Grid</b> checkbox - this affects timeline selection </span></p>
+<p class="p1"><span class="s1"><b>Snap beats - </b>if <b>Snap To Grid </b>is on this sets the grid resolution</span></p>
+<p class="p1"><span class="s1"><b>Bars</b> - sets the range of bars that are displayed</span></p>
+<p class="p1"><span class="s1"><b>Max</b> button - zoom out to display the maximum no of bars</span></p>
+<p class="p1"><span class="s1"><b>Max </b>number box - sets the maximum no of bars that will be displayed</span></p>
+<p class="p1"><span class="s1"><b>Time</b> - current time position, shown as <b>bars</b> : <b>beats</b>. A red line is shown on the timeline and in all tracks at the current time position. This moves during recording &amp; playback.</span></p>
+<p class="p1"><span class="s1"><b>&lt; &gt;</b> - Skips to previous or next marker - a quick way to move around the timeline</span></p>
+<p class="p1"><span class="s1"><b>Add Marker</b> - A marker is added at the current time. To name a marker, type the name in the white box to right before adding it.</span></p>
+<p class="p1"><span class="s1"><b>Del</b> - deletes a marker (if it exists) at the current time position</span></p>
+<p class="p1"><span class="s1"><b>Timeline ruler</b> - this shows numbered bars with thick lines and individual beats with thin lines. Clicking on on the Timeline with<b> <i>modifier keys</i></b> works as follows:</span></p>
+<p class="p1"><span class="s1"><b><i>click</i></b> to set <b>play</b> position, <b><i>shift drag</i></b> to change <b>selection</b> boundaries, &amp; <b><i>command drag</i></b> to change <b>loop</b> boundaries</span></p>
+<p class="p1"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b>Select All</b> - turns select on in all tracks</span></p>
+<p class="p1"><span class="s1"><b>Unselect All</b> - turns select off in all tracks</span></p>
+<p class="p1"><span class="s1"><b>Mute All</b> - turns mute on in all tracks</span></p>
+<p class="p1"><span class="s1"><b>Unmute All</b> - turns mute off in all tracks</span></p>
+<p class="p1"><span class="s1"><b>Unhide All</b> - all hidden tracks will be expanded tracks</span></p>
+<p class="p1"><span class="s1"><b>Markers ruler</b> - this shows each marker with a line at the time, either named or as bars &amp; beats.</span></p>
+<p class="p1"><span class="s1">Markers can be dragged forwards or backwards in time.</span></p>
+<p class="p2"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b><i>Individual Track Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>- / +</b> - <b>track hide/ unhide</b> - this small button make a track hidden so it appears only as a thin grey line </span></p>
+<p class="p1"><span class="s1"><b>Track Position</b> popup - shows a track’s position in the track order (e.g. “Tr 3”) - to move the track, select a new position from the list</span></p>
+<p class="p1"><span class="s1"><b>Track Name</b> - text box to add name</span></p>
+<p class="p1"><span class="s1"><b>Track Type &amp; ID</b> - shows the track type - note or controller - and an ID that is fixed (unlike the track position which can change)</span></p>
+<p class="p1"><span class="s1"><b>Edit</b> - changes the window to <b>edit</b> a particular track</span></p>
+<p class="p1"><span class="s1"><b>Del</b> - this will <b>delete</b> the track. This cannot be undone. </span></p>
+<p class="p1"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b>Sel</b> - sets whether the track is <b>selected</b> - lots of processes only affect selected tracks</span></p>
+<p class="p1"><span class="s1"><b>Mon</b> - sets <b>input monitoring</b> on/off for the track</span></p>
+<p class="p1"><span class="s1"><b>Rec</b> - sets <b>record mode</b> on/off for the track</span></p>
+<p class="p1"><span class="s1"><b>Offset</b> - this is a timing offset for the track, shown in beats</span></p>
+<p class="p1"><span class="s1"><b>Mute</b> - if a track is muted, the recorded material on the track won’t be output</span></p>
+<p class="p1"><span class="s1"><b>Dup</b> - this makes a duplicate copy of the the track, both settings and recorded data and places it directly below in the track order</span></p>
+<p class="p1"><span class="s1"><b>Track Data</b> - along the timeline, notes are shown as coloured lines, and controller data as a shaded graph - darker below the controller value, white above it.</span></p>
+<p class="p1"><span class="s1">— </span></p>
+<p class="p2"><span class="s1"><b><i>MultiTrack Process Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Process</b> - select a process and any required controls will appear to the right. Some processes require tracks to be selected first.</span></p>
+<p class="p1"><span class="s1"><b>Run Process</b> - runs the selected process</span></p>
+<p class="p1"><span class="s1">Multitrack processes include:</span></p>
+<p class="p1"><span class="s1"><b>Copy</b>, <b>Cut</b>, <b>Past</b>, <b>Undo</b>, <b>Redo</b>, <b>Interpolation,</b></span></p>
+<p class="p1"><span class="s1"><b>MIDI File Import</b> - tempo changes will be imported into a track called “<b>tempo track</b>”. For this to have an effect, the track output must be connected to the multitrack’s BPM</span></p>
+<p class="p1"><span class="s1"><b>MIDI File Export</b> - if a controller track is named “<b>tempo track</b>”, it won’t be made into a controller track but will be used to control the tempo of the exported MIDI file. <br>
+<br>
+</span></p>
+<p class="p1"><span class="s1"><br>
+<b><i>Note Track Edit Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Inputs &amp; Outputs </b>button - this shows controls for setting inputs &amp; outputs. </span></p>
+<p class="p1"><span class="s1"><i>Note:</i> Note tracks can only use MIDI as their input source.To be able to record another sequencer module within the TX Modular, set it’s output to MIDI loopback to bring the MIDI data back in. Then set the recording track to listen to the correct MIDI input channel.</span></p>
+<p class="p1"><span class="s1"><b>MIDI Learn</b> - automatically selects the Midi Channel based on incoming MIDI data. </span></p>
+<p class="p1"><span class="s1"><b>MIDI Channels</b> - which MIDI channels the track will listen to (1-16). </span></p>
+<p class="p1"><span class="s1"><b>Velocity Scale</b> - multiplies the output note velocities (default 1)</span></p>
+<p class="p2"><span class="s1"><b>Transpose</b> - transposes the track output, shown in semitones (default 0)</span></p>
+<p class="p2"><span class="s1"><b>Active</b> - to activate specific outputs</span></p>
+<p class="p1"><span class="s2"><b>Output Module 1..6 </b>&amp;<b> Parameter</b></span><span class="s1"><b> </b>- up to 6 output modules can be triggered. Only polyphonic modules can be triggered, such as wave synths, samplers, or envelopes. All valid modules will appear in the modules list.</span></p>
+<p class="p1"><span class="s1"><b>MIDI Output Port </b>- select from available ports</span></p>
+<p class="p1"><span class="s1"><b>MIDI Loop-Back </b>- sends MIDI notes back into the TX Modular system on the selected channel, so other modules can respond. </span></p>
+<p class="p1"><span class="s1"><i>Note: </i>Take care not to output MIDI loop-back to a channel that the module itself is listening to - otherwise the system will <b>crash</b> with a MIDI feedback loop!</span></p>
+<p class="p1"><span class="s1"><b>MIDI Channel</b> - output channel (1-16).</span></p>
+<p class="p1"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b>Draw Notes </b>button - this shows all notes on a grid, with an optional velocity track below it. </span></p>
+<p class="p1"><span class="s1">To add a note, click in the grid at the start of the note and drag to the right to set the note length. Dragging up or down will change the velocity of the note, which is also represented by the colour of the note. </span></p>
+<p class="p1"><span class="s1">If the velocity track is shown, once you have drawn a note, you can drag the black dot at the top of the velocity line to change it. </span></p>
+<p class="p1"><span class="s1">Various <b>Snap grid</b> controls are taken into account when drawing or editing. They are specific for <i>each track</i> in the sequencer.</span></p>
+<p class="p1"><span class="s1">In the yellow box below the velocity track, note and velocity values are shown.Velocity is given as a % (range 0-100), with MIDI velocity (range 0-127) shown in brackets.</span></p>
+<p class="p1"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b>Edit Notes </b>button - this looks similar to <b>Draw Notes</b> but with more controls. In this view you can select multiple notes and run processes on them (Copy, Cut, Paste, etc.). </span></p>
+<p class="p1"><span class="s1">To select notes, you can drag over notes in the note grid, or in the velocity track, or if the <b>auto select</b> checkbox is on (located above the MIDI keyboard graphic), by <i>shift-dragging</i> in the Timeline Ruler. Use shift and drag to add notes to the current selection.</span></p>
+<p class="p1"><span class="s1">If only a single note is selected, all the note properties (MIDI note, start/end position, velocity %) are shown in editable boxes below the velocity track for precise editing.</span></p>
+<p class="p1"><span class="s1">Selected notes can be altered by dragging the start position line, end position line, or main body of the note. </span></p>
+<p class="p1"><span class="s1">If the velocity track is shown, dragging the black dot at the top of the velocity line will change it. If many notes are selected, they will be scaled proportionately when changing velocities.</span></p>
+<p class="p1"><span class="s1"><b>Process</b> - select a process and any required controls will appear to the right. </span></p>
+<p class="p1"><span class="s1"><b>Run Process</b> - runs the selected process<br>
+</span><span class="s2"><br>
+</span></p>
+<p class="p1"><span class="s1"><br>
+<b><i>Controller Track Edit Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Inputs &amp; Outputs </b>button - this shows controls for setting inputs &amp; outputs. A controller track’s input can be <b>MIDI controller </b>or<b> pitch bend </b>data, one of 16 <b>modulation inputs</b> (for example for recording the output of an LFO module), or a <b>direct input</b> slider or number box (which could for example be controlled by a front interface slider).</span></p>
+<p class="p1"><span class="s1"><i>Note:</i> if a <b>modulation input</b> is used, a popup for “<b>MultiTrack Modulation Sample Rate</b>” appears. This setting will affect <b><i>all</i></b> tracks that are using modulation inputs in the current MultiTrack<b> </b>module.</span></p>
+<p class="p3"><span class="s1"><b>Active</b> - to activate specific outputs</span></p>
+<p class="p1"><span class="s1"><b>Output Module 1..6 </b>&amp;<b> Parameter </b>- up to 6 output module parameters can be used.</span></p>
+<p class="p1"><span class="s1"><b>MIDI Output Port </b>- select from available ports</span></p>
+<p class="p1"><span class="s1"><b>MIDI Loop-Back </b>- sends MIDI data back into the TX Modular system on the selected channel, so other modules can respond. </span></p>
+<p class="p1"><span class="s1"><i><b>Note: </b>Take care not to output MIDI loop-back to a channel that the module itself is monitoring - otherwise the system will <b>crash</b> with a MIDI feedback loop!</i></span></p>
+<p class="p1"><span class="s1"><b>MIDI Channel</b> - output channel (1-16).</span></p>
+<p class="p1"><span class="s1"><b>MIDI Controller</b> - output controller number (0-127).</span></p>
+<p class="p1"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b>Draw Points </b>button - this shows all controller values as a connected line of points on a grid. The area below the line is shaded. </span></p>
+<p class="p1"><span class="s1">The left edge of the grid shows minimum &amp; maximum values as well as quantise steps as text.  </span></p>
+<p class="p1"><span class="s1">If Output Parameter 1 has been assigned (see Inputs &amp; Outputs button), the equivalent value of that parameter is also shown on the left (i.e. some parameters have values that aren’t in the range 0-1, so they will be shown mapped to their relevant range).</span></p>
+<p class="p1"><span class="s1">Various <b>Snap grid</b> controls are taken into account when drawing or editing. They are specific for <i>each track</i> in the sequencer.</span></p>
+<p class="p1"><span class="s1">There are range (= zoom) controls for bars displayed and controller values displayed above and to the right of the grid.</span></p>
+<p class="p1"><span class="s1"><b>Quantise Value</b> - if set on, all drawn values will be quantised based on the value of <b>Quantise Steps.</b></span></p>
+<p class="p1"><span class="s1"><b>Mouse drag draws multiple points</b> - if set off, a single point will be drawn at the final mouse position at the end of the drag. This makes it easier for fine control of a single point’s position.</span></p>
+<p class="p1"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b>Draw Lines </b>button - similar to <b>Draw Points</b>, this is for drawing lines or curves with a specific shape.</span></p>
+<p class="p1"><span class="s1"><b>Line Shape</b> - various curve shapes can be selected.</span></p>
+<p class="p1"><span class="s1">—</span></p>
+<p class="p1"><span class="s1"><b>Edit Selection</b> button - select multiple controller values and run processes on them (Copy, Cut, Paste, etc.). </span></p>
+<p class="p1"><span class="s1">To select controller values, you can drag over points in the grid or <i>shift-drag</i> in the Timeline Ruler. Use shift and drag to add to the current selection.</span></p>
+<p class="p1"><span class="s1">If only a single value is selected, all the event properties (time position, value, &amp; output 1 value) are shown in editable boxes below the grid for precise editing.</span></p>
+<p class="p1"><span class="s1"><b>Process</b> - select a process and any required controls will appear to the right. </span></p>
+<p class="p1"><span class="s1"><b>Run Process</b> - runs the selected process<br>
+</span></p>
+<p class="p1"><span class="s1"><br>
+<b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Modulation 1…16</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>

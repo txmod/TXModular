@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 13.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+    span.Apple-tab-span {white-space:pre}
+  </style>
+</head>
+<body>
+<p class="p1">// Copyright (C) 2010 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).</p>
+<p class="p2"><b></b><br></p>
+<p class="p3"><b>What is OSC?</b></p>
+<p class="p3">"OpenSound Control ('OSC') is a protocol for communication among computers, sound synthesizers, and other multimedia devices that is optimized for modern networking technology and has been used in many application areas." </p>
+<p class="p3">[<i>quote</i> <i>from </i>http://www.cnmat.berkeley.edu/OpenSoundControl/].</p>
+<p class="p2"><br></p>
+<p class="p3"><b>OSC messages</b></p>
+<p class="p3">OSC messages, like MIDI messages, can be used to send note, controller or other data that can be used to interact with other software and other people. This allows for the possibility of networked group instruments where messages flow around the network between different people using different hardware/software. You can communicate with any IP address on the Internet.</p>
+<p class="p3">- To confirm the IP Address of the computer being sent to, search onlline for "What is my ip address". To check the IP address on an Airport network, go to: System Preferences - Network - Airport - Advanced - TCP/IP - IPv4 Address.</p>
+<p class="p3">- To see which Port the TX Modular System is currently using, go to the <b>Notes &amp; Options</b> screen, see button near the top of the screen.</p>
+<p class="p2"><br></p>
+<p class="p3"><b>OSC in the TX Modular System</b></p>
+<p class="p3">OSC messages are sent across a network. </p>
+<p class="p3">(N.B. On Macs, to create local airport network on one computer which other computers can connect to: click on the Airport icon, make sure it is turned on, then select Create Network.)</p>
+<p class="p3">To use OSC in the TX Modular system:</p>
+<p class="p3">- Send OSC messages using the <b>OSC Out</b> and <b>OSC Control Out</b> modules </p>
+<p class="p3">- Trigger actions from received single OSC messages using the <b>OSC Trigger</b> &amp; <b>OSC Remote </b>modules.</p>
+<p class="p3">- Receive OSC messages as control signals using the <b>OSC Controller</b> module</p>
+<p class="p3">(<i>See help files:<A href="Modules/TX_OSC Controller.html">OSC Controller<A>
+<A href="Modules/TX_OSC Control 2D.html">OSC Control 2D<A>
+<A href="Modules/TX_OSC Control Out.html">OSC Control Out<A>
+<A href="Modules/TX_OSC Out.html">OSC Out<A>
+<A href="Modules/TX_OSC Remote.html">OSC Remote<A>
+<A href="Modules/TX_OSC Trigger.html">OSC Trigger<A>
+).</p>
+<p class="p2"><br></p>
+<p class="p3"><b>Note</b> - when sending OSC messages to the TX Modular system, the Port usually needs to be set to <b>57120</b>. (<i>NB:</i> to see which Port the TX Modular System is currently using, go to the Notes &amp; Options screen). When sending OSC to other software, such as Processing, you need to check what Port is used by that software.</p>
+<p class="p2"><br></p>
+<p class="p3"><b>Other OSC software &amp; hardware</b></p>
+<p class="p3">There are now lots of pieces of software that can send or receive OSC messages, such as Processing, Reaktor &amp; MAX/MSP/Jitter. Also, some hardware can now send or receive OSC - e.g. iPad, iPhone, Android devices, Monome. </p>
+<p class="p2"><br></p>
+<p class="p3"><b><i>- For more details on OSC see:</i></b></p>
+<p class="p3"><b><span class="Apple-tab-span">	</span>http://www.cnmat.berkeley.edu/OpenSoundControl/</b></p>
+<p class="p3"><b><span class="Apple-tab-span">	</span>http://opensoundcontrol.org/ </b></p>
+<p class="p3"><b><span class="Apple-tab-span">	</span>http://en.wikipedia.org/wiki/OpenSound_Control</b></p>
+<p class="p2"><br></p>
+<p class="p3"><b><i>- Also see files</i></b>: <b>OSCMaster </b>&amp;<b> OSCSlave in TX Mod Examples folder</b></p>
+<p class="p2"><br></p>
+</body>
+</html>

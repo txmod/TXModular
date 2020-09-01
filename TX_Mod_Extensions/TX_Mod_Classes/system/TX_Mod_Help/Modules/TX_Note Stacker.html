@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Note Stacker</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type:<span class="Apple-converted-space">  </span>Action</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This triggered module makes no sound itself but instead triggers notes in other polyphonic modules, with the option of modifying the pitch or velocity of the notes for various effects.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1">Up to 18 different modules can be triggered, arranged in 6 layers each with 3 output modules.</span></p>
+<p class="p1"><span class="s1">The modules on a layer can be played together, rotated each time the layers is played, or randomly chosen.</span></p>
+<p class="p1"><span class="s1">Each layer has curves for modifying the overall velocity response, as well as individual note level and tuning for each note across the keyboard range.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1">It allows many kinds of instruments to be designed, for example:</span></p>
+<p class="p1"><span class="s1">- detuning multiple layers to create rich, evolving tones.</span></p>
+<p class="p1"><span class="s1">- velocity cross-fading between layers (e.g. to trigger different drum samples for different velocity ranges, or to use distorted waveforms on louder notes - see the Curve Auto-Build controls below)</span></p>
+<p class="p1"><span class="s1">- multiple keyboard zones which each trigger different output modules (e.g. a plucked bass zone and a lead synth zone).</span></p>
+<p class="p1"><span class="s1">- complex multi-timbral instruments which have a range of different characters depending on the pitch and velocity of the note played.</span></p>
+<p class="p1"><span class="s1">- hybrid instruments (e.g. stacked drums, multi-tone organs, or "prepared" instruments).</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>MIDI/Outputs button</b></span></p>
+<p class="p1"><span class="s1"><b>Midi Listen</b> - this allows the module to be triggered by midi Notes, and to respond to midi Pitchbend and midi Sustain Pedal (controller no. 64) messages.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Midi Chan.</b> - set the midi channels the module will listen to.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Output Modules and triggering type for each layer:</b></span></p>
+<p class="p1"><span class="s1"><b>Layer 1/2/3/4/5/6 Outs</b> - 3 polyphonic source modules, such as wave synths, samplers, or envelopes, All valid modules will appear in the modules list. See the <a href="file:../TX_0%20TX%20Modular%20Help.html"><span class="s3">Help Index</span></a> for details of which modules are polyphonic.</span></p>
+<p class="p1"><span class="s1">N.B. If Midi Listen is turned on make sure none of the individual output modules has their Midi Listen turned on, or there will be double triggering.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Trigger type </b>- can be one of the following options:<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><i>trigger nothing - layer disabled/ trigger all output modules (default)/ trigger a random output module/ rotate trigger between outputs</i></span></p>
+<p class="p1"><span class="s1"><b>Midi keyboard</b>- this can be played by clicking with a mouse. It will trigger <i>all </i>layers of the note stacker module. The midi velocity of the note played is set by the Velocity slider. Middle C is tinted red.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Velocity Curve button</b></span></p>
+<p class="p1"><span class="s1"><b>Layer 1/2/3/4/5/6 </b>- buttons to set which layer is being edited</span></p>
+<p class="p1"><span class="s1"><b>Layer 1/2/3/4/5/6 Outs</b> - as above</span></p>
+<p class="p1"><span class="s1"><b>Trigger type </b>- as above</span></p>
+<p class="p1"><span class="s1"><b>Vel curve</b> - sets a transfer curve which maps the input velocity to new output velocity. See the preset curves for examples.</span></p>
+<p class="p1"><span class="s1">See help file <a href="../TX_Curve%20Editing.html"><span class="s1">Curve Editing</span></a> for details.</span></p>
+<p class="p1"><span class="s1"><b>Grid rows</b> - no of rows (1-99) separated by white lines in the grid behind the curve.</span></p>
+<p class="p1"><span class="s1"><b>Grid cols</b> - no of columns (1-99) separated by white lines in the grid behind the curve.</span></p>
+<p class="p1"><span class="s1"><b>Random velocity mix</b> - sets the amount of random variation of the velocity for every note played.</span></p>
+<p class="p1"><span class="s1"><b>Curve Auto-Build:</b> - this row of controls is for spreading a velocity curve across multiple layers, with a settable cross-fade between layers.</span></p>
+<p class="p1"><span class="s1"><b>Target </b>- the overall velocity curve that is going to spread across multiple layers. This can be either <i>Linear curve</i> or <i>Current Layer 1</i>. If you want to draw a custom curve, draw it in Layer 1 before using the Curve Auto-Build.</span></p>
+<p class="p1"><span class="s1"><b>Across</b> - sets the number of layers the velocity curve will be spread across.</span></p>
+<p class="p1"><span class="s1"><b>X- Fade</b> - set the amount of overlap between the velocity layers.</span></p>
+<p class="p1"><span class="s1"><b>Build now</b> - only press this when you are ready to build. The selected layers' velocity curves will be rebuilt.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Note Levels button</b></span></p>
+<p class="p1"><span class="s1"><b>Layer 1/2/3/4/5/6 </b>- buttons to set which layer is being edited</span></p>
+<p class="p1"><span class="s1"><b>Layer 1/2/3/4/5/6 Outs</b> - as above</span></p>
+<p class="p1"><span class="s1"><b>Trigger type </b>- as above</span></p>
+<p class="p1"><span class="s1"><b>Note levels</b> curve - sets the volume level for each individual note across the keyboard.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Copy curve/ Paste curve</b> - for copying between layers</span></p>
+<p class="p1"><span class="s1"><b>Smooth curve</b> - evens out spikes or sudden changes in the curve. Useful when curve is drawn by the mouse.</span></p>
+<p class="p1"><span class="s1"><b>Invert curve</b> - turns the curve upside down.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Randomise curve</b> - randomises the level of every note.</span></p>
+<p class="p1"><span class="s1"><b>Default curve</b> - sets the level of every note to maximum.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Note Detune button</b></span></p>
+<p class="p1"><span class="s1"><b>Layer 1/2/3/4/5/6 </b>- buttons to set which layer is being edited</span></p>
+<p class="p1"><span class="s1"><b>Layer 1/2/3/4/5/6 Outs</b> - as above</span></p>
+<p class="p1"><span class="s1"><b>Trigger type </b>- as above</span></p>
+<p class="p1"><span class="s1"><b>Detune range semitones +/-</b> - sets the maximum amount of detune, up to +/- 1 semitone</span></p>
+<p class="p1"><span class="s1"><b>Transpose semitones</b> - sets the amount of note tranposition for the current layer. This can be positive or negative. This is useful, for example, for doubling notes in octaves.</span></p>
+<p class="p1"><span class="s1"><b>Random detune mix</b> - sets the amount of random detune for every note played.</span></p>
+<p class="p1"><span class="s1"><b>Note detune</b> curve - sets the detune, which can be positive or negative,<span class="Apple-converted-space">  </span>for each individual note across the keyboard.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Copy curve/ Paste curve</b> - for copying between layers</span></p>
+<p class="p1"><span class="s1"><b>Smooth curve</b> - evens out spikes or sudden changes in the curve. Useful when curve is drawn by mouse.</span></p>
+<p class="p1"><span class="s1"><b>Invert curve</b> - turns the curve upside down.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Randomise curve</b> - randomises the detune of every note.</span></p>
+<p class="p1"><span class="s1"><b>Default curve</b> - sets the detune of every note to 0.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>

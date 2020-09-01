@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 13.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {font: 15.0px Helvetica; text-decoration: underline ; font-kerning: none; color: #042eee; -webkit-text-stroke: 0px #042eee}
+  </style>
+</head>
+<body>
+<p class="p2"><span class="s1">// Copyright (C) 2016 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).</span><span class="s1"></p>
+</span></p>
+<p class="p1"><span class="s1"><b>Curve Editing</b></p>
+</span></p>
+<p class="p1"><span class="s1">Several modules use curves, including: <b>Env Curve, LFO Curve, Loop Player, Warp, Warp Morph, Waveshaper, WaveshaperX</b>.</span></p>
+<p class="p1"><span class="s1">Using a mouse, click and drag to draw either freehand points or pre-selected line shapes (see controls below). </span></p>
+<p class="p1"><span class="s1">Zoom sliders allow very detailed editing of the curve.</span></p>
+<p class="p1"><span class="s1">History buttons keep the last 20 curve edits for undo/redo.</span></p>
+<p class="p1"><span class="s1"></span></p>
+<p class="p1"><span class="s1">A separate Curve Builder can also be opened for more options for manipulating curve shapes. See help file <a href="./TX_Curve%20Builder.html"><span class="s2">Curve Builder</span></a> for details.</p>
+<p class="p1"><span class="s1"><b>Note:</b> Most TX modules display their curves horizontally, though an exception is Groove curves in Loop Player modules which are shown vertically (see image on right). However, all curves will be shown horizontally if they are opened in the Curve Builder. This is to allow adequate screen space for editing multiple curves.</span></p>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>&lt; &gt;</b> - to move backwards/forwards through the curve edit history </span></p>
+<p class="p1"><span class="s1"><b>drag &amp; drop</b> - use this box to drag or drop a curve onto the clipboard or the Curve Builder. </span></p>
+<p class="p1"><span class="s1"><b>Curve Builder</b> - this button opens the current curve inside the Curve Builder, which is in a separate window.</span></p>
+<p class="p1"><span class="s1"><b>Draw Points/Lines</b> - this selects between 2 different draw modes:</span></p>
+<p class="p1"><span class="s1"><b>- Draw Points</b> is for drawing a curve freehand. </span></p>
+<p class="p1"><span class="s1"><b>- Draw Lines</b> uses preset curve shapes, or straight lines, to draw lines between mouse-down and mouse-up points. If the <b>Shift</b> button is down when the mouse button is pressed, a line is drawn from the last drawn point to the current mouse point - this allows a chain of points to be linked together.</span></p>
+<p class="p1"><span class="s1"><b>Quantise</b> [only in <b>Draw Lines</b> mode] - this gives the option of quantising the start and end points of the line using the grid behind the curve. Options are: <br>
+<b><i>quant off</i></b> - no quantising is used<br>
+<b><i>quant x+y</i></b> - quantise both to columns and rows <br>
+<b><i>quant x</i></b> - quantise to columns only <br>
+<b><i>quant y</i></b> - quantise  to rows only</span></p>
+<p class="p1"><span class="s1"><b>Shape</b> - [only in <b>Draw Lines</b> mode] - selects the line shape to draw - the default is <b><i>linear</i></b> for straight lines. </span></p>
+<p class="p1"><span class="s1"><b>Reverse</b> - reverses the curve from right to left. </span></p>
+<p class="p1"><span class="s1"><b>Invert</b> - turns the curve upside down. </span></p>
+<p class="p1"><span class="s1"><b>Smooth</b> - evens out spikes or sudden changes in the curve. Useful when curve is drawn by the mouse.</span></p>
+<p class="p1"><span class="s1"><b>Mirror</b> - <b>Rebuild curve by mirroring</b> - this button can be useful for creating symmetrical curves. The curve is mirrored at the right hand edge.</span></p>
+<p class="p1"><span class="s1"><b>Mirror+Inv</b> - <b>Rebuild curve by mirroring &amp; inverting</b> - for this button, the curve is mirrored at the right hand edge, inverted and finally the whole curve is normalised.</span></p>
+<p class="p1"><span class="s1"><b>Smooth</b> - smooths the curve by mixing values of points on the curve with their immediate neighbours on either side.</span></p>
+<p class="p1"><span class="s1"><b>Smooth 5</b> - runs a smooth 5 times</span></p>
+<p class="p1"><span class="s1"><b>Reset</b> - resets the curve to a linear curve.</span></p>
+<p class="p1"><span class="s1"><b>Zoom out</b> - zooms out to show the whole curve.</span></p>
+<p class="p1"><span class="s1"><b>Load 1/2/3/4/5</b> - to load curves stored in 5 slots.</span></p>
+<p class="p1"><span class="s1"><b>Store 1/2/3/4/5</b> - to store curves in 5 slots.</span></p>
+<p class="p1"><span class="s1"><b>Preset curves</b> - select a presets to load it.</span></p>
+<p class="p1"><span class="s1"><b>Modify curve</b> - select from the following options:</span></p>
+<p class="p1"><span class="s1"><b>- normalise</b> - scales and adjusts values in the curve so the minimum value is 0 and the maximum is 1.</span></p>
+<p class="p1"><span class="s1"><b>- double copy</b> - replaces the curve with 2 copies (at half resolution)</span></p>
+<p class="p1"><span class="s1"><b>- triple copy</b> - replaces the curve with 3 copies (at one third resolution)</span></p>
+<p class="p1"><span class="s1"><b>- phase shift 25-75%</b> - shift/rotate the curve along the X-axis.</span></p>
+</body>
+</html>

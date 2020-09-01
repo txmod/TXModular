@@ -1,31 +1,26 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXMinMaxFreqNoteSldr {
-	var <>labelView, labelView2, <>sliderView, <>numberView, <>notePopup, <>rangeView, <>minNumberView, <>maxNumberView, <>presetPopupView;
+	var <>labelView, <>labelView2, <>sliderView, <>numberView, <>notePopup, <>rangeView, <>minNumberView, <>maxNumberView, <>presetPopupView;
 	var <>controlSpec, controlSpec2, <>action, viewValue, <>round = 0.001;
 
 	// controlSpec2 is only used internally and it's min & max are decided by minNumberView & maxNumberView
 
 	*new { arg window, dimensions, label, controlSpec, action, initVal,
-			initAction=false, labelWidth=80, numberWidth = 120, arrRangePresets;
+		initAction=false, labelWidth=80, numberWidth = 120, arrRangePresets;
 		^super.new.init(window, dimensions, label, controlSpec, action, initVal,
 			initAction, labelWidth, numberWidth, arrRangePresets);
 	}
 	init { arg window, dimensions, label, argControlSpec, argAction, initVal,
-			initAction, labelWidth, numberWidth, arrRangePresets;
-		var height, spacingX, spacingY, presetWidth;
+		initAction, labelWidth, numberWidth, arrRangePresets;
+		var height, spacingX, spacingY;
 
 		if (window.class == Window, {
 			spacingX = window.view.decorator.gap.x;
 			spacingY = window.view.decorator.gap.y;
-		}, {
-			spacingX = window.decorator.gap.x;
-			spacingY = window.decorator.gap.y;
-		});
-		if (arrRangePresets.notNil, {
-			presetWidth = 16 + spacingX;
-		}, {
-			presetWidth = 0;
+			}, {
+				spacingX = window.decorator.gap.x;
+				spacingY = window.decorator.gap.y;
 		});
 		height = ( (dimensions.y - spacingY) / 2).asInteger;
 
@@ -40,6 +35,7 @@ TXMinMaxFreqNoteSldr {
 		action = argAction;
 
 		sliderView = Slider(window, (dimensions.x - labelWidth - numberWidth - (2 * spacingX)) @ height);
+		sliderView.thumbSize_(8).knobColor_(TXColour.white);
 		sliderView.action = {
 			viewValue = controlSpec2.map(sliderView.value);
 			numberView.value = viewValue.round(round);
@@ -55,12 +51,12 @@ TXMinMaxFreqNoteSldr {
 			if (numberView.value < minNumberView.value, {
 				controlSpec2.minval = numberView.value;
 				minNumberView.value = numberView.value;
-				numberView.updateSpec(controlSpec2);
+				TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			});
 			if (numberView.value > maxNumberView.value, {
 				controlSpec2.maxval = numberView.value;
 				maxNumberView.value = numberView.value;
-				numberView.updateSpec(controlSpec2);
+				TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			});
 			rangeView.lo = controlSpec.unmap(minNumberView.value);
 			rangeView.hi = controlSpec.unmap(maxNumberView.value);
@@ -70,9 +66,9 @@ TXMinMaxFreqNoteSldr {
 		};
 
 		notePopup = PopUpMenu(window, ((numberWidth - spacingX)/2).asInteger @ height)
-			.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
+		.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		notePopup.items = ["notes"]
-			++ 103.collect({arg item; TXGetMidiNoteString(item + 24);});
+		++ 103.collect({arg item; TXGetMidiNoteString(item + 24);});
 		notePopup.action = {
 			if (notePopup.value > 0, {
 				minNumberView.valueAction = 0.midicps;
@@ -81,12 +77,12 @@ TXMinMaxFreqNoteSldr {
 			});
 		};
 
-		// decorator next line & shift
-			if (window.class == Window, {
-				window.view.decorator.nextLine;
-			}, {
-				window.decorator.nextLine;
-			});
+		// decorator next line
+		if (window.class == Window, {
+			window.view.decorator.nextLine;
+		}, {
+			window.decorator.nextLine;
+		});
 
 		labelView2 = StaticText(window, labelWidth @ height);
 		labelView2.string = "Min - Max";
@@ -99,8 +95,8 @@ TXMinMaxFreqNoteSldr {
 			controlSpec2.minval = minNumberView.value;
 			maxNumberView.value = controlSpec.map(rangeView.hi).round(round);
 			controlSpec2.maxval = maxNumberView.value;
-			numberView.updateSpec(controlSpec2);
-			sliderView.doAction;
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
+			sliderView.valueAction = controlSpec2.unmap(viewValue);
 		};
 		if (controlSpec.step != 0) {
 			rangeView.step = (controlSpec.step / (controlSpec.maxval - controlSpec.minval));
@@ -108,13 +104,13 @@ TXMinMaxFreqNoteSldr {
 		rangeView.lo = controlSpec.minval;
 		rangeView.hi = controlSpec.maxval;
 
-		minNumberView = TXScrollNumBox(window, ((numberWidth - presetWidth - spacingX)/2).asInteger @ (height * 0.8),
+		minNumberView = TXScrollNumBox(window, ((numberWidth - spacingX)/2).asInteger @ (height * 0.8),
 			controlSpec);
 		minNumberView.action = {
 			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
 			rangeView.lo = controlSpec.unmap(minNumberView.value);
 			controlSpec2.minval = minNumberView.value;
-			numberView.updateSpec(controlSpec2);
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			viewValue = controlSpec2.constrain(viewValue);
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
@@ -122,13 +118,13 @@ TXMinMaxFreqNoteSldr {
 		};
 		minNumberView.value = controlSpec.minval;
 
-		maxNumberView = TXScrollNumBox(window, ((numberWidth - presetWidth - spacingX)/2).asInteger @ (height * 0.8),
+		maxNumberView = TXScrollNumBox(window, ((numberWidth - spacingX)/2).asInteger @ (height * 0.8),
 			controlSpec);
 		maxNumberView.action = {
 			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
 			rangeView.hi = controlSpec.unmap(maxNumberView.value);
 			controlSpec2.maxval = maxNumberView.value;
-			numberView.updateSpec(controlSpec2);
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			viewValue = controlSpec2.constrain(viewValue);
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
@@ -137,15 +133,26 @@ TXMinMaxFreqNoteSldr {
 		maxNumberView.value = controlSpec.maxval;
 
 		if (arrRangePresets.notNil, {
-			presetPopupView = PopUpMenu(window, 16 @ (height * 0.8))
-						.background_(Color.white)
-						.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
-						.action_({ arg view;
-							var arrMinMax;
-							arrMinMax = arrRangePresets.at(view.value).at(1);
-							this.valueSplitAction = [this.valueSplit.at(0), arrMinMax.at(0), arrMinMax.at(1)];
-							view.value = 0;
-						});
+
+			// decorator next line & shift
+			if (window.class == Window, {
+				window.view.decorator.nextLine;
+				window.view.decorator.shift(labelWidth + spacingX, -2);
+			}, {
+				window.decorator.nextLine;
+				window.decorator.shift(labelWidth + spacingX, -2);
+			});
+
+			presetPopupView = PopUpMenu(window, (dimensions.x - labelWidth - spacingX) @ (height * 0.8))
+			.background_(TXColor.paleBlue2)
+			.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
+			.action_({ arg view;
+				var arrMinMax;
+				arrMinMax = arrRangePresets.at(view.value).at(1);
+				this.valueSplitAction = [this.valueSplit.at(0), arrMinMax.at(0),
+					arrMinMax.at(1)];
+				view.value = 0;
+			});
 		});
 
 		if (initAction) {
@@ -182,7 +189,7 @@ TXMinMaxFreqNoteSldr {
 		maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
 		rangeView.hi = controlSpec.unmap(maxNumberView.value);
 		controlSpec2.maxval = maxNumberView.value;
-		numberView.updateSpec(controlSpec2);
+		TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 		sliderView.value = valueArray.at(0) ? 0;
 		viewValue = controlSpec2.map(sliderView.value);
 		numberView.value = viewValue.round(round);
@@ -203,7 +210,7 @@ TXMinMaxFreqNoteSldr {
 		controlSpec2 = controlSpec.deepCopy.asSpec;
 		controlSpec2.minval = initMinVal;
 		controlSpec2.maxval = initMaxVal;
-		numberView.updateSpec(controlSpec2);
+		TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 
 		action = argAction;
 
@@ -214,5 +221,10 @@ TXMinMaxFreqNoteSldr {
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
 		};
+	}
+
+	hasFocus {
+		^numberView.hasFocus || notePopup.hasFocus || rangeView.hasFocus || minNumberView.hasFocus
+		|| maxNumberView.hasFocus;
 	}
 }

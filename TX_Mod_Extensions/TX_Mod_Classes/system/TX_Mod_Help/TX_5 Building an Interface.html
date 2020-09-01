@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 5.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 5.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none; color: #0000ee; -webkit-text-stroke: 0px #0000ee}
+    span.s3 {font: 15.0px Helvetica; text-decoration: underline ; font-kerning: none; color: #0000ee; -webkit-text-stroke: 0px #0000ee}
+    span.Apple-tab-span {white-space:pre}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">// Copyright (C) 2016 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <a href="file:LICENSE.html"><span class="s2">LICENSE</span></a>).</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>The TX Modular System - Building an Interface</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>++++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>INDEX:</b></span></p>
+<p class="p2"><span class="s1"><b>1.0 Introduction</b></span></p>
+<p class="p2"><span class="s1"><b>2.0 Displaying &amp; Editing the Interface Screens</b></span></p>
+<p class="p2"><span class="s1"><b>3.0 Design Interface window</b></span></p>
+<p class="p2"><span class="s1"><b>3.1 Widget Types</b></span></p>
+<p class="p2"><span class="s1"><b>4.0 Screen &amp; Widget Properties</b></span></p>
+<p class="p2"><span class="s1"><b>4.1</b> <b>Action Buttons</b></span></p>
+<p class="p2"><span class="s1"><b>4.2</b> <b>Notes Box</b></span></p>
+<p class="p2"><span class="s1"><b>4.3</b> <b>Check Box</b>, <b>Number Box</b>, <b>Popup</b>, <b>Knob, Sliders, 2-D Slider &amp; 2-D Tablet</b></span></p>
+<p class="p2"><span class="s1"><b>5.0 Run Interface window</b></span></p>
+<p class="p2"><span class="s1"><b>5.1</b> <b>Snapshots</b></span></p>
+<p class="p2"><span class="s1"><b>6.0 Notes on Building Interface Screens<span class="Apple-converted-space"> </span></b></span></p>
+<p class="p2"><span class="s1"><b>6.1 Running more than 10 actions in an Action Button</b></span></p>
+<p class="p2"><span class="s1"><b>6.2 Loading a Snapshot with an Action Button</b></span></p>
+<p class="p2"><span class="s1"><b>6.3 Displaying an Interface Screen with an Action Button</b></span></p>
+<p class="p2"><span class="s1"><b>6.4 Meaning of "unmapped" module parameters</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>++++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>1.0</b> <b>Introduction</b></span></p>
+<p class="p2"><span class="s1">There are 2 basic sides to the TX Modular System, the <b>System</b> itself and the <b>Interface</b>.</span></p>
+<p class="p2"><span class="s1">The <b>System</b> is all the modules and channels which actually make and process the sounds.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">The <b>Interface</b> is a customisable user interface on a set of screens that control the System.</span></p>
+<p class="p2"><span class="s1">20 screens can be customised with <b>Widgets</b> - such as sliders, knobs, buttons, number boxes, popups and text boxes. These widgets can control any of the modules or channels within the system. For example: buttons to start and stop sequencers, sliders or knobs to change volume levels, popups to change synthesiser waveforms.</span></p>
+<p class="p2"><span class="s1">It might be easier to build a system first before designing the interface for it - of course, both can be changed again later.</span></p>
+<p class="p2"><span class="s1"><b><i>Note</i></b> - the example file: <b>InterfaceWidgets</b> shows how various widgets can be used.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>+++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>2.0 Displaying &amp; Editing the Interface Screens</b></span></p>
+<p class="p2"><span class="s1">The buttons <b>Run Interface</b> and<b> Design Interface</b> are used to display and edit the interface screens.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">On the row below these buttons, the first box is popup where <b>Screens 1-20</b> can be selected. By default, each screen has a simple white label box on it showing the screen number (e.g. "Screen 1").</span></p>
+<p class="p2"><span class="s1"><b>Run Interface</b> - this window displays all the widgets and makes them active (i.e. so they do something when you interact with them and will also respond to midi, if set to).</span></p>
+<p class="p2"><span class="s1"><b>Design Interface</b> - this window is for adding widgets and designing the layout of interface screens (see next section). <br>
+</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>++++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>3.0 Design Interface window</b></span></p>
+<p class="p2"><span class="s1">This window is for adding widgets and designing the layout of interface screens. It is divided into <b>2 panels</b>, and each one has scroll bars and a white bar on the right which can be dragged to make the panel wider or narrower. Small coloured square buttons on the top and bottom of the white bar change the width of the panel, from narrowest (black) to widest (orange).</span></p>
+<p class="p2"><span class="s1">In the <b>left panel</b>, a gridded box shows all the widgets on the current screen. The currently selected widget(s) will be in a red box, all the others will be in a black box. Each widget has a unique ID number beginning with a W which is written in red inside its box.</span></p>
+<p class="p2"><span class="s1"><b>Note:</b> <i>(as displayed on the left panel)</i> - Click on a single widget and grab its corners to change its size. Use Shift key with mouse clicks to add to group of currently selected widgets. Use Command key with mouse drag to clone currently selected widgets.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">In the <b>right panel</b>, are controls for changing the look of the screen and its widgets, and what they control in the system.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>3.1 Widget Types</b></span></p>
+<p class="p2"><span class="s1">Various different widgets can be added to the interface screens.</span></p>
+<p class="p2"><span class="s1"><b><i>- For running commands/actions</i></b>:</span></p>
+<p class="p2"><span class="s1"><b>Action Button</b> - to run up to 10 commands or "actions", such as setting a module's parameters, or starting/stopping sequencers.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><b><i>- For displaying text:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Label Box</b> - For displaying a single line of text or just a coloured box (with no text).</span></p>
+<p class="p2"><span class="s1"><b>Notes Box</b> - For displaying a multiple line block of text.</span></p>
+<p class="p2"><span class="s1"><b><i>- For editing parameters from modules or channels:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Check Box</b> - a button which can be toggled on and off (like a channel mute button)<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><b>IP Address </b>-<b> </b>for editing a network IP address from a module</span></p>
+<p class="p2"><span class="s1"><b>List Box</b> - selecting a choice of various items from a scrollable list</span></p>
+<p class="p2"><span class="s1"><b>List Box + -<span class="Apple-converted-space"> </span></b> with +/- buttons</span></p>
+<p class="p2"><span class="s1"><b>Popup</b> - selecting a choice of various items with a popup menu</span></p>
+<p class="p2"><span class="s1"><b>Popup + -<span class="Apple-converted-space"> </span></b> with +/- buttons</span></p>
+<p class="p2"><span class="s1"><b>Knob</b> - Circlular knob for editing a numerical value</span></p>
+<p class="p2"><span class="s1"><b>Number Box</b> - box for editing a numerical value</span></p>
+<p class="p2"><span class="s1"><b>Slider H</b> - Horizontal slider for editing a numerical value</span></p>
+<p class="p2"><span class="s1"><b>Slider V</b> - Vertical slider for editing a numerical value</span></p>
+<p class="p2"><span class="s1"><b>Slider Number H</b> - Horizontal slider with number box next to it</span></p>
+<p class="p2"><span class="s1"><b>Slider Number V</b> - Vertical slider with number box under it</span></p>
+<p class="p2"><span class="s1"><b>Slider</b> <b>2-D </b>- 2-dimensional slider which can control 2 different sets of parameters at once</span></p>
+<p class="p2"><span class="s1"><b>Text Display Box</b> - for displaying a display-only text parameter from a module</span></p>
+<p class="p2"><span class="s1"><b>Text Edit Box - </b>for editing an editable text parameter from a module</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>++++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>4.0 Screen &amp; Widget Properties</b></span></p>
+<p class="p2"><span class="s1">At the top of the <b>right panel</b> is a row of controls:</span></p>
+<p class="p2"><span class="s1"><b>New Widget</b> - this button shows all the possible widgets. To add a widget, choose one of the widget names, which start with “Action Button”, click and drag from the widget button into the left panel, and drop the new widget onto the interface. You will then be able to edit the properties of the widget in the right panel and connect it to the parameters of any module in the system.</span></p>
+<p class="p2"><span class="s1"><b>Import From Module</b> - this button shows all the modules in the system, and the parameters you can control inside that module. If you select a module in the left box, and select a parameter in the right box, all possible widgets for that parameter will be shown below it. Then you can drag a widget onto the interface, as explained before. The advantage with importing a widget is that it will be already connected to the right parameter - or in the case of a Label Box, it will automatically contain the name of the parameter.</span></p>
+<p class="p2"><span class="s1"><b>Delete selected widgets</b> - button to delete currently selected widgets (shown with red boxes around them)</span></p>
+<p class="p2"><span class="s1"><b>Grid size</b> - this is the number of pixels in each box of the grid which widgets are placed on. The default grid size is 10 (pixels).</span></p>
+<p class="p2"><span class="s1">Below this is the <b>Current screen</b> section to select the screen number &amp; give the screen a name.</span></p>
+<p class="p2"><span class="s1">The "<b>Copy or load another screen</b>" popup allows you to copy widgets from another screen as well as to load or save the current screen to a file.</span></p>
+<p class="p2"><span class="s1"><b>Screen image</b> adds a background image to the Interface screen.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><b>Screen colour</b> can be set using the colour picker, choosing a preset or by setting Red/Green/Blue/Alpha values. The alpha value is for transparency, with 0 (minimum) being totally transparent, and 255 (maximum) being totally opaque.</span></p>
+<p class="p2"><span class="s1"><b>Note</b> - if a <b>Screen image</b> is shown, the <b>Screen colour</b> won’t be shown.</span></p>
+<p class="p2"><span class="s1">Below this are setting for the <b>Current widget</b>, including ID, type, size, position, and other properties different for each type of widget.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">For example, a Label box will have "Text to be displayed", but a Number box won't.</span></p>
+<p class="p2"><span class="s1">The following widgets have properties that need extra explanation:<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>4.1</b> <b>Action Buttons</b></span></p>
+<p class="p2"><span class="s1">The <b>Midi Trigger</b> settings allow the action button to be triggered by a midi note on for a specific midi note number on a range of settings.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">The <b>Key Trigger</b> settings allow the action button to be triggered by pressing a specific computer keyboard key.</span></p>
+<p class="p2"><span class="s1"><b>Action settings</b>: Actions are commands or instructions for any modules in the system. 10 actions can be set.</span></p>
+<p class="p2"><span class="s1">Examples of actions include: changing the settings of any modules in the system, triggering notes to play, starting and stopping sequencers.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">There are 3 columns for the actions:</span></p>
+<p class="p2"><span class="s1"><b>Module </b>- the module that will be instructed to carry out an action.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">(<b><i>Note</i></b> - the first module shown is "System" where actions such as "Sync start" can be found.)</span></p>
+<p class="p2"><span class="s1"><b>Action </b>- the action to be carried out when the button is pressed. Each module has different actions that can be carried out, so the options given will change depending on the module chosen.</span></p>
+<p class="p2"><span class="s1"><b>Value settings </b>- settings that are relevant to the action: these are given in the name of the action.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">For example a Wave Synth module has an action called "Play note: midi note + velocity + gate time". The name indicates that values need to be set for midi note, velocity and gate time.</span></p>
+<p class="p2"><span class="s1">Some actions don't require any value settings. For example, the Step Sequencer has an action called "Start Sequencer" which doesn't require any value settings since it simply starts the sequencer.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>4.2</b> <b>Notes Box</b></span></p>
+<p class="p2"><span class="s1">The <b>Store Notes</b> button must be pressed once you have added or edited text - otherwise your changes won't be kept.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>4.3</b> <b>Check Box</b>, <b>Number Box</b>, <b>List Box</b>, <b>Popup</b>, <b>Knob, Sliders &amp; Slider 2-D<span class="Apple-converted-space"> </span></b></span></p>
+<p class="p2"><span class="s1">The <b>Midi Listen</b> settings allow widgets to be triggered by a midi controller on a specific midi port.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">The <b>Midi Learn</b> checkbox allows you to learn midi details by moving a particular midi controller.</span></p>
+<p class="p2"><span class="s1">The <b>Midi Remote Sync</b> checkbox indicates that on request, the current midi value for the widget should be sent out to the select port.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><b>Note</b>: on the <b>Run Interface</b> window is a button to <b>Sync Midi Remote Devices</b>.</span></p>
+<p class="p2"><span class="s1"><b>Parameter update settings</b>: parameters of up to 5 modules or channels in the system which the widget will be update.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">There are 5 rows for the settings each with 3 columns:</span></p>
+<p class="p2"><span class="s1"><b>Module </b>- the system, module or channel that will be updated.</span></p>
+<p class="p2"><span class="s1"><b>Parameter to update </b>- the parameter to be updated when the widget is edited. Each module has different parameters that can be edited, so the options given will change depending on the module chosen.</span></p>
+<p class="p2"><span class="s1"><b>Extra parameter settings </b>- extra settings that are relevant to the parameter; these are shown in the name of the action.</span></p>
+<p class="p2"><span class="s1">For example a Step Sequencer module has a parameter called "set Group Note: value, group". The name shows that as well as the value of the note being updated by the widget, an extra parameter needs to be set for the group to be updated.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><b>Note: </b>The parameter in the <b><i>first row</i></b> of the "parameter to update" column will determine the <b>range</b> of possible values that the widget can have.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">Whenever the widget is displayed, it will show the current value of the parameter in the <b><i>first row</i></b> of the "parameter to update" column.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">This means that even if there are parameter settings in the other rows, the widget will show only the value of the parameter in the first row.</span></p>
+<p class="p2"><span class="s1">This is necessary because only 1 can be "in charge" in case of conflicts.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">When the value of the widget changes (e.g. when a slider is moved), it will send its value to all parameter settings in each of the rows, apart from empty ones.</span></p>
+<p class="p2"><span class="s1">See section <b>6.4 </b>below to see how "unmapped" module parameters can be used so that single widget can control multiple parameters with different parameter input ranges.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>++++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>5.0 Run Interface window</b></span></p>
+<p class="p2"><span class="s1">When this window is displayed, all the widgets on the current screen are made to be <b>active</b> - i.e. so they do something when you interact with them and will also respond to midi (if they have already been set to in the <b>Design Interface</b> window).</span></p>
+<p class="p2"><span class="s1"><b><i>Note</i></b> - If you switch to a different screen, <b><i>only the widgets on the current screen will be active</i></b>. This means that you can assign the same midi notes or controller numbers to widgets on different screens, yet they will only be active on the currently shown screen. By using multiple screens, this allows for very flexible midi assignment.</span></p>
+<p class="p2"><span class="s1">At the top of the window, the first box is popup where <b>Screens 1-20</b> can be selected.</span></p>
+<p class="p2"><span class="s1">Then a button to <b>Sync Midi Remote Devices</b> - this will sent midi data from all widgets that have Midi Remote Sync selected in their widget properties. This is useful to sync external midi devices that are bi-directional and can receive midi messages (for example Behringer BCR2000/BCF2000).</span></p>
+<p class="p2"><span class="s1">The checkbox <b>Allow live gui updates</b> can be turned off if there is a conflict between the user trying to update a widget, and a module, such as an Action Sequencer, which might also be trying to update the same parameter. When off, it allows the the user to make changes freely. Turn on again, when possible so all parameter changes are shown on widgets.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>5.1</b> <b>Snapshots</b></span></p>
+<p class="p2"><span class="s1">A Snapshot is like a photograph of all the settings on all the modules in a system.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">Near the top of the <b>Run Interface</b> window is the <b>Snapshots</b> popup labelled “<b>snapshots ...</b>".<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">There are 99 Snapshots in the system which can be selected here. They are all empty to begin with - free to be saved and named.</span></p>
+<p class="p2"><span class="s1">If a snapshot is <b>empty</b> when you select it (as shown by it's name), a box will appear where you can write the snapshot name as well as a "<b>Save snapshot</b>" button to save the current settings in your system.</span></p>
+<p class="p2"><span class="s1">If a snapshot isn't empty when you select it, the new snapshot will be loaded and settings on modules and channels will be updated.</span></p>
+<p class="p2"><span class="s1"><b>Note</b> - a snapshot will save or load settings for all the modules and channels that <b><i>currently exist</i></b> in your system.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">However, if you save a snapshot and then delete or add more modules or channels to your system, then when you load that snapshot the system will be different.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">The snapshot will still load, but some of the modules it tries to update might have been deleted. And if there are new modules, then they won't have been saved in the snapshot so their settings won't be updated when you load the preset.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">This means the snapshot isn't the complete system, so it may sound or behave differently to when you originally saved the snapshot.</span></p>
+<p class="p2"><span class="s1">If you change the system after saving a snapshot, it is probably worth reloading the snapshot, check it sounds as you want, and then overwriting the snapshot - use the Overwrite button that appears next to the snapshot name.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>++++++++++++++++++++++++++++++++++++++++</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>6.0 Notes on Building Interface Screens</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>6.1 Running more than 10 actions in an Action Button</b></span></p>
+<p class="p2"><span class="s1">If you need to run more than 10 actions in an action button, use an Action Sequencer to hold all the actions and use the action button to start the Action Sequencer.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>6.2 Loading a Snapshot with an Action Button</b></span></p>
+<p class="p2"><span class="s1">If you need an action button to load a Snapshot, add the following action:</span></p>
+<p class="p2"><span class="s1">Module: "<b>System</b>", Action: "<b>Set Snapshot</b>" (select the required snapshot)</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>6.3 Displaying an Interface Screen with an Action Button</b></span></p>
+<p class="p2"><span class="s1">If you need an action button to display a particular Interface Screen, add the following action:</span></p>
+<p class="p2"><span class="s1">Module: "<b>System</b>", Action: "<b>Show Screen 1/2/...</b>" (select the required screen no.)</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>6.4 Meaning of "unmapped" module parameters</b></span></p>
+<p class="p2"><span class="s1">When setting the "parameter to update" for a slider, knob or numberbox, some parameters have the word "unmapped" in their description.</span></p>
+<p class="p2"><span class="s1">For example, a Filter module will have "set Frequency" and "set Frequency unmapped" in the "parameter to update" options which both set the Frequency of the waveform.</span></p>
+<p class="p2"><span class="s1">If you look in the Waveform module window, you will see frequency by default has a range of values from 40 to 20000 hz.</span></p>
+<p class="p2"><span class="s1">A slider that had the "parameter to update" popup as "set Frequency" would therefore set values in the range 40 to 20000.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">On the other hand, a slider that had the "parameter to update" popup as "set Frequency unmapped" would set values in the range 0 to 1 - this is always the range of unmapped parameters.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">The reason for having the unmapped option is for when, for example, you want to have a slider widget that controls the frequency and resonance of the filter at the same time.</span></p>
+<p class="p2"><span class="s1">If you look in the Waveform module window, you will see resonance by default has a range of values from 0 to 1. This is different to the range of values for frequency, which is 40 to 20000.</span></p>
+<p class="p2"><span class="s1">If you tried to update the resonance of the filter with the slider widget that was based on the frequency range of 40 to 20000, it would just be set to a value of 1 - it's maximum value.</span></p>
+<p class="p2"><span class="s1">The solution would be to set the first row of the "parameter to update" popup set to "set Frequency unmapped" and the second row set to "set Resonance unmapped". This will then send the slider widget's unmapped value (between 0 and 1) to both the frequency and resonance sliders in the Filter module.<span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">Say for example, you then set the slider widget to half way (value 0.5). This would set the filter's actual frequency to 894 (half way through its range), with the resonance set to 0.5.</span></p>
+<p class="p2"><span class="s1">You only need to use the "unmapped" version when you are creating multi-parameter sliders like in this example.</span></p>
+<p class="p2"><span class="s1"></span></p>
+<p class="p3">Other  help that might be useful: <span class="s3"><a href="file:TX_Modulation_Vs_Automation.html">Modulation Vs Automation</a></span></p>
+<p class="p2"><span class="s1"></span></p>
+<p class="p2"><span class="s1">Previous help file: <a href="file:TX_4%20General%20Notes.html"><span class="s3">4 General Notes</span></a></span></p>
+</body>
+</html>

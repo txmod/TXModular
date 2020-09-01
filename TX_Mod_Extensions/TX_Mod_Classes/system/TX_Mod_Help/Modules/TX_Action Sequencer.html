@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Action Sequencer</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Action</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This is one of the most powerful modules - it can trigger many possible different actions within the overall system at specific times.</p>
+<p class="p1">Actions are commands or instructions for any modules in the system. <span class="Apple-converted-space"> </span></p>
+<p class="p1">Examples of actions include: changing the settings of any modules in the system, triggering notes to play, starting and stopping other sequencers, as well as causing the Action Sequencer module itself to jump to any step or loop back to the start.</p>
+<p class="p1">Each step has a probability setting so that uncertainty can be introduced.</p>
+<p class="p1">For more details about actions, see help files <A href="../TX_What_Are_Actions.html">What_Are_Actions<A> and <a href="../TX_Modulation_Vs_Automation.html">Modulation Vs Automation</a></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Start </b>- button to start the sequencer playing from the chosen step.</p>
+<p class="p1"><b>Stop</b> - button to stop the sequencer.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Sync Start</b> - sets whether the sequencer will be started when the "Sync Start" button is pressed. This button is located at the top of the main screen and is used to start multiple modules at the same time.</p>
+<p class="p1"><b>Sync Stop</b> - sets whether the sequencer will be stopped when the "Sync Stop" button is pressed. This button is located at the top of the main screen and is used to stop multiple modules at the same time.</p>
+<p class="p1"><b>Mute all actions</b> - this button is used to mute the sequencer temporarily while it playing. If set on, the sequencer will keep running but no actions will be taken.</p>
+<p class="p1"><b>Start playing from step</b> - sets which step the sequencer starts playing from.</p>
+<p class="p1"><b>BPM</b> - sets the tempo in beats per minute.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Tap tempo button</b> - this displays measures the tempo when it is clicked with a mouse on each beat. Use the Command (Apple) key<span class="Apple-converted-space">  </span>with a mouse drag to copy the BPM to the sequencer BPM.</p>
+<p class="p1"><b>Auto copy tap tempo </b>- when set on, this automatically copies the tap tempo to the<span class="Apple-converted-space">  </span>sequencer BPM.</p>
+<p class="p1"><b>Beats per bar</b> - this affects how bars and beats will be shown on each step.</p>
+<p class="p1"><b>Keep step times locked when BPM changes</b> - each step shows is start time in minutes and seconds as well as bars and beats.<span class="Apple-converted-space">  </span>When the BPM is changed,<span class="Apple-converted-space">  </span>if this button is set <b>on</b>, the time in minutes and seconds for each step will stay the same, and the bars and beats will be recalculated. If this button is <b>off</b>, then the minutes and seconds will be recalculated but the bars and beats will stay the same.</p>
+<p class="p1"><b></b><br></p>
+<p class="p1"><b><i>Controls for each step:</i></b></p>
+<p class="p1"><b>[] </b>yellow button to set step highlight on or off, where a yellow box appears behind the row and the action parameters are larger. When a step is edited, it will automatically be highlighted.</p>
+<p class="p1"><b>add </b>- adds a new step directly after this one with the same step time.</p>
+<p class="p1"><b>del </b>- deletes this step.</p>
+<p class="p1"><b>step </b>- sets the step position in the sequence.</p>
+<p class="p1"><b>ID </b>- each step has a unique ID number which cannot be changed.</p>
+<p class="p1"><b>mins/secs/bars/beats </b>- sets the step time in both min/sec and bar/beat formats, based on the <b>BPM</b> and <b>Beats per bar</b> settings (see above).<span class="Apple-converted-space"> </span></p>
+<p class="p1">Note - after you change the step time, all steps are sorted to be in time order. This may mean that the step you are editing moves to a new position when you enter its step time.</p>
+<p class="p1">Also, see the note below: "How to delay the first step in a sequence".</p>
+<p class="p1"><b>on </b>- if a step is turned off, no action will be triggered. <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>prob </b>- the probability that an action will be triggered when the sequencer gets to this step. If this is set to less than 100%, then the action will not always be triggered.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>upd </b>- if turned on the screen will be updated after this step has run. Useful if an action run in the step changes values that will affect the front interface or another screen.</p>
+<p class="p1"><b>copy </b>/ <b>paste </b>- buttons to copy and past the <b>module/action/value settings</b> between steps.</p>
+<p class="p1"><b>module </b>- the module that will be instructed to carry out an action.</p>
+<p class="p1"><b>action </b>- the action to be carried out when the step is triggered. Each module has different actions that can be carried out, so the options given will change depending on the module chosen.</p>
+<p class="p1"><b>value settings </b>- settings that are relevant to the action: these are given in the name of the action.<span class="Apple-converted-space"> </span></p>
+<p class="p1">For example a Wave Synth module has an action called "Play note: midi note + velocity + gate time". The name indicates that values need to be set for midi note, velocity and gate time.</p>
+<p class="p1">Some actions don't require any value settings. For example, the Step Sequencer has an action called "Start Sequencer" which doesn't require any value settings.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Notes on using this module:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Getting started</b></p>
+<p class="p1">The module is initially created with 2 steps, but you can add as many as you need using the add (<b>a</b>) button.<span class="Apple-converted-space"> </span></p>
+<p class="p1">If you want the action sequencer to carry out a set of actions immediately when started then set all step times to 0 min 0 secs. Otherwise set the time for each step.</p>
+<p class="p1">If you want to put step times in beats and bars then set the correct BPM and Beats per bar first.</p>
+<p class="p1">Choose the module before selecting its action.</p>
+<p class="p1">Use the copy and paste buttons to copy action settings between steps.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b><i></i></b><br></p>
+<p class="p1"><b>Editing the step time (mins/secs/bars/beats)</b></p>
+<p class="p1">After you change the step time of any step, all steps are resorted to be in time order. This may mean that the step you are editing moves to a new position when you enter its step time; its step number will also change. (Note - it's step ID will always remain the same).</p>
+<p class="p1"><b><i></i></b><br></p>
+<p class="p1"><b>To move a step, </b>click on the step no and select a new position. The step time (in mins/secs &amp; bars/beats) will change to the same time as the step it is moving to.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Using action<span class="Apple-converted-space">  </span>"Jump to step ID" for jumping and looping</b></p>
+<p class="p1">The Action Sequencer module has an action called "Jump to step ID" that will cause the sequencer to immediately jump to another step. This can be useful for looping a sequence or branching to a different step.<span class="Apple-converted-space"> </span></p>
+<p class="p1">To make the sequence loop to the start when it reaches its last step: add a new step at the end of the sequence with the current Action Sequencer module selected in the "module" box, and "jump to step ID" selected in the "action" box. <span class="Apple-converted-space"> </span></p>
+<p class="p1">Put the step ID of the step 1 into the value settings number box - or use the slider to select the correct ID.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Make sure that step you are jumping back to has an earlier step time than the step your jumping from (see note below).</p>
+<p class="p1"><b>N.B.<span class="Apple-converted-space"> </span></b> Using the<span class="Apple-converted-space">  </span>"Jump to step ID"<span class="Apple-converted-space">  </span>action, it is possible that the action sequencer can go into an <b>endless loop</b>. This will only happen if the step you are jumping to is before the current step and has the same step time. If you're looping back, make sure it is to an earlier step time.<span class="Apple-converted-space">  </span>(If you do this by mistake, an automatic delay of 1/10 sec will be added between each step to stop this crashing your computer).</p>
+<p class="p1">- <b><i>See example file</i></b>:<span class="Apple-converted-space">  </span><b>ActionSeqJumpStep</b> for a legit example using the "Jump to step ID" action.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>How to delay the first step in a sequence</b></p>
+<p class="p1">Whichever step is displayed in<span class="Apple-converted-space">  </span>"<b>Start playing from step</b>" will be played immediately when the Action Sequencer is started.<span class="Apple-converted-space"> </span></p>
+<p class="p1">This means that if you want the first step to be delayed, you must put an extra step in at a time before it and start the sequencer from the earlier step.</p>
+<p class="p1">Say, for example, you wanted the current step 1 to start after 3 seconds.<span class="Apple-converted-space"> </span></p>
+<p class="p1">You would need to add a new step and move it to step 1.Then the original step 1 will become step 2. <span class="Apple-converted-space"> </span></p>
+<p class="p1">Then set "Start playing from step" to 1.</p>
+<p class="p1">Then set step 1's time to 0 min 0 secs and set it to be switched off (so no action will be taken).<span class="Apple-converted-space"> </span></p>
+<p class="p1">Then set step 2's time to 0 min 3 secs.</p>
+<p class="p1">This would mean that the sequencer starts at step 1 which doesn't trigger any action. Then, after 3 seconds, step 2 runs.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+</body>
+</html>

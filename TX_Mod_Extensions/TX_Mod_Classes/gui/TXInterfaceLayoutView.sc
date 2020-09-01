@@ -1,13 +1,13 @@
 // Copyright (C) 2011  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
-TXInterfaceLayoutView {	
+TXInterfaceLayoutView {
 	var resizeHandles, resizeFixed, dropX, dropY;
 	var window, <>userView, arrWidgets;
 	var selection, selectionChanged = false, <selectedViews;
 	var <>highlightActionFunc, <>mouseUpActionFunc;
 	var <>gridStep = 1,<gridOn = true, dragging = false, indent, multipleDragBy;
 	var layoutWidth, layoutHeight, startDragPoint;
-	
+
 	*new { arg argWindow, dimensions, argArrWidgets;
 		^super.new.init(argWindow, dimensions, argArrWidgets);
 	}
@@ -18,27 +18,33 @@ TXInterfaceLayoutView {
 		dimensions = dimensions.bounds;
 		layoutHeight = dimensions.height;
 		layoutWidth = dimensions.width;
+		indent = 0 @ 0;
 		// make UserView
 		userView = UserView(window, dimensions);
+		userView.acceptsMouseOver = true;
 		userView.mouseDownAction = { |v,x,y,m| this.mouseDown(x,y,m) };
 		userView.mouseUpAction = { |v,x,y,m| this.mouseUp(x,y,m) };
 		userView.mouseMoveAction = { |v,x,y,m| this.drag(x,y,m) };
 		userView.background_(Color.clear);
-		userView.drawFunc = {	
+		userView.drawFunc = {
 			// draw grid
 			this.drawGrid;
 			// make boxes for each module
-			arrWidgets.do({ arg argWidget, i; 
+			arrWidgets.do({ arg argWidget, i;
 				var holdRect, holdSmallRect, holdRate, holdModuleType;
-				holdRect = Rect(argWidget.fromLeft(layoutWidth), 
+				holdRect = Rect(argWidget.fromLeft(layoutWidth),
 					argWidget.fromTop(layoutHeight), argWidget.width, argWidget.height);
-			//	// Draw the fill
-			//	Pen.fillColor = TXColor.black.alpha_(0.3);
-			//	Pen.addRect(holdRect);
-			//	Pen.fill;
+				// Draw the fill
+				Pen.fillColor = TXColor.white.alpha_(0.3);
+				Pen.addRect(holdRect);
+				Pen.fill;
 				Pen.width =2;
 				if (argWidget.highlight, {
-					Pen.strokeColor = TXColor.red;
+					if( resizeHandles.notNil and: {resizeFixed.notNil}, {
+						Pen.strokeColor = TXColor.orange;
+					},{
+						Pen.strokeColor = TXColor.red;
+					});
 				},{
 					Pen.strokeColor = TXColor.black;
 				});
@@ -47,8 +53,9 @@ TXInterfaceLayoutView {
 				Pen.stroke;
 				// add text
 				Pen.color = TXColor.red;
-				Pen.font = Font( "Helvetica", 12 );
-				Pen.stringCenteredIn("W " ++ argWidget.widgetID.asString, holdRect);
+				Pen.font = Font( "Helvetica", 12);
+				//Pen.stringCenteredIn("W " ++ argWidget.widgetID.asString, holdRect);
+				Pen.stringRightJustIn("W " ++ argWidget.widgetID.asString ++ " ", holdRect);
 			});
 			resizeHandles.do({ |r|
 				Pen.color = TXColor.white;
@@ -63,21 +70,22 @@ TXInterfaceLayoutView {
 			});
 
 		};
-		userView.mouseOverAction = { |v,x,y, mod| 
+		userView.mouseOverAction = { |v,x,y, mod|
 			dropX = x; dropY = y;
-		}; 		
+		};
 		userView.beginDragAction_({ arg view, x, y;
  			var holdArrViews, holdView;
+			dropX = x; dropY = y;
  			startDragPoint = Point(dropX, dropY);
  			holdView = this.viewContainingPoint(startDragPoint);
- 			// if holdView is nil don't do anything 
+ 			// if holdView is nil don't do anything
 			if (holdView.notNil, {
   				// (if click is in a selected view then leave as is)
  				// if a non-selected view then set selected views to this view
 				if (not(selectedViews.includes(holdView)), {
 					selectedViews = [holdView];
 				});
- 				
+
 			});
 			if (selectedViews.size == 0, {
 				userView.dragLabel_("No Widget selected.");
@@ -92,7 +100,7 @@ TXInterfaceLayoutView {
 			holdArrViews = selectedViews.deepCopy;
 			holdArrViews.do({arg item, i;
 				//	create widgetID
-				item.newWidgetID; 
+				item.newWidgetID;
 			});
 			// return holdArrViews
 			holdArrViews;
@@ -100,36 +108,48 @@ TXInterfaceLayoutView {
 		userView.canReceiveDragHandler = {
 			View.currentDrag.asArray[0].isKindOf( TXWidget )
 		};
-		userView.receiveDragHandler = {
+		userView.receiveDragHandler = { |v,x,y, mod|
 			var arrNewWidgets, diffPoint;
-			arrNewWidgets = View.currentDrag.asArray;
-			if (View.currentDrag.isArray, {
-				if (startDragPoint != nil and: {startDragPoint != Point( nil, nil) }, {
-					diffPoint = Point(dropX,dropY) - startDragPoint;
-					// move all new widgets by diffPoint
-					arrNewWidgets.do({ arg item, i;
-						item.bounds_(
-							item.bounds(layoutWidth, layoutHeight).moveBy(diffPoint.x, diffPoint.y), 
-							layoutWidth, layoutHeight
-						);
+			dropX = x; dropY = y;
+			if (startDragPoint == nil, {
+				startDragPoint = Point(0,layoutHeight);
+			});
+			if (startDragPoint != nil and: {startDragPoint != Point( nil, nil) }, {
+				diffPoint = Point(dropX,dropY) - startDragPoint;
+				// minimum move 10 pixels
+				if (abs(diffPoint.x) < 10, {
+					if (diffPoint.x.isNegative, {
+						diffPoint.x = -10;
+					},{
+						diffPoint.x = 10;
 					});
 				});
-			},{
-				arrNewWidgets[0].fromLeft_(dropX, layoutWidth);
-				arrNewWidgets[0].fromTop_(dropY, layoutHeight);
+				if (abs(diffPoint.y) < 10, {
+					if (diffPoint.y.isNegative, {
+						diffPoint.y = -10;
+					},{
+						diffPoint.y = 10;
+					});
+				});
+				arrNewWidgets = View.currentDrag.asArray;
+				arrNewWidgets.do({ arg item, i;
+					item.bounds_(
+						item.bounds(layoutWidth, layoutHeight).moveBy(diffPoint.x, diffPoint.y),
+						layoutWidth, layoutHeight
+					);
+				});
+				// update all arrWidgets
+				TXFrontScreen.arrWidgets = TXFrontScreen.arrWidgets ++ arrNewWidgets;
+				arrWidgets = TXFrontScreen.arrWidgets;
+				selectedViews = arrNewWidgets;
+				dragging = true;
+				// testing xxx - check next line?? - based on older code
+				indent = dropX@dropY - Point(arrWidgets.last.fromLeft(layoutWidth), arrWidgets.last.fromTop(layoutHeight));
+				this.updateResizeHandles;
+				selectionChanged = false;
+				this.unhighlightAllViews;
+				this.mouseUp(dropX,dropY);
 			});
-			// update all arrWidgets
-			TXFrontScreen.arrWidgets = TXFrontScreen.arrWidgets ++ arrNewWidgets;
-			arrWidgets = TXFrontScreen.arrWidgets;
-			selectedViews = arrNewWidgets;
-			dragging = true;
-		// testing - check next line?? - based on older code
-			indent = dropX@dropY - 
-				Point(arrWidgets.last.fromLeft(layoutWidth), arrWidgets.last.fromTop(layoutHeight));
- 			this.updateResizeHandles;
- 			selectionChanged = false;
- 			this.unhighlightAllViews;
- 			this.mouseUp(dropX,dropY);
 		};
  		this.updateResizeHandles;
 		userView.refresh;
@@ -137,34 +157,34 @@ TXInterfaceLayoutView {
 
 	mouseDown { |x,y, mod|
 		var view, point, handle;
-		
+		//dropX = x; dropY = y;
 		point = x @ y;
-		
+
 		view = this.viewContainingPoint(point);
-		
+
 		if (view.notNil, {
 			this.highlightView(view);
 		});
-		
+
 		dragging = view.notNil;
-		
+
 		if( resizeHandles.notNil and: {
 			(handle = resizeHandles.detect({ |h| h.containsPoint(point) }) ).notNil
 		},
 		{
 			this.setResizeFixed(handle)
 		},
-		{			
+		{
 			if( dragging, {
-								
+
 				indent = point - Point(view.fromLeft(layoutWidth), view.fromTop(layoutHeight));
-				
+
 				if (mod.isShift == true, {
 					if ( not(selectedViews.includes(view)), {
 						selectedViews = selectedViews.add(view);
 					});
 				});
-				if( (selectedViews.size > 1) and: 
+				if( (selectedViews.size > 1) and:
 					{ selectedViews.includes(view)},
 				{
 					multipleDragBy = view
@@ -177,28 +197,29 @@ TXInterfaceLayoutView {
 					this.unhighlightAllViews;
 					selectedViews = [];
 				});
-				selection = SCIBAreaSelection(point)
+				selection = TXAreaSelection(point);
 			});
 			userView.refresh;
 		});
 	}
-	
+
 	mouseUp { |x,y, mod|
- 		if (selectionChanged == true, {
+ 		//dropX = x; dropY = y;
+		if (selectionChanged == true, {
 			if (mod.isShift == false, {
 				selectedViews = [];
 			});
 			selectedViews = selectedViews ++ arrWidgets.select({ |view|
-				selection.selects(Rect(view.fromLeft(layoutWidth), 
+				selection.selects(Rect(view.fromLeft(layoutWidth),
 					view.fromTop(layoutHeight), view.width, view.height))
 			});
 			selectionChanged = false;
 		});
 		resizeFixed = nil;
 		this.highlightSelectedViews;
-		this.fitToGridSelectedViews;
+		//this.fitToGridSelectedViews;
 		if(selection.notNil,{
-			selection = nil; 
+			selection = nil;
 		});
 		this.updateResizeHandles;
 		if (mouseUpActionFunc.notNil, {
@@ -208,13 +229,13 @@ TXInterfaceLayoutView {
 	}
 
 	drag { |x,y|
-		var view, f, point = x @ y, xMin, yMin, xMax, yMax;
+		var view, f = 0 @ 0, point = x @ y, xMin, yMin, xMax, yMax;
 		if( dragging, {
 			if( resizeFixed.isNil,
 			{
 				if(multipleDragBy.notNil,
 				{
-					f = point - ( Point(multipleDragBy.fromLeft(layoutWidth), 
+					f = point - ( Point(multipleDragBy.fromLeft(layoutWidth),
 						multipleDragBy.fromTop(layoutHeight))
 						 + indent );
 					/* get the minimum/max fromLeft and fromTop from selectedViews
@@ -225,8 +246,8 @@ TXInterfaceLayoutView {
 					yMax = selectedViews.collect({ |v| v.fromTop(layoutHeight) + v.height;}).maxItem;
 					f.x = f.x.max(xMin.neg).min(layoutWidth - xMax);
 					f.y = f.y.max(yMin.neg).min(layoutHeight - yMax);
-				
-					selectedViews.do({ |v| 
+
+					selectedViews.do({ |v|
 						v.fromLeft_(((v.fromLeft(layoutWidth) + f.x).max(0)
 							.min(layoutWidth - v.width)), layoutWidth) ;
 						v.fromTop_(((v.fromTop(layoutHeight) + f.y).max(0)
@@ -241,7 +262,7 @@ TXInterfaceLayoutView {
 				})
 			},{
 			//	if(gridOn,{ point = point.round(gridStep); });
-				selectedViews.first.bounds_(Rect.fromPoints(point,resizeFixed), 
+				selectedViews.first.bounds_(Rect.fromPoints(point,resizeFixed),
 					layoutWidth, layoutHeight);
 				this.updateResizeHandles;
 			});
@@ -274,9 +295,9 @@ TXInterfaceLayoutView {
 	viewContainingPoint { |point|
 		if (point.x.isNil, {^nil});
 		if (point.y.isNil, {^nil});
-		arrWidgets.do({ |view|
+		arrWidgets.reverseDo({ |view|
 			var viewRect;
-			viewRect = Rect(view.fromLeft(layoutWidth), view.fromTop(layoutHeight), 
+			viewRect = Rect(view.fromLeft(layoutWidth), view.fromTop(layoutHeight),
 				view.width, view.height);
 			if (viewRect.containsPoint(point),
 				{ ^view });
@@ -307,6 +328,8 @@ TXInterfaceLayoutView {
 	}
 	fitToGridSelectedViews {
 		selectedViews.do({ |view|
+			view.width_(view.width(layoutWidth).round(gridStep).max(gridStep), layoutWidth);
+			view.height_(view.height(layoutHeight).round(gridStep).max(gridStep), layoutHeight);
 			view.fromLeft_(view.fromLeft(layoutWidth).round(gridStep), layoutWidth);
 			view.fromTop_(view.fromTop(layoutHeight).round(gridStep), layoutHeight);
 		})
@@ -314,7 +337,7 @@ TXInterfaceLayoutView {
 	drawGrid {
 		// draw grid lines if gridStep > 1
 		if (gridStep > 1, {
-		
+
 			Pen.use {
 				Pen.strokeColor = Color.white.alpha_(0.4);
 				Pen.width = 1;
@@ -338,3 +361,20 @@ TXInterfaceLayoutView {
 	}
 }
 
+TXAreaSelection
+{
+	var click,round,<rect;
+
+	*new { |p,r| r !? { p = round(p,r) };
+		^super.newCopyArgs(p,r).mouseDrag(p)
+	}
+
+	mouseDrag { |drag|
+		round !? { drag = round(drag,round) };
+		rect = Rect.fromPoints(click,drag)
+	}
+
+	selects { |aRect|
+		^rect.intersects(aRect)
+	}
+}

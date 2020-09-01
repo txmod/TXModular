@@ -3,22 +3,22 @@
 TXTransposeKey {
 	var <>labelView, <>labelView2, <>labelView3, <>numberViewOctave, <>numberViewSemitone, <>sliderViewSemitone, <>controlSpec, <>action;
 	var <>round = 1;
-	
-	*new { arg window, dimensions, label, action, initVal, 
+
+	*new { arg window, dimensions, label, action, initVal,
 			initAction=false, labelWidth=80, numberWidth = 57;
-		^super.new.init(window, dimensions, label, action, initVal, 
+		^super.new.init(window, dimensions, label, action, initVal,
 			initAction, labelWidth, numberWidth);
 	}
-	init { arg window, dimensions, label, argAction, initVal, 
+	init { arg window, dimensions, label, argAction, initVal,
 			initAction, labelWidth, numberWidth;
 		labelView = StaticText(window, labelWidth @ dimensions.y);
 		labelView.string = label ? "Transpose";
 		labelView.align = \right;
-		
+
 		controlSpec = ControlSpec(-127, 127, default: 0);
 		initVal = initVal ? controlSpec.default;
 		action = argAction;
-		
+
 		labelView2 = StaticText(window, 56 @ dimensions.y);
 		labelView2.string = "semitones";
 		labelView2.align = \right;
@@ -29,16 +29,16 @@ TXTransposeKey {
 			sliderViewSemitone.value = numberViewSemitone.value.abs - numberViewSemitone.value.abs.asInteger;
 			action.value(this);
 		};
-		
+
 		sliderViewSemitone = Slider(window, 80 @ dimensions.y);
-		sliderViewSemitone.action = {
-			if (numberViewSemitone.value.isNegative, {
-				numberViewSemitone.value = numberViewSemitone.value.asInteger - (sliderViewSemitone.value.min(0.99999));
-			},{
-				numberViewSemitone.value = numberViewSemitone.value.asInteger + sliderViewSemitone.value.min(0.99999);
-			});
-			
-			action.value(this);
+		sliderViewSemitone.action = {arg view;
+			view.value = view.value.min(0.99);
+				if (numberViewSemitone.value.isNegative, {
+					numberViewSemitone.value = numberViewSemitone.value.asInteger - view.value;
+				},{
+					numberViewSemitone.value = numberViewSemitone.value.asInteger + view.value;
+				});
+				action.value(this);
 		};
 		labelView3 = StaticText(window, 50 @ dimensions.y);
 		labelView3.string = "octaves";
@@ -49,15 +49,15 @@ TXTransposeKey {
 			numberViewOctave.value = numberViewOctave.value.max(-10).min(10);
 			action.value(this);
 		};
-		
-		
+
+
 		if (initAction) {
 			this.valueAction = initVal;
 		}{
 			this.value = initVal;
 		};
 	}
-	value_ { arg value; 
+	value_ { arg value;
 		value = controlSpec.constrain(value);
 		numberViewOctave.value = (value / 12).asInteger;
 		if (value.isNegative and: ((value % 12) > 0), {numberViewOctave.value = numberViewOctave.value -1});
@@ -68,7 +68,7 @@ TXTransposeKey {
 			sliderViewSemitone.value = (numberViewSemitone.value - numberViewSemitone.value.asInteger).min(0.99999);
 		});
 	}
-	valueAction_ { arg value; 
+	valueAction_ { arg value;
 		value = controlSpec.constrain(value);
 		numberViewOctave.value = (value / 12).asInteger;
 		if (value.isNegative, {numberViewOctave.value = numberViewOctave.value -1});
@@ -79,7 +79,7 @@ TXTransposeKey {
 			sliderViewSemitone.value = (numberViewSemitone.value - numberViewSemitone.value.asInteger).min(0.99999);
 		});
 	}
-	value { 
+	value {
 		^(numberViewOctave.value * 12) + numberViewSemitone.value;
 	}
 	set { arg label, argAction, initVal, initAction=false;
@@ -91,6 +91,10 @@ TXTransposeKey {
 		}{
 			this.value = initVal;
 		};
+	}
+
+	hasFocus {
+		^numberViewOctave.hasFocus || numberViewSemitone.hasFocus || sliderViewSemitone.hasFocus;
 	}
 }
 

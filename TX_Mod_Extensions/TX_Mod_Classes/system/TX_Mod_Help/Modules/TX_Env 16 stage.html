@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Env 16 stage</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Module type: Control Source (triggered)</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module creates polyphonic 16-stage envelopes as control signals. </p>
+<p class="p1">They can be triggered in various ways such as by MIDI notes, by other modules (such as <b>Step Sequencer</b>, <b>Audio Trigger</b>) or by action buttons on an interface screen. </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>No. Stages</b> - the total number of stages in the envelope (3-16) </p>
+<p class="p1"><b>Loop stage</b> - which stage the loop stages - this is only relevant when the envelope type is "Sustain Looped".</p>
+<p class="p1"><b>Release stage</b> - which stage the release part of the envelope begins from - this is only relevant when the envelope type is "Sustain Looped" or "Sustain Unlooped".</p>
+<p class="p1"><b>Env. Type</b> - this can be "sustain looped", "sustain unlooped" or "fixed length". A "sustain looped" envelope will keep looping from the release stage to the loop stage until the end of the trigger or midi note. A "sustain unlooped" envelope will remain at the release stage level until the end of the trigger or midi note. A "fixed length" envelope will play through all its stages according to the stage times.</p>
+<p class="p1"><b>Trigger Envelope 1 sec</b> - this will trigger an envelope for 1 second whenever it is pressed.</p>
+<p class="p1"><b>Envelope display box</b> - this shows each stage of the envelope by level (up-down) and time (left-right). The stages can be moved by dragging them with a mouse. </p>
+<p class="p1"><b>Levels/Times/Curves</b> - settings for each stage.<br>
+Curve types are: Linear, Exponential, Sine, Welch, Step, Slope +10, Slope +9, ... Slope -9, Slope -10</p>
+<p class="p1"><b>Total Time</b> - for the whole envelope. </p>
+<p class="p1"><b>Use Curve 1 for all stages</b> - to use one curve for the whole envelope. </p>
+<p class="p1"><b>Midi Listen</b> - this allows the module to be triggered by a midi note. </p>
+<p class="p1"><b>Midi Chan.</b> - set the midi channels the module will listen to. </p>
+<p class="p1"><b>Note range</b> - which notes will trigger the module.</p>
+<p class="p1"><b>Vel range</b> - which velocities will trigger the module.</p>
+<p class="p1"><b>Scale level to velocity</b> - if this is set on, then the maximum level of the envelope will depend on the velocity of the trigger or midi note; if this is set off, the maximum level will always be 100%.</p>
+<p class="p1"><b>Polyphony</b> - maximum number of simultaneous envelopes.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Output Busses:</i></b></p>
+<p class="p1"><b>Env Out</b> - the envelope signal</p>
+<p class="p1"><b>Env End Trig</b> - outputs a trigger when the envelope ends</p>
+<p class="p1"><br></p>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+  </style>
+</head>
+<body>
+<p class="p1">// Copyright (C) 2017 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <A href="LICENSE.html"> LICENSE<A>).</p>
+<p class="p2"><b></b><br></p>
+<p class="p3"><b>Modulation Vs Automation</b></p>
+<p class="p2"><br></p>
+
+<p class="p3"><b>Modulation</b></p>
+<p class="p3">Modulation is where a control signal, for example coming from an LFO or a Step Sequencer, is connected to a modulation input of another module, for example the Frequency input of a Waveform module. A Channel is used to make the connection between the LFO and the Waveform.</p>
+<p class="p3">(To see an example of this, open the file “BuildingASystem” which is in the folder TX_Mod_Examples. In that system, an LFO is used to control both the Frequency of Waveform [1] and the LFO rate of Flanger [1]. )</p>
+<p class="p2"><br></p>
+<p class="p3"><b>Automation</b></p>
+<p class="p3">Automation is where the parameters of a module are controlled directly. No control signals or channels are needed with automation.</p>
+<p class="p3">Using a GUI widget is one example - a button on the Interface could start a Step Sequecer module, or a slider might change the frequency of a Filter</p>
+<p class="p3">Other examples of automation are OSC and MIDI input modules which run actions to directly control other modules when messages are received. Action Sequencer & MultiTrack Sequencer also play notes or change parameter values directly.  </p>
+<p class="p3">(See the example files “InterfaceWidgets” and “MultiTrack_Seq_BachMidi”) </p>
+<p class="p2"><br></p>
+<p class="p3"><b>Triggering</b></p>
+<p class="p3">Some modules can be triggered - for example <b>Wave Synth</b>, <b>Env DADSR</b>, and <b>Mod Sequencer</b>. </p>
+<p class="p3">In the <a href="file:TX_0%20TX%20Modular%20Help.html"><span class="s3">Help Index</span></a>, the module category names show which modules can be triggered.</p>
+<p class="p3">There are two ways modules can be triggered: </p>
+<p class="p3">1) using automation, for example triggered by a midi note, an interface button, or a Step Sequencer module.</p>
+<p class="p3">2) using modulation - if the module has a modulation trigger input, then it can be triggered by a control signal connected through a Channel.</p>
+<p class="p3">For example, a <b>Clock Pulse</b> or <b>LFO Curve</b> module might be used as the trigger for a <b>Mod Sequencer</b> or <b>Gain Curve</b>, which have modulation trigger inputs.</p>
+<p class="p2"><br></p>
+<p class="p3"><b>Sequencing</b></p>
+<p class="p3">The various sequencers is the TX Modular behave in different ways:</p>
+<p class="p3">The  <b>Mod Sequencer</b> only uses modulation - for its inputs as well as outputs. It has modulation inputs to trigger steps as well as control any of the step pararmeters and all steps are output as control signals.</p>
+<p class="p3">The other sequencers - <b>Action Sequencer</b>, <b>MultiTrack Seq</b> & <b>Step Sequencer</b> - all use automation.</p>
+<p class="p3">The  <b>Action Sequencer</b> uses actions to control any module parameter in the system as well as to trigger notes in polyphonic modules. </p>
+<p class="p3">Note sequencing by the <b>Step Sequencer</b> and <b>MultiTrack Seq</b> (using note tracks) only works with <b>polyphonic</b> modules - these are indicated in the <a href="file:TX_0%20TX%20Modular%20Help.html"><span class="s3">Help Index</span></a></p>
+<p class="p2"><br></p>
+<p class="p3"><b>* Synth Options</b></p>
+<p class="p3">Automation can change more parameter values than are available as modulation inputs in a channel.  </p>
+<p class="p3">This is because some parameters, known as “Synth Options” can be automated, but they cannot be modulated. </p>
+<p class="p3">Parameters which are Synth Options all begin their name with an asterisk (*) so they can be easily recognised. </p>
+<p class="p3">For example, in the Waveform module, the parameter *Waveform is a Synth Option, showing all the different possible waveforms.  </p>
+<p class="p3">Synth Options are special because whenever they are changed, the underlying structure of the module is changed so the module has to be rebuilt. This will take a short time. </p>
+<p class="p3">If the module is audio, a short volume dip may be heard as the old signal fades out and the new one fades in. If it is a control module, there will be a short gap in the output.  </p>
+<p class="p3">In the case of polyphonic modules, the change will only be heard when the next trigger happens. </p>
+<p class="p3">NOTE: Synth options are not designed to be changed quickly because every time modules are rebuilt, extra resources are required and the output is briefly paused. So if they are automated, this needs to be considered.  A change rate of less than once per second is recommended.
+ </p>
+<p class="p3">Other parameters, particularly those that are listed as modulation inputs, can be changed more quickly - and without any output pauses.
+ </p>
+<p class="p2"><br></p>
+<p class="p3"><b>Screen updates</b></p>
+<p class="p3">One issue with automation is that it is affected by screen updates - if there is a lot of screen activity going on, such as switching between tracks full of notes in a MultiTrack sequencer while it is playing, then there can sometimes be delays in the automation, heard as notes playing late. </p>
+<p class="p3">This can be annoying! (If it happens, it's better to do track editing while the sequencer is stopped.)</p>
+<p class="p3">Whereas modulation is not affected by screen updates (this is because “under the hood” it is happening in a separate computer process where all audio and control signals get processed - the SuperCollider Server).
+ </p>
+<p class="p2"><br></p>
+
+<p class="p3"><b>Other relevent info</b></p>
+<p class="p3"><span class="s3"><a href="file:TX_What_Are_Actions.html">What_Are_Actions</a></span></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+</body>
+</html>

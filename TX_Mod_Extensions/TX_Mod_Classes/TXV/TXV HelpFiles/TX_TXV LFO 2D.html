@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV LFO 2D</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: ModulationSource</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module is a 2D "Low Frequency Oscillator" (LFO) which outputs 2 modulation signals based on a preset waveform or custom  curves.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Main Button</i></b></p>
+<p class="p1"><b>lfoType</b> - index with modulation (def: 1, range: 0 : 17) options: <b> [0]</b>_No Pattern, <b> [1]</b>_Circles, <b> [2]</b>_Spirals, <b> [3]</b>_Spiral Sine, <b> [4]</b>_Spiral Tri, <b> [5]</b>_Lines, <b> [6]</b>_Diagonal Lines, <b> [7]</b>_Grid, <b> [8]</b>_Sine Wave, <b> [9]</b>_Zig Zag, <b> [10]</b>_Random, <b> [11]</b>_Random Quantised, <b> [12]</b>_Random Smoothed, <b> [13]</b>_Double Random, <b> [14]</b>_Double Random Quantised, <b> [15]</b>_Double Random Smoothed, <b> [16]</b>_Custom Curve, <b> [17]</b>_Custom Curve - Mirrored. </p>
+<p class="p1"><b>randomSmoothType</b> - index with modulation (def: 23, range: 0 : 23) options: <b> [0]</b>_Cubic In, <b> [1]</b>_Cubic Out, <b> [2]</b>_Cubic In & Out, <b> [3]</b>_Elastic In, <b> [4]</b>_Elastic Out, <b> [5]</b>_Elastic In & Out, <b> [6]</b>_Exponential In, <b> [7]</b>_Exponential Out, <b> [8]</b>_Exponential In & Out, <b> [9]</b>_Linear In (default), <b> [10]</b>_Linear Out, <b> [11]</b>_Linear In & Out, <b> [12]</b>_Quadratic In, <b> [13]</b>_Quadratic Out, <b> [14]</b>_Quadratic In & Out, <b> [15]</b>_Quartic In, <b> [16]</b>_Quartic Out, <b> [17]</b>_Quartic In & Out, <b> [18]</b>_Quintic In, <b> [19]</b>_Quintic Out, <b> [20]</b>_Quintic In & Out, <b> [21]</b>_Sine In, <b> [22]</b>_Sine Out, <b> [23]</b>_Sine In & Out. </p>
+<p class="p1"><b>noLevels</b> - integer with modulation (def: 1, range: 1 : 20). </p>
+<p class="p1"><b>circularDirectionOut</b> - switch with modulation (def: 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Adjust X,Y</i></b></p>
+<p class="p1"><b>reverseX</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>reverseY</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>swapXAndY</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>BPM, Cycle, Phase Button</i></b></p>
+<p class="p1"><b>bpm</b> - float with modulation (def: 120, range: 0.001 : 1000). </p>
+<p class="p1"><b>useMasterBpm</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>cycleTimeBeats</b> - float with modulation (def: 16, range: 0.01 : 1000). </p>
+<p class="p1"><b>cycleTimeDivisor</b> - float with modulation (def: 1, range: 0.01 : 1000). </p>
+<p class="p1"><b>phaseOffset</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>frozen</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>resetClock</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Custom Curve X Button</i></b></p>
+<p class="p1"><b>customCurveX</b> - drawable curve (size: 256 points). </p>
+<p class="p1"><b>customCurveX2</b> - drawable curve (size: 256 points). </p>
+<p class="p1"><b>customCurveXMorph</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Custom Curve Y Button</i></b></p>
+<p class="p1"><b>customCurveY</b> - drawable curve (size: 256 points). </p>
+<p class="p1"><b>customCurveY2</b> - drawable curve (size: 256 points). </p>
+<p class="p1"><b>customCurveYMorph</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Outputs:</i></b></p>
+<p class="p1"><b>positionX</b></p>
+<p class="p1"><b>positionY</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>lfoType</b></p>
+<p class="p1"><b>randomSmoothType</b></p>
+<p class="p1"><b>noLevels</b></p>
+<p class="p1"><b>bpm</b></p>
+<p class="p1"><b>useMasterBpm</b></p>
+<p class="p1"><b>cycleTimeBeats</b></p>
+<p class="p1"><b>cycleTimeDivisor</b></p>
+<p class="p1"><b>phaseOffset</b></p>
+<p class="p1"><b>circularDirectionOut</b></p>
+<p class="p1"><b>frozen</b></p>
+<p class="p1"><b>resetClock</b></p>
+<p class="p1"><b>reverseX</b></p>
+<p class="p1"><b>reverseY</b></p>
+<p class="p1"><b>swapXAndY</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><b>customCurveXMorph</b></p>
+<p class="p1"><b>customCurveYMorph</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

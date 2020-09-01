@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV 3D Lights And Materials</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A> & <A href="TX_TXV_3D_Modules.html">TXV 3D Modules<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1"><b><i>Note:</i></b> The folowing information only applies when you draw 3D shapes to a Scene.</p>
+<p class="p1">TXV Scene has 3 Lights which each have various colours.</p>
+<p class="p1">3D Draw Source Modules - such as Shape 3D and Particles 3D - have Material parameters which include various colours as well as Shininess.</p>
+<p class="p1">The various color compenents of the lights illuminating the scene will interact with the color compenents and shininess of the material each shape is made of, to create the final output image.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Basic Lighting</b></p>
+<p class="p1"><i><b>Note:</b> The following text is quoted from: <b>www.learnopengl.com/Lighting/Basic-Lighting</b></i></p>
+<p class="p1">Lighting in the real world is extremely complicated and depends on way too many factors, something we can't afford to calculate on the limited processing power we have. Lighting in OpenGL [and in TXV] is therefore based on approximations of reality using simplified models that are much easier to process and look relatively similar. These lighting models are based on the physics of light as we understand it. One of those models is called the Phong lighting model. The major building blocks of the Phong model consist of 3 components: ambient, diffuse and specular lighting.</p>
+<p class="p1"><b>Ambient lighting:</b> even when it is dark there is usually still some light somewhere in the world (the moon, a distant light) so objects are almost never completely dark. To simulate this we use an ambient lighting constant that always gives the object some color.</p>
+<p class="p1"><b>Diffuse lighting:</b> simulates the directional impact a light object has on an object. This is the most visually significant component of the lighting model. The more a part of an object faces the light source, the brighter it becomes.</p>
+<p class="p1"><b>Specular lighting:</b> simulates the bright spot of a light that appears on shiny objects. Specular highlights are often more inclined to the color of the light than the color of the object.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Materials</b></p>
+<p class="p1"><i><b>Note:</b> The following text is quoted from: <b>www.learnopengl.com/Lighting/Materials</b></i></p>
+<p class="p1">In the real world, each object reacts differently to light. Steel objects are often shinier than a clay vase for example and a wooden container does not react the same to light as a steel container. Each object also responds differently to specular highlights. Some objects reflect the light without too much scattering resulting in a small highlights and others scatter a lot giving the highlight a larger radius. If we want to simulate several types of objects in OpenGL we have to define material properties specific to each object.</p>
+<p class="p1">When describing objects we can define a material color for each of the 3 lighting components: ambient, diffuse and specular lighting. By specifying a color for each of the components we have fine-grained control over the color output of the object. Now add a shininess component to those 3 colors and we have all the material properties we need.</p>
+<p class="p1">The <b>ambient</b> material color defines what color this object reflects under ambient lighting; this is usually the same as the object's color.</p>
+<p class="p1">The <b>diffuse</b> material color defines the color of the object under diffuse lighting. The diffuse color is (just like ambient lighting) set to the desired object's color.</p>
+<p class="p1">The <b>specular</b> material color sets the color impact a specular light has on the object (or possibly even reflect an object-specific specular highlight color).</p>
+<p class="p1">Lastly, the <b>shininess</b> impacts the scattering/radius of the specular highlight.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Emissive Color</b></p>
+<p class="p1">Materials have one more color: <b>emissive</b>. This is used for objects that emit light - like a light bulb. The emissive color shines constantly, with no need for a light to illuminate it.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Online Examples Of Material Settings</b></p>
+<p class="p1">Please see:  <i><b>http://devernay.free.fr/cours/opengl/materials.html</b></i>  for many examples of material settings.</p>
+<p class="p1">These include gold, silver, bronze, chrome, jade, pearl, and various types of plastic and rubber.</p>
+<p class="p1">For each type of material, R/G/B values for Ambient, Diffuse and Specular colors are given, as well as a Shininess value.</p>
+<p class="p1"><b><i>Note:</i></b> The <b>Shininess</b> value needs to be multiplied by <b>128</b> to work in TXV. (The website gives shininess values in the range 0-1, but in TXV, it's range is 0-128.).</p>
+<p class="p1"><br></p>
+</body>
+</html>

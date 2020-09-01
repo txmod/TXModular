@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+p.p2 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px; color: #0000ee}
+p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+</style>
+</head>
+<body>
+<p class="p3">// Copyright (C) 2020 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see <a href="file:LICENSE.html">LICENSE</a>).</p>
+<p class="p2"><br>
+</p>
+<p class="p1"><b>The TX Modular System - Building a TXV System</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Other useful help files:</i></b><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_General_Introduction.html">TXV General Introduction<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV%20System.html">TXV System<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_1_Drawing_In_Layers.html">TXV Ex 1 Drawing In Layers<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_2_Modulation.html">TXV Ex 2 Modulation<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_3_Howling_Vowels.html">TXV Ex 3 Howling Vowels<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_4_Image_FX.html">TXV Ex 4 Image FX<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_5_3D_Scene.html">TXV Ex 5 3D Scene<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_6_3D_Environment_Map.html">TXV Ex 6 3D Environment Map<A><br>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction to TXV app</i></b></p>
+<p class="p1">TXV, which is a separate app, opens in it’s own window and is a modular video system for generating real-time 2D & 3D visuals. It was created to enable a TX Modular user to control both video and audio processes, and link them together.</p>
+<p class="p1">In the TX Modular, TXV is controlled by adding a TXV System module (see the example below).</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>TXV Modules</i></b></p>
+<p class="p1">TXV includes various types of modules:</p>
+<p class="p1"><b>Draw Sources</b> such as image file, movie file, live video camera, 3D Model file, 2D/3D shapes.</p>
+<p class="p1"><b>Image FX</b> such as Blend, Blur, Pixelate and Colorize.</p>
+<p class="p1"><b>Draw Destinations</b> include the TXV System, Transform (shift/ scale/ rotate) and Transf3DMulti (transform & make multiple copies of drawn objects), Scene (3D Scene with cameras & lights).</p>
+<p class="p1"><b>Modulation sources</b> include LFOs, Perlin noise, and a Step Sequencer.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Module Connections</i></b></p>
+<p class="p1">There are two TXV modules which connect other modules together:</p>
+<p class="p1"><b>TXV Draw Connections</b> are modules that connect Draw Source modules to Draw Destination modules, including the TX System module which draws to the main window.</p>
+<p class="p1"><b>TXV Nodes</b> are modules that connect modulation sources (such as LFOs) to parameters in other modules to enable modulation to happen.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Image Connections</i></b></p>
+<p class="p1">The various modules that use images have the option either to use image files stored on disk or to directly import an image produced by another image module. This second option allows image FX modules to be chained together for more complex FX.</p>
+<p class="p1"><br></p>
+<p class="p2"><b><i>Example - Building a TXV System</i></b></p>
+<p class="p2">The following are instructions for building a simple TXV System which will display a 2D Shape being moved around using an LFO.</p>
+<p class="p2">1. First you need to add a new <b><i>TXV System</i></b> module. Press the </i><b><i>Modules &amp; Channels</i></b> button near the top left of the window.<br>
+In the left panel, press the <b><i>+Source</i></b> button and scroll to the bottom of the list to a category labelled <b><i>Control: TXV System</i></b>. If you open this category there's an <b><i>add TXV System</i></b> button. Press this to add a new TXV System module.</p>
+<p class="p2">2. Now you need to start the TXV software. If you are using the standalone TX Modular (for MacOS) which includes TXV inside it, you can use the green <b><i>Start TXV</i></b> button. If you are using another platform, you will need to have a TXV build for your platform and open it separately. TXV will open in a separate window.</p>
+<p class="p2">3. Once TXV is running, press the orange <b><i>Connect to TXV</i></b> button. To the right of the connect button is a yellow "Status" box which should soon say "TXV System connected".</p>
+<p class="p2">4. Once TXV is connected, you can start adding modules. The row of blue buttons near the top of the TXV System box are menu buttons for different groups of parameters. Press the <b><i>TXV Modules</i></b> button and below that next to "Display Group" press the <b><i>All Modules</i></b> button so you can see all available modules.</p>
+<p class="p2">5. On the left is a list of all possible modules that can be added. Select the module <b><i>TXV LFO</i></b> and then press the <b><i>Add Selected Module</i></b> button. Then add a <b><i>TXV Shape2D</i></b> module in the same way. </p>
+<p class="p2">6. In order for the shape to be seen on the screen, we need to add a Draw Connection. In the row of blue buttons near the top of the TXV System box, press the <b><i>Draw Connections</i></b> button.</p>
+<p class="p2">7. In the "source" box, click on <b><i>TXV Shape 2D [1]</i></b>. In the "destination" box, click on <b><i>TXV System [1]</i></b>. Then press the <b><i>Add Draw Connection</i></b> button on the right and you should see a small green circle in the middle of the black TXV window.</p>
+<p class="p2">8. To edit the shape, press the <b><i>Edit Module</i></b> button in the left hand panel of the TX Modular window. Below that, press the <b><i>TXV Shape 2D</i></b> button so you can see all shape parameters.</p>
+<p class="p2">9. There are blue buttons near the top of the module window. Make sure <b><i>Shape</i></b> is selected, and then try changing the <b><i>shapeType</i></b>. Each shape type has certain parameters listed after it's name - for example, "circle (width, circleResolution)". This shows which parameters are relevant for that particular shape. Try changing some of the values of those parameters for different shapes.</p>
+<p class="p2">10. The other blue buttons enable you to set  the Fill color, Outline color and Draw parameters such as position on the screen, scaling and rotation of the shape. Try changing the Fill and Outline colors.</p>
+<p class="p2">11. In order to allow the shape to be moved around, you need to set up the modulation: Press the <b><i>Draw</i></b> button and below that, press the <b><i>Position, Anchor, Rotate</i></b> button.</p>
+<p class="p2">12. You will see a slider labelled <b><i>positionX</i></b> and on below it to the right is slider labelled <b><i>modulation mix</i></b>. Set modulation mix to a value of 0.5 and you will see the shape has moved left.</p>
+<p class="p2">13. To set up the modulation, you need to open the <b><i>TXV System [1]</i> </b> module using the button in the left hand panel. An alternative way to do that is to use the <b><i>Show parent TXV System</i></b> button which is in the top row of the Shape 2D panel.</p>
+<p class="p2">14. Once the TXV System [1] module is open, press the <b><i>Modulation Nodes</i></b> menu button.</p>
+<p class="p2">15. In the "source module" box, click on <b><i>TXV LFO [1]</i></b>.<br>
+In the "source name" box, click on <b><i>out</i></b>.<br>
+In the "destination module" box, click on <b><i>TXV Shape 2D [1]</i></b>.<br>
+In the "destination name" box, scroll down to <b><i>positionX</i></b>.<br>
+Press the <b><i>Add Node</i></b> button. Now you should see the shape moving quickly from left to right and back again.</p>
+<p class="p2">16. To edit the LFO speed, in the left hand panel press the <b><i>TXV LFO [1]</i></b> button.</p>
+<p class="p2">17. In the TXV LFO [1] panel, press the <b><i>BPM, Cycle, Phase</i></b> button. Then change the <b><i>cycleTimeBeats</i></b> to a value around 10 so the shape moves at a slower speed.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>To learn more about how to use TXV, see the following help files which explore some TXV examples:</i></b></p>
+<p class="p1"><A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_1_Drawing_In_Layers.html">TXV Ex 1 Drawing In Layers<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_2_Modulation.html">TXV Ex 2 Modulation<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_3_Howling_Vowels.html">TXV Ex 3 Howling Vowels<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_4_Image_FX.html">TXV Ex 4 Image FX<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_5_3D_Scene.html">TXV Ex 5 3D Scene<A><br>
+<A href="file:../../TXV/TXV%20HelpFiles/TX_TXV_Ex_6_3D_Environment_Map.html">TXV Ex 6 3D Environment Map<A><br>
+<p class="p1"><br></p>
+</body>
+</html>

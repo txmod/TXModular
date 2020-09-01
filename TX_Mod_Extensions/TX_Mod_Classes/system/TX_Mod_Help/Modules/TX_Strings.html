@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Strings</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Audio Insert (mono input, mono output, triggered)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module uses the input signal to excite Karplus-Strong models of a group of 1-8 strings. When a trigger is received, the strings are 'plucked' using a short burst of the input signal to excite the strings.</span></p>
+<p class="p1"><span class="s1">The controls for each string are <b>frequency</b>, <b>filter</b>, <b>delay</b>, <b>decay</b> and <b>amplitude</b>.<span class="Apple-converted-space">  </span>Negative decay times emphasise odd harmonics.</span></p>
+<p class="p1"><span class="s1">This module can be triggered in various ways such as by modulation of the Trigger input, by other modules (such as an <b>Action Sequencer</b>) or by action buttons on an interface screen.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Trigger</b> - this is for manually triggering a string pluck.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Gain button</b></span></p>
+<p class="p1"><span class="s1"><b>In gain</b></span></p>
+<p class="p1"><span class="s1"><b>Out gain</b></span></p>
+<p class="p1"><span class="s1"><b>Level control</b> - options:<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><i>None - level unchanged</i></span></p>
+<p class="p1"><span class="s1"><i>Balance - match level to dry signal level<span class="Apple-converted-space"> </span></i></span></p>
+<p class="p1"><span class="s1"><i>Limiter - keep the signal level below 0db<span class="Apple-converted-space"> </span></i></span></p>
+<p class="p1"><span class="s1"><i>Normalize - force the signal level to just below 0db<span class="Apple-converted-space"> </span></i></span></p>
+<p class="p1"><span class="s1"><i>Tanh Clipping - uses hyperbolic tangent of signal to clip it (this adds some distortion)</i></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal. For send effects this will usually be set to 1 - i.e. 100% affected signal.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Parameters button</b></span></p>
+<p class="p1"><span class="s1"><b>Freq range</b> - the range of frequencies for all the strings shown as midi notes<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Quantise</b> - forces all frequencies to the nearest midi note<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Pitch bend</b> - to globally change all the string frequencies</span></p>
+<p class="p1"><span class="s1"><b>Max delay</b> - maximum delay time for all the strings</span></p>
+<p class="p1"><span class="s1"><b>Random delay</b> - adds a random scaling<span class="Apple-converted-space">  </span>to each string’s delay time. It will have no effect if the delay is zero.</span></p>
+<p class="p1"><span class="s1"><b>Max decay</b> - maximum decay time for all the strings</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Strings button</b></span></p>
+<p class="p1"><span class="s1"><b>Complexity</b> - the number of strings</span></p>
+<p class="p1"><b>MIDI learn notes & amps</b> - when this is switched on, any MIDI notes and velocities received on any MIDI channels will be recorded into the strings starting at the <b>Next String</b>, which is shown next to it.</p>
+<p class="p1"><span class="s1"><b>Freq 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Filter 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Delay 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Decay 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Amp 1-8</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Trigger</b></span></p>
+<p class="p1"><span class="s1"><b>Input gain</b></span></p>
+<p class="p1"><span class="s1"><b>Pitch bend</b></span></p>
+<p class="p1"><span class="s1"><b>Max delay</b></span></p>
+<p class="p1"><span class="s1"><b>Random delay</b></span></p>
+<p class="p1"><span class="s1"><b>Max decay</b></span></p>
+<p class="p1"><span class="s1"><b>Freq 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Filter 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Delay 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Decay 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Amp 1-8</b></span></p>
+<p class="p1"><span class="s1"><b>Output gain</b></span></p>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Drawing In Layers</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1">Within TXV, some modules are Draw Sources and some modules are Draw Destinations. (This is shown in the module properties at the top of each module's help file, marked as DrawSource & DrawDestination).</p>
+<p class="p1">See <A href="TX_TXV_List_Of_All_Modules.html">TXV List Of All Modules<A> for the properties of all modules, grouped as Draw Sources, Image FX (which are also Draw Sources) and Draw Destinations.</p>
+<p class="p1">In order for drawing to happen a Draw Source module needs to be connected to a Draw Destination using a <A href="TX_TXV DrawConnection.html">TXV DrawConnection<A> module.</p>
+<p class="p1">Each Draw Destination module has 20 layers which are drawn in numerical order, so layer 1 is drawn before layer 2. There's also a parameter "drawLayersRule" to choose which single layer or group of layers are drawn.</p>
+<p class="p1">Multiple draw sources can be connected to each layer of a Draw Destination module, but if draw order is important, each source should have its own layer. </p>
+<p class="p1">Chains of draw connections can be made, for example connecting an Image module to a Transform module to scale & rotate it & connecting the Transform module to the TXV System to display it. </p>
+<p class="p1">To draw to the main window, set the Draw Destination of a DrawConnection to the TXV System module.</p>
+<p class="p1"><br></p>
+</body>
+</html>

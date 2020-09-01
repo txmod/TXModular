@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none; color: #0000ee; -webkit-text-stroke: 0px #0000ee}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Live Grain</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Audio Insert (mono input, stereo output)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module granulates a mono signal, turning it into 'grains' of sound which are panned in stereo.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Grain button</b></span></p>
+<p class="p1"><span class="s1"><b>Max grains</b> - maximum number of grains at any time</span></p>
+<p class="p1"><span class="s1"><b>Triggering</b> - can be Internal or External. <br>
+Internal triggering uses an internal clock based on the grain time and density. <br>
+External triggering uses the Ext Trigger control input - whenever the signal goes above zero, a grain will be triggered. (Vary triggering and Grain density are ignored.)</span></p>
+<p class="p1"><span class="s1"><b>Vary triggering</b> - this adds a random variation to the start time of each grain. If set to zero, all grains will be at equally spaced times. </span></p>
+<p class="p1"><span class="s1"><b>Grain density</b> - the number of overlapping grains. Values below one will have gaps between grains.</span></p>
+<p class="p1"><span class="s1"><b>Grain time ms</b> - how long each grain is. Shorter times sound more fragmented. </span></p>
+<p class="p1"><span class="s1"><b>Vary grain time</b> - this adds a random variation to the length of each grain.</span></p>
+<p class="p1"><span class="s1"><b>Grain pan</b> - the pan position of the grain.</span></p>
+<p class="p1"><span class="s1"><b>Vary panning</b> - this adds a random variation to the pan of each grain. </span></p>
+<p class="p2"><span class="s1"><b>Level</b> - the output level of the granulator.</span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal. For send effects this will usually be set to 1 - i.e. 100% affected signal.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Grain Env button</b></span></p>
+<p class="p1"><span class="s1"><b>Grain Env</b> - the envelope to use: either the custom envelope shown below it, or a built-in Hann envelope.</span></p>
+<p class="p1"><span class="s1"><b>Custom Env</b> - editable envelope curve.</span></p>
+<p class="p1"><span class="s1">See help file <a href="../TX_Curve%20Editing.html"><span class="s2">Curve Editing</span></a> for details.</span></p>
+<p class="p1"><span class="s1"><b>Grid rows</b> - no of rows (1-128) separated by white lines in the grid behind the curve.</span></p>
+<p class="p1"><span class="s1"><b>Grid cols</b> - no of columns (1-128) separated by white lines in the grid behind the curve.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Grain time ms</b></span></p>
+<p class="p1"><span class="s1"><b>Grain density</b></span></p>
+<p class="p1"><span class="s1"><b>Grain pan</b></span></p>
+<p class="p1"><span class="s1"><b>Vary triggering</b></span></p>
+<p class="p1"><span class="s1"><b>Vary grain time</b></span></p>
+<p class="p1"><span class="s1"><b>Vary panning</b></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b></span></p>
+<p class="p1"><span class="s1"><b>Ext Trigger</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>

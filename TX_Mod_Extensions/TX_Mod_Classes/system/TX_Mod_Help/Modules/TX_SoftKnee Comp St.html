@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {font-kerning: none; color: #000000}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>SoftKnee Comp St</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b>Module type: Audio Insert (stereo input, stereo output)</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module responds to the amplitude (volume level) of a mono audio signal coming into it. A compressor reduces the level of the louder parts of signal. It has the effect of evening out the volume.</span></p>
+<p class="p1"><span class="s1">There is the option to use a side-chain audio input to control the compressor, instead of the main input signal. If the side-chain is used, then on another audio channel, the destination can be set to the compressor module's Side-chain bus (see Audio Input Busses below).</span></p>
+<p class="p1"><span class="s1">The type of compression can be changed from Peak Compression to RMS Compression, which responds to a signal over a settable averaging time of 12-1000 ms.</span></p>
+<p class="p1">A lookahead delay can also be added. Take care to set appropriate clamp and relax times if using a lookahead delay.</p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Channel link</b> - sets whether the left and right channels are linked together (the default setting) or independent of each other while being affected by the compressor. </span></p>
+<p class="p1"><span class="s1"><b>Side-chain</b> - sets whether the main input signal or the side-chain signal will be used to control the compressor.</span></p>
+<p class="p1"><span class="s1"><b>Compression</b> - selects Peak Compression or RMS Compression with averaging time 12-1000ms. </span></p>
+<p class="p1"><b>Lookahead</b> - a lookahead delay can be added to input signal to allow transients to be detected early. </p>
+<p class="p1"><span class="s1"><b>Threshold</b> - adjust to get required effect. </span></p>
+<p class="p1"><span class="s1"><b>Knee db</b> - the size of the knee in db (default is 6db). </span></p>
+<p class="p2"><span class="s1"><b>Comp. ratio</b> - compression ratio. </span></p>
+<p class="p2"><span class="s1"><b>Clamp time</b> - how quickly the module responds to amplitude changes past the threshold. </span></p>
+<p class="p2"><span class="s1"><b>Relax time</b> - how quickly it releases after responding.  </span></p>
+<p class="p1"><span class="s1"><b>Make-up gain</b> - boosts the output level of the module. </span></p>
+<p class="p2"><span class="s1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal. For send effects this will usually be set to 1 - i.e. 100% affected signal.</span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Audio Input Busses:</i></b></span></p>
+<p class="p2"><span class="s1"><b>Side-chain</b> - mono audio signal which can be used to control the </span><span class="s2">compressor</span><span class="s1"> (see <b>Side-chain</b> above). </span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+<p class="p2"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Threshold</b></span></p>
+<p class="p1"><span class="s1"><b>Knee</b></span></p>
+<p class="p1"><span class="s1"><b>Compressor Ratio</b></span></p>
+<p class="p1"><span class="s1"><b>Attack</b></span></p>
+<p class="p1"><span class="s1"><b>Release</b></span></p>
+<p class="p1"><span class="s1"><b>Make-Up Gain</b></span></p>
+<p class="p1"><span class="s1"><b>Dry-Wet Mix</b></span></p>
+<p class="p2"><span class="s1"><br>
+</span></p>
+</body>
+</html>

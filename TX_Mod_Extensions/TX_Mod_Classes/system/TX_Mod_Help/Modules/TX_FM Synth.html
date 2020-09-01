@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>FM Synth</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Module type: Audio Source (mono output, triggered)</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module creates polyphonic synthesised notes using multi-layer Frequency Modulation (FM) Synthesis.</p>
+<p class="p1">It uses 6 "operators" (which are the equivalent to sine oscillators in FM terminology), which can each modulate the frequency of any of the 6 operators, including themselves (self-modulation). </p>
+<p class="p1">See help file <A href="../TX_Frequency Modulation Synthesis.html">Frequency Modulation Synthesis<A> for details.</p>
+<p class="p1">Notes can be triggered in various ways such as by MIDI notes, other modules (e.g. <b>Step Sequencer</b>, <b>Audio Trigger</b>) or action buttons on an interface screen.  </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Operators button</b></p>
+<p class="p1">See help file <A href="../TX_Frequency Modulation Synthesis.html">Frequency Modulation Synthesis<A> for details about the operators.</p>
+<p class="p1"><b>Main level</b> - this sets the overall output level of the synth</p>
+<p class="p1"><b>Amp Comp</b> - select a preset for the type of amplitude compensation to use - see help file <A href="TX_Amp Comp.html">Amp Comp<A> for details. Can be set to off when not needed.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Velocity Curves button</b></p>
+<p class="p1"><b>Op 1/Op 2/Op 3/Op 4/Op 5/Op6/Output </b>- buttons to set which curve is being edited.<br>
+Each operator has it's own curve, which scales it's amplitude - by default this is flat curve set to 50% amplitude. <br>
+Output refers to the overall velocity curve which scales the output level of the synth. </p>
+<p class="p1"><b>Vel curve</b> - sets a transfer curve which maps the input velocity to new output velocity. See the preset curves for examples.</p>
+<p class="p1">See help file <a href="../TX_Curve%20Editing.html">Curve Editing</a> for details.</p>
+<p class="p1"><b>Grid rows</b> - no of rows (1-99) separated by white lines in the grid behind the curve.</p>
+<p class="p1"><b>Grid cols</b> - no of columns (1-99) separated by white lines in the grid behind the curve.</p>
+<p class="p1"><br>
+</p>
+<p class="p1"><b>Note Levels button</b></p>
+<p class="p1"><b>Op 1/Op 2/Op 3/Op 4/Op 5/Op6 </b>- buttons to set which curve is being edited</p>
+<p class="p1"><b>Note levels</b> curve - sets the amplitude scaling for each individual note across the keyboard. </p>
+<p class="p1"><b>Copy curve/ Paste curve</b> - for copying between layers</p>
+<p class="p1"><b>Smooth curve</b> - evens out spikes or sudden changes in the curve. Useful when curve is drawn by the mouse.</p>
+<p class="p1"><b>Invert curve</b> - turns the curve upside down. </p>
+<p class="p1"><b>Randomise curve</b> - randomises the level of every note.</p>
+<p class="p1"><b>Default curve</b> - sets the level of every note to maximum.</p>
+<p class="p1"><br>
+</p>
+<p class="p1"><b>MIDI/ Note button</b></p>
+<p class="p1">See help file <A href="../TX_MIDI Note Button.html">MIDI Note Button<A> for details.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Envelopes button</b></p>
+<p class="p1">There are buttons to select one the following envelopes which are triggered when a note is played:</p>
+<p class="p1"><b>Volume Env</b> - overall volume envelope for each note played</p>
+<p class="p1"><b>Operator 1 Env</b> - optional envelope which is added to the amplitude of Operator 1</p>
+<p class="p1"><b>Operator 2 Env</b> - optional envelope which is added to the amplitude of Operator 2</p>
+<p class="p1"><b><i>For Operator 1 Env and Operator 2 Env</i></b><i> , the following controls are shown:</i></p>
+<p class="p1"><b>OFF/ON Operator 1/2 Env</b> - turns the envelope on/off.</p>
+<p class="p1"><b>Env amount</b> - sets how much the envelope will affect the amplitude of Operator 1/2. The range is -1 to +1. Negative values will mean the envelope moves the amplitude in a negative direction. </p>
+<p class="p1"><b><i>For other envelope controls</i></b>, see help file <A href="TX_Env DADSSR.html">Env DADSSR<A>.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Pitch bend</b></p>
+<p class="p1"><b>Op 1* Freq Ratio</b></p>
+<p class="p1"><b>Op 1* Fixed Freq</b></p>
+<p class="p1"><b>Op 1* Detune</b></p>
+<p class="p1"><b>Op 1* Freq Ratio</b></p>
+<p class="p1"><b>Op 1* Phase</b></p>
+<p class="p1"><b>Op 1* Amp</b></p>
+<p class="p1"><b>. . . (* same for Op 2-Op 6). . . </b></p>
+<p class="p1"><b>Op 1 Level</b></p>
+<p class="p1"><b>Op 2 Level</b></p>
+<p class="p1"><b>Op 3 Level</b></p>
+<p class="p1"><b>Op 4 Level</b></p>
+<p class="p1"><b>Op 5 Level</b></p>
+<p class="p1"><b>Op 6 Level</b></p>
+<p class="p1"><b>Vol Env Delay</b>  </p>
+<p class="p1"><b>Vol Env Attack</b>  </p>
+<p class="p1"><b>Vol Env Decay</b></p>
+<p class="p1"><b>Vol Env Sustain level</b></p>
+<p class="p1"><b>Vol Env Sustain time</b></p>
+<p class="p1"><b>Vol Env Release  </b></p>
+<p class="p1"><b>Op 1 Env Delay</b>  </p>
+<p class="p1"><b>Op 1 Env Attack</b>  </p>
+<p class="p1"><b>Op 1 Env Decay</b></p>
+<p class="p1"><b>Op 1 Env Sustain level</b></p>
+<p class="p1"><b>Op 1 Env Sustain time</b></p>
+<p class="p1"><b>Op 1 Env Release  </b></p>
+<p class="p1"><b>Op 2 Env Delay</b>  </p>
+<p class="p1"><b>Op 2 Env Attack</b>  </p>
+<p class="p1"><b>Op 2 Env Decay</b></p>
+<p class="p1"><b>Op 2 Env Sustain level</b></p>
+<p class="p1"><b>Op 2 Env Sustain time</b></p>
+</body>
+</html>

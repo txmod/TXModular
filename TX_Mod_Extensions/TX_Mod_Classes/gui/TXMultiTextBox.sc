@@ -21,7 +21,7 @@ TXMultiTextBox {	// TXMultiTextBox module with label
 		size = initStrings.size;
 		if (scrollViewWidth.notNil, {
 			if (scrollViewAction.notNil, {
-				extraHeight = 12;
+				extraHeight = 18;
 			},{
 				extraHeight = 0;
 			});
@@ -44,11 +44,11 @@ TXMultiTextBox {	// TXMultiTextBox module with label
 			scrollBox.decorator.reset;
 		});
 		size.do({ arg item, i;
-			holdTextBox = StaticText(scrollBox?window, textWidth @ dimensions.y)
-					.align_(\centre);
+			holdTextBox = StaticText(scrollBox?window, textWidth @ dimensions.y);
+			holdTextBox.align_(\center);
 			holdTextBox .font_(Font.new("Gill Sans", 10));
+			holdTextBox.string = initStrings.at(i).asString;
 			arrTextViews = arrTextViews.add(holdTextBox);
-			holdTextBox.string = initStrings.at(i);
 		});
 
 	}

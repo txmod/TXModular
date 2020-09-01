@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>CyclOSC Colour</b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Control Source</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module analyses the video data coming in from a video camera to check for the presence of a particular target colour which you can set.</p>
+<p class="p1">You can also to define a zone which means that the target is looked for in only certain parts of the video grid. This is useful for triggering events only when a target colour enters a space. For example, by adding multiple modules you can create colour-sensitive hot-zones in an interactive performance or installation space.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Control signals (with values between 0 and 1) are output for the following:</p>
+<p class="p1"><b>- Out X/ Out Y</b> - When the target colour is found, the module outputs control signals of the X (left to right) and Y (up-down) values of the where the target is found. (If the target is found is more than one grid square, the centre of all the grids where the target is found is used).<span class="Apple-converted-space"> </span></p>
+<p class="p1">(<i>note: </i>The Out X &amp; Out Y control signal<b> </b>outputs can be passed to <b>Smooth</b> insert modules to make their values less "bumpy".)</p>
+<p class="p1"><b>- Target Found</b> - this control signal outputs a value of 1 if the target is found, otherwise it outputs 0.</p>
+<p class="p1">When the target colour is found, the<b> </b>module also triggers up to <b>10 actions</b>. Actions are commands or instructions for any modules in the system. <span class="Apple-converted-space"> </span></p>
+<p class="p1">Examples of actions include: changing the settings of any modules in the system, triggering notes to play, and starting/stopping sequencers.<span class="Apple-converted-space"> </span></p>
+<p class="p1">For more detials on Actions in the TX Modular system, see help file <A href="../TX_What_Are_Actions.html">TX_What_Are_Actions<A>.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Note:</i></b></p>
+<p class="p1">This module is designed to be used with the software <b>Processing</b> running on the same computer.<span class="Apple-converted-space"> </span></p>
+<p class="p1">A <b>video camera</b> is also required - a <b>built-in</b> or <b>external </b>camera can be used.<span class="Apple-converted-space"> </span></p>
+<p class="p1">By running a certain file in <b>Processing</b>, it will bring in live camera data and send it to this module to be anaysed (<i>see section </i><b><i>Using</i></b><i> </i><b><i>Processing</i></b><i> </i><b><i>files</i></b><i> below</i>).<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Target settings button</b></p>
+<p class="p1"><b>Grid size</b> - selects the size of the grid (8x8, 16x16, 32x32) which the video is divided into. The bigger the grid size, the more CPU is used. <b><i>Note</i></b> - the <b>grid size</b> must match the <b>grid resolution</b> of the <b>Processing file</b> which you are running.</p>
+<p class="p1">e.g. Processing file "<b>TXcyclOSC8Col.pde</b>" is for a colour grid of 8 rows and columns.</p>
+<p class="p1">(<i>see section </i><b><i>Using</i></b><i> </i><b><i>Processing</i></b><i> </i><b><i>files</i></b><i> below</i>).</p>
+<p class="p1"><b>Take snapshot<span class="Apple-converted-space">  </span>button</b> - pressing this will fill the video grid with a snapshot of the <b>latest video data</b> that has been sent from <b>Processing</b>. (n.b. If <b>nothing</b> has been sent yet, the grid will become <b>black</b>.)</p>
+<p class="p1"><b>Video Grid</b>- You can <b>set </b>the<b> target</b> <b>colour</b> by <b>clicking</b> on any square in the <b>video grid</b> (having taken a <b>snapshot</b> first).</p>
+<p class="p1"><b>Target colour box</b> - this shows what the target colour currently is.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Red</b> - change the <b>red</b> element of the <b>target colour</b></p>
+<p class="p1"><b>Green</b> - change the <b>green</b> element of the <b>target colour</b></p>
+<p class="p1"><b>Blue</b> - change the <b>blue</b> element of the <b>target colour</b></p>
+<p class="p1"><b>Tolerance</b> - ranges from 0-20% - this sets how closely a colour must match the target colour. 0% tolerance means the colours must match exactly. However, colour can easily change due to lighting conditions, so tolerance of around 5% or more is recommended.</p>
+<p class="p1"><b>Min Target</b> - ranges from 1-20 - this sets the minimum number of grid squares that need to be found to match the target colour.</p>
+<p class="p1"><b>Analysis rate</b> - ranges from 1-10 - this sets how many times per second the target is searched for.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Zone settings button</b></p>
+<p class="p1"><b>Use Zone checkbox</b> - this sets whether the target is searched for in a particular zone (rather than the whole video picture)</p>
+<p class="p1"><b>Take snapshot<span class="Apple-converted-space">  </span>button</b> - pressing this will fill the video grid with the <b>latest video data</b> that has been sent from <b>Processing</b>. If <b>nothing</b> has been sent yet, the grid will become <b>black</b>.</p>
+<p class="p1"><b>Video Grid</b>- You can <b>set </b>which grid squares are in<b> </b>the<b> target</b> <b>zone</b> by <b>clicking</b> on any square in the <b>video grid</b> (having taken a <b>snapshot</b> first). <b>Clicking</b> on any grid square will turn it on or off in the zone. If a grid square is on, it will show its correct colour. If it's off, it will be a pale grey colour.</p>
+<p class="p1"><b>All On button</b> - this sets all the grid squares on.</p>
+<p class="p1"><b>All Off button</b> - this sets all the grid squares off.</p>
+<p class="p1"><b>dragging turns boxes on/ dragging switches box values</b> - when the mouse is clicked and dragged around the grid, this sets whether the boxes it passes are turned on or turned on/off depending their current setting.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Actions 1-4<span class="Apple-converted-space">  </span>button</b></p>
+<p class="p1"><b>Module 1</b> - selects which module will be used.</p>
+<p class="p1"><b>Reset</b> - resets the action to the default action (which does nothing).</p>
+<p class="p1"><b>Action 1</b> - selects action will be run out of all the possible actions for that module.</p>
+<p class="p1"><b>Settings 1</b> - depending on which action is run, values can be set for the action.<span class="Apple-converted-space"> </span></p>
+<p class="p1">For example, if the action selected was to set the Frequency of a Waveform module, then a slider would be displayed for setting the frequency.</p>
+<p class="p1"><b>Use action</b> - if switched on, this means that the action will be run.<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Action 2/3/4, etc. </b>- the controls are the same for all other actions.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Actions 5-8<span class="Apple-converted-space">  </span>button</b></p>
+<p class="p1">- the controls are the same for all other actions</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Actions 9-10<span class="Apple-converted-space">  </span>button</b></p>
+<p class="p1">- the controls are the same for all other actions</p>
+<p class="p2"><b><i></i></b><br></p>
+<p class="p1"><b>++++++++++++++++++++++++++++++++++++++++</b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Using Processing files with this module:</b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Included Folder: "TX Processing "</b></p>
+<p class="p1">There is a folder of <b>Processing</b> files which is included with the TX Modular software.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Running Processing</b></p>
+<p class="p1">All the files have been tested with <b>Processing</b> version <b>1.0.5</b></p>
+<p class="p1">In order to use them you will need:</p>
+<p class="p1">- a recent version of <b>Processing</b> (go to <span class="s1">http://www.processing.org/download/</span>)</p>
+<p class="p1">- the <b>oscP5</b> library for Processing (go to <span class="s1">http://www.sojamo.de/libraries/oscP5/</span>)</p>
+<p class="p1"><i>Before starting Processing</i>, put the <b>oscP5</b> folder into the <b>libraries</b> folder of <b>Processing</b>.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Once <b>Processing</b> is running, open a file (see below) and start it running.</p>
+<p class="p2"><br></p>
+<p class="p1"><b>Processing files that can be used with this module:</b></p>
+<p class="p1">TXcyclOSC8Col.pde</p>
+<p class="p1">TXcyclOSC8ColNS.pde</p>
+<p class="p1">TXcyclOSC16Col.pde</p>
+<p class="p1">TXcyclOSC16ColNS.pde</p>
+<p class="p1">TXcyclOSC32Col.pde</p>
+<p class="p1">TXcyclOSC32ColNS.pde</p>
+<p class="p2"><br></p>
+<p class="p1">The<b> </b>file names show their <b>grid resolution</b> (8/16/ 32 rows and columns) and <b>colour</b> <b>type</b> (colour or grey). <span class="Apple-converted-space"> </span></p>
+<p class="p1">e.g. File "TXcyclOSC16Col.pde" is for a colour grid of 16 rows and columns.</p>
+<p class="p2"><br></p>
+<p class="p1">There are 2 versions of each file. One ends in <b>NS</b>, which means that "<b>no screen"</b> is shown in <b>Processing</b> - this is uses less CPU than the ordinary version.<span class="Apple-converted-space"> </span></p>
+<p class="p1">e.g. File "TXcyclOSC32ColNS.pde" is for a colour grid of 32 rows and columns with no screen shown.</p>
+<p class="p2"><br></p>
+<p class="p1">The reason to have 2 versions of each file is to allow you to open the ordinary version of the file first which displays the live video data in Processing. This is to make sure that Processing gets the image from the camera. Once you know this is working, then you can close the ordinary version and open the NS version of the file instead to save CPU load.</p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Note</b> - this module is based on CyclOSC by Steve Symons: http://muio.org.<span class="Apple-converted-space"> </span></p>
+</body>
+</html>

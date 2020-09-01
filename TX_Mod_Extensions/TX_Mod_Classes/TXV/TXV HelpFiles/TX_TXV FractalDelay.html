@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV FractalDelay</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource DrawDestination</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module is a Draw Destination which draws multiple transformed copies of what is drawn to it using a fractal branching  model.</p>
+<p class="p1">Up to 10 branches can be used, each with up to 10 branching levels.<br>
+Each branch can draw a specific draw layer (from 20 layers) and add scaling, rotation and position offsets.<br>
+Each branch level can have a delay, so that parameter changes (for example to scaling, rotation and position) can be delayed.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Global Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>fractalTreeLevels</b> - integer with modulation (def: 2, range: 1 : 10). </p>
+<p class="p1"><b>fractalTreeBranches</b> - integer with modulation (def: 2, range: 1 : 10). </p>
+<p class="p1"><b>cellWidth</b> - float with modulation (def: 0.2, range: 0 : 1). </p>
+<p class="p1"><b>cellHeight</b> - float with modulation (def: 0.2, range: 0 : 1). </p>
+<p class="p1"><b>randomSeed</b> - integer with modulation (def: 100, range: 0 : 10000). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Level Delays Button</i></b></p>
+<p class="p1"><b>maxLevelDelayFrames</b> - integer with modulation (def: 100, range: 0 : 1000). </p>
+<p class="p1"><b>level1DelayRatio</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level2DelayRatio</b> - float with modulation (def: 0.111, range: 0 : 1). </p>
+<p class="p1"><b>level3DelayRatio</b> - float with modulation (def: 0.222, range: 0 : 1). </p>
+<p class="p1"><b>level4DelayRatio</b> - float with modulation (def: 0.333, range: 0 : 1). </p>
+<p class="p1"><b>level5DelayRatio</b> - float with modulation (def: 0.444, range: 0 : 1). </p>
+<p class="p1"><b>level6DelayRatio</b> - float with modulation (def: 0.556, range: 0 : 1). </p>
+<p class="p1"><b>level7DelayRatio</b> - float with modulation (def: 0.667, range: 0 : 1). </p>
+<p class="p1"><b>level8DelayRatio</b> - float with modulation (def: 0.778, range: 0 : 1). </p>
+<p class="p1"><b>level9DelayRatio</b> - float with modulation (def: 0.889, range: 0 : 1). </p>
+<p class="p1"><b>level10DelayRatio</b> - float with modulation (def: 1.0, range: 0 : 1). </p>
+<p class="p1"><b>level1RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level2RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level3RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level4RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level5RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level6RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level7RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level8RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level9RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>level10RandDelayMix</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Branch 1 :: Options & Probability Button</i></b></p>
+<p class="p1"><b>branch01_branchIfTopLevel</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>branch01_drawBottomLevelOnly</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>branch01_branchRule</b> - index with modulation (def: 0, range: 0 : 4) options: <b> [0]</b>_Always branch, <b> [1]</b>_Branch if Level is Greater than Comparator, <b> [2]</b>_Branch if Level is Less than Comparator, <b> [3]</b>_Branch if Level is Equal to Comparator, <b> [4]</b>_Branch if Level is Not Equal to Comparator. </p>
+<p class="p1"><b>branch01_branchRuleComparator</b> - integer with modulation (def: 1, range: 1 : 10). </p>
+<p class="p1"><b>branch01_drawLayersRule</b> - index with modulation (def: 0, range: 0 : 26) options: <b> [0]</b>_All layers except Layer 20, <b> [1]</b>_Layer 1, <b> [2]</b>_Layer 2, <b> [3]</b>_Layer 3, <b> [4]</b>_Layer 4, <b> [5]</b>_Layer 5, <b> [6]</b>_Layer 6, <b> [7]</b>_Layer 7, <b> [8]</b>_Layer 8, <b> [9]</b>_Layer 9, <b> [10]</b>_Layer 10, <b> [11]</b>_Layer 11, <b> [12]</b>_Layer 12, <b> [13]</b>_Layer 13, <b> [14]</b>_Layer 14, <b> [15]</b>_Layer 15, <b> [16]</b>_Layer 16, <b> [17]</b>_Layer 17, <b> [18]</b>_Layer 18, <b> [19]</b>_Layer 19, <b> [20]</b>_Layer 20, <b> [21]</b>_Layers 1 - 5, <b> [22]</b>_Layers 6 - 10, <b> [23]</b>_Layers 11 - 15, <b> [24]</b>_Layers 16 - 20, <b> [25]</b>_Layers 1 - 10, <b> [26]</b>_Layers 11 - 20. </p>
+<p class="p1"><b>branch01_branchProbability</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>branch01_subBranchProbability</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Branch 1 :: Offset & Anchor Button</i></b></p>
+<p class="p1"><b>branch01_applyOffsetLast</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>branch01_offsetX</b> - float with modulation (def: 0, range: -10 : 10). </p>
+<p class="p1"><b>branch01_offsetY</b> - float with modulation (def: 0, range: -10 : 10). </p>
+<p class="p1"><b>branch01_anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>branch01_anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Branch 1 :: Scale Button</i></b></p>
+<p class="p1"><b>branch01_scaleX</b> - float with modulation (def: 1, range: 0 : 2). </p>
+<p class="p1"><b>branch01_scaleXLevelDelta</b> - float with modulation (def: 0, range: -1 : 1). </p>
+<p class="p1"><b>branch01_scaleXRandom</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>branch01_scaleY</b> - float with modulation (def: 1, range: 0 : 2). </p>
+<p class="p1"><b>branch01_scaleYLevelDelta</b> - float with modulation (def: 0, range: -1 : 1). </p>
+<p class="p1"><b>branch01_scaleYRandom</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Branch 1 :: Rotate Button</i></b></p>
+<p class="p1"><b>branch01_angle</b> - float with modulation (def: 0, range: -720 : 720). </p>
+<p class="p1"><b>branch01_angleLevelDelta</b> - float with modulation (def: 0, range: -180 : 180). </p>
+<p class="p1"><b>branch01_angleRandom</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Branches 2 - 10 are the same as Branch 1</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b> </p>
+<p class="p1"><b>fractalTreeLevels</b></p>
+<p class="p1"><b>fractalTreeBranches</p>
+<p class="p1"><b>cellWidth</b></p>
+<p class="p1"><b>cellHeight</b></p>
+<p class="p1"><b>randomSeed</b></p>
+<p class="p1"><b>maxLevelDelayFrames</b></p>
+<p class="p1"><b>level1DelayRatio</b></p>
+<p class="p1"><b>level2DelayRatio</b></p>
+<p class="p1"><b>level3DelayRatio</b></p>
+<p class="p1"><b>level4DelayRatio</b></p>
+<p class="p1"><b>level5DelayRatio</b></p>
+<p class="p1"><b>level6DelayRatio</b></p>
+<p class="p1"><b>level7DelayRatio</b></p>
+<p class="p1"><b>level8DelayRatio</b></p>
+<p class="p1"><b>level9DelayRatio</b></p>
+<p class="p1"><b>level10DelayRatio</b></p>
+<p class="p1"><b>level1RandDelayMix</b></p>
+<p class="p1"><b>level2RandDelayMix</b></p>
+<p class="p1"><b>level3RandDelayMix</b></p>
+<p class="p1"><b>level4RandDelayMix</b></p>
+<p class="p1"><b>level5RandDelayMix</b></p>
+<p class="p1"><b>level6RandDelayMix</b></p>
+<p class="p1"><b>level7RandDelayMix</b></p>
+<p class="p1"><b>level8RandDelayMix</b></p>
+<p class="p1"><b>level9RandDelayMix</b></p>
+<p class="p1"><b>level10RandDelayMix</b></p>
+<p class="p1"><b>branch01_branchIfTopLevel</b>
+<p class="p1"><b>branch01_drawBottomLevelOnly</b>
+<p class="p1"><b>branch01_branchRule</b></p>
+<p class="p1"><b>branch01_branchRuleComparator</b></p>
+<p class="p1"><b>branch01_drawLayersRule</b></p>
+<p class="p1"><b>branch01_branchProbability</b></p>
+<p class="p1"><b>branch01_subBranchProbability</b></p>
+<p class="p1"><b>branch01_applyOffsetLast</b></p>
+<p class="p1"><b>branch01_offsetX</b></p>
+<p class="p1"><b>branch01_offsetY</b></p>
+<p class="p1"><b>branch01_anchorX</b></p>
+<p class="p1"><b>branch01_anchorY</b></p>
+<p class="p1"><b>branch01_scaleX</b></p>
+<p class="p1"><b>branch01_scaleXLevelDelta</b> </p>
+<p class="p1"><b>branch01_scaleXRandom</b></p>
+<p class="p1"><b>branch01_scaleY</b></p>
+<p class="p1"><b>branch01_scaleYLevelDelta</b></p>
+<p class="p1"><b>branch01_scaleYRandom</b></p>
+<p class="p1"><b>branch01_angle</b></p>
+<p class="p1"><b>branch01_angleLevelDelta</b></p>
+<p class="p1"><b>branch01_angleRandom</b>
+<p class="p1"><b><i>Branches 2 - 10 are the same as Branch 1</i></b></p>
+<p class="p1"><br></p>
+</body>
+</html>

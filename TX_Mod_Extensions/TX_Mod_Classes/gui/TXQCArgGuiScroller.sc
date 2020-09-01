@@ -20,7 +20,10 @@ var <>arrControls, <>scrollView, controlCount, system, holdBackgroundBox, holdAr
 		controlCount = argArrLabels.size;
 		// add ScrollView
 		scrollView = ScrollView(argParent, Rect(0, 0, dimensions.x, dimensions.y)) 
-			.hasBorder_(false).autoScrolls_(false);
+			.hasBorder_(false);
+		if (GUI.current.asSymbol == \cocoa, {
+			scrollView.autoScrolls_(false);
+		});
 		scrollView.action = scrollViewAction;
 		scrollView.hasHorizontalScroller = false;
 		scrollView.hasVerticalScroller = true;

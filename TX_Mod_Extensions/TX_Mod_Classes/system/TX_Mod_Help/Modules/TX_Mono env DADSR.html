@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font: 15.0px Helvetica; font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Mono env DADSR</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type:<span class="Apple-converted-space">  </span>Control Source (triggered)</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module creates a mono DADSR (Delay Attack Decay Sustain Release) envelope as a control signal.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1">It can be triggered in various ways such as by modulation of the gate input, by other modules (such as an <b>Action Sequencer</b>) or by action buttons on an interface screen.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Env presets</b> - presets for various standard envelope shapes.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Envelope display box</b> - this shows each stage of the envelope by level (up-down) and time (left-right).</span></p>
+<p class="p1"><span class="s1"><b>Pre-Delay</b> - the delay time before the envelope begins.</span></p>
+<p class="p1"><span class="s1"><b>Attack</b> - the attack time of the envelope</span></p>
+<p class="p1"><span class="s1"><b>Decay</b> - the decay time of the envelope</span></p>
+<p class="p1"><span class="s1"><b>Sustain level</b> - the level which the sustain part of the envelope is at.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Sustain time</b> - this is only relevant if the Envelope type is fixed length.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1"><b>Release</b> - the release time of the envelope</span></p>
+<p class="p1"><span class="s1"><b>Curve</b> - this sets the shape of the curve for all parts of the envelope. </span></p>
+<p class="p1"><span class="s1"><b>Env. Type</b> - this can be Sustain or Fixed Length.<span class="Apple-converted-space">  </span>A Sustain envelope will remain at the sustain level until the end of the gate.<span class="Apple-converted-space">  </span>A Fixed Length envelope will remain at the sustain level according to the Sustain time slider.</span></p>
+<p class="p1"><span class="s1"><b>Level scale</b> - scales the level of the curve.</span></p>
+<p class="p1"><span class="s1"><b>Gate</b> - sets the gate to trigger or stop the envelope.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Gate</b></span></p>
+<p class="p1"><span class="s1"><b>Delay</b></span></p>
+<p class="p1"><span class="s1"><b>Attack</b></span></p>
+<p class="p1"><span class="s1"><b>Decay</b></span></p>
+<p class="p1"><span class="s1"><b>Sustain level</b></span></p>
+<p class="p1"><span class="s1"><b>Sustain time</b></span></p>
+<p class="p1"><span class="s1"><b>Release</b></span></p>
+<p class="p1"><span class="s1"><b>Level scale</b></span></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Output Busses:</i></b></p>
+<p class="p1"><b>Env Out</b> - the envelope signal</p>
+<p class="p1"><b>Env End Trig</b> - outputs a trigger when the envelope ends</p>
+<p class="p1"><br></p>
+</body>
+</html>

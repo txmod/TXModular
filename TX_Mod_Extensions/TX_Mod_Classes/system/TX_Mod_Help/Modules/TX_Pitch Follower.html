@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Pitch Follower</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Module type: Control Source</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module follows the pitch of a mono audio signal coming into it.</p>
+<p class="p1">Once an pitch follower has been created, it will appear in the list of possible destinations for audio channels. This allows you to send an audio signal to it.</p>
+<p class="p1">It outputs a control signal at the same level as the audio coming in.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Pitch detector</b> - this gives 2 options, slower &amp; more accurate, or faster and less accurate. Both can be tried to see which works best.</p>
+<p class="p1"><b>Freq min-max</b> - set the minimum and maximum frequencies that will be followed. There are presets for various musical instruments.</p>
+<p class="p1"><b>Follow time</b> - time taken in milliseconds to follow the amplitude. Longer times will tend to smooth the output signal.</p>
+<p class="p1"><b>Cailbrate On</b> - This button turns on the calibration process which automatically detects and set the minimum and maximum frequency values.</p>
+<p class="p1"><b>Cailbrate Off</b> - This button turns of the calibration process.</p>
+<p class="p1"><b>Detect min &amp; max</b> <b>[on/off]</b> - to display the minimum and maximum values found in the current audio being analysed. (Note this uses more CPU power when detection is on, so only use when needed.)</p>
+<p class="p1"><b>Copy detected values to min/max</b> - this copies the values found into the analysis controls above it.</p>
+<p class="p1"><b>Reset</b> - resets the detector, so previous min/max values are ignored.</p>
+<p class="p1"><b>Automatically copy detected values to min/max</b> <b>[on/off]</b> - automatically copies the values found into the analysis controls above it.</p>
+<p class="p1"><b>Detect Current Pitch</b> - button to display current pitch.</p>
+<p class="p1"><b>Reset</b> - resets the pitch displays.</p>
+<p class="p2"><b><i></i></b><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>Audio in</b> - the incoming mono audio signal for amp following.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Follow time</b></p>
+</body>
+</html>

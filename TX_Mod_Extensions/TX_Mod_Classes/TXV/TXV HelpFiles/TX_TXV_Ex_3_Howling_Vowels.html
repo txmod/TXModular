@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Ex 3 Howling Vowels</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This help file uses an example file “Ex_3_Howling_Vowels" found in the folder "TXV_Examples".  It is similar to Example 2, but adds has many more modules and more complexity to its structure.</p>
+<p class="p1">Please open the example in the TX Modular system.</p>
+<p class="p1">In order to start the TXV software, you can use the “Start TXV” button if you are using the standalone TX Modular (for MacOS) which includes TXV inside it.  If you are using another platform, you will need to have a TXV build ready for your platform and open it separately.</p>
+<p class="p1">Once TXV has been started, press the button “Rebuild TXV System” which will send all the data from the TX Modular to TXV.</p>
+<p class="p1">You should then see a face with rolling eyes that tilts from side to side.</p>
+<p class="p1">In order to hear the “howling vowels”, press the button “Start mouth sequencer” which will also cause the mouth to change shape every time a new vowel is sung. The button “Stop mouth sequencer” will stop the singing.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Basic idea</i></b></p>
+<p class="p1">In principle, this example is simlilar to Example 2. Shapes are drawn in layers with Transform modules to group them together and internal/external modulation to move the shapes or transforms.</p>
+<p class="p1">The individual parts of the face are drawn to a Transform so the face itself can be rotated from side to side with a TXV LFO 2D.</p>
+<p class="p1">The eyebrows move up and down with a TXV LFO 2D.</p>
+<p class="p1">The eye pupils move in spirals with a TXV LFO 2D.</p>
+<p class="p1">The mouth is scaled separately in X & Y directions using external modulation from a Step Sequencer that also controls the Vowel Morph. This enables the mouth to be stretched vertically and horizontally as each new vowel is sung (howled!).</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Interface controls</i></b></p>
+<p class="p1">On the interface screen, the “masterBPM” is there as before which changes the speed of all LFOs.</p>
+<p class="p1">Below that is “TXV Shape2D Multi [1] (hair) - numCopies”. If you change this slider, you will see the number of individual hairs changing - each hair is made from an orange triangle.</p>
+<p class="p1">The hair is made from a TXV Shape2D Multi module, which is similar to TXV Shape 2D, but has multiple copies of the shape, each of which can have different properties. Here, each hair has a different rotation as well as a different positionY so they curve around the face.</p>
+<p class="p1"><br></p>
+<p class="p1">Below that is “TXV Transf3D Multi [1] (eye group) - numCopies”. If you change this you will see the number eyes change.</p>
+<p class="p1">Each eye is made from 3 shapes:  a white oval for the eye itself, a blue circle for the eye pupil, and a grey diamond for the eyebrow. </p>
+<p class="p1">These are all drawn to a TXV Transf3D Multi, which is just like a TXV Transform except anything drawn to it will be drawn multiple times, each of which can have different properties. In this case, each eye has a different positionX to spread them across the face.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>More details</i></b></p>
+<p class="p1">If you click on the button “Modules + Channels”, you can see in the left-hand column all the modules used.</p>
+<p class="p1">If you open TXV System [1], you can click on the “Modulation Nodes” and “Draw Connections” button to see all the connections inside TXV.</p>
+<p class="p1"><br></p>
+<p class="p1">Now open the TXV Shape2D Multi [1] to see how the hair is created.</p>
+<p class="p1">If you click on the “Position” button, and below that click on “Position XY” you will see that both PositionX and PositionY have different start and end values. These set the minimum and maximum positions for the hair.</p>
+<p class="p1">Then if you click on “Position X Spread” and “Position Y Spread” you can see how the hairs are distributed in the different directions. “Position X Spread shows a linear ramp curve, meaning the hairs are distributed evenly along the X axis. “Position Y Spread” is drawn so that the hair is curved around the edge of the face, with the highest position given to the hairs in the middle.</p>
+<p class="p1">If you click on the “Rotate” button, and below that click on “Rotate & Multiply” you will see that rotate & rotateEnd have different values, 0 and 360 degrees. These set the minimum and maximum rotation for the hair.</p>
+<p class="p1">Then if you click on “Rotate Spread” you can see a linear ramp curve, meaning the hairs are evenly rotated, so the left and right sides point downwards, with the middle pointing upwards.</p>
+<p class="p1"><br></p>
+<p class="p1">Now open the TXV Transf3D Multi [1] (eye group) module to see how the eyes are drawn.</p>
+<p class="p1">If you click on the “Transform Shift” button, you can see that shiftX and shiftXEnd set the maximum left and right positions of the eyes.</p>
+<p class="p1">If you click on the “Shift Spread” button, you can see that shiftSpreadCurve is a linear ramp, so the eyes will be spread evenly from left to right.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Vowel synthesis and external modulation of the mouth</i></b></p>
+<p class="p1">First look at all the Channels in the TX Modular by clicking on the white bar to the left of the Channel Titles box and dragging it far leftwards.</p>
+<p class="p1">There are 9 channels in the TX Modular. Most of these are concerned with creating the Vowel sound, using a Step Sequencer and Env DADSR to play the notes and to move between the vowels in the Vowel Morph module.</p>
+<p class="p1">In Channel 2, ReverbG adds some reverb to the singing, and in Channel 9, an LFO adds vibrato to the singing.</p>
+<p class="p1">In Channels 5 & 7, the Step Sequencer Control 1 and 2 outputs have Smooth inserts so the vowels are morphed smoothly without sudden jumps.</p>
+<p class="p1">Finally, Channels 6 & 8 are used for the external modulation to TXV. They take the smoothed vowel morph signals from the Step Sequencer and connect them to scaleX and scaleY of TXV Transform [3], which groups the mouth and lips together.</p>
+<p class="p1">If you open TXV Transform [3] and click on the "Scale" button, you will see that scaleX and scaleY have been set for external modulation.</p>
+<p class="p1"><br></p>
+</body>
+</html>

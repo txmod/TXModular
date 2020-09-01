@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {font-kerning: none; color: #000000}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Pulse Divider</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Control Source</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module outputs clock pulses by dividing the number of </span><span class="s2">triggers</span><span class="s1"> it receives by various amounts. For example, if the division is 3, only the first of every 3 pulses will be output.</span></p>
+<p class="p1"><span class="s1">Each output, labelled Div 2 to Div 8, divides the input by a different fixed number. <span class="Apple-converted-space"> </span></span></p>
+<p class="p2"><span class="s1">This module can be triggered in various ways such as by modulation of the Trigger input, by other modules (such as an <b>Action Sequencer</b>) or by action buttons on an interface screen.<span class="Apple-converted-space"> </span></span></p>
+<p class="p1"><span class="s1">See also <a href="file:TX_Pulse%20DividerV.html">Pulse DividerV</a> which is similar but different.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Trigger Pulse</b> - this is for manually triggering a pulse into the dividers.</span></p>
+<p class="p1"><span class="s1"><b>Reset Dividers</b> - this resets all dividers so they will all trigger on the next trigger received.</span></p>
+<p class="p1"><span class="s1"><b>Probability</b> - the chance that an input pulse will be sent into the dividers.<span class="Apple-converted-space">  </span>1 means always, 0 means never.</span></p>
+<p class="p2"><span class="s1"><b>Output range</b> - preset output ranges including negative values</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Trigger</b></span></p>
+<p class="p1"><span class="s1"><b>Reset</b></span></p>
+<p class="p1"><span class="s1"><b>Probability</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Output Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Div 2</b></span></p>
+<p class="p1"><span class="s1"><b>Div 3</b></span></p>
+<p class="p1"><span class="s1"><b>Div 4</b></span></p>
+<p class="p1"><span class="s1"><b>Div 5</b></span></p>
+<p class="p1"><span class="s1"><b>Div 6</b></span></p>
+<p class="p1"><span class="s1"><b>Div 7</b></span></p>
+<p class="p1"><span class="s1"><b>Div 8</b></span></p>
+</body>
+</html>

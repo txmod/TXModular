@@ -1,46 +1,45 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
 
 TXMinMaxSlider {
-	var <>labelView, labelView2, <>sliderView, <>numberView, <>rangeView, <>minNumberView, <>maxNumberView, <>presetPopupView;
-	var <>controlSpec, controlSpec2, <>action, viewValue, <>round = 0.001;
-	
+	var <>labelView, <>labelView2, <>sliderView, <>numberView, <>rangeView, <>minNumberView;
+	var <>maxNumberView, <>presetPopupView, <>controlSpec, controlSpec2, <>action, viewValue, <>round = 0.001;
+
 	// controlSpec2 is only used internally and it's min & max are decided by minNumberView & maxNumberView
-	
-	*new { arg window, dimensions, label, controlSpec, action, initVal, 
-			initAction=false, labelWidth=80, numberWidth = 120, arrRangePresets;
-		^super.new.init(window, dimensions, label, controlSpec, action, initVal, 
+
+	*new { arg window, dimensions, label, controlSpec, action, initVal,
+		initAction=false, labelWidth=80, numberWidth = 120, arrRangePresets;
+		^super.new.init(window, dimensions, label, controlSpec, action, initVal,
 			initAction, labelWidth, numberWidth, arrRangePresets);
 	}
-	init { arg window, dimensions, label, argControlSpec, argAction, initVal, 
-			initAction, labelWidth, numberWidth, arrRangePresets;
-		var height, spacingX, spacingY, presetWidth;
-		
+
+	init { arg window, dimensions, label, argControlSpec, argAction, initVal,
+		initAction, labelWidth, numberWidth, arrRangePresets;
+		var height, spacingX, spacingY, indent;
+
 		if (window.class == Window, {
 			spacingX = window.view.decorator.gap.x;
 			spacingY = window.view.decorator.gap.y;
+			indent = window.view.decorator.left - window.view.decorator.margin.x;
 		}, {
 			spacingX = window.decorator.gap.x;
 			spacingY = window.decorator.gap.y;
-		});
-		if (arrRangePresets.notNil, {
-			presetWidth = 16 + spacingX;
-		}, {
-			presetWidth = 0;
+			indent = window.decorator.left - window.decorator.margin.x;
 		});
 		height = ( (dimensions.y - spacingY) / 2).asInteger;
-		
+
 		labelView = StaticText(window, labelWidth @ height);
 		labelView.string = label;
 		labelView.align = \right;
-		
+
 		controlSpec = argControlSpec.asSpec;
 		initVal = initVal ? controlSpec.default;
 		controlSpec2 = controlSpec.deepCopy.asSpec;
-		
+
 		action = argAction;
-		
-		sliderView = Slider(window, 
+
+		sliderView = Slider(window,
 			(dimensions.x - labelWidth - numberWidth - (2 * spacingX)) @ height);
+		sliderView.thumbSize_(8).knobColor_(TXColour.white);
 		sliderView.action = {
 			viewValue = controlSpec2.map(sliderView.value);
 			numberView.value = viewValue.round(round);
@@ -50,76 +49,89 @@ TXMinMaxSlider {
 			sliderView.step = (controlSpec2.step / (controlSpec2.maxval - controlSpec2.minval));
 		};
 
-		numberView = TXScrollNumBox(window, numberWidth @ height, controlSpec2);
+		numberView = TXScrollNumBox(window, numberWidth @ height, controlSpec2).maxDecimals_(4);
 		numberView.action = {
 			numberView.value = viewValue = controlSpec.constrain(numberView.value);
 			if (numberView.value < minNumberView.value, {
 				controlSpec2.minval = numberView.value;
 				minNumberView.value = numberView.value;
-				numberView.updateSpec(controlSpec2);
+				TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			});
 			if (numberView.value > maxNumberView.value, {
 				controlSpec2.maxval = numberView.value;
 				maxNumberView.value = numberView.value;
-				numberView.updateSpec(controlSpec2);
+				TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			});
 			rangeView.lo = controlSpec.unmap(minNumberView.value);
 			rangeView.hi = controlSpec.unmap(maxNumberView.value);
-			
+
 			sliderView.value = controlSpec2.unmap(viewValue);
 			action.value(this);
 		};
-		
-		// decorator next line & shift 
-			if (window.class == Window, {
-				window.view.decorator.nextLine;
-			}, {
-				window.decorator.nextLine;
-			});
+
+		// decorator next line & shift
+		if (window.class == Window, {
+			window.view.decorator.nextLine;
+			window.view.decorator.shift(indent, 0);
+		}, {
+			window.decorator.nextLine;
+			window.decorator.shift(indent, 0);
+		});
 
 		labelView2 = StaticText(window, labelWidth @ height);
-		labelView2.string = "Min - Max";
+		labelView2.string = "min - max";
 		labelView2.align = \right;
-		
-		rangeView = RangeSlider(window, 
+
+		rangeView = RangeSlider(window,
 			(dimensions.x - labelWidth - numberWidth - (2 * spacingX)) @ (height * 0.8) );
 		rangeView.action = {
 			minNumberView.value = controlSpec.map(rangeView.lo).round(round);
 			controlSpec2.minval = minNumberView.value;
 			maxNumberView.value = controlSpec.map(rangeView.hi).round(round);
 			controlSpec2.maxval = maxNumberView.value;
-			numberView.updateSpec(controlSpec2);
-			sliderView.doAction;
+			if (controlSpec2.step != 0) {
+				sliderView.step = (controlSpec2.step / (controlSpec2.maxval - controlSpec2.minval));
+			};
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
+			sliderView.valueAction = controlSpec2.unmap(viewValue).round(sliderView.step);
+			// numberView.value = viewValue.round(round);
+			// sliderView.doAction;
 		};
 		if (controlSpec.step != 0) {
 			rangeView.step = (controlSpec.step / (controlSpec.maxval - controlSpec.minval));
 		};
 		rangeView.lo = controlSpec.minval;
 		rangeView.hi = controlSpec.maxval;
-		
-		minNumberView = TXScrollNumBox(window, 
-			((numberWidth - presetWidth - spacingX)/2).asInteger @ (height * 0.8), 
-			controlSpec);
+
+		minNumberView = TXScrollNumBox(window,
+			((numberWidth - spacingX)/2).asInteger @ (height * 0.8),
+			controlSpec).maxDecimals_(4);
 		minNumberView.action = {
 			minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
 			rangeView.lo = controlSpec.unmap(minNumberView.value);
 			controlSpec2.minval = minNumberView.value;
-			numberView.updateSpec(controlSpec2);
+			if (controlSpec2.step != 0) {
+				sliderView.step = (controlSpec2.step / (controlSpec2.maxval - controlSpec2.minval));
+			};
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			viewValue = controlSpec2.constrain(viewValue);
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
 			action.value(this);
 		};
 		minNumberView.value = controlSpec.minval;
-		
-		maxNumberView = TXScrollNumBox(window, 
-			((numberWidth - presetWidth - spacingX)/2).asInteger @ (height * 0.8),
-			controlSpec);
+
+		maxNumberView = TXScrollNumBox(window,
+			((numberWidth - spacingX)/2).asInteger @ (height * 0.8),
+			controlSpec).maxDecimals_(4);
 		maxNumberView.action = {
 			maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
 			rangeView.hi = controlSpec.unmap(maxNumberView.value);
 			controlSpec2.maxval = maxNumberView.value;
-			numberView.updateSpec(controlSpec2);
+			if (controlSpec2.step != 0) {
+				sliderView.step = (controlSpec2.step / (controlSpec2.maxval - controlSpec2.minval));
+			};
+			TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 			viewValue = controlSpec2.constrain(viewValue);
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
@@ -128,16 +140,26 @@ TXMinMaxSlider {
 		maxNumberView.value = controlSpec.maxval;
 
 		if (arrRangePresets.notNil, {
-			presetPopupView = PopUpMenu(window, 16 @ (height * 0.8))
-				.background_(Color.white)
-				.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
-				.action_({ arg view;
-					var arrMinMax;
-					arrMinMax = arrRangePresets.at(view.value).at(1);
-					this.valueSplitAction = [this.valueSplit.at(0), arrMinMax.at(0),
-						 arrMinMax.at(1)]; 
-					view.value = 0;
-				});
+
+			// decorator next line & shift
+			if (window.class == Window, {
+				window.view.decorator.nextLine;
+				window.view.decorator.shift(labelWidth + spacingX, 0);
+			}, {
+				window.decorator.nextLine;
+				window.decorator.shift(labelWidth + spacingX, 0);
+			});
+
+			presetPopupView = PopUpMenu(window, (dimensions.x - labelWidth - spacingX) @ (height * 0.8))
+			.background_(TXColor.paleBlue2)
+			.items_(arrRangePresets.collect({arg item, i; item.at(0);}))
+			.action_({ arg view;
+				var arrMinMax;
+				arrMinMax = arrRangePresets.at(view.value).at(1);
+				this.valueSplitAction = [this.valueSplit.at(0), arrMinMax.at(0),
+					arrMinMax.at(1)];
+				view.value = 0;
+			});
 		});
 
 		if (initAction) {
@@ -149,43 +171,43 @@ TXMinMaxSlider {
 		};
 	}
 
-	value {  
-		^viewValue; 
-	}
-	
-	value_ { arg value; 
-		numberView.valueAction = value; 
-	}
-	
-	valueNoAction_  { arg value; 
-		numberView.value = value; 
+	value {
+		^viewValue;
 	}
 
-	valueSplit {  
-		^[sliderView.value, minNumberView.value, maxNumberView.value]; 
+	value_ { arg value;
+		numberView.valueAction = value;
 	}
-	
-	valueSplit_ { arg valueArray; 
-		minNumberView.value = valueArray.at(1) ? 0; 
+
+	valueNoAction_  { arg value;
+		numberView.value = value;
+	}
+
+	valueSplit {
+		^[sliderView.value, minNumberView.value, maxNumberView.value];
+	}
+
+	valueSplit_ { arg valueArray;
+		minNumberView.value = valueArray.at(1) ? 0;
 		minNumberView.value = controlSpec.constrain(minNumberView.value).round(round);
 		rangeView.lo = controlSpec.unmap(minNumberView.value);
 		controlSpec2.minval = minNumberView.value;
-		maxNumberView.value = valueArray.at(2) ? 0; 
+		maxNumberView.value = valueArray.at(2) ? 0;
 		maxNumberView.value = controlSpec.constrain(maxNumberView.value).round(round);
 		rangeView.hi = controlSpec.unmap(maxNumberView.value);
 		controlSpec2.maxval = maxNumberView.value;
-		numberView.updateSpec(controlSpec2);
-		sliderView.value = valueArray.at(0) ? 0; 
+		TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
+		sliderView.value = valueArray.at(0) ? 0;
 		viewValue = controlSpec2.map(sliderView.value);
 		numberView.value = viewValue.round(round);
 	}
 
-	valueSplitAction_ { arg valueArray; 
+	valueSplitAction_ { arg valueArray;
 		this.valueSplit_(valueArray);
 		action.value(this);
 	}
 
-	
+
 	set { arg label, spec, argAction, initVal, initMinVal, initMaxVal, initAction=false;
 		labelView.string = label;
 		controlSpec = spec.asSpec;
@@ -194,11 +216,10 @@ TXMinMaxSlider {
 		initMaxVal =  initMaxVal ? controlSpec.maxval;
 		controlSpec2 = controlSpec.deepCopy.asSpec;
 		controlSpec2.minval = initMinVal;
-		controlSpec2.maxval = initMaxVal;	
-		numberView.updateSpec(controlSpec2);	
-
+		controlSpec2.maxval = initMaxVal;
+		TXScrollNumBox.updateNumberBoxFromSpec(numberView, controlSpec2);
 		action = argAction;
-	
+
 		if (initAction) {
 			this.value = initVal;
 		}{
@@ -206,5 +227,9 @@ TXMinMaxSlider {
 			sliderView.value = controlSpec2.unmap(viewValue);
 			numberView.value = viewValue.round(round);
 		};
+	}
+
+	hasFocus {
+		^sliderView.hasFocus || numberView.hasFocus || rangeView.hasFocus || minNumberView.hasFocus || maxNumberView.hasFocus;
 	}
 }

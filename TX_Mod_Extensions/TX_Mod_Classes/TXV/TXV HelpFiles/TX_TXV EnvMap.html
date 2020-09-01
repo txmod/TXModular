@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV EnvMap</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource DrawDestination Renders ImageAsset</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module is a 3D Draw Destination which uses an image for "environment mapping", or "reflection mapping" to render an image.
+Reflections are created using the environment image as the distant environment surrounding anything that is drawn to the module.</p>
+<p class="p1"><b><i>Note:</i></b> Material color properties from 3D shapes are ignored in this module. Instead, a mix between a chosen base color and the environmental reflections is used for all materials.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Environment Image Button</i></b></p>
+<p class="p1"><b>envMapImageAsset</b> - index (def: 0) - Image Asset.</p>
+<p class="p1"><b>extEnvMapImageModule</b> - index (def: 0) - TXV module to import image from. </p>
+<p class="p1"><b>useExternalEnvMapImage</b> - switch (def: 0). </p>
+<p class="p1"><b>mirrorImageRight</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>environmentRotation</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>blurTopBottom</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>lightEffectMix</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>baseEnvColorMix</b> - float with modulation (def: 0.75, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Light Position Button</i></b></p>
+<p class="p1"><b>lightPosX</b> - float with modulation (def: 0, range: -10 : 10). </p>
+<p class="p1"><b>lightPosY</b> - float with modulation (def: 0, range: -10 : 10). </p>
+<p class="p1"><b>lightPosZ</b> - float with modulation (def: 0, range: -10 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Base Color Button</i></b></p>
+<p class="p1"><b>baseColorHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>baseColorHueRotate</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>baseColorSaturation</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>baseColorBrightness</b> - float with modulation (def: 0.4, range: 0 : 1). </p>
+<p class="p1"><b>baseColorHSBAsRGB</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Clear Button</i></b></p>
+<p class="p1"><b>clearBeforeRender</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>clearNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>clearColorHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>clearColorHueRotate</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>clearColorSaturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>clearColorBrightness</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>clearColorAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>clearColorHSBAsRGB</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Render Button</i></b></p>
+<p class="p1"><b>drawLayersRule</b> - index with modulation (def: 0, range: 0 : 26) options: <b> [0]</b>_All layers except Layer 20, <b> [1]</b>_Layer 1, <b> [2]</b>_Layer 2, <b> [3]</b>_Layer 3, <b> [4]</b>_Layer 4, <b> [5]</b>_Layer 5, <b> [6]</b>_Layer 6, <b> [7]</b>_Layer 7, <b> [8]</b>_Layer 8, <b> [9]</b>_Layer 9, <b> [10]</b>_Layer 10, <b> [11]</b>_Layer 11, <b> [12]</b>_Layer 12, <b> [13]</b>_Layer 13, <b> [14]</b>_Layer 14, <b> [15]</b>_Layer 15, <b> [16]</b>_Layer 16, <b> [17]</b>_Layer 17, <b> [18]</b>_Layer 18, <b> [19]</b>_Layer 19, <b> [20]</b>_Layer 20, <b> [21]</b>_Layers 1 - 5, <b> [22]</b>_Layers 6 - 10, <b> [23]</b>_Layers 11 - 15, <b> [24]</b>_Layers 16 - 20, <b> [25]</b>_Layers 1 - 10, <b> [26]</b>_Layers 11 - 20. </p>
+<p class="p1"><b>renderContinuosly</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>renderNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Active, Size, Alpha Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>maxDepthRule</b> - index (def: 0, range: 0 : 4) options: <b> [0]</b>_Use Screen Width, <b> [1]</b>_Use Screen Height, <b> [2]</b>_Use Max of Screen Width & Height, <b> [3]</b>_Use Min of Screen Width & Height, <b> [4]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxDepth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>drawAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawWidth</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawHeight</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Scale Button</i></b></p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Position, Anchor, Rotate Button</i></b></p>
+<p class="p1"><b>drawPosX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>drawPosY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>rotate</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>mirrorImageRight</b></p>
+<p class="p1"><b>environmentRotation</b></p>
+<p class="p1"><b>blurTopBottom</b></p>
+<p class="p1"><b>drawLayersRule</b></p>
+<p class="p1"><b>renderContinuosly</b></p>
+<p class="p1"><b>renderNow</b></p>
+<p class="p1"><b>clearBeforeRender</b></p>
+<p class="p1"><b>clearNow</b></p>
+<p class="p1"><b>clearColorHue</b></p>
+<p class="p1"><b>clearColorHueRotate</b></p>
+<p class="p1"><b>clearColorSaturation</b></p>
+<p class="p1"><b>clearColorBrightness</b></p>
+<p class="p1"><b>clearColorAlpha</b></p>
+<p class="p1"><b>clearColorHSBAsRGB</b></p>
+<p class="p1"><b>lightEffectMix</b></p>
+<p class="p1"><b>lightPosX</b></p>
+<p class="p1"><b>lightPosY</b></p>
+<p class="p1"><b>lightPosZ</b></p>
+<p class="p1"><b>baseColorHue</b></p>
+<p class="p1"><b>baseColorHueRotate</b></p>
+<p class="p1"><b>baseColorSaturation</b></p>
+<p class="p1"><b>baseColorBrightness</b></p>
+<p class="p1"><b>baseColorHSBAsRGB</b></p>
+<p class="p1"><b>baseEnvColorMix</b></p>
+<p class="p1"><b>drawAlpha</b></p>
+<p class="p1"><b>drawPosX</b></p>
+<p class="p1"><b>drawPosY</b></p>
+<p class="p1"><b>drawWidth</b></p>
+<p class="p1"><b>drawHeight</b></p>
+<p class="p1"><b>anchorX</b></p>
+<p class="p1"><b>anchorY</b></p>
+<p class="p1"><b>rotate</b></p>
+<p class="p1"><b>rotateMultiply</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

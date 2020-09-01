@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Step Seq</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: ModulationSource</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module outputs a modulation signal by playing a sequence of value steps with variable step times and optional smoothing between the steps.</p>
+<p class="p1">It can behave like an LFO by looping continuously through all steps, or it can behave like a triggered envelope (gated or fixed-length) by playing through the steps once.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Global Button</i></b></p>
+<p class="p1"><b>numValidSteps</b> - integer with modulation (def: 16, range: 2 : 16). </p>
+<p class="p1"><b>playLooped</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>envType</b> - index with modulation (def: 1, range: 0 : 2) options: <b> [0]</b>_Gated - by trigger input, <b> [1]</b>_Fixed length - allow retriggering, <b> [2]</b>_Fixed length - no retriggering. </p>
+<p class="p1"><b>triggerThreshold</b> - float with modulation (def: 0.5, range: 0.001 : 0.999). </p>
+<p class="p1"><b>triggerInput</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>releaseTime</b> - float with modulation (def: 0, range: 0 : 100). </p>
+<p class="p1"><b>randomiseStepOrder</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>baselineZero</b> - switch (def: 1). </p>
+<p class="p1"><b>frozen</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>resetClock</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Step Values Button</i></b></p>
+<p class="p1"><b>step01Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step02Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step03Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step04Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step05Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step06Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step07Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step08Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step09Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step10Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step11Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step12Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step13Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step14Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step15Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>step16Value</b> - float (def: 0, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Step Times Button</i></b></p>
+<p class="p1"><b>useMasterBpm</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>bpm</b> - float with modulation (def: 60, range: 0.001 : 1000). </p>
+<p class="p1"><b>stepTimeBeats</b> - float with modulation (def: 1, range: 0.01 : 1000). </p>
+<p class="p1"><b>stepTimeDivisor</b> - float with modulation (def: 1, range: 0.01 : 1000). </p>
+<p class="p1"><b>step01TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step02TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step03TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step04TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step05TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step06TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step07TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step08TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step09TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step10TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step11TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step12TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step13TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step14TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step15TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step16TimeProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Step Smoothing Button</i></b></p>
+<p class="p1"><b>useSmoothing</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>smoothingReturnToStep1</b> - switch (def: 0). </p>
+<p class="p1"><b>smoothType</b> - index with modulation (def: 9, range: 0 : 23) options: <b> [0]</b>_Cubic In, <b> [1]</b>_Cubic Out, <b> [2]</b>_Cubic In & Out, <b> [3]</b>_Elastic In, <b> [4]</b>_Elastic Out, <b> [5]</b>_Elastic In & Out, <b> [6]</b>_Exponential In, <b> [7]</b>_Exponential Out, <b> [8]</b>_Exponential In & Out, <b> [9]</b>_Linear In (default), <b> [10]</b>_Linear Out, <b> [11]</b>_Linear In & Out, <b> [12]</b>_Quadratic In, <b> [13]</b>_Quadratic Out, <b> [14]</b>_Quadratic In & Out, <b> [15]</b>_Quartic In, <b> [16]</b>_Quartic Out, <b> [17]</b>_Quartic In & Out, <b> [18]</b>_Quintic In, <b> [19]</b>_Quintic Out, <b> [20]</b>_Quintic In & Out, <b> [21]</b>_Sine In, <b> [22]</b>_Sine Out, <b> [23]</b>_Sine In & Out. </p>
+<p class="p1"><b>step01SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step02SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step03SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step04SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step05SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step06SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step07SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step08SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step09SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step10SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step11SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step12SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step13SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step14SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step15SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>step16SmoothProportion</b> - float (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Outputs:</i></b></p>
+<p class="p1"><b>out</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>numValidSteps</b></p>
+<p class="p1"><b>playLooped</b></p>
+<p class="p1"><b>envType</b></p>
+<p class="p1"><b>triggerThreshold</b></p>
+<p class="p1"><b>triggerInput</b></p>
+<p class="p1"><b>releaseTime</b></p>
+<p class="p1"><b>randomiseStepOrder</b></p>
+<p class="p1"><b>frozen</b></p>
+<p class="p1"><b>resetClock</b></p>
+<p class="p1"><b>useMasterBpm</b></p>
+<p class="p1"><b>bpm</b></p>
+<p class="p1"><b>stepTimeBeats</b></p>
+<p class="p1"><b>stepTimeDivisor</b></p>
+<p class="p1"><b>useSmoothing</b></p>
+<p class="p1"><b>smoothType</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

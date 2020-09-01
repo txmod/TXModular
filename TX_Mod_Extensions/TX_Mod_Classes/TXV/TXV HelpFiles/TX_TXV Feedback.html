@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Feedback</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource DrawDestination Renders</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module is a Draw Destination which renders an image by drawing the previous frame behind the current one with optional shift, scale  and rotate.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Freeze, Alpha, Brightness Button</i></b></p>
+<p class="p1"><b>freezeFeedback</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>feedbackAlpha</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>feedbackBrightness</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Shift & Scale Button</i></b></p>
+<p class="p1"><b>feedbackShiftX</b> - float with modulation (def: 0, range: -100 : 100). </p>
+<p class="p1"><b>quantiseFeedbackShiftX</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>feedbackShiftY</b> - float with modulation (def: 0, range: -100 : 100). </p>
+<p class="p1"><b>quantiseFeedbackShiftY</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>feedbackScaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>feedbackScaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useFeedbackScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Anchor & Rotate Button</i></b></p>
+<p class="p1"><b>feedbackAnchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>quantiseFeedbackAnchorX</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>feedbackAnchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>quantiseFeedbackAnchorY</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>feedbackRotate</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>feedbackRotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Clear Button</i></b></p>
+<p class="p1"><b>clearNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>clearColorHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>clearColorSaturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>clearColorBrightness</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>clearColorAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>clearColorHSBAsRGB</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Render Button</i></b></p>
+<p class="p1"><b>drawLayersRule</b> - index with modulation (def: 0, range: 0 : 26) options: <b> [0]</b>_All layers except Layer 20, <b> [1]</b>_Layer 1, <b> [2]</b>_Layer 2, <b> [3]</b>_Layer 3, <b> [4]</b>_Layer 4, <b> [5]</b>_Layer 5, <b> [6]</b>_Layer 6, <b> [7]</b>_Layer 7, <b> [8]</b>_Layer 8, <b> [9]</b>_Layer 9, <b> [10]</b>_Layer 10, <b> [11]</b>_Layer 11, <b> [12]</b>_Layer 12, <b> [13]</b>_Layer 13, <b> [14]</b>_Layer 14, <b> [15]</b>_Layer 15, <b> [16]</b>_Layer 16, <b> [17]</b>_Layer 17, <b> [18]</b>_Layer 18, <b> [19]</b>_Layer 19, <b> [20]</b>_Layer 20, <b> [21]</b>_Layers 1 - 5, <b> [22]</b>_Layers 6 - 10, <b> [23]</b>_Layers 11 - 15, <b> [24]</b>_Layers 16 - 20, <b> [25]</b>_Layers 1 - 10, <b> [26]</b>_Layers 11 - 20. </p>
+<p class="p1"><b>renderContinuosly</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>renderNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Active, Size, Alpha Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>drawAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawWidth</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawHeight</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Scale Button</i></b></p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Position, Anchor, Rotate Button</i></b></p>
+<p class="p1"><b>drawPosX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>drawPosY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>rotate</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>drawLayersRule</b></p>
+<p class="p1"><b>renderContinuosly</b></p>
+<p class="p1"><b>renderNow</b></p>
+<p class="p1"><b>freezeFeedback</b></p>
+<p class="p1"><b>clearNow</b></p>
+<p class="p1"><b>clearColorHue</b></p>
+<p class="p1"><b>clearColorSaturation</b></p>
+<p class="p1"><b>clearColorBrightness</b></p>
+<p class="p1"><b>clearColorAlpha</b></p>
+<p class="p1"><b>feedbackAlpha</b></p>
+<p class="p1"><b>feedbackBrightness</b></p>
+<p class="p1"><b>feedbackShiftX</b></p>
+<p class="p1"><b>quantiseFeedbackShiftX</b></p>
+<p class="p1"><b>feedbackShiftY</b></p>
+<p class="p1"><b>quantiseFeedbackShiftY</b></p>
+<p class="p1"><b>feedbackAnchorX</b></p>
+<p class="p1"><b>quantiseFeedbackAnchorX</b></p>
+<p class="p1"><b>feedbackAnchorY</b></p>
+<p class="p1"><b>quantiseFeedbackAnchorY</b></p>
+<p class="p1"><b>feedbackRotate</b></p>
+<p class="p1"><b>feedbackRotateMultiply</b></p>
+<p class="p1"><b>feedbackScaleX</b></p>
+<p class="p1"><b>feedbackScaleY</b></p>
+<p class="p1"><b>drawAlpha</b></p>
+<p class="p1"><b>drawPosX</b></p>
+<p class="p1"><b>drawPosY</b></p>
+<p class="p1"><b>drawWidth</b></p>
+<p class="p1"><b>drawHeight</b></p>
+<p class="p1"><b>anchorX</b></p>
+<p class="p1"><b>anchorY</b></p>
+<p class="p1"><b>rotate</b></p>
+<p class="p1"><b>rotateMultiply</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

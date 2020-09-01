@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Text3D</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource FontAsset</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module draws 3D text using a chosen font.</p>
+<p class="p1"><b>Note:</b> Font assets are added directly to the TXV System module.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Text Controls Button</i></b></p>
+<p class="p1"><b>fontAsset</b> - index (def: 0) - Font Asset.</p>
+<p class="p1"><b>textString</b> - Text. </p>
+<p class="p1"><b>fontsize</b> - integer with modulation (def: 24, range: 1 : 1000). </p>
+<p class="p1"><b>scaleFontToWidth_1024</b> - switch (def: 1). When this is on, the font size will only be accurate if the the screen width is 1024. Otherwise the font will be scaled based on the current screen width relative to 1024. This makes the text a consistent size for all screen widths. Turn this off if you want font size to always be accurate.</p>
+<p class="p1"><b>depth</b> - integer with modulation (def: 24, range: 1 : 1000). </p>
+<p class="p1"><b>depthResolution</b> - integer with modulation (def: 1, range: 1 : 1000). </p>
+<p class="p1"><b>fontSimplify</b> - float with modulation (def: 0.3, range: 0 : 1). </p>
+<p class="p1"><b>spaceSize</b> - float with modulation (def: 5, range: 0.01 : 1000). </p>
+<p class="p1"><b>letterSpacing</b> - float with modulation (def: 1, range: 0.01 : 100). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Face Options Button</i></b></p>
+<p class="p1"><b>drawLetterFrontSolid</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>drawLetterFrontWireframe</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>drawLetterBackSolid</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>drawLetterBackWireframe</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>drawLetterSidesSolid</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>drawLetterSidesWireframe</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Colors :: Color Front Button</i></b></p>
+<p class="p1"><b>colorFrontHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>colorFrontHueRotate</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>colorFrontSaturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>colorFrontBrightness</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>colorFrontHSBAsRGB</b> - switch with modulation (def: 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Colors :: Color Back Button</i></b></p>
+<p class="p1"><b>useColorFrontForColorBack</b> - switch (def: 0). </p>
+<p class="p1"><b>colorBackHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>colorBackHueRotate</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>colorBackSaturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>colorBackBrightness</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>colorBackHSBAsRGB</b> - switch with modulation (def: 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Colors :: Color Sides Button</i></b></p>
+<p class="p1"><b>useColorFrontForColorSides</b> - switch (def: 0). </p>
+<p class="p1"><b>colorSidesHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>colorSidesHueRotate</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>colorSidesSaturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>colorSidesBrightness</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>colorSidesHSBAsRGB</b> - switch with modulation (def: 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Active & Position Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxDepth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>positionX</b> - float with modulation (def: 0.5, range: -20 : 20). </p>
+<p class="p1"><b>positionY</b> - float with modulation (def: 0.5, range: -20 : 20). </p>
+<p class="p1"><b>positionZ</b> - float with modulation (def: 0, range: -20 : 20). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Scale Button</i></b></p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleZ</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><b>useScaleXForScaleZ</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Anchor & Rotate Button</i></b></p>
+<p class="p1"><b>rotateX</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateY</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateZ</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><b>anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorZ</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>fontsize</b></p>
+<p class="p1"><b>depth</b></p>
+<p class="p1"><b>depthResolution</b></p>
+<p class="p1"><b>fontSimplify</b></p>
+<p class="p1"><b>spaceSize</b></p>
+<p class="p1"><b>letterSpacing</b></p>
+<p class="p1"><b>drawLetterFrontSolid</b></p>
+<p class="p1"><b>drawLetterFrontWireframe</b></p>
+<p class="p1"><b>drawLetterBackSolid</b></p>
+<p class="p1"><b>drawLetterBackWireframe</b></p>
+<p class="p1"><b>drawLetterSidesSolid</b></p>
+<p class="p1"><b>drawLetterSidesWireframe</b></p>
+<p class="p1"><b>colorFrontHue</b></p>
+<p class="p1"><b>colorFrontHueRotate</b></p>
+<p class="p1"><b>colorFrontSaturation</b></p>
+<p class="p1"><b>colorFrontBrightness</b></p>
+<p class="p1"><b>colorFrontHSBAsRGB</b></p>
+<p class="p1"><b>colorBackHue</b></p>
+<p class="p1"><b>colorBackHueRotate</b></p>
+<p class="p1"><b>colorBackSaturation</b></p>
+<p class="p1"><b>colorBackBrightness</b></p>
+<p class="p1"><b>colorBackHSBAsRGB</b></p>
+<p class="p1"><b>colorSidesHue</b></p>
+<p class="p1"><b>colorSidesHueRotate</b></p>
+<p class="p1"><b>colorSidesSaturation</b></p>
+<p class="p1"><b>colorSidesBrightness</b></p>
+<p class="p1"><b>colorSidesHSBAsRGB</b></p>
+<p class="p1"><b>positionX</b></p>
+<p class="p1"><b>positionY</b></p>
+<p class="p1"><b>positionZ</b></p>
+<p class="p1"><b>rotateX</b></p>
+<p class="p1"><b>rotateY</b></p>
+<p class="p1"><b>rotateZ</b></p>
+<p class="p1"><b>rotateMultiply</b></p>
+<p class="p1"><b>anchorX</b></p>
+<p class="p1"><b>anchorY</b></p>
+<p class="p1"><b>anchorZ</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><b>scaleZ</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

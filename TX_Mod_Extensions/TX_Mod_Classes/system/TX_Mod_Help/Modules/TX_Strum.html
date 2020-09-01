@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {font-kerning: none}
+    span.s2 {text-decoration: underline ; font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1"><b>Strum</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Module type: Control Source</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Introduction:</i></b></span></p>
+<p class="p1"><span class="s1">This module makes no sound itself but instead outputs triggers and triggers notes in up to 6 different modules. It can also output MIDI notes.</span></p>
+<p class="p1"><span class="s1">Whenever, the 'strum position' is moved or modulated, it triggers notes in the current scale - either a preset scale, such as 'Major' or 'Minor', or a Custom Scale which is editable.</span></p>
+<p class="p1"><span class="s1">The 'strum position' is modelled on hand position when playing a guitar - as the hand moves up or down, the guitar strings are strummed.</span></p>
+<p class="p1"><span class="s1">The notes in the current scale are spread evenly along the strum position - the more notes there are in the current scale, the closer they will be to each other when strumming.</span></p>
+<p class="p1"><span class="s1">By modulating the strum position with LFOs or envelopes, many different kinds of strumming patterns can be created. This can also be used to create rasping or scraping effects by triggering short noise sounds in wave synths or samplers.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Notes in scale</b> - shows total number of notes in the current scale.</span></p>
+<p class="p1"><span class="s1"><b>Active</b> - if switched off, no notes will be triggered</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Outputs button</b></span></p>
+<p class="p1"><span class="s1"><b>Modules </b>- up to 6 polyphonic source modules, such as wave synths, samplers or polyphonic envelopes, can be triggered. All valid modules will appear in the modules list. See the <a href="file:../TX_0%20TX%20Modular%20Help.html"><span class="s3">Help Index</span></a> for details of which modules are polyphonic.</span></p>
+<p class="p1"><span class="s1"><b>Output MIDI notes</b> - on/off.</span></p>
+<p class="p1"><span class="s1"><b>MIDI Port </b>- select from available ports</span></p>
+<p class="p1"><span class="s1"><b>MIDI Loop-Back </b>- sends MIDI notes back into the TX Modular system on the selected channel, so other modules can respond </span></p>
+<p class="p1"><span class="s1"><b>Note</b>:<b> </b>Take care not to output MIDI loop-back to a channel that the module itself is listening to - otherwise the system will crash with a MIDI feedback loop.</span></p>
+<p class="p1"><span class="s1"><b>MIDI Channel</b> - output channel.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Strum button</b></span></p>
+<p class="p1"><span class="s1"><b>Strum mode</b> - sets which movement direction (up or down) will trigger notes when the strum position moves.<br>
+ Options: 1. Strum up and down, 2. Strum up only, 3. Strum down only.</span></p>
+<p class="p1"><span class="s1"><b>Strum position</b> - when this moves it triggers notes in the current scale.</span></p>
+<p class="p1"><span class="s1"><b>Smoothing</b> - This allows you to add smoothing to the strum position.<br>
+See help file <a href="file:../Modules/TX_Smooth.html">Smooth</a> for smoothing options.</span></p>
+<p class="p1"><span class="s1"><b>Velocity min</b> - the minimum velocity for each note.</span></p>
+<p class="p1"><span class="s1"><b>Random vel</b> - adds an extra random velocity to each note.</span></p>
+<p class="p1"><span class="s1"><b>Gate time</b> - the gate time in seconds for each triggered note.</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b>Scale &amp; Transpose button</b></span></p>
+<p class="p1"><span class="s1"><b>Keyboard</b>- Middle C is tinted red. Notes that are part of the current scale are tinted yellow. </span></p>
+<p class="p1"><span class="s1"><b>Use Custom Scale</b> - When 'Use Custom Scale' is switched on, notes can be added to or removed from the current scale by clicking or dragging on the keyboard.<br>
+When 'Use Custom Scale' is switched off, the settings for 'Key/ root', 'Chord/ scale' and 'Note range' will be used to build the current scale.</span></p>
+<p class="p1"><span class="s1"><b>Key/ root</b> - C to B.</span></p>
+<p class="p1"><span class="s1"><b>Chord/ scale</b> - various options showing interval, chord, mode and scale names.</span></p>
+<p class="p1"><span class="s1"><b>Note range</b> - the range of notes used to create the current scale.</span></p>
+<p class="p1"><span class="s1"><b>Transpose</b> - transposes all played notes up or down (in semitones).</span></p>
+<p class="p1"><span class="s1"><b>Quantise tsp</b> - quantise the Transpose value to whole semitones or whole octaves (12 semitones).</span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Control Modulation Input Busses:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Active</b></span></p>
+<p class="p1"><span class="s1"><b>Strum Mode</b></span></p>
+<p class="p1"><span class="s1"><b>Strum Position</b></span></p>
+<p class="p1"><span class="s1"><b>Smooth Time 1</b></span></p>
+<p class="p1"><span class="s1"><b>Smooth Time 2</b></span></p>
+<p class="p1"><span class="s1"><b>Velocity Min</b></span></p>
+<p class="p1"><span class="s1"><b>Random Vel</b></span></p>
+<p class="p1"><span class="s1"><b>Gate Time</b></span></p>
+<p class="p1"><span class="s1"><b>Transpose</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+<p class="p1"><span class="s1"><b><i>Outputs:</i></b></span></p>
+<p class="p1"><span class="s1"><b>Trigger Out</span></b></p>
+<p class="p1"><span class="s1"><b>Note Out</b> (based on MIDI freq range 8.18 - 12543.85 hz)</span></p>
+<p class="p1"><span class="s1"><b>Velocity Out</b></span></p>
+<p class="p1"><span class="s1"><b>Position Out</b></span></p>
+<p class="p1"><span class="s1"><br>
+</span></p>
+</body>
+</html>

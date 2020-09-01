@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV System</b></p>
+<p class="p1">Properties: ModulationSource DrawDestination</p>
+<p class="p1"><b><i>Other useful help files:</i></b><br>
+<A href="TX_TXV_General_Introduction.html">TXV General Introduction<A><br>
+<A href="TX_TXV_List_Of_All_Modules.html">TXV List Of All Modules<A><br>
+<A href="TX_TXV_Intro_To_All_Modules.html">TXV Intro To All Modules<A><br>
+<A href="TX_TXV_Assets.html">TXV Assets<A><br>
+<A href="TX_TXV_Choosing_Colours.html">TXV Choosing Colours<A><br>
+<A href="TX_TXV_Drawing_In_Layers.html">TXV Drawing In Layers<A><br>
+<A href="TX_TXV_Rendering_Images.html">TXV Rendering Images<A><br>
+<A href="TX_TXV_Using_Modulation.html">TXV Using Modulation<A><br>
+<A href="TX_TXV_3D_Modules.html">TXV 3D Modules<A><br>
+<A href="TX_TXV_3D_Lights_And_Materials.html">TXV 3D Lights And Materials<A><br>
+<p class="p1"><b><i>Help files for example TXV systems:</i></b><br>
+<A href="file:../../system/TX_Mod_Help/TX_6%20Building%20a%20TXV%20System.html">6 Building a TXV System<A><br>
+<A href="TX_TXV_Ex_1_Drawing_In_Layers.html">TXV Ex 1 Drawing In Layers<A><br>
+<A href="TX_TXV_Ex_2_Modulation.html">TXV Ex 2 Modulation<A><br>
+<A href="TX_TXV_Ex_3_Howling_Vowels.html">TXV Ex 3 Howling Vowels<A><br>
+<A href="TX_TXV_Ex_4_Image_FX.html">TXV Ex 4 Image FX<A><br>
+<A href="TX_TXV_Ex_5_3D_Scene.html">TXV Ex 5 3D Scene<A><br>
+<A href="TX_TXV_Ex_6_3D_Environment_Map.html">TXV Ex 6 3D Environment Map<A><br>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module is used to control TXV, a separate piece of software which is a modular video system for generating real-time 2D & 3D visuals. TXV opens in a separate window.</p>
+<p class="p1">(See <A href="TX_TXV_General_Introduction.html">TXV General Introduction<A> for more background information.)</p>
+<p class="p1"><b>Note:</b> The TXV software should be started before trying to connect to the TXV System module.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Start TXV</b> - This button will only appear if you are using a TX Modular build which has the TXV app enclosed within it. Once pressed, it will start TXV, and then try to connect to it.<br>
+If the button doesn't appear, the user will need to start the TXV app separately. </p>
+<p class="p1"><b>Connect to TXV</b> - This button will try to connect to TXV. When creating a new TXV system, TXV should be started before connecting to it using this button.</p>
+<p class="p1"><b>Rebuild TXV System</b> - This button will try to connect to TXV, clear the current system and then rebuild it. This is needed when opening a saved TXV system, or if TXV is restarted for some reason. Make sure TXV is running before rebuilding.</p>
+<p class="p1"><b>Status</b> - This shows the current status of the TXV system. Initially it will read "Not connected". Once a connection is made, it will read "TXV System connected". When rebuilding a system, it will first read "TXV System rebuild started", then "TXV System rebuild completed" when finished.</p>
+<p class="p1"><b>Kill TXV</b> - This will stop and close TXV (if it is connected).</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>TXV System Button</i></b></p>
+<p class="p1"><b>freezeSystem</b> - switch with modulation (def: 0). When freeze is on, all clocks and image updates will be paused.</p>
+<p class="p1"><b>oscLatency</b> - float (def: 0, range: 0 : 30). When sending OSC messages from the TX Modular to TXV, this adds a delay before executing the message. A small delay (e.g. 0.2 secs) might be used for example, when using a Multitrack Sequencer in the TX Modular to automate TXV parameters - it may help to reduce any jitter in the automation. A longer delay might be needed when running the TXV on a separate computer, where network jitter may be more of a problem.</p>
+<p class="p1"><b>showFullScreen</b> - switch (def: 0). </p>
+<p class="p1"><b>windowSizeMode</b> - index (def: 0, range: 0 : 6) options: <b> [0]</b>_Custom Window Size, <b> [1]</b>_480 x 360, <b> [2]</b>_858 x 480, <b> [3]</b>_1280 x 720, <b> [4]</b>_1920 x 1080, <b> [5]</b>_2560 x 1440, <b> [6]</b>_3840 x 2160.  </p>
+<p class="p1"><b>customWindowWidth</b> - integer (def: 1024, range: 1 : 5000). </p>
+<p class="p1"><b>customWindowHeight</b> - integer (def: 768, range: 1 : 5000). </p>
+<p class="p1"><b>antiAliasing</b> - switch (def: 1). </p>
+<p class="p1"><b>neverDropFrames</b> - switch (def: 1). If turned on, every image frame will be created, even if the last frame took longer then time it is allocated based on the targetFrameRate. This is useful when recording video, to make sure frames are never dropped in the recorded video, even if that slows down the movements as displayed in real time.
+<br>If turned off, frames will be dropped to make sure that movement never slows down. This is useful for live video where movement - created for example using LFOs and sequencers - needs to appear continuous.</p>
+<p class="p1"><b>showFrameRate</b> - switch (def: 0). Frame rate is displayed in top left of window. Useful for testing.</p>
+<p class="p1"><b>targetFrameRate</b> - integer (def: 30, range: 1 : 100). </p>
+<p class="p1"><b>resetClocks</b> - switch with modulation (def: 0). Resets clocks in all time-based TXV modules - for example LFOs & Step Sequencers, so they restart their sequence or pattern from the beginning.</p>
+<p class="p1"><b>masterBpm</b> - float with modulation (def: 120, range: 1 : 1000). Any time-based TXV modules,  such as LFOs & Step Sequencers, can be set to follow the Master Bpm. This is useful for syncing sequences together and to be able to change speeds in multiple modules at the same time.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Messages Button</i></b></p>
+<p class="p1">This shows messages received from the TXV software. </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw & Background Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>drawLayersRule</b> - index with modulation (def: 0, range: 0 : 26) options: <b> [0]</b>_All layers except Layer 20, <b> [1]</b>_Layer 1, <b> [2]</b>_Layer 2, <b> [3]</b>_Layer 3, <b> [4]</b>_Layer 4, <b> [5]</b>_Layer 5, <b> [6]</b>_Layer 6, <b> [7]</b>_Layer 7, <b> [8]</b>_Layer 8, <b> [9]</b>_Layer 9, <b> [10]</b>_Layer 10, <b> [11]</b>_Layer 11, <b> [12]</b>_Layer 12, <b> [13]</b>_Layer 13, <b> [14]</b>_Layer 14, <b> [15]</b>_Layer 15, <b> [16]</b>_Layer 16, <b> [17]</b>_Layer 17, <b> [18]</b>_Layer 18, <b> [19]</b>_Layer 19, <b> [20]</b>_Layer 20, <b> [21]</b>_Layers 1 - 5, <b> [22]</b>_Layers 6 - 10, <b> [23]</b>_Layers 11 - 15, <b> [24]</b>_Layers 16 - 20, <b> [25]</b>_Layers 1 - 10, <b> [26]</b>_Layers 11 - 20. </p>
+<p class="p1"><b>showBackground</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>backgroundHue</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>backgroundSaturation</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>backgroundBrightness</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>backgroundAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>backgroundHSBAsRGB</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>alphaThreshold</b> - float (def: 0, range: 0 : 0.05). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>TXV Modules Button</i></b></p>
+<p class="p1">Add, show & edit TXV Modules.<br>
+New modules are displayed in groups: All Modules, Draw Sources, Image FX, Draw Destinations & Modulation Sources.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Nodes Button</i></b></p>
+<p class="p1">Add, show & edit modulation Nodes which each connect a modulation source to a module parameter destination.<br>
+Also see help file <A href="TX_TXV_Using_Modulation.html">TXV Using Modulation<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw Connections Button</i></b></p>
+<p class="p1">Add, show & edit Draw Connections which each connect a draw source to a draw destination. <br>
+Also see help file <A href="TX_TXV_Drawing_In_Layers.html">TXV Drawing In Layers<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Image Connections Button</i></b></p>
+<p class="p1">Show all modules which can import an image directly from another module. Each image import parameter is shown on a separate line. The parameter name and the module to import the image from are shown. </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Assets Button</i></b></p>
+<p class="p1">Show, add & remove Assets representing files of the following types: image, movie, svg, cube, 3D model, font. </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>OSC Address Button</i></b></p>
+<p class="p1">The network address for TXV where OSC messages are sent. This should usually be 127.0.0.1 meaning TXV is running on the same computer as TX Modular.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Outputs:</i></b></p>
+<p class="p1"><b>mouseButtonPressed</b></p>
+<p class="p1"><b>mouseDraggedX</b></p>
+<p class="p1"><b>mouseDraggedY</b></p>
+<p class="p1"><b>mouseMovedX</b></p>
+<p class="p1"><b>mouseMovedY</b></p>
+<p class="p1"><b>mouseMovedOrDraggedX</b></p>
+<p class="p1"><b>mouseMovedOrDraggedY</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>drawLayersRule</b></p>
+<p class="p1"><b>freezeSystem</b></p>
+<p class="p1"><b>resetClocks</b></p>
+<p class="p1"><b>masterBpm</b></p>
+<p class="p1"><b>showBackground</b></p>
+<p class="p1"><b>backgroundHue</b></p>
+<p class="p1"><b>backgroundSaturation</b></p>
+<p class="p1"><b>backgroundBrightness</b></p>
+<p class="p1"><b>backgroundAlpha</b></p>
+<p class="p1"><b>backgroundHSBAsRGB</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

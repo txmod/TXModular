@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV LUT</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource Renders ImageAsset CubeAsset</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module processes an image, changing it's colors using a cube file as a color look-up table (LUT).</p>
+<p class="p1">Note: Cube assets are added directly to the TXV System module.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Source Image, Cube, Blend Button</i></b></p>
+<p class="p1"><b>sourceImageAsset</b> - index (def: 0) - Image Asset.</p>
+<p class="p1"><b>cubeAsset</b> - index (def: 0) - Cube Asset.</p>
+<p class="p1"><b>extSourceImageModule</b> - index (def: 0) - TXV module to import image from. </p>
+<p class="p1"><b>useExternalSourceImage</b> - switch (def: 0). </p>
+<p class="p1"><b>sourceImageScaleMode</b> - index with modulation (def: 0, range: 0 : 2) options: <b> [0]</b>_scale to fit, <b> [1]</b>_scale & crop to fill, <b> [2]</b>_stretch to fill. </p>
+<p class="p1"><b>blendMode</b> - index with modulation (def: 0, range: 0 : 26) options: <b> [0]</b>_Mix (default), <b> [1]</b>_Lighten, <b> [2]</b>_Darken, <b> [3]</b>_Multiply, <b> [4]</b>_Average, <b> [5]</b>_Add, <b> [6]</b>_Subtract, <b> [7]</b>_Difference, <b> [8]</b>_Negation, <b> [9]</b>_Exclusion, <b> [10]</b>_Screen, <b> [11]</b>_Overlay, <b> [12]</b>_SoftLight, <b> [13]</b>_HardLight, <b> [14]</b>_ColorDodge, <b> [15]</b>_ColorBurn, <b> [16]</b>_LinearLight, <b> [17]</b>_VividLight, <b> [18]</b>_PinLight, <b> [19]</b>_HardMix, <b> [20]</b>_Reflect, <b> [21]</b>_Glow, <b> [22]</b>_Phoenix, <b> [23]</b>_BlendHue, <b> [24]</b>_BlendSaturation, <b> [25]</b>_BlendColor, <b> [26]</b>_BlendLuminosity. </p>
+<p class="p1"><b>blendMix</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>blendReverse</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Clear Button</i></b></p>
+<p class="p1"><b>clearBeforeRender</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>clearNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>clearColorHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>clearColorSaturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>clearColorBrightness</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>clearColorAlpha</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>clearColorHSBAsRGB</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Render Button</i></b></p>
+<p class="p1"><b>renderContinuosly</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>renderNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>renderWidthHeightRule</b> - index (def: 0, range: 0 : 6) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size, <b> [6]</b>_Use Source Image Size. </p>
+<p class="p1"><b>renderCustomWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>renderCustomHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Active, Size, Alpha Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>drawAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawWidth</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawHeight</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Scale Button</i></b></p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Position, Anchor, Rotate Button</i></b></p>
+<p class="p1"><b>drawPosX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>drawPosY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>rotate</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>sourceImageScaleMode</b></p>
+<p class="p1"><b>renderContinuosly</b></p>
+<p class="p1"><b>renderNow</b></p>
+<p class="p1"><b>clearBeforeRender</b></p>
+<p class="p1"><b>clearNow</b></p>
+<p class="p1"><b>clearColorHue</b></p>
+<p class="p1"><b>clearColorSaturation</b></p>
+<p class="p1"><b>clearColorBrightness</b></p>
+<p class="p1"><b>clearColorAlpha</b></p>
+<p class="p1"><b>blendMode</b></p>
+<p class="p1"><b>blendMix</b></p>
+<p class="p1"><b>blendReverse</b></p>
+<p class="p1"><b>drawAlpha</b></p>
+<p class="p1"><b>drawPosX</b></p>
+<p class="p1"><b>drawPosY</b></p>
+<p class="p1"><b>drawWidth</b></p>
+<p class="p1"><b>drawHeight</b></p>
+<p class="p1"><b>anchorX</b></p>
+<p class="p1"><b>anchorY</b></p>
+<p class="p1"><b>rotate</b></p>
+<p class="p1"><b>rotateMultiply</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

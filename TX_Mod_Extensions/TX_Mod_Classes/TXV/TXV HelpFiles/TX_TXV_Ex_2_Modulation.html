@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Ex 2 Modulation</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A> & <A href="TX_TXV_Using_Modulation.html">TXV Using Modulation<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">This help file uses an example file “Ex_2_Modulation” found in the folder "TXV_Examples".  It is similar to Example 1, but adds modulation to move the shapes around.</p>
+<p class="p1">Please open the example in the TX Modular system.</p>
+<p class="p1">In order to start the TXV software, you can use the “Start TXV” button if you are using the standalone TX Modular (for MacOS) which includes TXV inside it.  If you are using another platform, you will need to have a TXV build ready for your platform and open it separately.</p>
+<p class="p1">Once TXV has been started, press the button “Rebuild TXV System” which will send all the data from the TX Modular to TXV.</p>
+<p class="p1">You should then see a blue-green background with a rotating red triangle, and a yellow oblong moving up and down.
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation using TXV LFOs</i></b></p>
+<p class="p1">If you click on the button “Modules + Channels”, you can see in the left-hand column all the modules used. </p>
+<p class="p1">Various new modules have been added to what was in Example 1: Amp Follower, FM Synth, ReverbG, Smooth, two TXV LFOs, and two TXV Nodes.</p>
+<p class="p1">To the right you will see the TXV System module, and if you click on the button “Modulation Nodes”, in the bottom half you will see “TXV Nodes” showing all the current Nodes in the system.</p>
+<p class="p1">TXV Node [1] connects TXV LFO [1] to the rotate parameter of Shape 2D [1] (the red triangle).</p>
+<p class="p1">TXV Node [2] connects TXV LFO [2] to the positionY parameter of Shape 2D [2] (the yellow oblong).</p>
+<p class="p1">The top half of the of the window allows you to add new Nodes, but we wont’ do that for this example.</p>
+<p class="p1">If you open TXV LFO [1] and click on the “Main” button, you’ll see the parameter "lfoType". This is set to “Saw” which is a linear ramp because we are using this LFO to continuously rotate the red triangle.</p>
+<p class="p1">If you click on the “Bpm, Cycle, Phase” button, you will see that “useMasterBpm” is switched on (which is the default). The MasterBpm is a parameter in the TXV System. This means that any LFOs, or other BPM-based Modulation Source modules, can follow the MasterBpm and will change speed automatically if the MasterBpm changes.</p>
+<p class="p1">Now open the TXV Shape 2D [1] module (red triangle), click on the “Draw” button  and in the line below click on the button “Position, Anchor, Rotate”.</p>
+<p class="p1">You can see the “rotate” parameter is set to 180, with a min-max range of 0-360. To the right of this, the “modulation mix” is set 1 (fully on). This means that modulation is in full control of the parameter value, and moving the slider set to 180 will have no effect.</p>
+<p class="p1">Try setting the “modulation mix” to 0 and then moving the slider set to 180 - now the LFO will no longer rotate the triangle, and you can set the rotation to a specific value.</p>
+<p class="p1">For now, set the “modulation mix” to 1 again to restart the rotation.</p>
+<p class="p1">If you open TXV LFO [2] and click on the “Main” button, you’ll see the parameter lfoType is set to “Sine” which gives a smooth up and down movement to the yellow oblong.</p>
+<p class="p1">Now open the TXV Shape 2D [2] module (yellow oblong), click on the “Draw” button  and in the line below click on the button “Position, Anchor, Rotate”.</p>
+<p class="p1">You can see that the parameter “positionY” has a modulation mix of 0.5. If you set it to 1, the yellow oblong will move much further up and down. If you set it to 0, the movement will stop completely.</p>
+<p class="p1">For now, set the “modulation mix” to 0.5 again to restart the movement.
+<p class="p1">Now click on the "Run Interface" button and change the "TXV System - masterBpm" slider. This will change the speed of both LFOs, since they are both set to follow the MasterBPM. You will see the movement of both shapes speed up or slow down.
+<p class="p1"><br></p>
+<p class="p1"><b><i>External modulation from the TX Modular</i></b></p>
+<p class="p1">Using the LFOs and Nodes described above is known as “Internal Modulation” because it happens inside TXV, but you can also send control signals from the TX Modular to TXV. This is known as “External Modulation”.</p>
+<p class="p1">To demonstrate this, click on the "Start Step Sequencer” button. This will start the sequencer which plays the FM Synth. As each note plays, you will see the red triangle and yellow oblong growing and shrinking.</p>
+<p class="p1">Now click on the button “Modules + Channels” again and look at the Channels in the TX Modular by dragging the white bar to the left of the Channel Titles box leftwards.</p>
+<p class="p1">Now you can see there are 3 channels in the TX Modular:</p>
+<p class="p1">Channel 1 connects the FM Synth to a ReverbG insert and then to the Main Outs so you can hear the synth.</p>
+<p class="p1">Channel 2 connects the ReverbG to an Amp Follower which detects the volume of the signal from ReverbG.</p>
+<p class="p1">Channel 3 connects the Amp Follower, via a Smooth insert, to TXV Transform parameter “scale X’.</p>
+<p class="p1">Finally, drag the white bar to right again to move the channels out the way. Then open the TXV Transform [1] module and click on the “Scale” button.</p>
+<p class="p1">You will see the parameter “useScaleXForScaleY” is set on, so that both X & Y scaling are controlled by scaleX.</p>
+<p class="p1">Parameter scaleX has it’s “modulation mix” set to 1, but the key thing is that it has “use external modulation” set on. This is what enables the TX Modular to modulate parameters in TXV. </p>
+<p class="p1"><br></p>
+</body>
+</html>

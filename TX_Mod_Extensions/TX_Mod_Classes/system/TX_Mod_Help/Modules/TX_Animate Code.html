@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Animate Code</b></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b>Module type:   </span>Action</b></p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module allows you to use SuperCollider 3 computer code within the TX Modular system, to generate an animation which is displayed in a separate window.</p>
+<p class="p1">20 modulatable sliders can be used to control the animation.</p>
+<p class="p1">This module can be used with other modules to create interactive and/or automated audio-visual systems.  </span></p>
+<p class="p1">NOTE: if the animation seems jerky, try turning off "Show Channel Meters" on the Modules & Channels window & closing the Meter Bridge or Oscilloscope  if they're open. You can also lower the "Screen update rate" on the Notes & Options window. All of these changes will give more computer resources to the animation.</span></p>
+<p class="p2"><br></p>
+<p class="p1"><b>Controls</b>:</p>
+<p class="p1">Controls are on 6 screens accessed by pressing the following buttons:  </span></p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b><i>Window Button</i></b></p>
+<p class="p1"><b>Show Window</b> - this button brings the animation window to the front and reopens it if it is closed.</p>
+<p class="p1"><b>Close Window</b> - this button closes the animation window.</p>
+<p class="p1"><b>Window To Front</b> - this button pushes the animation window to the front of all windows.</p>
+<p class="p1"><b>Window width & height </b>- To specify the size of the display window.</p>
+<p class="p1"><b>Sample Current W & H</b> - this allows you to resize the window as you want it and then press this button to set <b>Window width & height</b> to the current size.  </span></p>
+<p class="p1"><b>Default Window W & H</b> - this sets <b>Window width & height </b>to 640 & 480.</p>
+<p class="p1"><b>Wind. Pos X & Y </b>- To specify the screen position where the window should be displayed.</span></p>
+<p class="p1">The <b>X</b> and <b>Y</b> refer to the distance in pixels of the bottom left corner of the window from the bottom left corner of the computer screen.   </span></p>
+<p class="p1"><b>Sample Current Position</b> - this allows you to move the window to where you want it and then press this button to set <b>Wind. Pos X & Y </b>to the current position.  </span></p>
+<p class="p1"><b>Default Window Position</b> - this sets <b>Wind. Pos X & Y </b>to near the bottom left corner of the screen.</p>
+<p class="p1"><b>Border X/ Border Y </b>- To set the width of the black border around the edge of the window, or click on the <b>Presets</b> popup to use a preset border size.</p>
+<p class="p1">The <b>X</b> and <b>Y</b> refer to the distance in pixels of the left /right and top/bottom borders.</span></p>
+<p class="p1"><b>Max FPS - </b>sets the maximum rendering rate (Frames Per Second). If set to 0, it will render as fast as possible. Low FPS values (e.g. 5) will make the playback seem jerky.</p>
+<p class="p1"><b>Background Colour</b> - for the window with controls for <b>Hue, Saturation & Brightness</b>.</p>
+<p class="p1"><b>Show Window Controls</b> - turn this off for a borderless window. However, if you want to be able to drag the window around or resize it, then turn it on.</p>
+<p class="p1"><b>Window Always on Top</b> - keeps the window in front of other windows.</p>
+<p class="p1"><b>Clear Screen Before Drawing </b> - if on, every time a frame is drawn, the screen will be cleared to the background colour.</p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b><i>Code Button</i></b></p>
+<p class="p1">Enter Supercollider 3 code in the window. The code needs to be a function which uses Pen to draw to the screen. The function will be passed the arguments: animationView - the view itself, frameCount, &amp; arrPassVals - array of 20 modulatable sliders.</p>
+<p class="p1">Use the <b>Evaulate text</b> button to evaulate the code.</p>
+<p class="p2"><br></p>
+<p class="p1"><b><i>Controls</b> <b>1-5/ 6-10/ 11-15/ 16-20 Buttons</i></b></p>
+<p class="p1">- The values of each of the 20 sliders are passed to the animation code so that the animation can be controlled live.</span></p>
+<p class="p1"><b>Name </b>- name or description for each slider.</p>
+<p class="p1"><b>Value/Min/Max</b> - these allow you to restrict the range of values of each slider. The Min/Max controls set the minimum and maximum numbers allowed. Value can be modulated.</p>
+<p class="p2"><b></b><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Value 1-20</b></p>
+</body>
+</html>

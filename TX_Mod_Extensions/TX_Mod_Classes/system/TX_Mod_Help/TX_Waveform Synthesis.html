@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 13.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    span.s1 {text-decoration: underline}
+    span.s2 {color: #971f8e}
+  </style>
+</head>
+<body>
+<p class="p1">// Copyright (C) 2017<span class="Apple-converted-space">  </span>Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).</p>
+<p class="p2"><b></b><br></p>
+<p class="p2"><b>Waveform Synthesis</b></p>
+<p class="p2">Various TX modules, including <b>Waveform</b> (mono and stereo), <b>Wave Synth</b>, <b>Wave Synth +</b> and <b>Harmoniser</b>, can use waveforms which offer many kinds of software synthesis, from the more usual sine or square waves, to various types of noise, to more exotic vowel shapes as well as FM synthesis (see full list below).</p>
+<p class="p2">These different types of synthesis are selected using the <b>Waveform</b> control.</p>
+<p class="p2">Some waveforms have one or two parameters that can modify their sound in various ways. These are indicated by the text <b>M1</b> and <b>M2</b><span class="Apple-converted-space">  </span>following the name of the waveform.</p>
+<p class="p2">Underneath the waveform name are two sliders labelled "<b>Modify 1</b>" and "<b>Modify 2</b>" which can be moved to affect the sound of the waveform. These <b>only</b> have an effect if <b>M1</b> or <b>M2</b> is shown in the <b>name</b> of the waveform</p>
+<p class="p2">For example, there is a waveform called "<b>Sine -&gt; Sawtooth wave - M1</b>". In this case, the <b>Modify 1</b> slider will change the waveform from a <b>sine</b> wave to a <b>sawtooth</b> wave.</p>
+<p class="p2"><b></b><br></p>
+<p class="p2"><b>Note</b> - the <b>frequency</b> of the waveform is set in different ways in these three modules:</p>
+<p class="p2">In the <b>Waveform</b> module, the frequency is set on the screen and can also be modulated.</p>
+<p class="p2">In the <b>Wave Synth</b> / <b>Wave Synth +</b> modules, the frequency is set by the sequencer or midi keyboard that is triggering the synth.</p>
+<p class="p2">In the <b>Harmoniser</b> module, the frequency is set by detecting the frequency of the audio signal coming into the module (this module is an audio insert module, so audio will be coming into it from the <b>channel</b> it is in).</p>
+<p class="p2"><br></p>
+<p class="p2"><b>List of Waveforms:</b><br></p>
+<p class="p2"><b>Sine wave</b> - Modify 1 is not used.
+Modify 2 is not used.</p>
+<p class="p2"><b>Chorusing sine wave - M1</b> - Mix of 2 detuned sine waves.
+Modify 1 sets the depth of detune, range: 0 - 2%
+Modify 2 is not used.</p>
+<p class="p2"><b>Sine -> Sawtooth wave - M1</b> - Modify 1 crossfades between the waveforms.
+Modify 2 is not used.</p>
+<p class="p2"><b>Sine -> Square wave - M1</b> - Modify 1 crossfades between the waveforms.
+Modify 2 is not used.</p>
+<p class="p2"><b>Sawtooth wave</b> - Modify 1 is not used.
+Modify 2 is not used.</p>
+<p class="p2"><b>SyncSaw wave - M1</b> - Sawtooth with a hard-synced second waveform.
+Modify 1 is the frequency ratio of the second waveform, range: 1 - 2.5
+Modify 2 is not used.</p>
+<p class="p2"><b>Sawtooth -> Square wave - M1</b> - Modify 1 crossfades between the waveforms.
+Modify 2 is not used.</p>
+<p class="p2"><b>Sawtooth wave with flattened harmonics - M1</b> - Modify 1 sets the amount of flattening.
+Modify 2 is not used.</p>
+<p class="p2"><b>Sawtooth wave with sharpened harmonics - M1</b> - Modify 1 sets the amount of sharpening.
+Modify 2 is not used.</p>
+<p class="p2"><b>Square wave</b> - Modify 1 is not used.
+Modify 2 is not used.</p>
+<p class="p2"><b>Pulse wave - M1</b> - Modify 1 sets the width of the pulse, range: 50% - 97%
+Modify 2 is not used.</p>
+<p class="p2"><b>Square wave with flattened harmonics - M1</b> - Modify 1 sets the amount of flattening.
+Modify 2 is not used.</p>
+<p class="p2"><b>Square wave with sharpened harmonics - M1</b> - Modify 1 sets the amount of sharpening.
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 1 - M1</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant. Pulse width frequency is same as fundamental frequency.
+Modify 1 sets the formant frequency ratio, range: 1 - 10.
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 2 - M1</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant. Pulse width frequency is twice the fundamental frequency.
+Modify 1 sets the formant frequency ratio, range: 1 - 10.
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 3 - M1</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant. Pulse width frequency is 4 times the fundamental frequency.
+Modify 1 sets the formant frequency ratio, range: 1 - 10.
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 4 - M1</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant. Pulse width frequency is 8 times the fundamental frequency.
+Modify 1 sets the formant frequency ratio, range: 1 - 10.
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 5 - M1</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant. Formant frequency is twice the fundamental frequency.
+Modify 1 sets the pulse width frequency, range: 1 - 9
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 6 - M1</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant. Formant frequency is 4 times the fundamental frequency.
+Modify 1 sets the pulse width frequency, range: 1 - 9
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 7 - M1</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant. Formant frequency is 8 times the fundamental frequency.
+Modify 1 sets the pulse width frequency, range: 1 - 17
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 8 - M1</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant. Formant frequency is 16 times the fundamental frequency.
+Modify 1 sets the pulse width frequency, range: 1 - 17
+Modify 2 is not used.</p>
+<p class="p2"><b>Formant osc 9 - M1 & M2</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant.
+Modify 1 sets the formant frequency, range: 1 - 10
+Modify 2 sets the pulse width frequency, range: 1 - 16</p>
+<p class="p2"><b>Formant osc 10 - M1 & M2</b> - Generates a set of harmonics around a formant frequency at a given fundamental frequency, with pulse width frequency affecting the bandwidth of the formant.
+Modify 1 sets the formant frequency, with the direction reversed, range: 10 - 1
+Modify 2 sets the pulse width frequency, range: 1 - 16</p>
+<p class="p2"><b>White Noise</b> - Noise where frequency spectrum has equal power at all frequencies.
+Modify 1 is not used.
+Modify 2 is not used.</p>
+<p class="p2"><b>Pink Noise</b> - Noise where frequency spectrum falls off in power by 3 dB per octave. This gives equal power over the span of each octave. It has more lower frequencies than white noise.
+Modify 1 is not used.
+Modify 2 is not used.</p>
+<p class="p2"><b>Brown Noise</b> - Noise where frequency spectrum falls off in power by 6 dB per octave.  It has more lower frequencies than white and pink noise.
+Modify 1 is not used.
+Modify 2 is not used.</p>
+<p class="p2"><b>Clip Noise</b> - Noise with maximum energy.
+Modify 1 is not used.
+Modify 2 is not used.</p>
+<p class="p2"><b>Crackle - M1</b> - Noise generator based on chaos algorithm.
+Modify 1 sets the chaos parameter. Higher values crackle.
+Modify 2 is not used.</p>
+<p class="p2"><b>Dust - M1</b> - Noise based on random impulses.
+Modify 1 sets the density (average frequency) of the dust, range: 1 - 1001
+Modify 2 is not used.</p>
+<p class="p2"><b>Gray Noise</b> - Varying noise where frequency spectrum is emphasized towards lower frequencies.
+Modify 1 is not used.
+Modify 2 is not used.</p>
+<p class="p2"><b>Vowel - Man 1 - M1 & M2</b> - Vowel sounds from formants based on a man's voice and the vowel sounds in BEAT, BIT, PART and BOOK.
+Modify 1 & Modify 2 together control the mix between the vowel sounds.</p>
+<p class="p2"><b>Vowel - Man 2 - M1 & M2</b> - Vowel sounds from formants based on a man's voice and the vowel sounds in BUT, BOOT, BAT and BET.
+Modify 1 & Modify 2 together control the mix between the vowel sounds.</p>
+<p class="p2"><b>Vowel - Woman 1 - M1 & M2</b> - Vowel sounds from formants based on a woman's voice and the vowel sounds in POT, BIT, BET and PART.
+Modify 1 & Modify 2 together control the mix between the vowel sounds.</p>
+<p class="p2"><b>Vowel - Woman 2 - M1 & M2</b> - Vowel sounds from formants based on a woman's voice and the vowel sounds in BOOK, PERT, BAT and BOOT.
+Modify 1 & Modify 2 together control the mix between the vowel sounds.</p>
+<p class="p2"><b>Vowel - Child 1 - M1 & M2</b> - Vowel sounds from formants based on a child's voice and the vowel sounds in PART, BET, POT and BIT.
+Modify 1 & Modify 2 together control the mix between the vowel sounds.</p>
+<p class="p2"><b>Vowel - Child 2 - M1 & M2</b> - Vowel sounds from formants based on a child's voice and the vowel sounds in BEAT, BAT, BUT and PERT.
+Modify 1 & Modify 2 together control the mix between the vowel sounds.</p>
+<p class="p2"><b>Vowel - SizeMorph 1 - M1 & M2</b> - Vowel sounds from formants.
+Modify 1 sets the mix between the vowel sound in BUT and BOOK.
+Modify 2 shifts the formant frequencies.</p>
+<p class="p2"><b>Vowel - SizeMorph 2 - M1 & M2</b> - Vowel sounds from formants.
+Modify 1 sets the mix between the vowel sound in BUT and BOOK.
+Modify 2 shifts the formant frequencies.</p>
+<p class="p2"><b>Vowel - SizeMorph 3 - M1 & M2</b> - Vowel sounds from formants.
+Modify 1 sets the mix between the vowel sound in BOOT and PART.
+Modify 2 shifts the formant frequencies.</p>
+<p class="p2"><b>Vowel - SizeMorph 4 - M1 & M2</b> - Vowel sounds from formants.
+Modify 1 sets the mix between the vowel sound in BEAT and PERT.
+Modify 2 shifts the formant frequencies.</p>
+<p class="p2"><b>FM 0 - 2C.2M, freq ratios 2 & 1.5 - M1 & M2</b> - Frequency modulation using sine waves. Has a mix of 2 carriers each with a modulator.
+Modify 1 sets the depth of modulation using 2:1 frequency ratio.
+Modify 2 sets the depth of modulation using 1.5:1 frequency ratio.</p>
+<p class="p2"><b>FM 1 - 2C.2M, freq ratios 1.5 & 3.5 - M1 & M2</b> - Frequency modulation using sine waves. Has a mix of 2 carriers each with a modulator.
+Modify 1 sets the depth of modulation using 2:1 frequency ratio.
+Modify 2 sets the depth of modulation using 1.5:1 frequency ratio.</p>
+<p class="p2"><b>FM 2 - 2C.2M, freq ratios 1.333 & 1.666 - M1 & M2</b> - Frequency modulation using sine waves. Has a mix of 2 carriers each with a modulator.
+Modify 1 sets the depth of modulation using 1.333:1 frequency ratio.
+Modify 2 sets the depth of modulation using 1.666:1 frequency ratio.</p>
+<p class="p2"><b>FM 3 - 2C.2M, freq ratios 1.25 & 1.75 - M1 & M2</b> - Frequency modulation using sine waves. Has a mix of 2 carriers each with a modulator.
+Modify 1 sets the depth of modulation using 1.25:1 frequency ratio.
+Modify 2 sets the depth of modulation using 1.75:1 frequency ratio.</p>
+<p class="p2"><b>FM 4 - 1C.2M, freq ratios 2 & 1.5 - M1 & M2</b> - Frequency modulation using sine waves. Has 1 carrier being modulated by a modulator with a 2:1 frequency ratio, which is being modulated by another modulator with a 1.5:1 frequency ratio.
+Modify 1 sets the depth of modulation using 2:1 frequency ratio.
+Modify 2 sets the depth of modulation using 1.5:1 frequency ratio.</p>
+<p class="p2"><b>FM 5 - 1C.2M, freq ratios 1.5 & 3.5 - M1 & M2</b> - Frequency modulation using sine waves. Has 1 carrier being modulated by a modulator with a 1.5:1 frequency ratio, which is being modulated by another modulator with a 3.5:1 frequency ratio.
+Modify 1 sets the depth of modulation using 1.5:1 ratio.
+Modify 2 sets the depth of modulation using 3.5:1 ratio.</p>
+<p class="p2"><b>FM 6 - 1C.2M, freq ratios 1.25 & 2.25 - M1 & M2</b> - Frequency modulation using sine waves. Has 1 carrier being modulated by a modulator with a 1.25:1 frequency ratio, which is being modulated by another modulator with a 2.25:1 frequency ratio.
+Modify 1 sets the depth of modulation using 1.25:1 ratio.
+Modify 2 sets the depth of modulation using 2.25:1 ratio.</p>
+<p class="p2"><b>FM 7 - 1C.1M, variable freq - M1 & M2</b> - Frequency modulation using sine waves. Has 1 carrier being modulated by a modulator.
+Modify 1 sets the frequency ratio of the modulator, range: 1 - 2.5
+Modify 2 sets the depth of modulation.</p>
+<p class="p2"><b>FM 8 - 1C.2M, variable freq - M1 & M2</b> - Frequency modulation using sine waves. Has 1 carrier being modulated by a modulator with a variable frequency ratio, which is being modulated by another modulator with a variable frequency ratio. This has a shallower modulation than FM 9.
+Modify 1 sets the frequency ratio of the first modulator, range: 0.5 - 2.5
+Modify 2 sets the frequency ratio of the second modulator, range: 0.25 - 3.25</p>
+<p class="p2"><b>FM 9 - 1C.2M, variable freq - M1 & M2</b> - Frequency modulation using sine waves. Has 1 carrier being modulated by a modulator with a variable frequency ratio, which is being modulated by another modulator with a variable frequency ratio. This has a deeper modulation than FM 8.
+Modify 1 sets the frequency ratio of the first modulator, range: 0.5 - 2.5
+Modify 2 sets the frequency ratio of the second modulator, range: 0.25 - 3.25</p>
+<p class="p2"><b>Golden Mean Harmonics - M1</b> - Generates a set of harmonics based on the frequency ratio of the Golden Mean which is approx. 1.61803
+Modify 1 sets the proportion of harmonics added.
+Modify 2 is not used.</p>
+<p class="p2"><b>Drum Harmonics - M1</b> - Generates a set of harmonics based on the vibration of a drum,
+Modify 1 sets the proportion of harmonics added.
+Modify 2 is not used.</p>
+<p class="p2"><b>Cymbal Harmonics - M1</b> - Generates a set of harmonics based on the vibration of a cymbal,
+Modify 1 sets the proportion of harmonics added.
+Modify 2 is not used.</p>
+<p class="p2"><b>Root 2 Harmonics - M1</b> - Generates a set of harmonics based on the frequency ratio of the square root of 2 which is approx. 1.41421
+Modify 1 sets the proportion of harmonics added.
+Modify 2 is not used.</p>
+<p class="p2"><b>Root 3 Harmonics - M1</b> - Generates a set of harmonics based on the frequency ratio of the square root of 3 which is approx. 1.73205
+Modify 1 sets the proportion of harmonics added.
+Modify 2 is not used.</p>
+<p class="p2"><b>Blip - M1</b> - Blip - Band limited impulse oscillator.
+Modify 1 sets the number of harmonics, range: 1 - 60
+Modify 2 is not used.</p>
+<p class="p2"><b>Chaotic noise, Logistic map, stepped - M1</b> - Standard map chaotic generator with no smoothing.
+Modify 1 changes the chaotic behaviour.
+Modify 2 is not used.</p>
+<p class="p2"><b>Chaotic noise, Logistic map, linear smoothing - M1</b> - Standard map chaotic generator with linear smoothing.
+Modify 1 changes the chaotic behaviour.
+Modify 2 is not used.</p>
+<p class="p2"><b>Chaotic noise, Logistic map, cubic smoothing - M1</b> - Standard map chaotic generator with cubic smoothing.
+Modify 1 changes the chaotic behaviour.
+Modify 2 is not used.</p>
+<p class="p2"><b>Chaotic noise, Standard map, stepped - M1</b> - Standard map chaotic generator with no smoothing.
+Modify 1 changes the chaotic behaviour.
+Modify 2 is not used.</p>
+<p class="p2"><b>Chaotic noise, Standard map, linear smoothing - M1</b> - Standard map chaotic generator with linear smoothing.
+Modify 1 changes the chaotic behaviour.
+Modify 2 is not used.</p>
+<p class="p2"><b>Chaotic noise, Quadratic map, stepped - M1</b> - Quadratic map chaotic generator with no smoothing.
+Modify 1 changes the chaotic behaviour.
+Modify 2 is not used.</p>
+<p class="p2"><b>Chaotic noise, Quadratic map, linear smoothing - M1</b> - Quadratic map chaotic generator with linear smoothing.
+Modify 1 changes the chaotic behaviour.
+Modify 2 is not used.</p>
+<p class="p2"><b>Chaotic noise, Quadratic map, cubic smoothing - M1</b> - Quadratic map chaotic generator with cubic smoothing.
+Modify 1 changes the chaotic behaviour.
+Modify 2 is not used.</p>
+<p class="p2"><b>Triangle wave with negative shape distortion - M1</b> - Triangle wave with negative shape distortion. It sounds more buzzy than positive shape distortion.
+Modify 1 distorts the waveform shape.
+Modify 2 is not used.</p>
+<p class="p2"><b>Triangle wave with positive shape distortion - M1</b> - Triangle wave with positive shape distortion. It sounds more bassy than negative shape distortion.
+Modify 1 distorts the waveform shape.
+Modify 2 is not used.</p>
+<p class="p2"><b>Phase distortion sync sine wave - M1 & M2</b> - Phase distortion synthesis using a sine wave.
+Modify 1 sets the frequency ratio of the sync wave, range: 1 - 32.
+Modify 2 distorts the waveform shape.</p>
+<p class="p2"><b>Phase distortion sync sawtooth wave - M1 & M2</b> - Phase distortion synthesis using a sawtooth wave.
+Modify 1 sets the frequency ratio of the sync wave, range: 1 - 32.
+Modify 2 distorts the waveform shape.</p>
+<p class="p2"><b>Phase distortion sync triangle wave - M1 & M2</b> - Phase distortion synthesis using a triangle wave.
+Modify 1 sets the frequency ratio of the sync wave, range: 1 - 32.
+Modify 2 distorts the waveform shape.</p>
+</body>
+</html>

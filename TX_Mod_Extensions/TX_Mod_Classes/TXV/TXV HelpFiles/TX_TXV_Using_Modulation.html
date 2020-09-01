@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Using Modulation</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">Within TXV, some modules are Modulation Sources including LFOs, Step Sequencers and TXV System which has various mouse property modulation outputs. (In the module properties at the top of each module's help file, Modulation Sources are shown).</p>
+<p class="p1">See <A href="TX_TXV_List_Of_All_Modules.html">TXV List Of All Modules<A> & <A href="TX_TXV_Intro_To_All_Modules.html">TXV Intro To All Modules<A> for the properties of all modules, especially the group <b>Modulation Sources</b>.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Internal vs. External Modulation</i></b></p>
+<p class="p1">Modulation works slightly differently in TXV compared to the TX Modular.</p>
+<p class="p1"><b>Internal modulation</b> is where a TXV modulation source modulates another TXV module's parameter using a <A href="TX_TXV Node.html">TXV Node<A> module to make the connection. For example, an LFO might be modulating the vertical position of a 2D shape on the screen.</p>
+<p class="p1">The Node sets the amount of modulation and can also invert the signal.</p>
+<p class="p1">In order for Internal modulation to work, the parameter to be modulated should have "modulation mix" set above zero (it is zero by default). It should also have "use external modulation" switched off which is the default value.</p>
+<p class="p1"><b>External modulation</b> is where a TX Modular modulation source modulates a TXV module parameter using a Channel. This allows, for example, Audio Analysis signals in the TX Modular to change TXV parameters for "visualiser"-type effects.</p>
+<p class="p1">In order for External modulation to work, the parameter to be modulated should have "use external modulation" switched on. </p>
+<p class="p1"><br></p>
+<p class="p1"><b>Note:</b> Modulation with multiple sources is also calculated differently in TXV compared to the TX Modular.</p>
+<p class="p1">In TXV, if multiple sources modulate the same destination, their combined signals will automatically be scaled to the appropriate range of values in the destination parameter.</p>
+<p class="p1">So for example, 3 different modulation sources added together with their modulation Nodes at maximum modulation will automatically be scaled to the destination parameter range, and will not "hit the buffers" at the min & max values. </p>
+<p class="p1">(This auto-scaling doesn't happen in the TX Modular unless the modulation sources are first mixed into a Mix Control 8-1 or Matrix C 8x8 module with Auto-Scale switched on).</p>
+<p class="p1">There is one case which is different: if the TXV destination parameter is a switch with multiple modulation sources connected to it, there is no auto-scaling so that any one of the individual modulation sources are able to turn the switch on.</p>
+<p class="p1"><br></p>
+</body>
+</html>

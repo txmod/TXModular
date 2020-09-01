@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Step Sequencer</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Module type: Control Source</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module can trigger notes in other polyphonic modules as well as outputting control signals for note and velocity values and 3 extra controls.</p>
+<p class="p1">The sequencer holds patterns of up to 64 steps. There are 100 pattern slots (numbered 0 - 99) which can be chained together to make longer patterns.</p>
+<p class="p1">The sequencer BPM can be modulated by other modules.</p>
+<p class="p1">It is possible to use a sequencer just for triggering notes in other modules without using the control signals that it outputs. In this case, it doesn't need to be in a channel (i.e. the channel that is automatically created when you create a new Step Sequencer can be deleted).</p>
+<p class="p1">On the other hand, it is possible to use a sequencer just for it's control outputs, as a kind of step LFO. In this case you would need to use channels.</p>
+<p class="p1">You can easily introduce randomisation to the sequence in various different ways.</p>
+<p class="p1">It is also possible to manually trigger the sequencer step by step.</p>
+<p class="p1"><b><i>Note: </i></b>In this module, the maximum note velocity is 100, whereas trigger modules use the MIDI standard of 127.</p>
+<p class="p1">See also: <a href="../TX_Modulation_Vs_Automation.html">Modulation Vs Automation</a></p>
+<p class="p1"> </p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b><i></i></b><br></p>
+<p class="p1"><b>Controls on all Step Sequencer screens:</b></p>
+<p class="p1"><b>Start </b>-button to start the sequencer playing from the first step in the play range.</p>
+<p class="p1"><b>Stop</b> - button to stop the sequencer. </p>
+<p class="p1"><b>Sync Start</b> - this checkbox sets whether the sequencer will be started when the "Sync Start" button is pressed. The button is located at the top of the main screen and is used to start multiple modules at the same time.</p>
+<p class="p1"><b>Sync Stop</b> - this checkbox sets whether the sequencer will be stopped when the "Sync Stop" button is pressed. The button is located at the top of the main screen and is used to stop multiple modules at the same time.</p>
+<p class="p1"><b></b><br></p>
+<p class="p1"><b>Controls on several Step Sequencer screens (Patterns, Steps, Groups, Processes):</b></p>
+<p class="p1"><b>Step</b> - shows which steps are displayed . </p>
+<p class="p1"><b>Step on/off</b> - if a step is turned off, no note is triggered for that step.  </p>
+<p class="p1"><b>clone 1</b> - button which is at the end of lots of parameter rows in the sequencer. When pressed the value of the first step is copied to all the other steps.</p>
+<p class="p1"><b>Pattern</b> - shows the current Pattern number followed by the MIDI note names (e.g. C3) of each step displayed.</p>
+<p class="p1"><b></b><br></p>
+<p class="p1"><b>Outputs button</b></p>
+<p class="p1"><b>Polyphonic modules to be triggered directly by the sequencer</b> - up to 6 polyphonic source modules, such as wave synths, samplers or polyphonic envelopes, can be triggered. All valid modules will appear in the modules list. See the <a href="file:../TX_0%20TX%20Modular%20Help.html"><span class="s3">Help Index</span></a> for details of which modules are polyphonic.</p>
+<p class="p1"><b>MIDI Port </b>- for MIDI output</p>
+<p class="p1"><b>MIDI Loop-Back </b>- for sending MIDI output back into the TX Modular</p>
+<p class="p1"><b>MIDI Channel </b>- for MIDI output</p>
+<p class="p1"><b>Output MIDI notes for each step </b>- turns on MIDI note output</p>
+<p class="p1"><b>Output MIDI control values for Control 1/2/3 values at each step </b>- turns on MIDI control output</p>
+<p class="p1"><b>Control 1/2/3 MIDI</b> - the MIDI control numbers used</p>
+<p class="p1"><b></b><br></p>
+<p class="p1"><b>BPM &amp; Options button</b> </p>
+<p class="p1"><b>BPM</b> - sets the tempo in beats per minute. </p>
+<p class="p1"><b>Tap tempo button</b> - this displays measures the tempo when it is clicked with a mouse on each beat. Use the Command (Apple) key with a mouse drag to copy the BPM to the sequencer BPM.</p>
+<p class="p1"><b>Auto copy tap tempo to BPM </b>- when set on, this automatically copies the tap tempo to the sequencer BPM as long as the tap tempo is within the min-max range of BPM values.</p>
+<p class="p1"><b>Play Mode </b>- this has 3 options: 1) <b><i>Normal</i></b>,</p>
+<p class="p1">2) <b><i>Random Trigger - steps are randomly triggered based on BPM. Step lengths are ignored</i></b><i>. </i>- when this is on, it changes the sequencer's rhythmic base; instead of using step lengths to created rhythms, a random trigger is used with an average trigger rate based on the current bpm. </p>
+<p class="p1">3) <b><i>Manual Trigger - steps are manually triggered. BPM &amp; Step lengths are ignored.</i></b>- when this is on, once the sequencer is started, the following will appear on the screen.</p>
+<p class="p1"><b>Manual Controls: </b></p>
+<p class="p1"><b>    Trigger status </b>- displays current info about manual triggering. </p>
+<p class="p1"><b>    Rewind Sequencer button</b> - rewinds to the start of the sequence.</p>
+<p class="p1"><b>    Trigger Next Step button</b> - manually triggers next play step.</p>
+<p class="p1"><b>    Skip Next Step button</b> - manually skips next play step.</p>
+<p class="p1"><b>Mute - sequencer plays but all steps are turned off</b> - this stops all steps from triggering. </p>
+<p class="p1"><b>Randomise step order every cycle</b> - when this is on, the step order will be scrambled every time a pattern plays, but only for selected parameters (the parameters are only shown when this button is switched on).</p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+<p class="p1"><b>Patterns button</b></p>
+<p class="p1">The <b>Patterns</b> button displays <b>Pattern Slots</b> (from 0 to 99) which can be used to store sequences and recall them. </p>
+<p class="p1"><b>Play steps</b> - selects which steps will be played in the current Pattern. </p>
+<p class="p1"><b>Pattern time</b> - displays the length of the current Pattern in beats and seconds. (<i>Please note</i>: the length in seconds is based on the BPM set inside the sequencer. But, since the BPM can be modulated, the length in seconds may not reflect the current <i>modulated</i> BPM.)</p>
+<p class="p1"><b>Pattern desc</b> - space to add a description for each pattern.</p>
+<p class="p1"><b>Pattern slot</b> - slot number of the current Pattern.</p>
+<p class="p1"><b>Copy pattern/ Paste pattern</b> - buttons to copy and paste betweeen patterns.</p>
+<p class="p1"><b>Reset all values</b> - will reset all the paramenters of the whole current pattern to default values.</p>
+<p class="p1"><b>Next pattern</b> has various options: </p>
+<p class="p1"><b><i>- None</i></b> will mean the current pattern only plays once; </p>
+<p class="p1"><b><i>- Repeat current pattern</i></b> will loop the current pattern; </p>
+<p class="p1"><b><i>- Use pattern chain - in chain step order</i></b> allows you to create your own chain of different patterns - up to 64 can be chained and you can loop the chain using the Loop button</p>
+<p class="p1"><b><i>- Use pattern chain - in random order</i></b> randomises the order of the chain steps.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Note: </i></b>Sequencer steps cannot be edited while Sequencer is playing a Pattern Chain.</p>
+<p class="p1">You can still edit controls on the <b>Outputs</b> and <b>BPM &amp; Options</b> screens, but the other screens will be disabled while the sequencer is playing. </p>
+<p class="p1">To edit a Pattern while playing it, set <b>Next pattern</b> to <b><i>None</i></b> or <b><i>Repeat current pattern</i></b>.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Steps button</b></p>
+<p class="p1">Here, you can edit the notes and other parameter of each step. </p>
+<p class="p1">A piano keyboard shows all the possible notes. </p>
+<p class="p1">The grid next to the keyboard can be clicked with a mouse to input notes and has scroll bars to move around it.</p>
+<p class="p1">The green buttons allow you to edit various parameters for each step:</p>
+<p class="p1">The <b>notes</b> button displays a 3 octave keyboard (it is only 2 octaves on the other buttons). </p>
+<p class="p1">It also displays a checkbox: <b>MIDI learn notes & velocities</b>. When this is switched on, any MIDI notes and velocities received on any MIDI channels will be recorded into the steps of the sequencer starting at the <b>Next Step</b>, which is shown next to it. The new notes will be displayed on the screen.  </p>
+<p class="p1">This is useful adding a pattern played on a MIDI keyboard.</p>
+<p class="p1">The <b>velocity</b> button displays the velocity values for each step, and the <b>Velocity o/p range</b>, which rescales the velocity to within a certain output range.</p>
+<p class="p1"><b><i>Note</i></b> - the <b>clone 1</b> button will copy the value in the first step to all other steps.</p>
+<p class="p1">A <b>random velocity</b> can also be set for each note. This is useful for so-called "humanisation" of of patterns to make them sound less machine-like.</p>
+<p class="p1">The <b>step/note lengths</b> button displays the length in beats of each step/note as a fraction: X over Y. So for example 1 over 2 would be a step length of 1/2 or 0.5 beats. Or 3 over 4 would be a step length of 3/4 or 0.75 beats. A checkbox shows various presets - select a preset to set all step &amp; note lengths to the preset value. </p>
+<p class="p1">The <b>probability</b> button displays the probablity of each step playing.</p>
+<p class="p1">A probabililty of 100 would mean that the step would always be played.</p>
+<p class="p1">A probabililty of 33 would mean that the step would be played 33 percent of the time - on average only every 3rd time the sequence is played. This is useful for creating sequences that change every cycle, with some steps playing every time, and others only sometimes.</p>
+<p class="p1">The <b>delay</b> button displays the delay amount of each step. A step can be delayed by up to 50% of the step time. </p>
+<p class="p1"><b>random delay</b> adds a random delay to each step. This is useful for so-called "humanisation" of the timing of patterns to make them sound less machine-like.</p>
+<p class="p1">Delay can also be used to make a swung rhythm by delaying every second step.</p>
+<p class="p1"><b>random octave</b> - if this is not zero, the note will be transposed by a random no of octaves between 0 and that value. For example a value of 2 will mean every time that step is played, it could be transposed by 0, 1, or 2 octaves.</p>
+<p class="p1">The random octave is set every time a step is played. Negative values are allowed which will transpose downwards to lower octaves.</p>
+<p class="p1"><b>control 1/2/3</b> - these controls are not used for creating notes, but they are output as control signals at the same time as notes are played in each step.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Groups button</b></p>
+<p class="p1"><b>Group 1-8</b> - There are 8 groups and any step can belong to any number of groups. </p>
+<p class="p1">Groups can used by to dynamically control a sequencer while it is running by sending an instruction to all the steps in a group. </p>
+<p class="p1">You would do this by running an Action from another module. </p>
+<p class="p1">For example, an Action Sequencer could instruct all the steps in Group 1 to have their probability set to 50%, or their velocity set to 60. You can also use widgets (such as sliders) on Interface screens to control group parameters.</p>
+<p class="p1">- For more info on Actions in the TX Modular System, see help file: <A href="../TX_What_Are_Actions.html">What_Are_Actions<A></p>
+<p class="p1">(<i>Example System</i>: To see an example of how Groups can be used in a built system, see the file <b>Drunken_Sailor</b> in the <b>Larger_Systems</b> folder within the <b>TX Mod Examples</b> folder.)</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Processes button</b></p>
+<p class="p1">The <b>Processes</b> button allows you to apply all kinds of processes to change the pattern currently being displayed. </p>
+<p class="p1">You can copy and paste steps from one part of the pattern to another, randomise the order of steps, or generate new patterns based on specific scales, chords or modes. </p>
+<p class="p1">Each process has its own specific options and parameters to set. The best way to understand them is to try them out.</p>
+<p class="p1">All processes have a parameter <b>Target steps</b> - this is the range of steps that will be affected when you run the process. Steps outside this range won't be changed in any way.</p>
+<p class="p1">The following processes can be run on the current pattern:</p>
+<p class="p1">    Copy and paste steps once</p>
+<p class="p1">    Copy and paste steps repeatedly</p>
+<p class="p1">    Shift steps left</p>
+<p class="p1">    Shift steps right </p>
+<p class="p1">    Randomise step order</p>
+<p class="p1">    Reverse step order</p>
+<p class="p1">    Constrain notes to chord, mode, scale</p>
+<p class="p1">    Generate notes from chord, mode, scale</p>
+<p class="p1">    Generate notes from selected range</p>
+<p class="p1">    Transpose notes upwards</p>
+<p class="p1">    Transpose notes downwards</p>
+<p class="p1">    Randomise step on-off values</p>
+<p class="p1">    Randomise velocity values</p>
+<p class="p1">    Randomise step length X values</p>
+<p class="p1">    Randomise step length Y values</p>
+<p class="p1">    Randomise note length X values</p>
+<p class="p1">    Randomise note length Y values</p>
+<p class="p1">    Randomise probability values</p>
+<p class="p1">    Randomise delay values</p>
+<p class="p1">    Randomise control 1/2/3 values</p>
+<p class="p1"><b><i></i></b><br></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>BPM</b>  </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Outputs:</i></b></p>
+<p class="p1">Note Out (based on MIDI freq range 8.18 - 12543.85 hz)</p>
+<p class="p1">Velocity Out</p>
+<p class="p1">Control 1</p>
+<p class="p1">Control 2</p>
+<p class="p1">Control 3</p>
+<p class="p1">Note Trigger</p>
+<p class="p1"> </p>
+<p class="p1"><br></p>
+</body>
+</html>

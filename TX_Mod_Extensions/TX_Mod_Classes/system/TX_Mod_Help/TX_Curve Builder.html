@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1404.13">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 13.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 6.0px 0.0px 12.0px 0.0px; line-height: 14.0px; font: 12.0px Times; color: #000000; -webkit-text-stroke: #000000; min-height: 14.0px}
+    p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000}
+    p.p4 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica; color: #000000; -webkit-text-stroke: #000000; min-height: 18.0px}
+    p.p5 {margin: 6.0px 0.0px 0.0px 0.0px; line-height: 17.0px; font: 15.0px Helvetica}
+    span.s1 {font-kerning: none}
+    span.s2 {font: 15.0px Helvetica; text-decoration: underline ; font-kerning: none; color: #042eee; -webkit-text-stroke: 0px #042eee}
+    span.s3 {font-kerning: none; color: #000000}
+    span.s4 {font-kerning: none; color: #000000; -webkit-text-stroke: 0px #000000}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">// Copyright (C) 2016 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p3"><span class="s1"><b>Curve Builder</b></span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p3"><span class="s1">Several modules use curves, including: <b>Env Curve, LFO Curve, Warp, Warp Morph, Waveshaper, WaveshaperX</b>.</span></p>
+<p class="p3"><span class="s1">These modules include a basic curve editor - see help file <a href="file:TX_Curve%20Editing.html"><span class="s2">Curve Editing</span></a> for details.</span></p>
+<p class="p3"><span class="s1">The Curve Builder adds more ways to manipulate curves, and has clipboards to store temporary copies of the curves while you’re working with them.</span></p>
+<p class="p3"><span class="s1">The Curve Builder can be opened from the Tool Windows popup on the main window, or from inside a module which uses curves - there's a Curve Builder button on the curve editor . The curve from the module will automatically be copied into Curve 1 of the </span><span class="s3">Curve Builder window, and the Curve Size (see box at the top of the window) and Curves 1/2/3/4 in the builder will be set to the correct size of the curve being edited</span><span class="s1">.</span></p>
+<p class="p5"><span class="s4">After editing in the </span><span class="s1">Curve Builder, curves can be dragged - using the yellow “drag &amp; drop” boxes or the white/blue drag &amp; drop clipboards at the top and bottom of the window.</span></p>
+<p class="p3"><span class="s1">There are various options to help with building or modifying curves which are shown on the screen as checkboxes or buttons (see below).</span></p>
+<p class="p3"><span class="s1"><b>Note:</b> All curves are shown horizontally, from left to right, in the Curve Builder window. Some TX modules use vertical curves (such as the Groove Curves in Loop Player modules), but they will be shown horizontally if they are dragged into the Curve Builder. This is to allow adequate screen space for editing multiple curves.</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p3"><span class="s1"><b><i>Controls:</i></b></span></p>
+<p class="p3"><span class="s1"><b>Curve Size</b> - the number of points in the curves.</span></p>
+<p class="p3"><span class="s1"><b>Grid rows</b> - no of rows (1-128) separated by white lines in the grid behind the curves.</span></p>
+<p class="p3"><span class="s1"><b>Grid cols</b> - no of columns (1-128) separated by white lines in the grid behind the curves.</span></p>
+<p class="p3"><span class="s1"><b>Curve Height</b> - adjusts the height of the curves on the screen.</span></p>
+<p class="p3"><span class="s1"><b>Show Envelope</b> - this checkbox opens an envelope editor with draggable curves. You can add or delete new nodes in the envelope by pressing Ctrl while clicking on the curve. Once you have created the shape you want, use the buttons below the envelope to copy it to Curves 1/2/3/4.</span></p>
+<p class="p3"><span class="s1"><b>Curve 1</b> - the initial curve before modifying.</span></p>
+<p class="p3"><span class="s1"><b>Curve 1 Parameter FX</b> - this button displays options and parameters for modifying Curve 1 using either a single parameter labelled <b>Parameter 1</b>(a slider),or a pair of parameters labelled <b>Parameter 2</b> (a range slider).</span></p>
+<p class="p3"><span class="s1">Options include randomising, clamping, scaling, phase shifting, multiplying, dividing, adding, &amp; subtracting values.</span></p>
+<p class="p3"><span class="s1">The results are put into Curve 4</span></p>
+<p class="p3"><span class="s1"><b>Curve 1 &amp; 2 FX</b> - this button displays options for modifying Curve 1 using Curve 2.<br>
+Options include mixing, multiplying, dividing, adding, &amp; subtracting the 2 curves, or using Curve 2 as an index into Curve 1 or Curve 1 as an index into Curve 2.<br>
+The results are put into Curve 4.</span></p>
+<p class="p3"><span class="s1"><b>Use Curve 3 for FX Mix</b> - this checkbox will make Curve 3 visible instead of the FX Mix slider and uses the curve as a mix control, giving much more control to the user of the final mix along each part of the curve.</span></p>
+<p class="p3"><span class="s1"><b>FX Active Range</b> - selects the area of the curve to be changed.</span></p>
+<p class="p3"><span class="s1"><b>Curve 2</b> - this is only visible if <b>Curve 1 &amp; 2 FX</b> is selected.</span></p>
+<p class="p3"><span class="s1"><b>FX Mix Slider </b> - this is only visible if <b>Use Curve 3 for FX Mix</b> is NOT selected. It controls the overall mix between the original and modified versions of the curve.</span></p>
+<p class="p3"><span class="s1"><b>Curve 3 - FX Mix</b> - this is only visible if <b>Use Curve 3 for FX Mix</b> is selected. Curve 3 is used to control the mix between the original and modified versions of the curve at each point along the curve.</span></p>
+<p class="p3"><span class="s1"><b>Curve 4 - FX Result</b> - the final curve with FX mixed in.</span></p>
+<p class="p4"><span class="s1"></span><br></p>
+</body>
+</html>

@@ -1,0 +1,690 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="Apple-converted-space">                    </span>GNU GENERAL PUBLIC LICENSE</p>
+<p class="p1"><span class="Apple-converted-space">                       </span>Version 3, 29 June 2007</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space"> </span>Copyright (C) 2007 Free Software Foundation, Inc. &lt;http://fsf.org/&gt;</p>
+<p class="p1"><span class="Apple-converted-space"> </span>Everyone is permitted to copy and distribute verbatim copies</p>
+<p class="p1"><span class="Apple-converted-space"> </span>of this license document, but changing it is not allowed.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                            </span>Preamble</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The GNU General Public License is a free, copyleft license for</p>
+<p class="p1">software and other kinds of works.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The licenses for most software and other practical works are designed</p>
+<p class="p1">to take away your freedom to share and change the works.<span class="Apple-converted-space">  </span>By contrast,</p>
+<p class="p1">the GNU General Public License is intended to guarantee your freedom to</p>
+<p class="p1">share and change all versions of a program--to make sure it remains free</p>
+<p class="p1">software for all its users.<span class="Apple-converted-space">  </span>We, the Free Software Foundation, use the</p>
+<p class="p1">GNU General Public License for most of our software; it applies also to</p>
+<p class="p1">any other work released this way by its authors.<span class="Apple-converted-space">  </span>You can apply it to</p>
+<p class="p1">your programs, too.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>When we speak of free software, we are referring to freedom, not</p>
+<p class="p1">price.<span class="Apple-converted-space">  </span>Our General Public Licenses are designed to make sure that you</p>
+<p class="p1">have the freedom to distribute copies of free software (and charge for</p>
+<p class="p1">them if you wish), that you receive source code or can get it if you</p>
+<p class="p1">want it, that you can change the software or use pieces of it in new</p>
+<p class="p1">free programs, and that you know you can do these things.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>To protect your rights, we need to prevent others from denying you</p>
+<p class="p1">these rights or asking you to surrender the rights.<span class="Apple-converted-space">  </span>Therefore, you have</p>
+<p class="p1">certain responsibilities if you distribute copies of the software, or if</p>
+<p class="p1">you modify it: responsibilities to respect the freedom of others.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>For example, if you distribute copies of such a program, whether</p>
+<p class="p1">gratis or for a fee, you must pass on to the recipients the same</p>
+<p class="p1">freedoms that you received.<span class="Apple-converted-space">  </span>You must make sure that they, too, receive</p>
+<p class="p1">or can get the source code.<span class="Apple-converted-space">  </span>And you must show them these terms so they</p>
+<p class="p1">know their rights.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Developers that use the GNU GPL protect your rights with two steps:</p>
+<p class="p1">(1) assert copyright on the software, and (2) offer you this License</p>
+<p class="p1">giving you legal permission to copy, distribute and/or modify it.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>For the developers' and authors' protection, the GPL clearly explains</p>
+<p class="p1">that there is no warranty for this free software.<span class="Apple-converted-space">  </span>For both users' and</p>
+<p class="p1">authors' sake, the GPL requires that modified versions be marked as</p>
+<p class="p1">changed, so that their problems will not be attributed erroneously to</p>
+<p class="p1">authors of previous versions.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Some devices are designed to deny users access to install or run</p>
+<p class="p1">modified versions of the software inside them, although the manufacturer</p>
+<p class="p1">can do so.<span class="Apple-converted-space">  </span>This is fundamentally incompatible with the aim of</p>
+<p class="p1">protecting users' freedom to change the software.<span class="Apple-converted-space">  </span>The systematic</p>
+<p class="p1">pattern of such abuse occurs in the area of products for individuals to</p>
+<p class="p1">use, which is precisely where it is most unacceptable.<span class="Apple-converted-space">  </span>Therefore, we</p>
+<p class="p1">have designed this version of the GPL to prohibit the practice for those</p>
+<p class="p1">products.<span class="Apple-converted-space">  </span>If such problems arise substantially in other domains, we</p>
+<p class="p1">stand ready to extend this provision to those domains in future versions</p>
+<p class="p1">of the GPL, as needed to protect the freedom of users.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Finally, every program is threatened constantly by software patents.</p>
+<p class="p1">States should not allow patents to restrict development and use of</p>
+<p class="p1">software on general-purpose computers, but in those that do, we wish to</p>
+<p class="p1">avoid the special danger that patents applied to a free program could</p>
+<p class="p1">make it effectively proprietary.<span class="Apple-converted-space">  </span>To prevent this, the GPL assures that</p>
+<p class="p1">patents cannot be used to render the program non-free.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The precise terms and conditions for copying, distribution and</p>
+<p class="p1">modification follow.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                       </span>TERMS AND CONDITIONS</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>0. Definitions.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>"This License" refers to version 3 of the GNU General Public License.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>"Copyright" also means copyright-like laws that apply to other kinds of</p>
+<p class="p1">works, such as semiconductor masks.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>"The Program" refers to any copyrightable work licensed under this</p>
+<p class="p1">License.<span class="Apple-converted-space">  </span>Each licensee is addressed as "you".<span class="Apple-converted-space">  </span>"Licensees" and</p>
+<p class="p1">"recipients" may be individuals or organizations.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>To "modify" a work means to copy from or adapt all or part of the work</p>
+<p class="p1">in a fashion requiring copyright permission, other than the making of an</p>
+<p class="p1">exact copy.<span class="Apple-converted-space">  </span>The resulting work is called a "modified version" of the</p>
+<p class="p1">earlier work or a work "based on" the earlier work.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>A "covered work" means either the unmodified Program or a work based</p>
+<p class="p1">on the Program.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>To "propagate" a work means to do anything with it that, without</p>
+<p class="p1">permission, would make you directly or secondarily liable for</p>
+<p class="p1">infringement under applicable copyright law, except executing it on a</p>
+<p class="p1">computer or modifying a private copy.<span class="Apple-converted-space">  </span>Propagation includes copying,</p>
+<p class="p1">distribution (with or without modification), making available to the</p>
+<p class="p1">public, and in some countries other activities as well.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>To "convey" a work means any kind of propagation that enables other</p>
+<p class="p1">parties to make or receive copies.<span class="Apple-converted-space">  </span>Mere interaction with a user through</p>
+<p class="p1">a computer network, with no transfer of a copy, is not conveying.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>An interactive user interface displays "Appropriate Legal Notices"</p>
+<p class="p1">to the extent that it includes a convenient and prominently visible</p>
+<p class="p1">feature that (1) displays an appropriate copyright notice, and (2)</p>
+<p class="p1">tells the user that there is no warranty for the work (except to the</p>
+<p class="p1">extent that warranties are provided), that licensees may convey the</p>
+<p class="p1">work under this License, and how to view a copy of this License.<span class="Apple-converted-space">  </span>If</p>
+<p class="p1">the interface presents a list of user commands or options, such as a</p>
+<p class="p1">menu, a prominent item in the list meets this criterion.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>1. Source Code.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The "source code" for a work means the preferred form of the work</p>
+<p class="p1">for making modifications to it.<span class="Apple-converted-space">  </span>"Object code" means any non-source</p>
+<p class="p1">form of a work.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>A "Standard Interface" means an interface that either is an official</p>
+<p class="p1">standard defined by a recognized standards body, or, in the case of</p>
+<p class="p1">interfaces specified for a particular programming language, one that</p>
+<p class="p1">is widely used among developers working in that language.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The "System Libraries" of an executable work include anything, other</p>
+<p class="p1">than the work as a whole, that (a) is included in the normal form of</p>
+<p class="p1">packaging a Major Component, but which is not part of that Major</p>
+<p class="p1">Component, and (b) serves only to enable use of the work with that</p>
+<p class="p1">Major Component, or to implement a Standard Interface for which an</p>
+<p class="p1">implementation is available to the public in source code form.<span class="Apple-converted-space">  </span>A</p>
+<p class="p1">"Major Component", in this context, means a major essential component</p>
+<p class="p1">(kernel, window system, and so on) of the specific operating system</p>
+<p class="p1">(if any) on which the executable work runs, or a compiler used to</p>
+<p class="p1">produce the work, or an object code interpreter used to run it.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The "Corresponding Source" for a work in object code form means all</p>
+<p class="p1">the source code needed to generate, install, and (for an executable</p>
+<p class="p1">work) run the object code and to modify the work, including scripts to</p>
+<p class="p1">control those activities.<span class="Apple-converted-space">  </span>However, it does not include the work's</p>
+<p class="p1">System Libraries, or general-purpose tools or generally available free</p>
+<p class="p1">programs which are used unmodified in performing those activities but</p>
+<p class="p1">which are not part of the work.<span class="Apple-converted-space">  </span>For example, Corresponding Source</p>
+<p class="p1">includes interface definition files associated with source files for</p>
+<p class="p1">the work, and the source code for shared libraries and dynamically</p>
+<p class="p1">linked subprograms that the work is specifically designed to require,</p>
+<p class="p1">such as by intimate data communication or control flow between those</p>
+<p class="p1">subprograms and other parts of the work.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The Corresponding Source need not include anything that users</p>
+<p class="p1">can regenerate automatically from other parts of the Corresponding</p>
+<p class="p1">Source.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The Corresponding Source for a work in source code form is that</p>
+<p class="p1">same work.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>2. Basic Permissions.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>All rights granted under this License are granted for the term of</p>
+<p class="p1">copyright on the Program, and are irrevocable provided the stated</p>
+<p class="p1">conditions are met.<span class="Apple-converted-space">  </span>This License explicitly affirms your unlimited</p>
+<p class="p1">permission to run the unmodified Program.<span class="Apple-converted-space">  </span>The output from running a</p>
+<p class="p1">covered work is covered by this License only if the output, given its</p>
+<p class="p1">content, constitutes a covered work.<span class="Apple-converted-space">  </span>This License acknowledges your</p>
+<p class="p1">rights of fair use or other equivalent, as provided by copyright law.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You may make, run and propagate covered works that you do not</p>
+<p class="p1">convey, without conditions so long as your license otherwise remains</p>
+<p class="p1">in force.<span class="Apple-converted-space">  </span>You may convey covered works to others for the sole purpose</p>
+<p class="p1">of having them make modifications exclusively for you, or provide you</p>
+<p class="p1">with facilities for running those works, provided that you comply with</p>
+<p class="p1">the terms of this License in conveying all material for which you do</p>
+<p class="p1">not control copyright.<span class="Apple-converted-space">  </span>Those thus making or running the covered works</p>
+<p class="p1">for you must do so exclusively on your behalf, under your direction</p>
+<p class="p1">and control, on terms that prohibit them from making any copies of</p>
+<p class="p1">your copyrighted material outside their relationship with you.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Conveying under any other circumstances is permitted solely under</p>
+<p class="p1">the conditions stated below.<span class="Apple-converted-space">  </span>Sublicensing is not allowed; section 10</p>
+<p class="p1">makes it unnecessary.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>3. Protecting Users' Legal Rights From Anti-Circumvention Law.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>No covered work shall be deemed part of an effective technological</p>
+<p class="p1">measure under any applicable law fulfilling obligations under article</p>
+<p class="p1">11 of the WIPO copyright treaty adopted on 20 December 1996, or</p>
+<p class="p1">similar laws prohibiting or restricting circumvention of such</p>
+<p class="p1">measures.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>When you convey a covered work, you waive any legal power to forbid</p>
+<p class="p1">circumvention of technological measures to the extent such circumvention</p>
+<p class="p1">is effected by exercising rights under this License with respect to</p>
+<p class="p1">the covered work, and you disclaim any intention to limit operation or</p>
+<p class="p1">modification of the work as a means of enforcing, against the work's</p>
+<p class="p1">users, your or third parties' legal rights to forbid circumvention of</p>
+<p class="p1">technological measures.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>4. Conveying Verbatim Copies.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You may convey verbatim copies of the Program's source code as you</p>
+<p class="p1">receive it, in any medium, provided that you conspicuously and</p>
+<p class="p1">appropriately publish on each copy an appropriate copyright notice;</p>
+<p class="p1">keep intact all notices stating that this License and any</p>
+<p class="p1">non-permissive terms added in accord with section 7 apply to the code;</p>
+<p class="p1">keep intact all notices of the absence of any warranty; and give all</p>
+<p class="p1">recipients a copy of this License along with the Program.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You may charge any price or no price for each copy that you convey,</p>
+<p class="p1">and you may offer support or warranty protection for a fee.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>5. Conveying Modified Source Versions.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You may convey a work based on the Program, or the modifications to</p>
+<p class="p1">produce it from the Program, in the form of source code under the</p>
+<p class="p1">terms of section 4, provided that you also meet all of these conditions:</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>a) The work must carry prominent notices stating that you modified</p>
+<p class="p1"><span class="Apple-converted-space">    </span>it, and giving a relevant date.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>b) The work must carry prominent notices stating that it is</p>
+<p class="p1"><span class="Apple-converted-space">    </span>released under this License and any conditions added under section</p>
+<p class="p1"><span class="Apple-converted-space">    </span>7.<span class="Apple-converted-space">  </span>This requirement modifies the requirement in section 4 to</p>
+<p class="p1"><span class="Apple-converted-space">    </span>"keep intact all notices".</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>c) You must license the entire work, as a whole, under this</p>
+<p class="p1"><span class="Apple-converted-space">    </span>License to anyone who comes into possession of a copy.<span class="Apple-converted-space">  </span>This</p>
+<p class="p1"><span class="Apple-converted-space">    </span>License will therefore apply, along with any applicable section 7</p>
+<p class="p1"><span class="Apple-converted-space">    </span>additional terms, to the whole of the work, and all its parts,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>regardless of how they are packaged.<span class="Apple-converted-space">  </span>This License gives no</p>
+<p class="p1"><span class="Apple-converted-space">    </span>permission to license the work in any other way, but it does not</p>
+<p class="p1"><span class="Apple-converted-space">    </span>invalidate such permission if you have separately received it.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>d) If the work has interactive user interfaces, each must display</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Appropriate Legal Notices; however, if the Program has interactive</p>
+<p class="p1"><span class="Apple-converted-space">    </span>interfaces that do not display Appropriate Legal Notices, your</p>
+<p class="p1"><span class="Apple-converted-space">    </span>work need not make them do so.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>A compilation of a covered work with other separate and independent</p>
+<p class="p1">works, which are not by their nature extensions of the covered work,</p>
+<p class="p1">and which are not combined with it such as to form a larger program,</p>
+<p class="p1">in or on a volume of a storage or distribution medium, is called an</p>
+<p class="p1">"aggregate" if the compilation and its resulting copyright are not</p>
+<p class="p1">used to limit the access or legal rights of the compilation's users</p>
+<p class="p1">beyond what the individual works permit.<span class="Apple-converted-space">  </span>Inclusion of a covered work</p>
+<p class="p1">in an aggregate does not cause this License to apply to the other</p>
+<p class="p1">parts of the aggregate.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>6. Conveying Non-Source Forms.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You may convey a covered work in object code form under the terms</p>
+<p class="p1">of sections 4 and 5, provided that you also convey the</p>
+<p class="p1">machine-readable Corresponding Source under the terms of this License,</p>
+<p class="p1">in one of these ways:</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>a) Convey the object code in, or embodied in, a physical product</p>
+<p class="p1"><span class="Apple-converted-space">    </span>(including a physical distribution medium), accompanied by the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Corresponding Source fixed on a durable physical medium</p>
+<p class="p1"><span class="Apple-converted-space">    </span>customarily used for software interchange.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>b) Convey the object code in, or embodied in, a physical product</p>
+<p class="p1"><span class="Apple-converted-space">    </span>(including a physical distribution medium), accompanied by a</p>
+<p class="p1"><span class="Apple-converted-space">    </span>written offer, valid for at least three years and valid for as</p>
+<p class="p1"><span class="Apple-converted-space">    </span>long as you offer spare parts or customer support for that product</p>
+<p class="p1"><span class="Apple-converted-space">    </span>model, to give anyone who possesses the object code either (1) a</p>
+<p class="p1"><span class="Apple-converted-space">    </span>copy of the Corresponding Source for all the software in the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>product that is covered by this License, on a durable physical</p>
+<p class="p1"><span class="Apple-converted-space">    </span>medium customarily used for software interchange, for a price no</p>
+<p class="p1"><span class="Apple-converted-space">    </span>more than your reasonable cost of physically performing this</p>
+<p class="p1"><span class="Apple-converted-space">    </span>conveying of source, or (2) access to copy the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Corresponding Source from a network server at no charge.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>c) Convey individual copies of the object code with a copy of the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>written offer to provide the Corresponding Source.<span class="Apple-converted-space">  </span>This</p>
+<p class="p1"><span class="Apple-converted-space">    </span>alternative is allowed only occasionally and noncommercially, and</p>
+<p class="p1"><span class="Apple-converted-space">    </span>only if you received the object code with such an offer, in accord</p>
+<p class="p1"><span class="Apple-converted-space">    </span>with subsection 6b.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>d) Convey the object code by offering access from a designated</p>
+<p class="p1"><span class="Apple-converted-space">    </span>place (gratis or for a charge), and offer equivalent access to the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Corresponding Source in the same way through the same place at no</p>
+<p class="p1"><span class="Apple-converted-space">    </span>further charge.<span class="Apple-converted-space">  </span>You need not require recipients to copy the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Corresponding Source along with the object code.<span class="Apple-converted-space">  </span>If the place to</p>
+<p class="p1"><span class="Apple-converted-space">    </span>copy the object code is a network server, the Corresponding Source</p>
+<p class="p1"><span class="Apple-converted-space">    </span>may be on a different server (operated by you or a third party)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>that supports equivalent copying facilities, provided you maintain</p>
+<p class="p1"><span class="Apple-converted-space">    </span>clear directions next to the object code saying where to find the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Corresponding Source.<span class="Apple-converted-space">  </span>Regardless of what server hosts the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Corresponding Source, you remain obligated to ensure that it is</p>
+<p class="p1"><span class="Apple-converted-space">    </span>available for as long as needed to satisfy these requirements.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>e) Convey the object code using peer-to-peer transmission, provided</p>
+<p class="p1"><span class="Apple-converted-space">    </span>you inform other peers where the object code and Corresponding</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Source of the work are being offered to the general public at no</p>
+<p class="p1"><span class="Apple-converted-space">    </span>charge under subsection 6d.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>A separable portion of the object code, whose source code is excluded</p>
+<p class="p1">from the Corresponding Source as a System Library, need not be</p>
+<p class="p1">included in conveying the object code work.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>A "User Product" is either (1) a "consumer product", which means any</p>
+<p class="p1">tangible personal property which is normally used for personal, family,</p>
+<p class="p1">or household purposes, or (2) anything designed or sold for incorporation</p>
+<p class="p1">into a dwelling.<span class="Apple-converted-space">  </span>In determining whether a product is a consumer product,</p>
+<p class="p1">doubtful cases shall be resolved in favor of coverage.<span class="Apple-converted-space">  </span>For a particular</p>
+<p class="p1">product received by a particular user, "normally used" refers to a</p>
+<p class="p1">typical or common use of that class of product, regardless of the status</p>
+<p class="p1">of the particular user or of the way in which the particular user</p>
+<p class="p1">actually uses, or expects or is expected to use, the product.<span class="Apple-converted-space">  </span>A product</p>
+<p class="p1">is a consumer product regardless of whether the product has substantial</p>
+<p class="p1">commercial, industrial or non-consumer uses, unless such uses represent</p>
+<p class="p1">the only significant mode of use of the product.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>"Installation Information" for a User Product means any methods,</p>
+<p class="p1">procedures, authorization keys, or other information required to install</p>
+<p class="p1">and execute modified versions of a covered work in that User Product from</p>
+<p class="p1">a modified version of its Corresponding Source.<span class="Apple-converted-space">  </span>The information must</p>
+<p class="p1">suffice to ensure that the continued functioning of the modified object</p>
+<p class="p1">code is in no case prevented or interfered with solely because</p>
+<p class="p1">modification has been made.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If you convey an object code work under this section in, or with, or</p>
+<p class="p1">specifically for use in, a User Product, and the conveying occurs as</p>
+<p class="p1">part of a transaction in which the right of possession and use of the</p>
+<p class="p1">User Product is transferred to the recipient in perpetuity or for a</p>
+<p class="p1">fixed term (regardless of how the transaction is characterized), the</p>
+<p class="p1">Corresponding Source conveyed under this section must be accompanied</p>
+<p class="p1">by the Installation Information.<span class="Apple-converted-space">  </span>But this requirement does not apply</p>
+<p class="p1">if neither you nor any third party retains the ability to install</p>
+<p class="p1">modified object code on the User Product (for example, the work has</p>
+<p class="p1">been installed in ROM).</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The requirement to provide Installation Information does not include a</p>
+<p class="p1">requirement to continue to provide support service, warranty, or updates</p>
+<p class="p1">for a work that has been modified or installed by the recipient, or for</p>
+<p class="p1">the User Product in which it has been modified or installed.<span class="Apple-converted-space">  </span>Access to a</p>
+<p class="p1">network may be denied when the modification itself materially and</p>
+<p class="p1">adversely affects the operation of the network or violates the rules and</p>
+<p class="p1">protocols for communication across the network.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Corresponding Source conveyed, and Installation Information provided,</p>
+<p class="p1">in accord with this section must be in a format that is publicly</p>
+<p class="p1">documented (and with an implementation available to the public in</p>
+<p class="p1">source code form), and must require no special password or key for</p>
+<p class="p1">unpacking, reading or copying.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>7. Additional Terms.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>"Additional permissions" are terms that supplement the terms of this</p>
+<p class="p1">License by making exceptions from one or more of its conditions.</p>
+<p class="p1">Additional permissions that are applicable to the entire Program shall</p>
+<p class="p1">be treated as though they were included in this License, to the extent</p>
+<p class="p1">that they are valid under applicable law.<span class="Apple-converted-space">  </span>If additional permissions</p>
+<p class="p1">apply only to part of the Program, that part may be used separately</p>
+<p class="p1">under those permissions, but the entire Program remains governed by</p>
+<p class="p1">this License without regard to the additional permissions.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>When you convey a copy of a covered work, you may at your option</p>
+<p class="p1">remove any additional permissions from that copy, or from any part of</p>
+<p class="p1">it.<span class="Apple-converted-space">  </span>(Additional permissions may be written to require their own</p>
+<p class="p1">removal in certain cases when you modify the work.)<span class="Apple-converted-space">  </span>You may place</p>
+<p class="p1">additional permissions on material, added by you to a covered work,</p>
+<p class="p1">for which you have or can give appropriate copyright permission.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Notwithstanding any other provision of this License, for material you</p>
+<p class="p1">add to a covered work, you may (if authorized by the copyright holders of</p>
+<p class="p1">that material) supplement the terms of this License with terms:</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>a) Disclaiming warranty or limiting liability differently from the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>terms of sections 15 and 16 of this License; or</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>b) Requiring preservation of specified reasonable legal notices or</p>
+<p class="p1"><span class="Apple-converted-space">    </span>author attributions in that material or in the Appropriate Legal</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Notices displayed by works containing it; or</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>c) Prohibiting misrepresentation of the origin of that material, or</p>
+<p class="p1"><span class="Apple-converted-space">    </span>requiring that modified versions of such material be marked in</p>
+<p class="p1"><span class="Apple-converted-space">    </span>reasonable ways as different from the original version; or</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>d) Limiting the use for publicity purposes of names of licensors or</p>
+<p class="p1"><span class="Apple-converted-space">    </span>authors of the material; or</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>e) Declining to grant rights under trademark law for use of some</p>
+<p class="p1"><span class="Apple-converted-space">    </span>trade names, trademarks, or service marks; or</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>f) Requiring indemnification of licensors and authors of that</p>
+<p class="p1"><span class="Apple-converted-space">    </span>material by anyone who conveys the material (or modified versions of</p>
+<p class="p1"><span class="Apple-converted-space">    </span>it) with contractual assumptions of liability to the recipient, for</p>
+<p class="p1"><span class="Apple-converted-space">    </span>any liability that these contractual assumptions directly impose on</p>
+<p class="p1"><span class="Apple-converted-space">    </span>those licensors and authors.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>All other non-permissive additional terms are considered "further</p>
+<p class="p1">restrictions" within the meaning of section 10.<span class="Apple-converted-space">  </span>If the Program as you</p>
+<p class="p1">received it, or any part of it, contains a notice stating that it is</p>
+<p class="p1">governed by this License along with a term that is a further</p>
+<p class="p1">restriction, you may remove that term.<span class="Apple-converted-space">  </span>If a license document contains</p>
+<p class="p1">a further restriction but permits relicensing or conveying under this</p>
+<p class="p1">License, you may add to a covered work material governed by the terms</p>
+<p class="p1">of that license document, provided that the further restriction does</p>
+<p class="p1">not survive such relicensing or conveying.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If you add terms to a covered work in accord with this section, you</p>
+<p class="p1">must place, in the relevant source files, a statement of the</p>
+<p class="p1">additional terms that apply to those files, or a notice indicating</p>
+<p class="p1">where to find the applicable terms.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Additional terms, permissive or non-permissive, may be stated in the</p>
+<p class="p1">form of a separately written license, or stated as exceptions;</p>
+<p class="p1">the above requirements apply either way.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>8. Termination.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You may not propagate or modify a covered work except as expressly</p>
+<p class="p1">provided under this License.<span class="Apple-converted-space">  </span>Any attempt otherwise to propagate or</p>
+<p class="p1">modify it is void, and will automatically terminate your rights under</p>
+<p class="p1">this License (including any patent licenses granted under the third</p>
+<p class="p1">paragraph of section 11).</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>However, if you cease all violation of this License, then your</p>
+<p class="p1">license from a particular copyright holder is reinstated (a)</p>
+<p class="p1">provisionally, unless and until the copyright holder explicitly and</p>
+<p class="p1">finally terminates your license, and (b) permanently, if the copyright</p>
+<p class="p1">holder fails to notify you of the violation by some reasonable means</p>
+<p class="p1">prior to 60 days after the cessation.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Moreover, your license from a particular copyright holder is</p>
+<p class="p1">reinstated permanently if the copyright holder notifies you of the</p>
+<p class="p1">violation by some reasonable means, this is the first time you have</p>
+<p class="p1">received notice of violation of this License (for any work) from that</p>
+<p class="p1">copyright holder, and you cure the violation prior to 30 days after</p>
+<p class="p1">your receipt of the notice.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Termination of your rights under this section does not terminate the</p>
+<p class="p1">licenses of parties who have received copies or rights from you under</p>
+<p class="p1">this License.<span class="Apple-converted-space">  </span>If your rights have been terminated and not permanently</p>
+<p class="p1">reinstated, you do not qualify to receive new licenses for the same</p>
+<p class="p1">material under section 10.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>9. Acceptance Not Required for Having Copies.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You are not required to accept this License in order to receive or</p>
+<p class="p1">run a copy of the Program.<span class="Apple-converted-space">  </span>Ancillary propagation of a covered work</p>
+<p class="p1">occurring solely as a consequence of using peer-to-peer transmission</p>
+<p class="p1">to receive a copy likewise does not require acceptance.<span class="Apple-converted-space">  </span>However,</p>
+<p class="p1">nothing other than this License grants you permission to propagate or</p>
+<p class="p1">modify any covered work.<span class="Apple-converted-space">  </span>These actions infringe copyright if you do</p>
+<p class="p1">not accept this License.<span class="Apple-converted-space">  </span>Therefore, by modifying or propagating a</p>
+<p class="p1">covered work, you indicate your acceptance of this License to do so.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>10. Automatic Licensing of Downstream Recipients.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Each time you convey a covered work, the recipient automatically</p>
+<p class="p1">receives a license from the original licensors, to run, modify and</p>
+<p class="p1">propagate that work, subject to this License.<span class="Apple-converted-space">  </span>You are not responsible</p>
+<p class="p1">for enforcing compliance by third parties with this License.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>An "entity transaction" is a transaction transferring control of an</p>
+<p class="p1">organization, or substantially all assets of one, or subdividing an</p>
+<p class="p1">organization, or merging organizations.<span class="Apple-converted-space">  </span>If propagation of a covered</p>
+<p class="p1">work results from an entity transaction, each party to that</p>
+<p class="p1">transaction who receives a copy of the work also receives whatever</p>
+<p class="p1">licenses to the work the party's predecessor in interest had or could</p>
+<p class="p1">give under the previous paragraph, plus a right to possession of the</p>
+<p class="p1">Corresponding Source of the work from the predecessor in interest, if</p>
+<p class="p1">the predecessor has it or can get it with reasonable efforts.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You may not impose any further restrictions on the exercise of the</p>
+<p class="p1">rights granted or affirmed under this License.<span class="Apple-converted-space">  </span>For example, you may</p>
+<p class="p1">not impose a license fee, royalty, or other charge for exercise of</p>
+<p class="p1">rights granted under this License, and you may not initiate litigation</p>
+<p class="p1">(including a cross-claim or counterclaim in a lawsuit) alleging that</p>
+<p class="p1">any patent claim is infringed by making, using, selling, offering for</p>
+<p class="p1">sale, or importing the Program or any portion of it.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>11. Patents.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>A "contributor" is a copyright holder who authorizes use under this</p>
+<p class="p1">License of the Program or a work on which the Program is based.<span class="Apple-converted-space">  </span>The</p>
+<p class="p1">work thus licensed is called the contributor's "contributor version".</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>A contributor's "essential patent claims" are all patent claims</p>
+<p class="p1">owned or controlled by the contributor, whether already acquired or</p>
+<p class="p1">hereafter acquired, that would be infringed by some manner, permitted</p>
+<p class="p1">by this License, of making, using, or selling its contributor version,</p>
+<p class="p1">but do not include claims that would be infringed only as a</p>
+<p class="p1">consequence of further modification of the contributor version.<span class="Apple-converted-space">  </span>For</p>
+<p class="p1">purposes of this definition, "control" includes the right to grant</p>
+<p class="p1">patent sublicenses in a manner consistent with the requirements of</p>
+<p class="p1">this License.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Each contributor grants you a non-exclusive, worldwide, royalty-free</p>
+<p class="p1">patent license under the contributor's essential patent claims, to</p>
+<p class="p1">make, use, sell, offer for sale, import and otherwise run, modify and</p>
+<p class="p1">propagate the contents of its contributor version.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>In the following three paragraphs, a "patent license" is any express</p>
+<p class="p1">agreement or commitment, however denominated, not to enforce a patent</p>
+<p class="p1">(such as an express permission to practice a patent or covenant not to</p>
+<p class="p1">sue for patent infringement).<span class="Apple-converted-space">  </span>To "grant" such a patent license to a</p>
+<p class="p1">party means to make such an agreement or commitment not to enforce a</p>
+<p class="p1">patent against the party.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If you convey a covered work, knowingly relying on a patent license,</p>
+<p class="p1">and the Corresponding Source of the work is not available for anyone</p>
+<p class="p1">to copy, free of charge and under the terms of this License, through a</p>
+<p class="p1">publicly available network server or other readily accessible means,</p>
+<p class="p1">then you must either (1) cause the Corresponding Source to be so</p>
+<p class="p1">available, or (2) arrange to deprive yourself of the benefit of the</p>
+<p class="p1">patent license for this particular work, or (3) arrange, in a manner</p>
+<p class="p1">consistent with the requirements of this License, to extend the patent</p>
+<p class="p1">license to downstream recipients.<span class="Apple-converted-space">  </span>"Knowingly relying" means you have</p>
+<p class="p1">actual knowledge that, but for the patent license, your conveying the</p>
+<p class="p1">covered work in a country, or your recipient's use of the covered work</p>
+<p class="p1">in a country, would infringe one or more identifiable patents in that</p>
+<p class="p1">country that you have reason to believe are valid.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If, pursuant to or in connection with a single transaction or</p>
+<p class="p1">arrangement, you convey, or propagate by procuring conveyance of, a</p>
+<p class="p1">covered work, and grant a patent license to some of the parties</p>
+<p class="p1">receiving the covered work authorizing them to use, propagate, modify</p>
+<p class="p1">or convey a specific copy of the covered work, then the patent license</p>
+<p class="p1">you grant is automatically extended to all recipients of the covered</p>
+<p class="p1">work and works based on it.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>A patent license is "discriminatory" if it does not include within</p>
+<p class="p1">the scope of its coverage, prohibits the exercise of, or is</p>
+<p class="p1">conditioned on the non-exercise of one or more of the rights that are</p>
+<p class="p1">specifically granted under this License.<span class="Apple-converted-space">  </span>You may not convey a covered</p>
+<p class="p1">work if you are a party to an arrangement with a third party that is</p>
+<p class="p1">in the business of distributing software, under which you make payment</p>
+<p class="p1">to the third party based on the extent of your activity of conveying</p>
+<p class="p1">the work, and under which the third party grants, to any of the</p>
+<p class="p1">parties who would receive the covered work from you, a discriminatory</p>
+<p class="p1">patent license (a) in connection with copies of the covered work</p>
+<p class="p1">conveyed by you (or copies made from those copies), or (b) primarily</p>
+<p class="p1">for and in connection with specific products or compilations that</p>
+<p class="p1">contain the covered work, unless you entered into that arrangement,</p>
+<p class="p1">or that patent license was granted, prior to 28 March 2007.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Nothing in this License shall be construed as excluding or limiting</p>
+<p class="p1">any implied license or other defenses to infringement that may</p>
+<p class="p1">otherwise be available to you under applicable patent law.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>12. No Surrender of Others' Freedom.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If conditions are imposed on you (whether by court order, agreement or</p>
+<p class="p1">otherwise) that contradict the conditions of this License, they do not</p>
+<p class="p1">excuse you from the conditions of this License.<span class="Apple-converted-space">  </span>If you cannot convey a</p>
+<p class="p1">covered work so as to satisfy simultaneously your obligations under this</p>
+<p class="p1">License and any other pertinent obligations, then as a consequence you may</p>
+<p class="p1">not convey it at all.<span class="Apple-converted-space">  </span>For example, if you agree to terms that obligate you</p>
+<p class="p1">to collect a royalty for further conveying from those to whom you convey</p>
+<p class="p1">the Program, the only way you could satisfy both those terms and this</p>
+<p class="p1">License would be to refrain entirely from conveying the Program.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>13. Use with the GNU Affero General Public License.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Notwithstanding any other provision of this License, you have</p>
+<p class="p1">permission to link or combine any covered work with a work licensed</p>
+<p class="p1">under version 3 of the GNU Affero General Public License into a single</p>
+<p class="p1">combined work, and to convey the resulting work.<span class="Apple-converted-space">  </span>The terms of this</p>
+<p class="p1">License will continue to apply to the part which is the covered work,</p>
+<p class="p1">but the special requirements of the GNU Affero General Public License,</p>
+<p class="p1">section 13, concerning interaction through a network will apply to the</p>
+<p class="p1">combination as such.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>14. Revised Versions of this License.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The Free Software Foundation may publish revised and/or new versions of</p>
+<p class="p1">the GNU General Public License from time to time.<span class="Apple-converted-space">  </span>Such new versions will</p>
+<p class="p1">be similar in spirit to the present version, but may differ in detail to</p>
+<p class="p1">address new problems or concerns.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Each version is given a distinguishing version number.<span class="Apple-converted-space">  </span>If the</p>
+<p class="p1">Program specifies that a certain numbered version of the GNU General</p>
+<p class="p1">Public License "or any later version" applies to it, you have the</p>
+<p class="p1">option of following the terms and conditions either of that numbered</p>
+<p class="p1">version or of any later version published by the Free Software</p>
+<p class="p1">Foundation.<span class="Apple-converted-space">  </span>If the Program does not specify a version number of the</p>
+<p class="p1">GNU General Public License, you may choose any version ever published</p>
+<p class="p1">by the Free Software Foundation.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If the Program specifies that a proxy can decide which future</p>
+<p class="p1">versions of the GNU General Public License can be used, that proxy's</p>
+<p class="p1">public statement of acceptance of a version permanently authorizes you</p>
+<p class="p1">to choose that version for the Program.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>Later license versions may give you additional or different</p>
+<p class="p1">permissions.<span class="Apple-converted-space">  </span>However, no additional obligations are imposed on any</p>
+<p class="p1">author or copyright holder as a result of your choosing to follow a</p>
+<p class="p1">later version.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>15. Disclaimer of Warranty.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY</p>
+<p class="p1">APPLICABLE LAW.<span class="Apple-converted-space">  </span>EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT</p>
+<p class="p1">HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY</p>
+<p class="p1">OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,</p>
+<p class="p1">THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</p>
+<p class="p1">PURPOSE.<span class="Apple-converted-space">  </span>THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM</p>
+<p class="p1">IS WITH YOU.<span class="Apple-converted-space">  </span>SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF</p>
+<p class="p1">ALL NECESSARY SERVICING, REPAIR OR CORRECTION.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>16. Limitation of Liability.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING</p>
+<p class="p1">WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS</p>
+<p class="p1">THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY</p>
+<p class="p1">GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE</p>
+<p class="p1">USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF</p>
+<p class="p1">DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD</p>
+<p class="p1">PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),</p>
+<p class="p1">EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF</p>
+<p class="p1">SUCH DAMAGES.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>17. Interpretation of Sections 15 and 16.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If the disclaimer of warranty and limitation of liability provided</p>
+<p class="p1">above cannot be given local legal effect according to their terms,</p>
+<p class="p1">reviewing courts shall apply local law that most closely approximates</p>
+<p class="p1">an absolute waiver of all civil liability in connection with the</p>
+<p class="p1">Program, unless a warranty or assumption of liability accompanies a</p>
+<p class="p1">copy of the Program in return for a fee.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                     </span>END OF TERMS AND CONDITIONS</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>How to Apply These Terms to Your New Programs</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If you develop a new program, and you want it to be of the greatest</p>
+<p class="p1">possible use to the public, the best way to achieve this is to make it</p>
+<p class="p1">free software which everyone can redistribute and change under these terms.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>To do so, attach the following notices to the program.<span class="Apple-converted-space">  </span>It is safest</p>
+<p class="p1">to attach them to the start of each source file to most effectively</p>
+<p class="p1">state the exclusion of warranty; and each file should have at least</p>
+<p class="p1">the "copyright" line and a pointer to where the full notice is found.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;one line to give the program's name and a brief idea of what it does.&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>Copyright (C) &lt;year&gt;<span class="Apple-converted-space">  </span>&lt;name of author&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>This program is free software: you can redistribute it and/or modify</p>
+<p class="p1"><span class="Apple-converted-space">    </span>it under the terms of the GNU General Public License as published by</p>
+<p class="p1"><span class="Apple-converted-space">    </span>the Free Software Foundation, either version 3 of the License, or</p>
+<p class="p1"><span class="Apple-converted-space">    </span>(at your option) any later version.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>This program is distributed in the hope that it will be useful,</p>
+<p class="p1"><span class="Apple-converted-space">    </span>but WITHOUT ANY WARRANTY; without even the implied warranty of</p>
+<p class="p1"><span class="Apple-converted-space">    </span>MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.<span class="Apple-converted-space">  </span>See the</p>
+<p class="p1"><span class="Apple-converted-space">    </span>GNU General Public License for more details.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>You should have received a copy of the GNU General Public License</p>
+<p class="p1"><span class="Apple-converted-space">    </span>along with this program.<span class="Apple-converted-space">  </span>If not, see &lt;http://www.gnu.org/licenses/&gt;.</p>
+<p class="p2"><br></p>
+<p class="p1">Also add information on how to contact you by electronic and paper mail.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>If the program does terminal interaction, make it output a short</p>
+<p class="p1">notice like this when it starts in an interactive mode:</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;program&gt;<span class="Apple-converted-space">  </span>Copyright (C) &lt;year&gt;<span class="Apple-converted-space">  </span>&lt;name of author&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.</p>
+<p class="p1"><span class="Apple-converted-space">    </span>This is free software, and you are welcome to redistribute it</p>
+<p class="p1"><span class="Apple-converted-space">    </span>under certain conditions; type `show c' for details.</p>
+<p class="p2"><br></p>
+<p class="p1">The hypothetical commands `show w' and `show c' should show the appropriate</p>
+<p class="p1">parts of the General Public License.<span class="Apple-converted-space">  </span>Of course, your program's commands</p>
+<p class="p1">might be different; for a GUI interface, you would use an "about box".</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>You should also get your employer (if you work as a programmer) or school,</p>
+<p class="p1">if any, to sign a "copyright disclaimer" for the program, if necessary.</p>
+<p class="p1">For more information on this, and how to apply and follow the GNU GPL, see</p>
+<p class="p1">&lt;http://www.gnu.org/licenses/&gt;.</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>The GNU General Public License does not permit incorporating your program</p>
+<p class="p1">into proprietary programs.<span class="Apple-converted-space">  </span>If your program is a subroutine library, you</p>
+<p class="p1">may consider it more useful to permit linking proprietary applications with</p>
+<p class="p1">the library.<span class="Apple-converted-space">  </span>If this is what you want to do, use the GNU Lesser General</p>
+<p class="p1">Public License instead of this License.<span class="Apple-converted-space">  </span>But first, please read</p>
+<p class="p1">&lt;http://www.gnu.org/philosophy/why-not-lgpl.html&gt;.</p>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Frequency Modulation Synthesis</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">Frequency Modulation (FM) synthesis is used in various TX modules including <b>Granulator FM</b>, <b>Waveform</b> & <b>Wave Synth</b>. </p>
+<p class="p1">This help file focusses on the modules <b>FM Drone</b> & <b>FM Synth</b> which both use 6-Operator Frequency Modulation. Operators are the equivalent to oscillators in FM terminology, and they can each modulate the frequency of any of the 6 operators, including themselves (self-modulation). </p>
+<p class="p1">An operator which modulates another operator is called a Modulator, and an operator which can be heard is called a Carrier. </p>
+<p class="p1">The term Algorithm (see controls below) means a particular configuration of modulation and output level settings. It's also possible to randomise the modulation connections.</p>
+<p class="p1">The image <i>"Frequency Modulation Synthesis 1.png"</i> shows 32 Algorithms that were used in the Yamaha DX7 synth (and other models) These can be loaded as preset patterns of modulation. </p>
+<p class="p1">[Note - technically speaking, although it's called Frequency Modulation, it is actually Phase Modulation where the phase of one oscillator is modulated by another oscillator.]</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Operator Controls in modules <b>FM Drone</b> & <b>FM Synth</b>:</i></b></p>
+<p class="p1">(See image: <i>"Frequency Modulation Synthesis 2.png"</i>)</p>
+<p class="p1"><br></p>
+<p class="p1"><b>All 1/All 2/Op 1/Op 2/Op 3/Op 4/Op 5/Op6/Ratios/Freqs</b> buttons - these select which operator(s) are being edited.</p>
+<p class="p1"><b>All 1/All 2/Ratios/Freqs</b> buttons show all 6 operators in various configurations for easy editing. Various randomisation processes are shown for generating new settings.</p>
+<p class="p1"><b>Use fixed freq</b> - if turned on, the fixed frequency will be used instead of the frequency ratio to set the operators frequency.</p>
+<p class="p1"><b>Freq ratio</b> - this sets the frequency of the current operator in relation to the base frequency (in FM Synth the base frequency is the MIDI note played). <br>
+For example, if the frequency ratio is 1, the operator's frequency will be the same as the base frequency. Whereas if the frequency ratio is 0.5, the operator's frequency will be an octave below the base frequency; or 2 for an octave above.</p>
+<p class="p1"><b>Fixed freq</b> - sets the fixed frequency of the current operator</p>
+<p class="p1"><b>Detune</b> - detunes the frequency between around -1 and +1 semitones</p>
+<p class="p1"><b>Phase</b> - this sets the starting phase of the current operator.</p>
+<p class="p1"><b>Amplitude</b> - the amplitude of the operator affects how much it can modulate the frequency of other operators. </p>
+<p class="p1"><b>Mod Op 1/Mod Op 2/Mod Op 3/Mod Op 4/Mod Op 5/Mod Op 6</b> - these set the amount of frequency modulation coming from operators 1- 6 to affect the frequency of the current operator. This allows for self-modulation and feedback.</p>
+<p class="p1"><b>Level</b> - this sets the output level of the current operator. If the level is above zero, the operator is heard in the audio output (i.e. it is a Carrier)</p>
+<p class="p1"><b>Algorithm</b> - select an algorithm to be loaded. An algorithm will set controls <b>Mod Op 1,Mod Op 2,Mod Op 3,Mod Op 4,Mod Op 5,Mod Op 6, Level</b> for each operator.<br>
+The first 32 are the DX7 algorithms (see above). The others use randomised settings to create new modulation connections.</p>
+<p class="p1"><b>Algo feedback</b> - this sets the modulation level where there is self-modulation or feedback in the modulation path. It affects all algorithms including the random ones & can be used to help limit the amount of extreme modulation (which can sound harsh).</p>
+<p class="p1"><b>Load Algorithm</b> - this loads the chosen algorithm taking into account the Algo feedback setting.</p>
+<p class="p1"><br></p>
+</body>
+</html>

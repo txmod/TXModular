@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV 3D Modules</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A> & <A href="TX_TXV_3D_Lights_And_Materials.html">TXV 3D Lights And Materials<A></p>
+<p class="p1"><br></p>
+<p class="p1">The following TXV modules are for working in 3D:</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>3D Draw Sources</i></b></p>
+<p class="p1"><A href="TX_TXV 3D Model.html">TXV 3D Model<A> [DrawSource 3DModelAsset]</p>
+<p class="p1"><A href="TX_TXV BSurfaces.html">TXV BSurfaces<A> [DrawSource ImageAsset]</p>
+<p class="p1"><A href="TX_TXV BSurfaces2.html">TXV BSurfaces2<A> [DrawSource ImageAsset]</p>
+<p class="p1"><A href="TX_TXV BSurfacesX6.html">TXV BSurfacesX6<A> [DrawSource ImageAsset]</p>
+<p class="p1"><A href="TX_TXV Particles3D.html">TXV Particles3D<A> [DrawSource ImageAsset]</p>
+<p class="p1"><A href="TX_TXV Shape 3D.html">TXV Shape 3D<A> [DrawSource ImageAsset]</p>
+<p class="p1"><A href="TX_TXV Shape3D Multi.html">TXV Shape3D Multi<A> [DrawSource ImageAsset]</p>
+<p class="p1"><A href="TX_TXV Text3D.html">TXV Text3D<A> [DrawSource FontAsset]</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>3D Draw Destinations</i></b></p>
+<p class="p1"><A href="TX_TXV EnvMap.html">TXV EnvMap<A> [DrawSource DrawDestination Renders ImageAsset]</p>
+<p class="p1"><A href="TX_TXV Fractal3D.html">TXV Fractal3D<A> [DrawSource DrawDestination]</p>
+<p class="p1"><A href="TX_TXV Scene.html">TXV Scene<A> [DrawSource DrawDestination]</p>
+<p class="p1"><A href="TX_TXV Transform3D.html">TXV Transform3D<A> [DrawSource DrawDestination]</p>
+<p class="p1"><A href="TX_TXV Transf3D Delay.html">TXV Transf3D Delay<A> [DrawSource DrawDestination]</p>
+<p class="p1"><A href="TX_TXV Transf3D Multi.html">TXV Transf3D Multi<A> [DrawSource DrawDestination]</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Extra Consideration When Drawing In 3D</i></b></p>
+<p class="p1">3D Draw sources need to be drawn to a <A href="TX_TXV Scene.html">TXV Scene<A> for their material image and colors to work properly</p>
+<p class="p1">TXV Scene includes 3 lights with various colors. See <A href="TX_TXV_3D_Lights_And_Materials.html">TXV 3D Lights And Materials<A> for more details.</p>
+<p class="p1">The alternative is draw them to a <A href="TX_TXV EnvMap.html">TXV EnvMap<A>. However, EnvMap will ignore the shape's material and use its own base color with a simulated lighting effect, as well as simulated reflections from an environment image, to create the output image.</p>
+<p class="p1"><br></p>
+</body>
+</html>

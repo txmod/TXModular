@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1138.47">
+  <style type="text/css">
+    p.p1 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+    p.p2 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; color: #ff1213; min-height: 18.0px}
+    p.p3 {margin: 6.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; min-height: 18.0px}
+    span.s1 {text-decoration: underline}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Spectral FX</b></p>
+<p class="p2"><span class="Apple-converted-space">   </span></p>
+<p class="p1"><b>Module type:<span class="Apple-converted-space">  </span>Audio Insert (mono input, mono output)</b></p>
+<p class="p3"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">Spectral effects can change a mono audio signal in unique ways. Vocoding is an example of a well-known spectral effect, but there are many more which can be combined for further complexity.</p>
+<p class="p1">This module uses a DSP process called the fast fourier transform (FFT) which analyzes the frequency spectrum of a signal.<span class="Apple-converted-space"> </span></p>
+<p class="p1">Once analysed, the signal can then be further processed, using up to 6 different processes (from over 50 choices - see below).<span class="Apple-converted-space"> </span></p>
+<p class="p1">In addition a side chain input can be used to introduce a second audio signal - this is only used in certain labelled processes.<span class="Apple-converted-space"> </span></p>
+<p class="p1">After all processing, a final process called the inverse fast fourier transform (IFFT) is run, which turns the analysed signal back into an audio signal (resynthesis).</p>
+<p class="p1"><b>Further info about FFT: </b>To properly explain FFT and what the settings do is quite complex and technical. See online for further details (e.g. search for FFT or Phase Vocoder, &amp; see:<span class="Apple-converted-space">  </span><span class="s1">http://en.wikipedia.org/wiki/Phase_vocoder</span> &amp;<span class="Apple-converted-space">  </span><span class="s1">http://www.cycling74.com/story/2006/11/2/113327/823</span>).<span class="Apple-converted-space"> </span></p>
+<p class="p3"><br></p>
+<p class="p1"><b>List of Spectral FX:</b></p>
+<p class="p1">Bin Wipe Down - uses side chain audio input</p>
+<p class="p1">Bin Wipe Up - uses side chain audio input</p>
+<p class="p1">BrickWall High Pass</p>
+<p class="p1">BrickWall Low Pass</p>
+<p class="p1">Comb Filter</p>
+<p class="p1">Comb Integrater - uses side chain audio input</p>
+<p class="p1">Common Magnitudes - uses side chain audio input</p>
+<p class="p1">Conformal Map</p>
+<p class="p1">Cutoff Low Pass - High Pass</p>
+<p class="p1">Diffuser</p>
+<p class="p1">Disintegrate</p>
+<p class="p1">Even Bins Only</p>
+<p class="p1">Freeze Spectrum</p>
+<p class="p1">Invert Magnitudes</p>
+<p class="p1">Local Maximum</p>
+<p class="p1">Magnitude Above Threshold</p>
+<p class="p1">Magnitude Below Threshold</p>
+<p class="p1">Magnitude Clip To Threshold</p>
+<p class="p1">Magnitude Compare Maximum - uses side chain audio input</p>
+<p class="p1">Magnitude Compare Minimum - uses side chain audio input</p>
+<p class="p1">Magnitude Divide - uses side chain audio input</p>
+<p class="p1">Magnitude Exponential</p>
+<p class="p1">Magnitude Freeze</p>
+<p class="p1">Magnitude Log</p>
+<p class="p1">Magnitude Multiply</p>
+<p class="p1">Magnitude Multiply - uses side chain audio input</p>
+<p class="p1">Magnitude Noise</p>
+<p class="p1">Magnitude Smear</p>
+<p class="p1">Magnitude Smooth</p>
+<p class="p1">Magnitude Squared</p>
+<p class="p1">Magnitude Stretch &amp; Shift</p>
+<p class="p1">Multiply Common Magnitudes - uses side chain audio input</p>
+<p class="p1">Noise Keep Using Magnitudes</p>
+<p class="p1">Noise Keep Using Phases</p>
+<p class="p1">Noise Remove Using Magnitudes</p>
+<p class="p1">Noise Remove Using Phases</p>
+<p class="p1">Odd Bins Only</p>
+<p class="p1">Phase Shift 270</p>
+<p class="p1">Phase Shift 90</p>
+<p class="p1">Phase Shift Variable</p>
+<p class="p1">Random Crossfade - uses side chain audio input</p>
+<p class="p1">Randomize Bins</p>
+<p class="p1">Scale &amp; Shift Bins</p>
+<p class="p1">Soft Wipe - uses side chain audio input</p>
+<p class="p1">Spectral Addition - uses side chain audio input</p>
+<p class="p1">Spectral Compression</p>
+<p class="p1">Spectral Expansion</p>
+<p class="p1">Spectral Gate</p>
+<p class="p1">Spectral Gate Inverted</p>
+<p class="p1">Spectral Morph - uses side chain audio input</p>
+<p class="p1">Spectral Multiply - uses side chain audio input</p>
+<p class="p1">Spectral Subtract - uses side chain audio input</p>
+<p class="p1">Spectral Subtract Zero-limited - uses side chain audio input</p>
+<p class="p1">Spectral XFade - uses side chain audio input</p>
+<p class="p1">Strongest Bins</p>
+<p class="p1">Subtract Magnitudes - uses side chain audio input</p>
+<p class="p1">Weekest Bins</p>
+<p class="p3"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p3"><b></b><br></p>
+<p class="p1"><b>Settings button</b></p>
+<p class="p1">There are various FFT settings which can be set. For best results, use the one of the default settings. <span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Default 1</b> - this sets the FFT settings to one recommended default.</p>
+<p class="p1"><b>Default 2</b> - this sets the FFT settings to another recommended default.</p>
+<p class="p1">(N.B. for best results, it is recommended to use one of these defaults.)</p>
+<p class="p1"><b>FFT size</b> - sets the number of FFT bins used for analysis(default 512).</p>
+<p class="p1"><b>FFT window</b> - sets the type of window used for analysis (Sine, Hanning, or Rectangular).</p>
+<p class="p1"><b>FFT hop</b> - sets the amount of offset from one FFT analysis frame to the next.</p>
+<p class="p1"><b>Dry-Wet Mix</b> - this sets the mix of the original signal with the affected signal.<span class="Apple-converted-space">  </span>For send effects this will usually be set to 1 - i.e. 100% affected signal.</p>
+<p class="p3"><b><i></i></b><br></p>
+<p class="p1"><b>Process 1 button</b></p>
+<p class="p1"><b>Process 1</b> - sets which process will be used. A description of the process will be shown in the box below, along with details of what the parameters Modify 1/2/3 do.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Modify 1</b> - sets the Modify 1 control.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Modify 2</b> - sets the Modify 2 control.<span class="Apple-converted-space"> </span></p>
+<p class="p1"><b>Modify 3</b> - sets the Modify 3 control.<span class="Apple-converted-space"> </span></p>
+<p class="p3"><b><i></i></b><br></p>
+<p class="p1"><b>Process 2/3/4/5/6 buttons</b> - see Process 1 button</p>
+<p class="p3"><br></p>
+<p class="p1"><b><i>Audio Input Busses:</i></b></p>
+<p class="p1"><b>Side Chain</b> - mono audio signal used in some processes.<span class="Apple-converted-space"> </span></p>
+<p class="p3"><span class="Apple-converted-space">  </span></p>
+<p class="p1"><b><i>Control Modulation Input Busses:</i></b></p>
+<p class="p1"><b>Proc 1 Mod 1 </b>- this means Process 1, Modify 1</p>
+<p class="p1"><b>Proc 1 Mod 2</b></p>
+<p class="p1"><b>Proc 1 Mod 3</b></p>
+<p class="p1"><b>Proc 2 Mod 1</b></p>
+<p class="p1"><b>Proc 2 Mod 2</b></p>
+<p class="p1"><b>Proc 2 Mod 3</b></p>
+<p class="p1"><b>Proc 3 Mod 1</b></p>
+<p class="p1"><b>Proc 3 Mod 2</b></p>
+<p class="p1"><b>Proc 3 Mod 3</b></p>
+<p class="p1"><b>Proc 4 Mod 1</b></p>
+<p class="p1"><b>Proc 4 Mod 2</b></p>
+<p class="p1"><b>Proc 4 Mod 3</b></p>
+<p class="p1"><b>Proc 5 Mod 1</b></p>
+<p class="p1"><b>Proc 5 Mod 2</b></p>
+<p class="p1"><b>Proc 5 Mod 3</b></p>
+<p class="p1"><b>Proc 6 Mod 1</b></p>
+<p class="p1"><b>Proc 6 Mod 2</b></p>
+<p class="p1"><b>Proc 6 Mod 3</b></p>
+<p class="p1"><b>Dry-Wet Mix</b> <span class="Apple-converted-space"> </span></p>
+</body>
+</html>

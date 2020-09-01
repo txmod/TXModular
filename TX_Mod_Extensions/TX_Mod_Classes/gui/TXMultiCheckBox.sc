@@ -1,23 +1,23 @@
 // Copyright (C) 2005  Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).
-		
+
 TXMultiCheckBox {	// TXMultiCheckBox module with label
 	var <>labelView, <>arrCheckboxViews, <>action, <value, <size;
-	
-	*new { arg window, dimensions, label, action, initVal, 
+
+	*new { arg window, dimensions, label, action, initVal,
 			initAction=false, labelWidth=80, numberWidth = 20;
-		^super.new.init(window, dimensions, label, action, initVal, 
+		^super.new.init(window, dimensions, label, action, initVal,
 			initAction, labelWidth, numberWidth);
 	}
-	init { arg window, dimensions, label, argAction, initVal, 
+	init { arg window, dimensions, label, argAction, initVal,
 			initAction, labelWidth, numberWidth;
 		var holdCheckBox;
 		labelView = StaticText(window, labelWidth @ dimensions.y);
 		labelView.string = label;
 		labelView.align = \right;
-		
+
 		initVal = initVal ? Array.fill(8, 0);
 		action = argAction;
-		
+
 		value = initVal;
 		size = initVal.size;
 		size.do({ arg item, i;
@@ -29,19 +29,19 @@ TXMultiCheckBox {	// TXMultiCheckBox module with label
 			arrCheckboxViews = arrCheckboxViews.add(holdCheckBox);
 			holdCheckBox.value = initVal.at(i);
 		});
-		
+
 		if (initAction) {
 			action.value(this);
 		};
 	}
-	value_ { arg argValue; 
+	value_ { arg argValue;
 		arrCheckboxViews.do({ arg item, i;
 			if (argValue.at(i).notNil, {
 				item.value = argValue.at(i);
 			});
 		});
 	}
-	valueAction_ { arg argValue; 
+	valueAction_ { arg argValue;
 		arrCheckboxViews.do({ arg item, i;
 			if (argValue.at(i).notNil, {
 				item.value = argValue.at(i);
@@ -49,5 +49,15 @@ TXMultiCheckBox {	// TXMultiCheckBox module with label
 		});
 		action.value(this);
 	}
+
+	hasFocus {
+		arrCheckboxViews.do({arg item;
+			if (item.hasFocus, {
+				^true;
+			});
+		});
+		^false;
+	}
+
 }
 
