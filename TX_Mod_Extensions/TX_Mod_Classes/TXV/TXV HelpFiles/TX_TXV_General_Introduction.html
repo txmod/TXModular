@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV General Introduction</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Other useful help files:</i></b><br>
+<A href="TX_TXV System.html">TXV System<A><br>
+<A href="file:../../system/TX_Mod_Help/TX_6%20Building%20a%20TXV%20System.html">6 Building a TXV System<A><br>
+<A href="TX_TXV_List_Of_All_Modules.html">TXV List Of All Modules<A><br>
+<A href="TX_TXV_Intro_To_All_Modules.html">TXV Intro To All Modules<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">TXV is a modular video app for generating real-time 2D & 3D visuals. It was created to enable a TX Modular user to control both video and audio processes, and link them together.</p>
+<p class="p1">TXV is a separate app that opens in it’s own window TXV is controlled by adding a TXV System module to the TX Modular and editing the controls or using modulation or automation.</p>
+<p class="p1">Tech note: TXV was written using C++ and GLSL languages running inside OpenFrameworks 0.9.8. Internally, OSC network messages are used to communicate between the TX Modular System and TXV.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Installing TXV on different platforms</i></b></p>
+<p class="p1">There are various ways to install TX Modular:</p>
+<p class="p1">There’s a MacOS standalone TX Modular app that includes SuperCollider & TXV within it.<br>
+The standalone will only work with MacOS Mojave (version 10.14) and earlier versions of MacOS (versions 10.11,10.12 & 10.13), but NOT MacOS Catalina (version 10.15) or later.</p>
+<p class="p1">The TX audio engine, in the form of SuperCollider code, should work with MacOS, Windows and Linux platforms with SuperCollider installed.</p>
+<p class="p1">The TX visual engine (the separate TXV app) has been compiled for MacOS and Windows.<br>
+TXV compiled for MacOS  will work with Mojave (version 10.14) and earlier MacOS versions (10.11,10.12 & 10.13) - but NOT MacOS Catalina (version 10.15) or later.
+</p>
+<p class="p1">To use the TXV visual engine on Linux or MacOS Catalina (version 10.15) or later, it should hopefully be possible to compile TXV from source code using openFrameworks 0.9.8.<br>
+(Note: compiling on these platforms has not yet been tested)</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>TXV Modules</i></b></p>
+<p class="p1">TXV includes various types of modules:</p>
+<p class="p1"><b>Draw Sources</b> such as image file, movie file, live video camera, 3D Model file, 2D/3D shapes.</p>
+<p class="p1"><b>Image FX</b> such as Blend, Blur, Pixelate and Colorize.</p>
+<p class="p1"><b>Draw Destinations</b> include the TXV System, Transform (shift/ scale/ rotate) and Transf3DMulti (transform & make multiple copies of drawn objects), Scene (3D Scene with cameras & lights).</p>
+<p class="p1"><b>Modulation sources</b> include LFOs, Perlin noise, and a Step Sequencer.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Module Connections</i></b></p>
+<p class="p1">There are two modules which connect TXV modules together:</p>
+<p class="p1"><b>Draw Connections</b> are modules that connect Draw Source modules to Draw Destination modules. For example a TXV Movie module could be connected to the TXV System to display it on the main window. </p>
+<p class="p1"><b>Nodes</b> are modules that connect modulation sources (such as LFOs) to parameters in other modules to enable modulation to happen.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Image Connections</i></b></p>
+<p class="p1">The various modules that use images have the option either to use image files stored on disk or to directly import an image produced by another image module (including a video camera). This allows image FX modules to be chained together for more complex FX.</p>
+<p class="p1"><br></p>
+</body>
+</html>

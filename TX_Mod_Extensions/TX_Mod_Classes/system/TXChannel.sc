@@ -68,7 +68,7 @@ TXChannel : TXModuleBase { //  Channel module
 	*systemInit{
 		//	send the SynthDef for the main audio channel
 		SynthDef("TXChannelAudio1",
-			{ arg in, out, pan = 0.5, vol = 0, mute = 0, modPan = 0, modVol = 0;
+			{ arg in, out, pan = 0.5, vol = 0, mute = 0, modPan = 0, modVol = 0, showMeter = 1;
 				var mixout, startEnv, inBus;
 				var outVol, peak, trig;
 				startEnv = TXEnvPresets.startEnvFunc.value;
@@ -76,13 +76,13 @@ TXChannel : TXModuleBase { //  Channel module
 				inBus = TXClean.ar(InFeedback.ar(in));
 				mixout = TXClean.ar(startEnv * (inBus * outVol * 2 * (1-mute)));
 				peak = PeakFollower.ar(mixout, 0.9999);
-				trig = Impulse.ar(20);
+				trig = Impulse.ar(15) * showMeter;
 				SendTrig.ar(trig, 0 , peak);
 				Out.ar(out, mixout);
 			}, [0, 0, \ir, defLagTime, defLagTime, \ir, defLagTime] // lag rates
 		).add;
 		SynthDef("TXChannelAudio2",
-			{ arg inL, inR, outL,  outR, pan = 0.5, vol = 0, mute = 0, modPan = 0, modVol = 0;
+			{ arg inL, inR, outL,  outR, pan = 0.5, vol = 0, mute = 0, modPan = 0, modVol = 0, showMeter = 1;
 				var startEnv, inBusL, inBusR, mixoutL, mixoutR, panSum;
 				var outVol, peak, trig;
 				startEnv = TXEnvPresets.startEnvFunc.value;
@@ -92,8 +92,8 @@ TXChannel : TXModuleBase { //  Channel module
 				panSum = (pan + modPan).min(1).max(0);
 				mixoutL = TXClean.ar(startEnv * (inBusL * outVol * 2 * (1-mute) * (1-panSum)));
 				mixoutR = TXClean.ar(startEnv * inBusR * outVol * 2 * (1-mute) * panSum);
-				peak = PeakFollower.ar([mixoutL, mixoutR], 0.9999);
-				trig = Impulse.ar(20);
+				peak = PeakFollower.ar([mixoutL, mixoutR], 0.9995);
+				trig = Impulse.ar(15) * showMeter;
 				SendTrig.ar(trig, [0,1], peak);
 				Out.ar(outL, mixoutL);
 				Out.ar(outR, mixoutR);
@@ -101,11 +101,11 @@ TXChannel : TXModuleBase { //  Channel module
 		).add;
 		//	send the SynthDef for the main control channel
 		SynthDef("TXChannelControl1",
-			{ arg in, out, i_numInputs, i_numOutputs, vol = 0, invert = 0, mute = 0, modVol = 0;
+			{ arg in, out, i_numInputs, i_numOutputs, vol = 0, invert = 0, mute = 0, modVol = 0, showMeter = 1;
 				i_numOutputs.do({ arg item, i;
 					var mixout, trig;
 					mixout = TXClean.kr(In.kr(in+i) * (vol + modVol).min(1).max(0) * (1-mute) * (1-(2*invert)));
-					trig = Impulse.kr(20);
+					trig = Impulse.kr(15) * showMeter;
 					SendTrig.kr(trig, 0 , mixout);
 					Out.kr((out+i), mixout);
 				});
@@ -212,6 +212,7 @@ TXChannel : TXModuleBase { //  Channel module
 			["FXSend3Val", 0],
 			["FXSend4On", 0],
 			["FXSend4Val", 0],
+			["showMeter", 1],
 		];
 		this.setSourceVariables(argSource);
 		//	set chanColour
@@ -318,7 +319,7 @@ TXChannel : TXModuleBase { //  Channel module
 		// 0- string "TXModuleSaveData", 1- module class, 2- moduleID, 3- arrControlVals, 4- arrModuleIDs,
 		// 5- chanStatus, 6- sourceBusno, 7- destBusNo, 8- holdArrEditControlVals, 9- arrSynthArgSpecs,
 		// 10- chanLabel, 11-posX, 12-posY
-		var holdModuleIDs, holdChanStatus, holdModules;
+		var holdModuleIDs, holdChanStatus, holdModules, synthArgSpecData;
 		if (arrData.class != Array, {
 			TXInfoScreen.new("Error: invalid data. cannot load.");
 			^0;
@@ -331,7 +332,10 @@ TXChannel : TXModuleBase { //  Channel module
 		holdChanStatus = arrData.at(5).deepCopy;
 		sourceBusno = arrData.at(6).copy;
 		destBusNo = arrData.at(7).copy;
-		arrSynthArgSpecs = arrData.at(9).deepCopy;
+		synthArgSpecData = arrData.at(9).deepCopy;
+		synthArgSpecData.do({arg item, i;
+			this.setSynthArgSpec(item[0], item[1])
+		});
 		if (arrData.at(10).size > 0, {
 			chanLabel = arrData.at(10).deepCopy;
 		});
@@ -419,7 +423,7 @@ TXChannel : TXModuleBase { //  Channel module
 	////////////////////////////////////////////////////////////////////////////////////
 
 	*makeTitleGui{ arg argParent, argWidth = 74, argHeight = 595;
-		var holdColumn, btn1, btn2, btn3, arrCols, holdInd;
+		var holdColumn, btn1, btn2, btn3, arrCols, holdInd, arrMeterActions;
 		// create column for Titles
 		holdColumn =  CompositeView(argParent,Rect(0, 0, argWidth, argHeight));
 		holdColumn.background = TXColor.sysMainWindow;
@@ -486,6 +490,8 @@ TXChannel : TXModuleBase { //  Channel module
 			system.showView;
 		});
 		holdColumn.decorator.nextLine.shift(0, 4);
+		/* OLD CODE
+		// replaced with
 		// checkbox - showMeters
 		TXCheckBox (holdColumn, (argWidth - 4) @ guiRowHeight, "Show Channel Meters",
 			TXColor.sysGuiCol1, TXColor.white, TXColor.white, TXColor.sysGuiCol1)
@@ -500,6 +506,22 @@ TXChannel : TXModuleBase { //  Channel module
 			// recreate view
 			system.showView;
 		});
+		*/
+		// popup - show/ hide meters
+		arrMeterActions = ["Channel meters...", "show all meters", "show all audio meters", "show all control meters",
+			"hide all meters", "hide all audio meters", "hide all control meters", ];
+		PopUpMenu(holdColumn, (argWidth - 4) @ guiRowHeight)
+		.items_(arrMeterActions)
+		.background_(TXColor.white)
+		.stringColor_(TXColor.sysGuiCol1)
+		.action_({arg view;
+			if (view.value > 0, {
+				TXChannelRouting.setChannelMeters(arrMeterActions[view.value].asSymbol);
+			});
+			//this.channelHighlight;
+			system.showView;
+		});
+
 		holdColumn.decorator.nextLine;
 		// button - wide/narrow View
 		Button (holdColumn, (argWidth - 4) @ guiRowHeight)
@@ -565,7 +587,7 @@ TXChannel : TXModuleBase { //  Channel module
 			holdOffTxt = "Off";
 			holdDelBtnSpace = 15;
 			holdNumboxSpace = 28;
-			holdMeterGap = 14;
+			holdMeterGap = 20;
 		}, {
 			holdCheckBoxWidth = 30;
 			holdSoloTxt = "S";
@@ -574,7 +596,7 @@ TXChannel : TXModuleBase { //  Channel module
 			holdOffTxt = "O";
 			holdDelBtnSpace = 2;
 			holdNumboxSpace = -2;
-			holdMeterGap = -2;
+			holdMeterGap = -1;
 		});
 
 		// create array of names of system's audio source modules.
@@ -698,7 +720,7 @@ TXChannel : TXModuleBase { //  Channel module
 		if (channelRate == "audio", {channelRateString = " A";}, {channelRateString = " C";});
 		arrPositions = [
 			("Chan " ++ channelNo.asString ++ channelRateString),
-			 "duplicate channel", "delete channel","delete insert module 1", "delete insert module 2",
+			 "show meter", "hide meter", "duplicate channel", "delete channel","delete insert module 1", "delete insert module 2",
 			"delete insert module 3", "delete insert module 4", "delete insert module 5", "delete destination",
 		]
 		++ (1 .. arrInstances.size).collect({ arg item, i; " move to slot " ++ item.asString;});
@@ -709,17 +731,19 @@ TXChannel : TXModuleBase { //  Channel module
 		.action_({arg view;
 			this.channelHighlight;
 			case
-			{view.value == 1} {this.duplicateChannel;}
-			{view.value == 2} {this.deleteChannelRequest(view);}
-			{view.value == 3} {this.deleteModuleRequest(insert1Module, view); system.showView;}
-			{view.value == 4} {this.deleteModuleRequest(insert2Module, view); system.showView;}
-			{view.value == 5} {this.deleteModuleRequest(insert3Module, view); system.showView;}
-			{view.value == 6} {this.deleteModuleRequest(insert4Module, view); system.showView;}
-			{view.value == 7} {this.deleteModuleRequest(insert5Module, view); system.showView;}
-			{view.value == 8} {this.deleteDestination;}
-			{view.value > 8} {
+			{view.value == 1} {this.setSynthValue("showMeter", 1); system.showView;}
+			{view.value == 2} {this.setSynthValue("showMeter", 0); system.showView;}
+			{view.value == 3} {this.duplicateChannel;}
+			{view.value == 4} {this.deleteChannelRequest(view);}
+			{view.value == 5} {this.deleteModuleRequest(insert1Module, view); system.showView;}
+			{view.value == 6} {this.deleteModuleRequest(insert2Module, view); system.showView;}
+			{view.value == 7} {this.deleteModuleRequest(insert3Module, view); system.showView;}
+			{view.value == 8} {this.deleteModuleRequest(insert4Module, view); system.showView;}
+			{view.value == 9} {this.deleteModuleRequest(insert5Module, view); system.showView;}
+			{view.value == 10} {this.deleteDestination;}
+			{view.value > 10} {
 				// alter channelNo
-				this.moveToPosition(view.value - 8);
+				this.moveToPosition(view.value - 10);
 				// recreate view
 				system.showView;
 			}
@@ -1125,6 +1149,7 @@ TXChannel : TXModuleBase { //  Channel module
 			column.decorator.shift(0 - holdCheckBoxWidth - column.decorator.gap.x,40);
 			arrControls = arrControls.add(
 				holdVolNumberbox = TXScrollNumBox (column, min(holdCheckBoxWidth, 40) @ guiRowHeight, [0,100].asSpec)
+				.maxDecimals_(1)
 				// get  data from synthArgSpecs
 				.value_((this.getSynthArgSpec("Volume") * 100).round(0.01) )
 				.action_({ |view|
@@ -1144,9 +1169,7 @@ TXChannel : TXModuleBase { //  Channel module
 				}
 			);
 			column.decorator.shift(holdMeterGap, -120);
-			if (TXChannelRouting.dataBank.showChannelMeters == true, {
-				this.makeMeterGui(column);
-			});
+			this.makeMeterGui(column);
 		});	// end of if channelRate ==  "control"
 		// ======================= ======================= ======================= =======================
 		// if audio channel add certain controls
@@ -1560,6 +1583,7 @@ TXChannel : TXModuleBase { //  Channel module
 			column.decorator.shift(0 - holdCheckBoxWidth - column.decorator.gap.x,40);
 			arrControls = arrControls.add(
 				holdVolNumberbox = TXScrollNumBox (column, min(holdCheckBoxWidth, 40) @ guiRowHeight, [0,100].asSpec)
+				.maxDecimals_(1)
 				// get  data from synthArgSpecs
 				.value_((this.getSynthArgSpec("Volume") * 100).round(0.01) )
 				.action_({ |view|
@@ -1579,18 +1603,16 @@ TXChannel : TXModuleBase { //  Channel module
 				}
 			);
 			column.decorator.shift(holdMeterGap, -120);
-			if (TXChannelRouting.dataBank.showChannelMeters == true, {
-				this.makeMeterGui(column);
-			});
+			this.makeMeterGui(column);
 		});	// end of if channelRate ==  "audio"
 	} // end of method makeChannelGui
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	makeMeterGui{arg parent;
-		var meterHeight = 136;
+		var meterHeight = 120;
 		var size = arrDestOuts.size;
 		var holdView;
-		var indent;
+		var indent, button, buttonIndent, buttonColour;
 
 		meter = Array.new(size);
 		clip = Array.new(size);
@@ -1601,41 +1623,62 @@ TXChannel : TXModuleBase { //  Channel module
 		}, {
 			indent = 8;
 		});
-		holdView= CompositeView(parent, Rect(0, 0, indent + (size * 18), meterHeight + 15));
+		// if show Meter
+		if (this.getSynthArgSpec("showMeter") == 1, {
+			holdView = CompositeView(parent, Rect(0, 0, indent + (size*18), meterHeight + 26 + 15));
+			size.do( { arg ix, i;
+				if (channelRate == "audio", {
+					clip = clip.add(Button(holdView, Rect(indent+ (i*18), 0, 15, 10)));
+					clip[i].canFocus = false;
+					//clip[i].font = Font("Arial",9);
+					clip[i].states = [ [" ", Color.black, Color.grey(0.5)] ,
+						[" ", Color.black, Color.red] ];
+					clip[i].action = { arg view;
+						resetfunc.(i);
+					};
+					meter = meter.add(RangeSlider(holdView, Rect(indent+ (i*18), 12, 15, meterHeight)));
+					meter[i].knobColor = Color.grey;
+					// gradient not working yet in qt
+					//meter[i].background = Gradient(Color.yellow, Color(0, 0.8, 0.2), \v);
+					meter[i].background = TXColor.blue.blend(Color.grey(0.65), 0.35);
+					meter[i].hi = 1.0;
+					meter[i].lo = 0.0;
+					buttonIndent = 9;
+					buttonColour = TXColour.sysGuiCol1;
+				}, {
+					meter = meter.add(Slider(holdView, Rect(indent+ (i*18), 12, 15, meterHeight)));
+					meter[i].thumbSize = 8;
+					meter[i].knobColor = TXColor.yellow2;
+					meter[i].background = Color.grey(0.7).blend(TXColour.sysGuiCol2, 0.2);
+					meter[i].acceptsMouse = false;
+					UserView(meter[i], Rect( 0, (meterHeight/2)-1, 25, 2))
+					.background_(Color.red.blend(Color.black, 0.15));
+					buttonIndent = 7;
+					buttonColour = TXColour.sysGuiCol2;
+				});
+				meter[i].canFocus = false;
+				// peak = peak.add(NumberBox(holdView, Rect(indent+ (i*18), meterHeight + 45, 15, 15)));
+				// peak[i].font = Font("Arial",9);
+				// peak[i].value = -60.0;
+				// Hide meter button
 
-		size.do( { arg ix, i;
-			if (channelRate == "audio", {
-				clip = clip.add(Button(holdView, Rect(indent+ (i*18), 0, 15, 10)));
-				clip[i].canFocus = false;
-				//clip[i].font = Font("Arial",9);
-				clip[i].states = [ [" ", Color.black, Color.grey(0.5)] ,
-					[" ", Color.black, Color.red] ];
-				clip[i].action = { arg view;
-					resetfunc.(i);
-				};
-				meter = meter.add(RangeSlider(holdView, Rect(indent+ (i*18), 12, 15, meterHeight)));
-				meter[i].knobColor = Color.grey;
-				// gradient not working yet in qt
-				//meter[i].background = Gradient(Color.yellow, Color(0, 0.8, 0.2), \v);
-				meter[i].background = TXColor.blue.blend(Color.grey(0.65), 0.35);
-				meter[i].hi = 1.0;
-				meter[i].lo = 0.0;
-			}, {
-				meter = meter.add(Slider(holdView, Rect(indent+ (i*18), 12, 15, meterHeight)));
-				meter[i].thumbSize = 8;
-				meter[i].knobColor = TXColor.yellow2;
-				meter[i].background = Color.grey(0.7).blend(TXColour.sysGuiCol2, 0.2);
-				meter[i].acceptsMouse = false;
-				UserView(meter[i], Rect( 0, (meterHeight/2)-1, 25, 2))
-				.background_(Color.red.blend(Color.black, 0.15));
+				this.addResponder(i);
+				resetfunc.(i);
 			});
-			meter[i].canFocus = false;
-			// peak = peak.add(NumberBox(holdView, Rect(indent+ (i*18), meterHeight + 45, 15, 15)));
-			// peak[i].font = Font("Arial",9);
-			// peak[i].value = -60.0;
-
-			this.addResponder(i);
-			resetfunc.(i);
+			button = Button(holdView, Rect(buttonIndent, meterHeight + 12, 18, 18));
+			button.states = [ ["x", Color.white, buttonColour] ];
+			button.action = {this.setSynthValue("showMeter", 0); system.showView;};
+		}, {
+			// Meter button
+			if (channelRate == "audio", {
+				buttonColour = TXColour.sysGuiCol1;
+			}, {
+				buttonColour = TXColour.sysGuiCol2;
+			});
+			holdView = CompositeView(parent, Rect(0, 0, 36, meterHeight + 26 + 15));
+			button = Button(holdView, Rect(0, meterHeight + 12, 36, 18));
+			button.states = [ ["meter", Color.white, buttonColour] ];
+			button.action = {this.setSynthValue("showMeter", 1); system.showView;};
 		});
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2464,6 +2507,12 @@ TXChannel : TXModuleBase { //  Channel module
 			if (argSynthArgString == "FXSend4Val", {
 				// set current value on synth
 				synthFXSend4.set("send", argVal);
+			});
+			if (argSynthArgString == "showMeter", {
+				// set current value on synth
+				synthChannel.set("showMeter", argVal);
+				// store current data to synthArgSpecs
+				this.setSynthArgSpec("showMeter", argVal);
 			});
 		});
 		// store to synthArgSpecs

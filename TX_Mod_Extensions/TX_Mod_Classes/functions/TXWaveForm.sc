@@ -697,9 +697,48 @@ TXWaveForm {
 				+ "\nModify 2 distorts the waveform shape."
 			],
 
-
-
-
+			["FM 10 - 1C.1M, freq ratio 1.61803 (Golden Mean) - M1",
+				{arg outFreq, waveModify1, waveModify2;
+					1/3 * PMOsc.ar(outFreq, outFreq * 1.61803, waveModify1*2pi*2, 0); },
+				"Frequency modulation using sine waves."
+				+ "Modify 1 sets the depth of modulation."
+				+ "\nModify 2 is not used."
+			],
+			["FM 11 - 1C.1M, freq ratio 0.61803 (1/Golden Mean) - M1",
+				{arg outFreq, waveModify1, waveModify2;
+					1/3 * PMOsc.ar(outFreq, outFreq * 0.61803, waveModify1*2pi*2, 0); },
+				"Frequency modulation using sine waves."
+				+ "Modify 1 sets the depth of modulation."
+				+ "\nModify 2 is not used."
+			],
+			["FM 12 - 1C.1M, freq ratio 1.4142 (square root 2) - M1",
+				{arg outFreq, waveModify1, waveModify2;
+					1/3 * PMOsc.ar(outFreq, outFreq * 1.4142, waveModify1*2pi*2, 0); },
+				"Frequency modulation using sine waves."
+				+ "Modify 1 sets the depth of modulation."
+				+ "\nModify 2 is not used."
+			],
+			["FM 13 - 1C.1M, freq ratio 1/1.4142 (1/square root 2) - M1",
+				{arg outFreq, waveModify1, waveModify2;
+					1/3 * PMOsc.ar(outFreq, outFreq * 0.7071, waveModify1*2pi*2, 0); },
+				"Frequency modulation using sine waves."
+				+ "Modify 1 sets the depth of modulation."
+				+ "\nModify 2 is not used."
+			],
+			["FM 14 - 1C.1M, freq ratio 2.236 (square root 5) - M1",
+				{arg outFreq, waveModify1, waveModify2;
+					1/3 * PMOsc.ar(outFreq, outFreq * 2.236, waveModify1*2pi*2, 0); },
+				"Frequency modulation using sine waves."
+				+ "Modify 1 sets the depth of modulation."
+				+ "\nModify 2 is not used."
+			],
+			["FM 15 - 1C.1M, freq ratio 1/2.236 (1/square root 5) - M1",
+				{arg outFreq, waveModify1, waveModify2;
+					1/3 * PMOsc.ar(outFreq, outFreq * 0.4472, waveModify1*2pi*2, 0); },
+				"Frequency modulation using sine waves."
+				+ "Modify 1 sets the depth of modulation."
+				+ "\nModify 2 is not used."
+			],
 
 			//////////////////////////////
 

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Image</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource ImageAsset</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module draws an image (or part of it) with optional tiling and masking.</p>
+<p class="p1">The image can be opened from a file or imported from another TXV image module.</p>
+<p class="p1"><b>Note:</b> Image assets are added directly to the TXV System module.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Source Image Button</i></b></p>
+<p class="p1"><b>sourceImageAsset</b> - index (def: 0) - Image Asset.</p>
+<p class="p1"><b>extSourceImageModule</b> - index (def: 0) - TXV module to import image from. </p>
+<p class="p1"><b>useExternalSourceImage</b> - switch (def: 0). </p>
+<p class="p1"><b>sourceImageScaleMode</b> - index with modulation (def: 0, range: 0 : 2) options: <b> [0]</b>_scale to fit, <b> [1]</b>_scale & crop to fill, <b> [2]</b>_stretch to fill. </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Sample Area Button</i></b></p>
+<p class="p1"><b><i>Note</i></b> - When the sample width and height are maximum (which they are by default) the sample area is the whole image, in which case samplePosX and samplePosY will have no effect. But when the sample area is smaller than the whole image, samplePosX and samplePosY move  the sample area around within the whole image. </p>
+<p class="p1"><b>samplePosX</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>samplePosY</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>sampleWidth</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>sampleHeight</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Tile Button</i></b></p>
+<p class="p1"><b>numTiles</b> - float with modulation (def: 1, range: 1 : 100). </p>
+<p class="p1"><b>mirrorTileX</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>mirrorTileY</b> - switch with modulation (def: 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Mask Button</i></b></p>
+<p class="p1"><b>maskImageAsset</b> - index (def: 0) - Image Asset.</p>
+<p class="p1"><b>extMaskImageModule</b> - index (def: 0) - TXV module to import image from. </p>
+<p class="p1"><b>useExternalMaskImage</b> - switch (def: 0). </p>
+<p class="p1"><b>maskType</b> - index with modulation (def: 0, range: 0 : 9) options: <b> [0]</b>_no mask, <b> [1]</b>_use mask image, <b> [2]</b>_feathered rectangle, <b> [3]</b>_oval, <b> [4]</b>_feathered oval, <b> [5]</b>_blurred oval, <b> [6]</b>_ring, <b> [7]</b>_feathered ring, <b> [8]</b>_diamond, <b> [9]</b>_feathered diamond. </p>
+<p class="p1"><b>invertMask</b> - switch (def: 0). </p>
+<p class="p1"><b>feathering</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Active, Size, Alpha Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>useSamplePosForDrawPos</b> - switch (def: 0). </p>
+<p class="p1"><b>useSampleSizeForDrawSize</b> - switch (def: 0). </p>
+<p class="p1"><b>constrainToEdges</b> - switch (def: 0). </p>
+<p class="p1"><b>alpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawWidth</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawHeight</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Scale Button</i></b></p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Position, Anchor, Rotate Button</i></b></p>
+<p class="p1"><b>drawPosX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>drawPosY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>rotate</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>sourceImageScaleMode</b></p>
+<p class="p1"><b>maskType</b></p>
+<p class="p1"><b>feathering</b></p>
+<p class="p1"><b>alpha</b></p>
+<p class="p1"><b>samplePosX</b></p>
+<p class="p1"><b>samplePosY</b></p>
+<p class="p1"><b>sampleWidth</b></p>
+<p class="p1"><b>sampleHeight</b></p>
+<p class="p1"><b>numTiles</b></p>
+<p class="p1"><b>mirrorTileX</b></p>
+<p class="p1"><b>mirrorTileY</b></p>
+<p class="p1"><b>drawPosX</b></p>
+<p class="p1"><b>drawPosY</b></p>
+<p class="p1"><b>drawWidth</b></p>
+<p class="p1"><b>drawHeight</b></p>
+<p class="p1"><b>anchorX</b></p>
+<p class="p1"><b>anchorY</b></p>
+<p class="p1"><b>rotate</b></p>
+<p class="p1"><b>rotateMultiply</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

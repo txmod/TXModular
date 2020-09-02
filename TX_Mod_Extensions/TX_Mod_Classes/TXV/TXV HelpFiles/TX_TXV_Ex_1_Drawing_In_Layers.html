@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Ex 1 Drawing In Layers</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A> & <A href="TX_TXV_Drawing_In_Layers.html">TXV Drawing In Layers<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">This help file uses an example file "Ex_1_Drawing_In_Layers" found in the folder "TXV_Examples".  </p>
+<p class="p1">Please open the example in the TX Modular system.</p>
+<p class="p1">In order to start the TXV software, you can use the “Start TXV” button if you are using the standalone TX Modular (for MacOS) which includes TXV inside it.  If you are using another platform, you will need to have a TXV build ready for your platform and open it separately.</p>
+<p class="p1">Once TXV has been started, press the button “Rebuild TXV System” which will send all the data from the TX Modular to TXV.</p>
+<p class="p1">You should then see a blue-green background with a red triangle on it, and a yellow oblong over the red triangle.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>TXV Modules Used</i></b></p>
+<p class="p1">If you click on the button “Modules + Channels”, you can see in the left-hand column all the TXV modules used. Apart from the TXV System itself, there is a Gradient, two Shape 2Ds, a Transform and four DrawConnections.</p>
+<p class="p1">The Gradient creates the blue-green background. The two Shape 2Ds are the red triangle and yellow oblong.</p>
+<p class="p1">The Transform module is used to group together the two Shape 2Ds, which allows them to be “transformed” by shifting them along the X or Y axis, scaling them or rotating them.</p>
+<p class="p1">The 4 DrawConnections can be understood by opening the TXV System module and clicking on the button “Draw Connections”. </p>
+<p class="p1">This shows that the Gradient is drawn first to layer 1 of the TXV System (i.e. the main TXV window). Then the two Shape 2Ds are drawn to layers 1 & 2 of the Transform. Finally, the Transform is drawn to layer 2 of the TXV System.</p>
+<p class="p1">Because layers are drawn in numerical order, the Gradient is drawn first on the main window. Then the Transform is drawn which itself draws the two Shape 2Ds, with the red triangle drawn before the yellow oblong.</p>
+<p class="p1">One thing to note is that if you click on the button "Draw & Background" in the TXV System, you will see a parameter "drawLayersRule". This selects which layers will actually be drawn on the main window. By default, it is set to "All layers except Layer 20". Keep the default setting for this example.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Changing layers and other parameters</i></b></p>
+<p class="p1">If you click on the button “Run Interface”, you will see some GUI widgets which allow you to easily change how things look.</p>
+<p class="p1">First, try setting “Draw Connection [2] - layerNo” to 3. This will mean that the red triangle is now drawn after the yellow oblong and will appear in front of it.</p>
+<p class="p1">Next, change the rotation of the triangle and oblong and they will rotate relative to one another.</p>
+<p class="p1">Next change “Transform [1] - rotateZ”. This will add further rotation to the two Shape 2Ds treating them as a group because they are both drawn onto the Transform [1].</p>
+<p class="p1">Finally change “Transform [1] - shiftX” and you will see both Shape 2Ds move left or right.</p>
+<p class="p1"><br></p>
+</body>
+</html>

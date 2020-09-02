@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Render Image</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource DrawDestination Renders</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module is a Draw Destination that renders an image from anything drawn to it.</p>
+<p class="p1">It can also save individual images or video files from the rendered image.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Clear Button</i></b></p>
+<p class="p1"><b>clearBeforeRender</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>clearNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>clearColorHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>clearColorSaturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>clearColorBrightness</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>clearColorAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>clearColorHSBAsRGB</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Render Button</i></b></p>
+<p class="p1"><b>drawLayersRule</b> - index with modulation (def: 0, range: 0 : 26) options: <b> [0]</b>_All layers except Layer 20, <b> [1]</b>_Layer 1, <b> [2]</b>_Layer 2, <b> [3]</b>_Layer 3, <b> [4]</b>_Layer 4, <b> [5]</b>_Layer 5, <b> [6]</b>_Layer 6, <b> [7]</b>_Layer 7, <b> [8]</b>_Layer 8, <b> [9]</b>_Layer 9, <b> [10]</b>_Layer 10, <b> [11]</b>_Layer 11, <b> [12]</b>_Layer 12, <b> [13]</b>_Layer 13, <b> [14]</b>_Layer 14, <b> [15]</b>_Layer 15, <b> [16]</b>_Layer 16, <b> [17]</b>_Layer 17, <b> [18]</b>_Layer 18, <b> [19]</b>_Layer 19, <b> [20]</b>_Layer 20, <b> [21]</b>_Layers 1 - 5, <b> [22]</b>_Layers 6 - 10, <b> [23]</b>_Layers 11 - 15, <b> [24]</b>_Layers 16 - 20, <b> [25]</b>_Layers 1 - 10, <b> [26]</b>_Layers 11 - 20. </p>
+<p class="p1"><b>renderContinuosly</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>renderNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>renderWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>renderCustomWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>renderCustomHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Save Image Button</i></b></p>
+<p class="p1"><b>saveImageNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>saveImageFolder</b> - Text. </p>
+<p class="p1"><b>saveImageFileNamePrefix</b> - Text. </p>
+<p class="p1"><b>saveImageFormat</b> - index (def: 0, range: 0 : 2) options: <b> [0]</b>_jpg (default), <b> [1]</b>_png (slow but high res), <b> [2]</b>_bmp (fast but big). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Record Video Button</i></b></p>
+<p class="p1"><b>recordVideo</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>pauseRecordVideo</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>maxVideoRecordTimeMinutes</b> - float (def: 0, range: 0 : 600). </p>
+<p class="p1"><b>recordVideoFolder</b> - Text. </p>
+<p class="p1"><b>recordVideoFileNamePrefix</b> - Text. </p>
+<p class="p1"><b>recordVideoFileNameExtension</b> - Text. </p>
+<p class="p1"><b>recordVideoBitrate</b> - index (def: 6, range: 0 : 17) options: <b> [0]</b>_400k, <b> [1]</b>_1000k, <b> [2]</b>_1200k, <b> [3]</b>_1400k, <b> [4]</b>_1600k, <b> [5]</b>_2000k, <b> [6]</b>_3000k, <b> [7]</b>_4000k, <b> [8]</b>_5000k, <b> [9]</b>_6000k, <b> [10]</b>_7000k, <b> [11]</b>_10000k, <b> [12]</b>_12000k, <b> [13]</b>_20000k, <b> [14]</b>_15000k, <b> [15]</b>_20000k, <b> [16]</b>_25000k, <b> [17]</b>_30000k. </p>
+<p class="p1"><b>recordVideoPixelFormat</b> - index (def: 0, range: 0 : 1) options: <b> [0]</b>_rgb24, <b> [1]</b>_rgba. </p>
+<p class="p1"><b>recordAudioWithVideo</b> - switch (def: 0). </p>
+<p class="p1"><b>recordAudioBitrate</b> - index (def: 3, range: 0 : 4) options: <b> [0]</b>_128k, <b> [1]</b>_160k, <b> [2]</b>_192k, <b> [3]</b>_256k, <b> [4]</b>_320k. </p>
+<p class="p1"><b>recordAudioDeviceID</b> - integer (def: 0, range: 0 : 20). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Record Image Seq Button</i></b></p>
+<p class="p1"><b>recordImageSeq</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>pauseRecordImageSeq</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>maxImageSeqRecordTimeMinutes</b> - float (def: 0, range: 0 : 600). </p>
+<p class="p1"><b>imageSeqFolder</b> - Text. </p>
+<p class="p1"><b>imageSeqFileNamePrefix</b> - Text. </p>
+<p class="p1"><b>imageSeqFormat</b> - index (def: 0, range: 0 : 2) options: <b> [0]</b>_jpg (default), <b> [1]</b>_png (slow but high res), <b> [2]</b>_bmp (fast but big). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Active, Size, Alpha Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>alpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawWidth</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawHeight</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Scale Button</i></b></p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Position, Anchor, Rotate Button</i></b></p>
+<p class="p1"><b>drawPosX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>drawPosY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>rotate</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>drawLayersRule</b></p>
+<p class="p1"><b>renderContinuosly</b></p>
+<p class="p1"><b>renderNow</b></p>
+<p class="p1"><b>clearBeforeRender</b></p>
+<p class="p1"><b>clearNow</b></p>
+<p class="p1"><b>clearColorHue</b></p>
+<p class="p1"><b>clearColorSaturation</b></p>
+<p class="p1"><b>clearColorBrightness</b></p>
+<p class="p1"><b>clearColorAlpha</b></p>
+<p class="p1"><b>alpha</b></p>
+<p class="p1"><b>drawPosX</b></p>
+<p class="p1"><b>drawPosY</b></p>
+<p class="p1"><b>drawWidth</b></p>
+<p class="p1"><b>drawHeight</b></p>
+<p class="p1"><b>anchorX</b></p>
+<p class="p1"><b>anchorY</b></p>
+<p class="p1"><b>rotate</b></p>
+<p class="p1"><b>rotateMultiply</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><b>recordVideo</b></p>
+<p class="p1"><b>pauseRecordVideo</b></p>
+<p class="p1"><b>saveImageNow</b></p>
+<p class="p1"><b>recordImageSeq</b></p>
+<p class="p1"><b>pauseRecordImageSeq</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

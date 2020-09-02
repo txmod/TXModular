@@ -31,7 +31,7 @@ TXCheckBox {
 
 	onOffTextType_ {arg type = 0;
 		// create on and off text
-		onOffTextType = type.asInt;
+		onOffTextType = type.asInteger;
 		[
 			{offText = "[  ] "; onText =  "[X] "; }, // 0
 			{offText = " "; onText = "X"; }, // 1
@@ -45,7 +45,7 @@ TXCheckBox {
 			{offText = "0 - False"; onText = "1 - True"; }, // 9
 			{offText = "NO "; onText = "YES "; }, // 10
 			{offText = "[NO] "; onText = "[YES] "; }, // 11
-			{offText = ""; onText = ""; }, // 12 - just let colour change indicated state
+			{offText = ""; onText = ""; }, // 12 - just let colour change indicate state
 		].at(onOffTextType).value;
 	}
 

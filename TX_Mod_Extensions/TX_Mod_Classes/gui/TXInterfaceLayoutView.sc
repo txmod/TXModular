@@ -34,10 +34,10 @@ TXInterfaceLayoutView {
 				var holdRect, holdSmallRect, holdRate, holdModuleType;
 				holdRect = Rect(argWidget.fromLeft(layoutWidth),
 					argWidget.fromTop(layoutHeight), argWidget.width, argWidget.height);
-				//	// Draw the fill
-				//	Pen.fillColor = TXColor.black.alpha_(0.3);
-				//	Pen.addRect(holdRect);
-				//	Pen.fill;
+				// Draw the fill
+				Pen.fillColor = TXColor.white.alpha_(0.3);
+				Pen.addRect(holdRect);
+				Pen.fill;
 				Pen.width =2;
 				if (argWidget.highlight, {
 					if( resizeHandles.notNil and: {resizeFixed.notNil}, {
@@ -53,8 +53,9 @@ TXInterfaceLayoutView {
 				Pen.stroke;
 				// add text
 				Pen.color = TXColor.red;
-				Pen.font = Font( "Helvetica", 12 );
-				Pen.stringCenteredIn("W " ++ argWidget.widgetID.asString, holdRect);
+				Pen.font = Font( "Helvetica", 12);
+				//Pen.stringCenteredIn("W " ++ argWidget.widgetID.asString, holdRect);
+				Pen.stringRightJustIn("W " ++ argWidget.widgetID.asString ++ " ", holdRect);
 			});
 			resizeHandles.do({ |r|
 				Pen.color = TXColor.white;

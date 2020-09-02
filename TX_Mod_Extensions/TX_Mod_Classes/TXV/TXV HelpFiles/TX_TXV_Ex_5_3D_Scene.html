@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Ex 5 3D Scene</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A> & <A href="TX_TXV_3D_Lights_And_Materials.html">TXV 3D Lights And Materials<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">This help file uses an example file “Ex_5_3D_Scene" found in the folder "TXV_Examples".</p>
+<p class="p1">Please open the example in the TX Modular system.</p>
+<p class="p1">In order to start the TXV software, you can use the “Start TXV” button if you are using the standalone TX Modular (for MacOS) which includes TXV inside it.  If you are using another platform, you will need to have a TXV build ready for your platform and open it separately.</p>
+<p class="p1">Once TXV has been started, press the button “Rebuild TXV System” which will send all the data from the TX Modular to TXV.</p>
+<p class="p1">You should then see a group of yellow diamonds arranged in a circle, with with a spherical twisted shape with a surface pattern rising and falling in the centre of the circle.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Overview</i></b></p>
+<p class="p1">This example has been built using various 3D shapes that have been drawn to a TXV Scene. As with previous examples, LFOs have been used to create movement using modulation.</p>
+<p class="p1">On the Interface, there are various widgets which you can use to change certain parameters in the scene:</p>
+<p class="p1">As before there is a Master BPM to control the speed of all the LFOs.</p>
+<p class="p1"><br></p>
+<p class="p1">TXV Shape 3D [1] is the shape in the centre of the circle. It is called a Catenoid, but you can try changing the shape as well its overall size (ScaleX/Y/Z).</p>
+<p class="p1">The parameter twistActive is on by default, which gives the shape its twisted look, but you can try turning it off to see the original Catenoid shape.</p>
+<p class="p1">The parameter useImageAsTexture, is on by default. This uses an image from a TXV Generator module to add the pattern to the surface of the shape.</p>
+<p class="p1"><br></p>
+<p class="p1">TXV Shape3D Multi [1] is the circle of diamonds. Again you try different shapes.</p>
+<p class="p1"><br></p>
+<p class="p1">Below that, are various controls for the TXV Scene.</p>
+<p class="p1">You can select which camera to use (or none at all) and change the FieldOfView for the cameras - smaller angles are like a telephoto lens, and larger angles are like a fish-eye lens, with central values more like what the human eye sees.</p>
+<p class="p1">One thing to point out is that when you switch to Camera 1, the Catenoid in the centre seems to no longer move up and down, whereas the whole circle of yellow diamonds now seems to move instead. This is because Camera 1 is being rotated with the same LFO that moves the Catenoid up and down, so the camera tracks the Catenoid’s movement.</p>
+<p class="p1">3 switches enable you to turn on and off the 3 lights which illuminate the scene. The lights are all positioned differently, and have different color settings, so they illuminate different sides of the shapes in different ways. As the shapes gradually rotate, the highlights change since they depend on the angle of the surface in relation to each light, as well as the light's color settings.</p>
+<p class="p1"><i>(See <A href="TX_TXV_3D_Lights_And_Materials.html">TXV 3D Lights And Materials<A> for further information.)</i></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modules And Connections</i></b></p>
+<p class="p1">If you click on the button “Modules + Channels”, you can see in the left-hand column all the modules used.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV System [1]” and click on the “Draw Connections” button, you can see how the shapes are drawn to the TXV Scene, and the scene is then drawn to the main system.</p>
+<p class="p1">In this case all the shapes are drawn to Layer 1 of the scene. This is because when working in 3D, a process called “Depth Testing” is used which ignores the layer order and instead looks at every part of everything that is drawn to scene. It checks whether each one is in front of or behind the others, and it only draws the ones at the front.</p>
+<p class="p1">You can see this clearly in the example, because the Catenoid in the centre of the circle blocks out the diamonds that are behind it, but the ones in front of it can still be seen.</p>
+<p class="p1">If you click on the “Modulation Nodes” button, you can see how the various LFOs create movement of the shapes as well as rotating Camera 1 so it follows the Catenoid’s movement (as described above).</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV Shape 3D [1]”, you can see the many parameters available. As well as choosing the shape type and size, you can choose the material it made from, and then add various kinds of distortion to change the original shape. In this example, we are using Twist, but there is also Bend and you can also use various waveforms to add other kinds of distortion.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV Shape3D Multi [1]”, you can see many of the parameters are similar to TXV Shape 3D [1].</p>
+<p class="p1">If you click on the "Position" button, below that you can see buttons for Position XYZ and a Spread button for each dimension. The X and Z spread curves are used to spread the shapes into a circular formation.</p>
+<p class="p1">If you click on the "Position Y Spread" button, you can see the curve that gives a vertical kink in the circle. Below the curve, the parameter "PositionYSpreadCurvePhase has it's modulation mix set to 1 (fully on). This enables an LFO to rotate the curve so it appears as if a a vertical wave is moving around the circle of diamonds.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV Scene [1]”, you can see all the settings for the lights and cameras.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV Generator [1]”, you can see all the settings for the pattern that is generated and the wrapped around the Catenoid.</p>
+<p class="p1">If you click the “Generator” button, you can choose a different generatorType to get a different pattern. Next to the name of the generatorType is a description of which colors and other parameters that are used.</p>
+<p class="p1">If you click on the “Colors” button you can try changing any colours relevant to the particular generatorType.</p>
+<p class="p1">Any changes you make will be seen on the surface of the Catenoid.</p>
+<p class="p1"><br></p>
+</body>
+</html>

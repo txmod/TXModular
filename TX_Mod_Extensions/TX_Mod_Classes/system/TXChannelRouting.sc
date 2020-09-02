@@ -32,7 +32,7 @@ TXChannelRouting {	// Channel Routing
 		dataBank.channelWidth = 151;
 		//dataBank.channelBoxWidth = 4 + (3 * dataBank.channelWidth);
 		dataBank.channelBoxWidth = 380;
-		dataBank.showChannelMeters = true;
+		dataBank.showChannelMeters = true;  // note: no longer used
 		dataBank.boxHeight = 612;
 		dataBank.wideChannelMode = true;
 		dataBank.multiWindow = false;
@@ -213,6 +213,32 @@ TXChannelRouting {	// Channel Routing
 	*setWideChannelMode {arg mode;
 		dataBank.wideChannelMode = mode;
 		TXChannel.adjustGuiWidth(dataBank.wideChannelMode);
+	}
+
+	*setChannelMeters {arg mode;
+		var holdVal;
+		case
+		{mode == 'show all meters'} {holdVal = 1;}
+		{mode == 'show all audio meters'} {holdVal = 1;}
+		{mode == 'show all control meters'} {holdVal = 1;}
+		{mode == 'hide all meters'} {holdVal = 0;}
+		{mode == 'hide all audio meters'} {holdVal = 0;}
+		{mode == 'hide all control meters'} {holdVal = 0;}
+		;
+		arrChannels.do({ arg channel, i;
+			// check rate
+			if (channel.channelRate == "audio", {
+				if (mode != 'show all control meters' and: {mode != 'hide all control meters'}, {
+					channel.setSynthValue("showMeter", holdVal);
+				});
+			}, {
+				// channel.channelRate == "control"
+				if (mode != 'show all audio meters'  and: {mode != 'hide all audio meters'}, {
+					channel.setSynthValue("showMeter", holdVal);
+				});
+			});
+		});
+
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////

@@ -31,14 +31,14 @@ TXTransposeKey {
 		};
 
 		sliderViewSemitone = Slider(window, 80 @ dimensions.y);
-		sliderViewSemitone.action = {
-			if (numberViewSemitone.value.isNegative, {
-				numberViewSemitone.value = numberViewSemitone.value.asInteger - (sliderViewSemitone.value.min(0.99999));
-			},{
-				numberViewSemitone.value = numberViewSemitone.value.asInteger + sliderViewSemitone.value.min(0.99999);
-			});
-
-			action.value(this);
+		sliderViewSemitone.action = {arg view;
+			view.value = view.value.min(0.99);
+				if (numberViewSemitone.value.isNegative, {
+					numberViewSemitone.value = numberViewSemitone.value.asInteger - view.value;
+				},{
+					numberViewSemitone.value = numberViewSemitone.value.asInteger + view.value;
+				});
+				action.value(this);
 		};
 		labelView3 = StaticText(window, 50 @ dimensions.y);
 		labelView3.string = "octaves";

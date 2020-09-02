@@ -426,6 +426,10 @@ TXSystem1GUI {		// system module 1 GUI
 						"MIDI Keyboard",
 						"Colour Picker",
 						"Curve Builder",
+<<<<<<< HEAD
+=======
+						"Points Curve Editor",
+>>>>>>> Version089Changes
 						"WaveTerrain Builder",
 					];
 					popupTools.background_(TXColor.sysGuiCol1);
@@ -436,6 +440,10 @@ TXSystem1GUI {		// system module 1 GUI
 							{TXMIDIKeyboardWindow.showWindow},
 							{TXColor.showPicker},
 							{TXCurveBuilder.showWindow},
+<<<<<<< HEAD
+=======
+							{TXPointsCurveEditor.showWindow},
+>>>>>>> Version089Changes
 							{TXWaveTerrainBuilder.showWindow},
 						] [view.value].value;
 						view.value = 0;

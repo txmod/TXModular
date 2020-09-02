@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 12.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Intro To All Modules</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: <A href="TX_TXV_List_Of_All_Modules.html">TXV List Of All Modules<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>System</i></b></p>
+<p class="p1"><A href="TX_TXV System.html">TXV System<A> [ModulationSource DrawDestination]<br>
+This module is used to control a separate piece of software - TXV - which is a modular video system for generating real-time 2D & 3D visuals. </p>
+<p class="p1">TXV opens in it’s own window and is controlled by the TXV System module running in the TX Modular. <br>
+Internally, OSC network messages are used to communicate between the TXV System module and TXV software.</p>
+<p class="p1">TXV was created to enable the TX Modular system to control both video and audio processes.<br>
+Like the TX Modular, TXV includes various types of modules:<br>
+- <b>Draw Sources</b> such as image file, movie file, live video camera, 3D Model file, 2D/3D shapes.<br>
+- <b>Draw Destinations</b> include the TXV System,Transform (shift/ scale/ rotate) and Transf3DMulti  (transform & multiply drawn objects), Scene (3D Scene with camera & lights).<br>
+- <b>Modulation sources</b> include LFOs, Perlin noise,  and a step sequencer.<br>
+- <b>Image FX</b> include Blend, Blur, Pixelate and Colorize.<br>
+(See “TXV Intro To All Modules” for a full list).</p>
+<p class="p1">There are various ways to connect modules together:<br>
+- <b>Draw Connections</b> connect Draw Source modules to Draw Destination modules, including the TX System module which draws to the main window.<br>
+- <b>Modulation Nodes</b> connect modulation sources to parameters in other modules.<br>
+- Lastly, the various modules that use images have the option to directly import the image produced by any other image module.</p>
+<p class="p1">Note: The TXV software should be started before trying to connect to the TXV System module.</p>
+<p class="p1"><A href="TX_TXV DrawConnection.html">TXV DrawConnection<A>  <br>
+This module connects a Draw Source module to a particular draw layer in a Draw Destination module (which all have 20 draw layers).<br>
+Whenever the Draw Destination module draws that particular layer, the Draw Source module will be drawn. <br>
+Multiple draw sources can be connected to each layer of a Draw Destination module. <br>
+To draw to the main window, the final Draw Destination needs to be the TX System module.<br>
+Chains of draw connections can be made, for example connecting an Image module to a Transform module to scale & rotate it & connecting the Transform module to the TXV System to display it. </p>
+<p class="p1"><A href="TX_TXV Node.html">TXV Node<A>  <br>
+This module connects a modulation source to a parameter in another module so it can be modulated.<br>
+Negative modulation, which is optional, will invert the modulation signal.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw Sources</i></b></p>
+<p class="p1"><A href="TX_TXV 3D Model.html">TXV 3D Model<A> [DrawSource 3DModelAsset]<br>
+This module can load 3D Model files (using the 'Open Asset Import Library' version 2).<br>
+If the file contains an animation, it can be played through (manually or automatically).<br>
+Note: 3D Model assets are added directly to the TXV System module.</p>
+<p class="p1"><A href="TX_TXV BSurfaces.html">TXV BSurfaces<A> [DrawSource ImageAsset]<br>
+This module creates multiple Bezier surfaces, which are curved surfaces based on Bezier curves with 16 control points in a 4 X 4 grid.<br>
+The curved surface is based on the shape of the grid. Each point can be controlled independently and modulated.<br>
+There are also preset shapes, 20 user-defined and & 30 pre-defined, which can be morphed between to define the shape of the surface.</p>
+<p class="p1"><A href="TX_TXV BSurfaces2.html">TXV BSurfaces2<A> [DrawSource ImageAsset]<br>
+This module creates multiple Bezier surfaces, which are curved surfaces based on Bezier curves with 36 control points in a 6 X 6 grid.<br>
+The curved surface is based on the shape of the grid. Each point can be controlled independently and modulated.<br>
+There are also preset shapes, 20 user-defined and & 30 pre-defined, which can be morphed between to define the shape of the surface.</p>
+<p class="p1"><A href="TX_TXV BSurfacesX6.html">TXV BSurfacesX6<A> [DrawSource ImageAsset]<br>
+This module creates multiple 6-sided Bezier surfaces from front and back surfaces, each based on Bezier curves with 16 control points in a 4 X 4 grid, with a variable gap between them.<br>
+Each point can be controlled independently and modulated. <br>
+There are also preset shapes, 20 user-defined and & 30 pre-defined, which can be morphed between to define the shape of the front and back surfaces.</p>
+<p class="p1"><A href="TX_TXV Curves.html">TXV Curves<A> [DrawSource]<br>
+This module creates multiple curves, with each curve created by connecting points together. Optionally, the curves can be filled, so there are separate line and fill colors.</p>
+<p class="p1"><A href="TX_TXV Delay Curves.html">TXV Delay Curves<A> [DrawSource]<br>
+This module creates multiple curves, with each curve created by connecting points together. Optionally, the curves can be filled, so there are separate line and fill colors.<br>
+The multiple curves are each delayed copies of the first curve. The delayed copies will be seen by moving or modulating the curve points.</p>
+<p class="p1"><A href="TX_TXV Fluid.html">TXV Fluid<A> [DrawSource]<br>
+This module runs a fluid simulation and particle system.<br>
+Inside the simulation there is a grid of cells which contain all the forces that govern the movement of the fluid along with parameters such as viscocity.<br>
+4 colors can be added to the cells in the grid, and 4 forces can be applied to cause movement inside the fluid.<br>
+Colored particles can be added which will be moved around with the fluid.<br>
+It is possible to visualise the movement of the fluid by changing the drawMode, for example to [3]_Draw Vectors.</p>
+<p class="p1"><A href="TX_TXV Generator.html">TXV Generator<A> [DrawSource Renders]<br>
+This module generates a pattern chosen from a list of presets.<br>
+Most of the patterns can change over time, with manual or automatic control of the speed of movement.</p>
+<p class="p1"><A href="TX_TXV Gradient.html">TXV Gradient<A> [DrawSource Renders]<br>
+This module generates an image with a gradient - a crossfade between 2-4 colors.<br>
+The gradient can be horizontal, vertical or radial, stretched between 2 movable points.</p>
+<p class="p1"><A href="TX_TXV Image.html">TXV Image<A> [DrawSource ImageAsset]<br>
+This module draws an image (or part of it) with optional tiling and masking.<br>
+The image can be opened from a file or imported from another TXV image module.<br>
+Note: Image assets are added directly to the TXV System module.</p>
+<p class="p1"><A href="TX_TXV Movie.html">TXV Movie<A> [DrawSource MovieAsset]<br>
+This module opens a movie file and draws it.<br>
+Manual and automatic playback are available, or frames can be stepped through manually<br>
+Note: Movie assets are added directly to the TXV System module.</p>
+<p class="p1"><A href="TX_TXV Particles.html">TXV Particles<A> [DrawSource ImageAsset]<br>
+This module draws particles which are 2D shapes based on masked rectangles taken from an image.<br>
+Automatic or manual triggering creates new particles, each with a fixed lifetime.<br>
+Particles can move in various ways and change size or color during their lifetimes.</p>
+<p class="p1"><A href="TX_TXV Particles3D.html">TXV Particles3D<A> [DrawSource ImageAsset]<br>
+This module draws 3D particles with the same parameters as TXV Shape 3D including options for material properties, image-wrapping, and shape distortion.<br>
+Automatic or manual triggering creates new particles, each with a fixed lifetime.<br>
+Particles can move in various ways and change size or color during their lifetimes.<br>
+<p class="p1"><A href="TX_TXV Shape 2D.html">TXV Shape 2D<A> [DrawSource]<br>
+This module draws a 2D shape selected from various presets. The shape can be drawn as an outline, filled or both.</p>
+<p class="p1"><A href="TX_TXV Shape2D Multi.html">TXV Shape2D Multi<A> [DrawSource]<br>
+This module draws multiple 2D shapes selected from various presets. The shapes can be drawn as an outline, filled or both.<br>
+Many parameters have an optional end value (for example width, widthEnd, widthEndIgnore) so that variations between multiple shapes can be created.<br>
+There are also morphable spread curves (e.g. sizeSpread, positionSpread) which define where the parameter values fall between their start and end values for each shape.</p>
+<p class="p1"><A href="TX_TXV Shape 3D.html">TXV Shape 3D<A> [DrawSource ImageAsset]<br>
+This module draws a 3D shape selected from various presets.<br>
+Shape material controls include image mapping, shininess and various color properties.<br>
+Shape distortion can be added by using waveform distortion, Perlin noise, twisting and bending.</p>
+<p class="p1"><A href="TX_TXV Shape3D Multi.html">TXV Shape3D Multi<A> [DrawSource ImageAsset]<br>
+This module draws multiple 3D shapes selected from various presets.<br>
+Shape material controls include image mapping, shininess and various color properties.<br>
+Shape distortion can be added by using waveform distortion, Perlin noise, twisting and bending.<br>
+Many parameters have an optional end value (for example: width, widthEnd, widthEndIgnore) so that variations between multiple shapes can be created.<br>
+There are also mophable spread curves (e.g. sizeSpread, positionSpread) which define where the parameter values fall between their start and end values for each shape.</p>
+<p class="p1"><A href="TX_TXV Slide Show.html">TXV Slide Show<A> [DrawSource Renders]<br>
+This module creates a slide show, crossfading between images from a folder, with automatic or manual triggering.</p>
+<p class="p1"><A href="TX_TXV SVG.html">TXV SVG<A> [DrawSource SVGAsset]<br>
+This module opens and draws SVG (Scalable Vector Graphics) files.<br>
+Note: SVG assets are added directly to the TXV System module.</p>
+<p class="p1"><A href="TX_TXV Text3D.html">TXV Text3D<A> [DrawSource FontAsset]<br>
+This module draws 3D text using a chosen font.<br>
+Note: Font assets are added directly to the TXV System module.</p>
+<p class="p1"><A href="TX_TXV VideoCam.html">TXV VideoCam<A> [DrawSource]<br>
+This module draws an image taken from a video camera.</p>
+<p class="p1"><A href="TX_TXV Wave Terrain.html">TXV Wave Terrain<A> [DrawSource Renders]<br>
+This module generates an image based on a "wave terrain", a mathematically generated model of a landscape (seen from above) which is colored based on the height of the land.<br>
+The model uses up to 4 layers of mathematical functions (binary and unary processes) to create a terrain.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Image FX</i></b></p>
+<p class="p1"><A href="TX_TXV Blend.html">TXV Blend<A> [DrawSource Renders ImageAsset]<br>
+This module blends 2 images together using a chosen blend mode.</p>
+<p class="p1"><A href="TX_TXV Bloom.html">TXV Bloom<A> [DrawSource Renders ImageAsset]<br>
+This module adds "bloom" to an image which appears to make brighter parts of the image glow.</p>
+<p class="p1"><A href="TX_TXV Blur.html">TXV Blur<A> [DrawSource Renders ImageAsset]<br>
+This module blurs an image.</p>
+<p class="p1"><A href="TX_TXV Color Controls.html">TXV Color Controls<A> [DrawSource Renders ImageAsset]<br>
+This module adjusts the color of an image using controls for brightness, contrast, saturation & hue shift.</p>
+<p class="p1"><A href="TX_TXV Color Curves.html">TXV Color Curves<A> [DrawSource Renders ImageAsset]<br>
+This module adjusts the color of an image using editable curves for RGB (red/green/blue) or HSL (hue/saturation/luminosity) channels, with optional posterization (quantisation).</p>
+<p class="p1"><A href="TX_TXV Colorize.html">TXV Colorize<A> [DrawSource Renders ImageAsset]<br>
+This module adjusts the color of an image by using up to 4 "bands" to process the colour of selected pixels in the image.<br>
+A "band" is a group of pixels selected because they fall within a chosen range of values within a particular RGB/HSL channel.<br>
+The selected pixels can then be tinted and modified in various ways by channel using editable curves.</p>
+<p class="p1"><A href="TX_TXV Convolution.html">TXV Convolution<A> [DrawSource Renders ImageAsset]<br>
+This module modifies an image by convolving it with a kernel, which is a 3 X 3 convolution matrix.<br>
+There are various presets to blur, find edges, sharpen and emboss the image, or a custom kernel can be created by setting the 9 matrix values.</p>
+<p class="p1"><A href="TX_TXV FindEdges.html">TXV FindEdges<A> [DrawSource Renders ImageAsset]<br>
+This module finds edges within an image an draws them, either in white or in their original color.</p>
+<p class="p1"><A href="TX_TXV Glow.html">TXV Glow<A> [DrawSource Renders ImageAsset]<br>
+This module makes an image seem to glow.</p>
+<p class="p1"><A href="TX_TXV Kaleidoscope.html">TXV Kaleidoscope<A> [DrawSource Renders ImageAsset]<br>
+This module creates a kaleidoscope effect by taking a wedge-shaped piece of an image and repeating it around a circle.</p>
+<p class="p1"><A href="TX_TXV Levels.html">TXV Levels<A> [DrawSource Renders ImageAsset]<br>
+This module adjusts the color of an image by changing the levels of RGB channels, with optional posterization (quantisation).</p>
+<p class="p1"><A href="TX_TXV LumaKey.html">TXV LumaKey<A> [DrawSource Renders ImageAsset]<br>
+This module creates an image by replacing pixels from one image that are in a particular brightness range with pixels from another image.<br>
+If maskMode is active, it creates a monochrome mask from the chosen brightness range.</p>
+<p class="p1"><A href="TX_TXV LUT.html">TXV LUT<A> [DrawSource Renders ImageAsset CubeAsset]<br>
+This module processes an image, changing it's colors using a cube file as a color look-up table (LUT).<br>
+Note: Cube assets are added directly to the TXV System module.</p>
+<p class="p1"><A href="TX_TXV Pixelate.html">TXV Pixelate<A> [DrawSource Renders ImageAsset]<br>
+This module pixelates an image by breaking it up into single-colored squares or rectangles.</p>
+<p class="p1"><A href="TX_TXV SoftThreshold.html">TXV SoftThreshold<A> [DrawSource Renders ImageAsset]<br>
+This module processes an image to draw the original color where the brightness is above a certain threshold and black if it is below the threshold.<br>
+The softEdge adds a fade between the above and below threshold areas.<br>
+If maskMode is active, it will output a greyscale image showing white above the threshold and black below.</p>
+<p class="p1"><A href="TX_TXV Threshold.html">TXV Threshold<A> [DrawSource Renders ImageAsset]<br>
+This module processes an image to create a new image which is one color where the pixel brightness is above a certain threshold and another color if it is below the threshold.<br>
+The above and below colors, which are white and black by default, can be edited or sampled directly from the image.</p>
+<p class="p1"><A href="TX_TXV Tile & Mask.html">TXV Tile & Mask<A> [DrawSource ImageAsset]<br>
+This module renders an image (or part of it) with optional tiling and masking.<br>
+The image can be opened from a file or imported from another TXV image module.<br>
+Note: Image assets are added directly to the TXV System module.</p>
+<p class="p1"><A href="TX_TXV Wallpaper.html">TXV Wallpaper<A> [DrawSource Renders ImageAsset]<br>
+This module creates a wallpaper pattern by repeating a section taken from an image.<br>
+Wallpaper pattern presets use rotation and mirroring in different ways to generate square or hexagonal patterns.</p>
+<p class="p1"><A href="TX_TXV Wobble.html">TXV Wobble<A> [DrawSource Renders ImageAsset]<br>
+This module adds a wave-like wobble to an image in both horizontal and vertical directions.<br>
+By changing the phase, the waves will appear to move through the image.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw Destinations</i></b></p>
+<p class="p1"><A href="TX_TXV EnvMap.html">TXV EnvMap<A> [DrawSource DrawDestination Renders ImageAsset]<br>
+This module is a 3D Draw Destination which uses an image for "environment mapping", or "reflection mapping" to render an image.<br>
+Reflections are created using the environment image as the distant environment surrounding anything that is drawn to the module.</p>
+<p class="p1"><A href="TX_TXV Feedback.html">TXV Feedback<A> [DrawSource DrawDestination Renders]<br>
+This module is a Draw Destination which renders an image by drawing the previous frame behind the current one with optional shift, scale  and rotate.</p>
+<p class="p1"><A href="TX_TXV Fractal.html">TXV Fractal<A> [DrawSource DrawDestination]<br>
+This module is a Draw Destination which draws multiple transformed copies of what is drawn to it using a fractal branching  model.<br>
+Up to 10 branches can be used, each with up to 10 branching levels.<br>
+Each branch can draw a specific draw layer (from 20 layers) and add scaling, rotation and position offsets.</p>
+<p class="p1"><A href="TX_TXV Fractal3D.html">TXV Fractal3D<A> [DrawSource DrawDestination]<br>
+This module is a 3D Draw Destination which draws multiple transformed copies of what is drawn to it using a fractal branching  model.<br>
+Up to 10 branches can be used, each with up to 10 branching levels.<br>
+Each branch can draw a specific draw layer (from 20 layers) and add scaling, rotation and position offsets.</p>
+<p class="p1"><A href="TX_TXV FractalDelay.html">TXV FractalDelay<A> [DrawSource DrawDestination]<br>
+This module is a Draw Destination which draws multiple transformed copies of what is drawn to it using a fractal branching  model.<br>
+Up to 10 branches can be used, each with up to 10 branching levels.<br>
+Each branch can draw a specific draw layer (from 20 layers) and add scaling, rotation and position offsets.<br>
+Each branch level can have a delay, so that parameter changes (for example to scaling, rotation and position) can be delayed.</p>
+<p class="p1"><A href="TX_TXV FractalDelay3D.html">TXV FractalDelay3D<A> [DrawSource DrawDestination]<br>
+This module is a 3D Draw Destination which draws multiple transformed copies of what is drawn to it using a fractal branching  model.<br>
+Up to 10 branches can be used, each with up to 10 branching levels.<br>
+Each branch can draw a specific draw layer (from 20 layers) and add scaling, rotation and position offsets.<br>
+Each branch level can have a delay, so that parameter changes (for example to scaling, rotation and position) can be delayed.</p>
+<p class="p1"><A href="TX_TXV Render Image.html">TXV Render Image<A> [DrawSource DrawDestination Renders]<br>
+This module is a Draw Destination that renders an image from anything drawn to it.<br>
+It can also save individual images or video files from the rendered image.</p>
+<p class="p1"><A href="TX_TXV Scene.html">TXV Scene<A> [DrawSource DrawDestination]<br>
+This module is a 3D Draw Destination that renders an image from anything drawn to it.<br>
+3 lights and 2 cameras can be used to create the scene captured.</p>
+<p class="p1"><A href="TX_TXV Transform.html">TXV Transform<A> [DrawSource DrawDestination]<br>
+This module is a 2D Draw Destination that draws anything drawn to it after applying a "transform" which includes position shift, scale and rotate in any order.</p>
+<p class="p1"><A href="TX_TXV Transform3D.html">TXV Transform3D<A> [DrawSource DrawDestination]<br>
+This module is a 3D Draw Destination that draws anything drawn to it after applying a 3D "transform" which includes position shift, scale and rotate in any order.</p>
+<p class="p1"><A href="TX_TXV Transf3D Delay.html">TXV Transf3D Delay<A> [DrawSource DrawDestination]<br>
+This module is a 3D Draw Destination that draws multiple delayed copies of anything drawn to it after applying a 3D "transform" to each copy, which includes position shift, scale and rotate in any order.
+<p class="p1"><A href="TX_TXV Transf3D Multi.html">TXV Transf3D Multi<A> [DrawSource DrawDestination]<br>
+This module is a 3D Draw Destination that draws multiple  copies of anything drawn to it after applying a 3D "transform" to each copy, which includes position shift, scale and rotate in any order.
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Sources</i></b></p>
+<p class="p1"><A href="TX_TXV Color Sampler.html">TXV Color Sampler<A> [ModulationSource ImageAsset]<br>
+This module reads the color of 4 sample positions from an image, and outputs separate modulation signals for each R/G/B/H/S/B/A color channel.</p>
+<p class="p1"><A href="TX_TXV LFO.html">TXV LFO<A> [ModulationSource]<br>
+This module is a "Low Frequency Oscillator" (LFO) which outputs a modulation signal from a preset or custom waveform curve.</p>
+<p class="p1"><A href="TX_TXV LFO 2D.html">TXV LFO 2D<A> [ModulationSource]<br>
+This module is a 2D "Low Frequency Oscillator" (LFO) which outputs 2 modulation signals based on a preset waveform or custom  curves.</p>
+<p class="p1"><A href="TX_TXV LFO 3D.html">TXV LFO 3D<A> [ModulationSource]<br>
+This module is a 3D "Low Frequency Oscillator" (LFO) which outputs 3 modulation signals based on a preset waveform or custom  curves.</p>
+<p class="p1"><A href="TX_TXV OSC ControlIn.html">TXV OSC ControlIn<A> [ModulationSource]<br>
+This module listens for Open Sound Control (OSC) network messages sent to a particular OSC address.<br>
+If the first message argument is a number (float or integer), it will be normalised (mapped from the range inputMin:inputMax to the range 0:1) and output as a modulation signal.</p>
+<p class="p1"><A href="TX_TXV OSC ControlIn2D.html">TXV OSC ControlIn2D<A> [ModulationSource]<br>
+This module listens for Open Sound Control (OSC) network messages sent to a particular OSC address.<br>
+If the first 2 message arguments are numbers (float or integer), they will be normalised (mapped from the range inputMin:inputMax to the range 0:1) and output as 2 modulation signals.</p>
+<p class="p1"><A href="TX_TXV OSC ControlIn3D.html">TXV OSC ControlIn3D<A> [ModulationSource]<br>
+This module listens for Open Sound Control (OSC) network messages sent to a particular OSC address.<br>
+If the first 3 message arguments are numbers (float or integer), they will be normalised (mapped from the range inputMin:inputMax to the range 0:1) and output as 3 modulation signals.</p>
+<p class="p1"><A href="TX_TXV Perlin.html">TXV Perlin<A> [ModulationSource]<br>
+This module outputs Perlin noise (a kind of smoothed random noise) as a modulation signal.</p>
+<p class="p1"><A href="TX_TXV Sample & Hold.html">TXV Sample & Hold<A> [ModulationSource]<br>
+This module outputs the inputValue as a modulation signal, but when hold is switched on, it will lock the current value of the output until hold is switched off again.</p>
+<p class="p1"><A href="TX_TXV Smooth.html">TXV Smooth<A> [ModulationSource]<br>
+This module outputs a smoothed signal. By modulating the targetValue with an input signal, the output will be a smoothed version of the input.</p>
+<p class="p1"><A href="TX_TXV SmoothMulti.html">TXV SmoothMulti<A> [ModulationSource]<br>
+This module outputs 12 smoothed signals. By modulating the targetValues with input signals, the outputs will be smoothed versions of the inputs.</p>
+<p class="p1"><A href="TX_TXV Step Seq.html">TXV Step Seq<A> [ModulationSource]<br>
+This module outputs a modulation signal by playing a sequence of value steps with variable step times and optional smoothing between the steps.<br>
+It can behave like an LFO by looping continuously through all steps, or it can behave like a triggered envelope (gated or fixed-length) by playing through the steps once.</p>
+<p class="p1"><A href="TX_TXV Toggle.html">TXV Toggle<A> [ModulationSource]<br>
+This module outputs a switched modulation signal which is either 0 or 1.<br>
+When the input value passes the trigger threshold, the output will toggle to it's opposite value - 0 becomes 1,  or 1 becomes 0.</p>
+<p class="p1"><A href="TX_TXV Warp.html">TXV Warp<A> [ModulationSource]<br>
+This module is for "mapping" or changing the behaviour of a modulation signal.<br>
+The input value is mapped using a preset or custom transfer curve, with optional quantization.</p>
+<p class="p1"><A href="TX_TXV WarpMorph.html">TXV WarpMorph<A> [ModulationSource]<br>
+This module is for "mapping" or changing the behaviour of a modulation signal.<br>
+The input value is mapped using a morph between 2 preset or custom transfer curves, with optional quantization.</p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+<p class="p1"><br></p>
+</body>
+</html>

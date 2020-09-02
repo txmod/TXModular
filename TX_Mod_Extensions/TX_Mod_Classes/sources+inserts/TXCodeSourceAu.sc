@@ -78,7 +78,7 @@ TXCodeSourceAu : TXModuleBase {
 			["TXMinMaxSliderSplit", "Modify 2", \unipolar, "change2", "change2Min", "change2Max"],
 			["TXMinMaxSliderSplit", "Modify 3", \unipolar, "change3", "change3Min", "change3Max"],
 			["TXMinMaxSliderSplit", "Modify 4", \unipolar, "change4", "change4Min", "change4Max"],
-			["TextViewDisplay", "Coding Notes: Enter Supercollider 3 code in the window below. The code needs to be a function which returns a stereo audio signal. The function will be passed the arguments: Modify 1, Modify 2, Modify 3, Modify 4.  Use the 'Store & compile code' button after editing the code.", 750, 48, "Notes"],
+			["TextViewDisplay", "Coding Notes: Enter Supercollider 3 code in the window below. The code needs to be a function which returns a mono audio signal. The function will be passed the arguments: Modify 1, Modify 2, Modify 3, Modify 4.  Use the 'Store & compile code' button after editing the code.", 750, 48, "Notes"],
 			["TextViewCompile", {userFunctionString}, {arg argText; this.evaluate(argText);}, 730, 246, "Store & compile code"],
 			["TXStaticText", "Status", {userFuncCompileStatus}, {arg view; userFuncCompileStatusView = view.textView}, 400, 50],
 		];

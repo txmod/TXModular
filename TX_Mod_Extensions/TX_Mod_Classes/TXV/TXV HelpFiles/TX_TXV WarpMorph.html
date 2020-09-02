@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV WarpMorph</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: ModulationSource</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module is for "mapping" or changing the behaviour of a modulation signal.</p>
+<p class="p1">The input value is mapped using a morph between 2 preset or custom transfer curves, with optional quantization.</p>
+<p class="p1">The horizontal (left-right) axis of the curve represents the range of values of the input signal (based on the input range).</p>
+<p class="p1">The vertical (up-down) axis of the curve represents the range of values of the output signal (based on the output range).</p>
+<p class="p1">The default curve is a linear curve which will have no effect on the input.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Main Button</i></b></p>
+<p class="p1"><b>inputValue</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>warpType</b> - index with modulation (def: 0, range: 0 : 15) options: <b> [0]</b>_Linear, <b> [1]</b>_Exponential, <b> [2]</b>_Minus Exponential, <b> [3]</b>_Curve 5, <b> [4]</b>_Curve 4, <b> [5]</b>_Curve 3, <b> [6]</b>_Curve 2, <b> [7]</b>_Curve Minus 2, <b> [8]</b>_Curve Minus 3, <b> [9]</b>_Curve Minus 4, <b> [10]</b>_Curve Minus 5, <b> [11]</b>_Phase Shift 90, <b> [12]</b>_Phase Shift 180, <b> [13]</b>_Phase Shift 270, <b> [14]</b>_Custom Curve 1, <b> [15]</b>_Custom Curve 2. </p>
+<p class="p1"><b>warpType2</b> - index with modulation (def: 0, range: 0 : 15) options: <b> [0]</b>_Linear, <b> [1]</b>_Exponential, <b> [2]</b>_Minus Exponential, <b> [3]</b>_Curve 5, <b> [4]</b>_Curve 4, <b> [5]</b>_Curve 3, <b> [6]</b>_Curve 2, <b> [7]</b>_Curve Minus 2, <b> [8]</b>_Curve Minus 3, <b> [9]</b>_Curve Minus 4, <b> [10]</b>_Curve Minus 5, <b> [11]</b>_Phase Shift 90, <b> [12]</b>_Phase Shift 180, <b> [13]</b>_Phase Shift 270, <b> [14]</b>_Custom Curve 1, <b> [15]</b>_Custom Curve 2. </p>
+<p class="p1"><b>warpTypeMorph</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>inputMin</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>inputMax</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>outputMin</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>outputMax</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Quantize Button</i></b></p>
+<p class="p1"><b>useQuantize</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>quantizeSteps</b> - integer with modulation (def: 4, range: 2 : 128). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Custom Curves Button</i></b></p>
+<p class="p1"><b>customCurve</b> - drawable curve (size: 256 points). </p>
+<p class="p1"><b>customCurve2</b> - drawable curve (size: 256 points). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Outputs:</i></b></p>
+<p class="p1"><b>out</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>inputValue</b></p>
+<p class="p1"><b>warpType</b></p>
+<p class="p1"><b>warpType2</b></p>
+<p class="p1"><b>warpTypeMorph</b></p>
+<p class="p1"><b>inputMin</b></p>
+<p class="p1"><b>inputMax</b></p>
+<p class="p1"><b>outputMin</b></p>
+<p class="p1"><b>outputMax</b></p>
+<p class="p1"><b>useQuantize</b></p>
+<p class="p1"><b>quantizeSteps</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1">Copyright (C) 2020 Paul Miller. This file is part of TX Modular system distributed under the terms of the GNU General Public License (see file LICENSE).</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Points Curve Editor</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">Points curves are curves that are created by connecting a series of points together. Different curve types are available (see below).</p>
+<p class="p1">Modules that use points curves include: <b>TXV Curves</b> and <b>TXV Delay Curves</b>.</p>
+<p class="p1">The Points Curve Editor allows you to edit point curves in various ways: by moving individual points, by drawing each point in turn, or by shifting, scaling or rotating the whole curve.</p>
+<p class="p1">The editor can be opened from the Tool Windows popup on the main window, or from inside a module which uses points curves. The curve from the module can be automatically copied into the Points Curve Editor window.</p>
+<p class="p1">After editing in the Points Curve Editor, curves can be dragged back to the TX Module using the yellow “drag &amp; drop curve” box.</p>
+<p class="p1"><b>Keyboard shortcuts</b> - editing mode options can be set using single key shortcuts as follows:<br>
+<b>e - edit points</b><br>
+<b>d - draw points in seq</b><br>
+<b>m - move all points</b><br>
+<b>x - x-zoom all points</b><br>
+<b>y - y-zoom all points</b><br>
+<b>z - zoom all points</b><br>
+<b>r - rotate all points</b><br>
+<b>g - show / hide grid</b><br>
+<b>p - show / hide points</b><br>
+<b>n - show / hide point names</b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><b>Preset controls </b> - to name, save, load and delete presets. There are no presets to begin with, but if you save any, they are stored on disk and will be available the next time you open TX Modular. (Presets can be useful for keeping temporary versions of curves - so you can go back to a previous version if you don't want to keep any changes you've made.)</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Curve Type</b> - Different types of curves are available. <br>
+- To see examples of all the curve types, select the image <b>"Points Editor 2.png"</b> [in the box on the right].<br>
+- All types of curve use from 2 to 8 draw points. The curve is created by connecting all the draw points, which are shown as blue boxes.<br>
+- All curves - apart from Straight Line - use extra points called control points which are shown as green boxes. The curve isn't drawn through the control points, but they are used to change the curvature of the curve as it goes through each draw point. (An easy way to understand what control points do is to edit a Bezier curve and drag around the green control points.).<br>
+- The different curve types are:<br>
+<b><i>Auto Curve</i></b> - This connects the draw points together using with a smooth curve. There are 2 optional control points that can be used to shape the start and end of the curve.<br>
+<b><i>Straight Line</i></b> - This simply connects all the draw points together with straight lines. No control points are used.<br>
+<b><i>Bezier - Control P1</i></b> - This draws a Bezier curve through all the points using a single control point between each pair of draw points. The control point affects the curvature of the pair of draw points in the same way.<br>
+<b><i>Bezier - Control P1 smoothed</i></b> - This draws a Bezier curve through all the points using a single control point between each pair of draw points. The curve is smoothed at each draw point - by adding an extra hidden symmetrical control point - so that there are no kinks in the curve.<br>
+<b><i>Bezier - Control P1 + P2</i></b> - This draws a Bezier curve through all the points using two control points between each pair of draw points.</p>
+<p class="p1"><b>No. Points</b> - the number of draw points in the curve.</p>
+<p class="p1"><b>Auto Close</b> - If this is switched on, a straight line is drawn between the first and last draw point.</p>
+<p class="p1"><b>Use first draw point for AC Start</b> - This control will only appear if the the curve type is Auto Curve.<br>
+If it is switched off, a control point called "acstart" will be shown, which changes the curvature around the first draw point.</p>
+<p class="p1"><b>Use last draw point for AC End</b> - This control will only appear if the the curve type is Auto Curve.<br>
+If it is switched off, a control point called "acend" will be shown, which changes the curvature around the last draw point.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Grid rows, columns & presets</b> - settings for the grid shown behind the curve if the "show grid" switch is on.</p>
+<p class="p1"><b>drop background PNG image file</b> - to add an image to be shown behind the curve. This can be used, for example, for copying the outline of a shape in the image with a points curve.</p>
+<p class="p1"><b>Remove background image</b> - button to remove the image.</p>
+<p class="p1"><b>Print list of points</b> - this prints a list of points and their X & Y coordinates to the SuperCollider post window.</p>
+<p class="p1"><br></p>
+<p class="p1"><b>Curve controls</b> - the lower section of the window is for editing the curve. Most of the controls are self-explanatory - a few need clarifying:</p>
+<p class="p1"><b>Curve Edit Mode</b> - options are: <b><i>e - edit points, d - draw points in seq, m - move all points, x - x-zoom all points, y - y-zoom all points, z - zoom all points, r - rotate all points. </i></b></p>
+<p class="p1"><b>undo / redo</b> - A history of recent edits is kept.</p>
+<p class="p1"><b>lock end to start</b> - This switch forces the last draw point to be at the same position as the first draw point. Then if you drag one point, both will move together.</p>
+<p class="p1"><b>quantise</b> controls adjust the x/y position of all draw and control points:<br>
+<b>auto quantise X, Y</b> & <b>quantise X, Y</b> move them to the nearest grid crossing point.<br>
+<b>quantise X</b> moves them to the nearest grid column.<br>
+<b>quantise Y</b> moves them to the nearest grid row.</p>
+<p class="p1"><b>realign control points</b> - this button will move all control points so they lie on a straight line between each pair of draw points. The effect of this is to straighten the curve between all draw points.</p>
+<p class="p1"><br></p>
+</body>
+</html>

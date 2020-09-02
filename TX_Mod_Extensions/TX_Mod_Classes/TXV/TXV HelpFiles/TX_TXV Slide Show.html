@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Slide Show</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource Renders</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module creates a slide show, crossfading between images from a folder, with automatic or manual triggering.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Source & X-fade Button</i></b></p>
+<p class="p1"><b>sourceImageScaleMode</b> - index with modulation (def: 1, range: 0 : 2) options: <b> [0]</b>_scale to fit, <b> [1]</b>_scale & crop to fill, <b> [2]</b>_stretch to fill. </p>
+<p class="p1"><b>folderName</b> - Text. </p>
+<p class="p1"><b>randomiseOrder</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>xFadeType</b> - index with modulation (def: 23, range: 0 : 23) options: <b> [0]</b>_Cubic In, <b> [1]</b>_Cubic Out, <b> [2]</b>_Cubic In & Out, <b> [3]</b>_Elastic In, <b> [4]</b>_Elastic Out, <b> [5]</b>_Elastic In & Out, <b> [6]</b>_Exponential In, <b> [7]</b>_Exponential Out, <b> [8]</b>_Exponential In & Out, <b> [9]</b>_Linear In (default), <b> [10]</b>_Linear Out, <b> [11]</b>_Linear In & Out, <b> [12]</b>_Quadratic In, <b> [13]</b>_Quadratic Out, <b> [14]</b>_Quadratic In & Out, <b> [15]</b>_Quartic In, <b> [16]</b>_Quartic Out, <b> [17]</b>_Quartic In & Out, <b> [18]</b>_Quintic In, <b> [19]</b>_Quintic Out, <b> [20]</b>_Quintic In & Out, <b> [21]</b>_Sine In, <b> [22]</b>_Sine Out, <b> [23]</b>_Sine In & Out. </p>
+<p class="p1"><b>runSlideShow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>pauseSlideShow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>triggerXFadeForwards</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>triggerXFadeBackwards</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>triggerXFadeToRandom</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>jumpToFirstImage</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>jumpToNextImage</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>jumpToPreviousImage</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>jumpToRandomImage</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Times Button</i></b></p>
+<p class="p1"><b>xFadeTimeFixed</b> - float with modulation (def: 3, range: 0.1 : 1000). </p>
+<p class="p1"><b>xFadeTimeRandom</b> - float with modulation (def: 0, range: 0 : 1000). </p>
+<p class="p1"><b>holdTimeFixed</b> - float with modulation (def: 3, range: 0.1 : 1000). </p>
+<p class="p1"><b>holdTimeRandom</b> - float with modulation (def: 0, range: 0 : 1000). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Clear Button</i></b></p>
+<p class="p1"><b>clearBeforeRender</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>clearNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>clearColorHue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>clearColorSaturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>clearColorBrightness</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>clearColorAlpha</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>clearColorHSBAsRGB</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Clear & Render :: Render Button</i></b></p>
+<p class="p1"><b>renderContinuosly</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>renderNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><b>renderWidthHeightRule</b> - index (def: 0, range: 0 : 6) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size, <b> [6]</b>_Use Source Image Size. </p>
+<p class="p1"><b>renderCustomWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>renderCustomHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Active, Size, Alpha Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxDepth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>drawAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawWidth</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawHeight</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Scale Button</i></b></p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Position, Anchor, Rotate Button</i></b></p>
+<p class="p1"><b>drawPosX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>drawPosY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>rotate</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>sourceImageScaleMode</b></p>
+<p class="p1"><b>renderContinuosly</b></p>
+<p class="p1"><b>renderNow</b></p>
+<p class="p1"><b>clearBeforeRender</b></p>
+<p class="p1"><b>clearNow</b></p>
+<p class="p1"><b>clearColorHue</b></p>
+<p class="p1"><b>clearColorSaturation</b></p>
+<p class="p1"><b>clearColorBrightness</b></p>
+<p class="p1"><b>clearColorAlpha</b></p>
+<p class="p1"><b>randomiseOrder</b></p>
+<p class="p1"><b>xFadeType</b></p>
+<p class="p1"><b>xFadeTimeFixed</b></p>
+<p class="p1"><b>xFadeTimeRandom</b></p>
+<p class="p1"><b>holdTimeFixed</b></p>
+<p class="p1"><b>holdTimeRandom</b></p>
+<p class="p1"><b>runSlideShow</b></p>
+<p class="p1"><b>pauseSlideShow</b></p>
+<p class="p1"><b>triggerXFadeForwards</b></p>
+<p class="p1"><b>triggerXFadeBackwards</b></p>
+<p class="p1"><b>triggerXFadeToRandom</b></p>
+<p class="p1"><b>jumpToFirstImage</b></p>
+<p class="p1"><b>jumpToNextImage</b></p>
+<p class="p1"><b>jumpToPreviousImage</b></p>
+<p class="p1"><b>jumpToRandomImage</b></p>
+<p class="p1"><b>drawAlpha</b></p>
+<p class="p1"><b>drawPosX</b></p>
+<p class="p1"><b>drawPosY</b></p>
+<p class="p1"><b>drawWidth</b></p>
+<p class="p1"><b>drawHeight</b></p>
+<p class="p1"><b>anchorX</b></p>
+<p class="p1"><b>anchorY</b></p>
+<p class="p1"><b>rotate</b></p>
+<p class="p1"><b>rotateMultiply</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

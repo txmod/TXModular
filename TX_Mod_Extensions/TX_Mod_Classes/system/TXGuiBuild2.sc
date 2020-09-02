@@ -74,6 +74,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// SeqStepNoTxt
 	// SeqSyncStartCheckBox
 	// SeqSyncStopCheckBox
+	// ShiftDecorator
 	// Spacer
 	// SpacerLine
 	// SynthOptionCheckBox
@@ -241,6 +242,15 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	*guiNextLine { arg item, w;
 		this.nextline(w);
 		if (item.at(1).notNil, {item.at(1).value;});
+	}
+
+	// ShiftDecorator
+	// arguments- index1 is shiftHorizontal, index2 is shiftVertical
+	// e.g. ["ShiftDecorator", 10, 30],
+	*guiShiftDecorator { arg item, w;
+		classData.holdVal = item.at(1) ? 0;
+		classData.holdVal2 = item.at(2) ? 0;
+		classData.win.asView.decorator.shift(classData.holdVal, classData.holdVal2);
 	}
 
 	// Spacer	 - defaults to width 40 if item.at(1) is nil
@@ -610,9 +620,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// ActionButton
 	// arguments- index1 is button text, index2 is action function, index3 is optional width
 	// index4 is optional text color, index5 is optional background color,
+	// index6 is optional height (default 20)
 	// e.g. ["ActionButton", "Start", {this.startSequencer}, 100]
 	*guiActionButton { arg item, w;
-		Button(w, item.at(3) ? 80 @ 20)
+		Button(w, item.at(3) ? 80 @ (item.at(6) ? 20))
 		.states_([
 			[item.at(1), item.at(4) ? TXColor.white, item.at(5) ? TXColor.sysGuiCol1]
 		])
@@ -1932,6 +1943,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	// arguments- index1 is row label, index2 is synth arg name to be updated,
 	// 	index3 is an optional ACTION function to be valued in views action,
 	// 	index4 is optional text width, index5 is optional label width
+	// index6 is optional function to be valued with view as argument (e.g. for storing view to variable in module),
 	// e.g. ["TXTextBox", "Text", "textString"]
 	*guiTXTextBox { arg item, w;
 		var holdWidth;
@@ -1950,6 +1962,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			argModule.getSynthArgSpec(item.at(2)),
 			false, item.at(5) ? 80, item.at(4)
 		);
+		// value function
+		if (item.at(6).notNil, {
+			item.at(6).value(classData.holdView);
+		});
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		if (classData.holdView.labelView.notNil, {
 			classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
@@ -2083,6 +2099,7 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 	//	index3 is synth arg name to be updated, index4 is optional popup action,
 	// index5 is the optional width,
 	// index6 is the optional label width,
+	// index7 is optional function to be valued with view as argument (e.g. for storing view to variable in module),
 	// e.g. ["TXPopupActionPlusMinus", "Sample", holdSampleFileNames, "sampleNo", { arg view; this.loadSample(view.value); }]
 	*guiTXPopupActionPlusMinus { arg item, w;
 		// TXPopup.new  arg argParent, dimensions, label, items, action, initVal,
@@ -2102,6 +2119,10 @@ TXGuiBuild2 {		// Gui builder for modules - called by TXModuleBase:baseOpenGui
 			false,
 			item.at(6) ? 80
 		);
+		// value function
+		if (item.at(7).notNil, {
+			item.at(7).value(classData.holdView);
+		});
 		argModule.arrControls = argModule.arrControls.add(classData.holdView);
 		classData.holdView.labelView.stringColor_(TXColor.sysGuiCol1).background_(TXColor.white);
 		classData.holdView.popupMenuView.stringColor_(TXColor.black).background_(TXColor.white);

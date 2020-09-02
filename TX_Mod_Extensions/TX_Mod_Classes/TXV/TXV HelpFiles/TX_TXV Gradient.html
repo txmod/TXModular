@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Gradient</b></p>
+<p class="p1">  </p>
+<p class="p1">Properties: DrawSource Renders</p>
+<p class="p1">  </p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction:</i></b></p>
+<p class="p1">This module generates an image with a gradient - a crossfade between 2-4 colours.</p>
+<p class="p1">The gradient can be horizontal, vertical or radial, stretched between 2 movable points.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Controls:</i></b></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Gradient Button</i></b></p>
+<p class="p1"><b>gradientType</b> - index with modulation (def: 0, range: 0 : 2) options: <b> [0]</b>_horizontal, <b> [1]</b>_vertical, <b> [2]</b>_radial. </p>
+<p class="p1"><b>numColors</b> - integer with modulation (def: 2, range: 2 : 4). </p>
+<p class="p1"><b>curveBias</b> - float with modulation (def: 0, range: -10 : 10). </p>
+<p class="p1"><b>invert</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Points Button</i></b></p>
+<p class="p1"><b>point1X</b> - float with modulation (def: 0, range: -10 : 10). </p>
+<p class="p1"><b>point1Y</b> - float with modulation (def: 0, range: -10 : 10). </p>
+<p class="p1"><b>point2X</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>point2Y</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Colors :: Color 1 Button</i></b></p>
+<p class="p1"><b>color1Hue</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>color1HueRotate</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>color1Saturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>color1Brightness</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>color1Alpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>color1HSBAsRGB</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Colors :: Color 2 Button</i></b></p>
+<p class="p1"><b>color2Hue</b> - float with modulation (def: 0.25, range: 0 : 1). </p>
+<p class="p1"><b>color2HueRotate</b> - float with modulation (def: 0.0, range: 0 : 1). </p>
+<p class="p1"><b>color2Saturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>color2Brightness</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>color2Alpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>color2HSBAsRGB</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Colors :: Color 3 Button</i></b></p>
+<p class="p1"><b>color3Hue</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>color3HueRotate</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>color3Saturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>color3Brightness</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>color3Alpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>color3HSBAsRGB</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Colors :: Color 4 Button</i></b></p>
+<p class="p1"><b>color4Hue</b> - float with modulation (def: 0.75, range: 0 : 1). </p>
+<p class="p1"><b>color4HueRotate</b> - float with modulation (def: 0, range: 0 : 1). </p>
+<p class="p1"><b>color4Saturation</b> - float with modulation (def: 0.6, range: 0 : 1). </p>
+<p class="p1"><b>color4Brightness</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>color4Alpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>color4HSBAsRGB</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Render Button</i></b></p>
+<p class="p1"><b>renderContinuosly</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>renderNow</b> - switch with modulation (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Active, Size, Alpha Button</i></b></p>
+<p class="p1"><b>drawActive</b> - switch with modulation (def: 1). </p>
+<p class="p1"><b>maxWidthHeightRule</b> - index (def: 0, range: 0 : 5) options: <b> [0]</b>_Use Screen Width & Height, <b> [1]</b>_Square - Use Max of Screen Width & Height, <b> [2]</b>_Square - Use Min of Screen Width & Height, <b> [3]</b>_Square - Use Screen Width, <b> [4]</b>_Square - Use Screen Height, <b> [5]</b>_Use Custom Size. </p>
+<p class="p1"><b>customMaxWidth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxHeight</b> - integer (def: 768, range: 1 : 4096). </p>
+<p class="p1"><b>customMaxDepth</b> - integer (def: 1024, range: 1 : 4096). </p>
+<p class="p1"><b>drawAlpha</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawWidth</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><b>drawHeight</b> - float with modulation (def: 1, range: 0 : 1). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Scale Button</i></b></p>
+<p class="p1"><b>scaleX</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>scaleY</b> - float with modulation (def: 1, range: -10 : 10). </p>
+<p class="p1"><b>useScaleXForScaleY</b> - switch (def: 0). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Draw :: Position, Anchor, Rotate Button</i></b></p>
+<p class="p1"><b>drawPosX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>drawPosY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorX</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>anchorY</b> - float with modulation (def: 0.5, range: 0 : 1). </p>
+<p class="p1"><b>rotate</b> - float with modulation (def: 0, range: -360 : 360). </p>
+<p class="p1"><b>rotateMultiply</b> - float with modulation (def: 1, range: 0 : 10). </p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modulation Inputs:</i></b></p>
+<p class="p1"><b>drawActive</b></p>
+<p class="p1"><b>renderContinuosly</b></p>
+<p class="p1"><b>renderNow</b></p>
+<p class="p1"><b>gradientType</b></p>
+<p class="p1"><b>numColors</b></p>
+<p class="p1"><b>curveBias</b></p>
+<p class="p1"><b>invert</b></p>
+<p class="p1"><b>point1X</b></p>
+<p class="p1"><b>point1Y</b></p>
+<p class="p1"><b>point2X</b></p>
+<p class="p1"><b>point2Y</b></p>
+<p class="p1"><b>color1Hue</b></p>
+<p class="p1"><b>color1HueRotate</b></p>
+<p class="p1"><b>color1Saturation</b></p>
+<p class="p1"><b>color1Brightness</b></p>
+<p class="p1"><b>color1Alpha</b></p>
+<p class="p1"><b>color1HSBAsRGB</b></p>
+<p class="p1"><b>color2Hue</b></p>
+<p class="p1"><b>color2HueRotate</b></p>
+<p class="p1"><b>color2Saturation</b></p>
+<p class="p1"><b>color2Brightness</b></p>
+<p class="p1"><b>color2Alpha</b></p>
+<p class="p1"><b>color2HSBAsRGB</b></p>
+<p class="p1"><b>color3Hue</b></p>
+<p class="p1"><b>color3HueRotate</b></p>
+<p class="p1"><b>color3Saturation</b></p>
+<p class="p1"><b>color3Brightness</b></p>
+<p class="p1"><b>color3Alpha</b></p>
+<p class="p1"><b>color3HSBAsRGB</b></p>
+<p class="p1"><b>color4Hue</b></p>
+<p class="p1"><b>color4HueRotate</b></p>
+<p class="p1"><b>color4Saturation</b></p>
+<p class="p1"><b>color4Brightness</b></p>
+<p class="p1"><b>color4Alpha</b></p>
+<p class="p1"><b>color4HSBAsRGB</b></p>
+<p class="p1"><b>drawAlpha</b></p>
+<p class="p1"><b>drawPosX</b></p>
+<p class="p1"><b>drawPosY</b></p>
+<p class="p1"><b>drawWidth</b></p>
+<p class="p1"><b>drawHeight</b></p>
+<p class="p1"><b>anchorX</b></p>
+<p class="p1"><b>anchorY</b></p>
+<p class="p1"><b>rotate</b></p>
+<p class="p1"><b>rotateMultiply</b></p>
+<p class="p1"><b>scaleX</b></p>
+<p class="p1"><b>scaleY</b></p>
+<p class="p1"><br></p>
+</body>
+</html>

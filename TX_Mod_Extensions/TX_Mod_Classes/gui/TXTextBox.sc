@@ -33,5 +33,11 @@ TXTextBox {
 			textView.string = string;
 		};
 	}
+	value {^string}
+	value_ { arg argString; textView.string = string = argString;}
+	valueAction_ { arg argString;
+		textView.string = string = argString;
+		action.value(this);
+	}
 	string_ { arg argString; textView.string = string = argString;}
 }

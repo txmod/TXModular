@@ -2275,6 +2275,7 @@ TXFrontScreenGuiProperties {	// Front Screen gui
 								holdModule.arrActionSpecs.at(actionPopup.value).arrControlSpecFuncs.at(0);
 								val1NumberBox = NumberBox(propertiesBox, Rect(0, 0, 60, 20))
 								.scroll_(false)
+								.maxDecimals_(4)
 								.action_({arg view;
 									view.value = holdControlSpec1.value.constrain(view.value);
 									holdArrActions.at(i).put(2, view.value);

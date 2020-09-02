@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Ex 6 3D Environment Map</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">This help file uses an example file “Ex_6_3D_Environment_Map” found in the folder "TXV_Examples".</p>
+<p class="p1">Please open the example in the TX Modular system.</p>
+<p class="p1">In order to start the TXV software, you can use the “Start TXV” button if you are using the standalone TX Modular (for MacOS) which includes TXV inside it. If you are using another platform, you will need to have a TXV build ready for your platform and open it separately.</p>
+<p class="p1">Once TXV has been started, press the button “Rebuild TXV System” which will send all the data from the TX Modular to TXV.</p>
+<p class="p1">You should then see a blue-tinted image with mist blowing in the background, a rippled sea with moving waves at the bottom, and pointed cones falling out of the sky into the sea.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Overview</i></b></p>
+<p class="p1">This example has been built using various 3D shapes that have been drawn to a TXV EnvMap module, which uses an image for "environment mapping", or "reflection mapping" to render an image. Reflections are created using the environment image as the distant environment surrounding anything that is drawn to the module.</p>
+<p class="p1">A TXV Generator module is used to create the image used for environment mapping.</p>
+<p class="p1">The falling cones are created using a Particles3D module.</p>
+<p class="p1">As with previous examples, LFOs have been used to create movement using modulation. A Perlin module (a type of smoothed random noise) is also used.</p>
+<p class="p1"><br></p>
+<p class="p1">On the Interface, there are different widgets which you can use to change various module parameters:</p>
+<p class="p1">As before there is a Master BPM to control the speed of all the LFOs.</p>
+<p class="p1">For the EnvMap module, you can change the lightEffectMix which controls how dark shaded areas are on shapes in relation to a single light position. You can also control the baseEnvColorMix which mixes between a global base color, which is yellow in this example, and the environment color created by reflections from the environment image.</p>
+<p class="p1">Below that are controls for the Generator module that is used to produce the environment image. A few Generator presets can be selected between.</p>
+<p class="p1">Finally, there is a gravity slider for the falling cones.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Modules And Connections</i></b></p>
+<p class="p1">If you click on the button “Modules + Channels”, you can see in the left-hand column all the modules used.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV System [1]” and click on the “Draw Connections” button, you can see how the shapes are drawn to Transform3D modules and then to the TXV EnvMap, which is then drawn to the main system.</p>
+<p class="p1">In this example, all the shapes are drawn to Layer 1 of the EnvMap. This is because when working in 3D, a process called “Depth Testing” is used which ignores the layer order and instead looks at every part of everything that is drawn to scene. It checks whether each one is in front of or behind the others, and it only draws the ones at the front.</p>
+<p class="p1">If you click on the “Modulation Nodes” button, you can see how the various LFOs and Perlin create movement of the shapes as well as rotating the environment image.</p>
+<p class="p1">If you click on the “Assets” button, and below that the “Image” button, you can add you own image assets to the system. You can then use these in the EnvMap module.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV EnvMap [1], you can choose one of your images as “envMapImageAsset”. You also need to turn off “useExternalEnvMapImage” so the Generator image is no longer used.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV Shape 3D [1]”, you can see how the sea plane is created by taking a flat plane and adding wave distortion which is then modulated to create constant movement.</p>
+<p class="p1">If you click on the “Shape” button and below that the “Type” button, you can see the shape is set to Plane.</p>
+<p class="p1">If you click on the “Wave Distort” button and below that the “Active & Distort 1” button, you can see that “waveDistortActive” is on.</p>
+<p class="p1">Then if you look at “waveDistort1Waveform” it is set to Wave 1.</p>
+<p class="p1">Then using buttons Distort 2/3/4, you’ll see that Distort 2 uses Wave 1 as well, and Distort 3 & 4 use Wave 2.</p>
+<p class="p1">If you click on the “Waves & Perlins” button and below that the “Wave 1” button, you can see that “wave1Type is set to “Custom Curve”, “wave1Freq” is set to 2.17. Wave 1 adds the uneven ripples to the surface of the sea. Try changing “wave1Freq”.</p>
+<p class="p1">“wave1CustomCurve” is set to an undulating wave form that is 2 sine wave cycles that have been stretched and squashed a bit to create unevenness.</p>
+<p class="p1">If you click on the “Wave 2” button, you can see that it is sine wave with “wave2Freq” set to 1.3. Wave 2 creates the strong widely-spaced waves that lift the sea up and down. Again try changing “wave2Freq”.</p>
+<p class="p1"><br></p>
+<p class="p1">TXV Shape 3D [2] is the background panel which is a flat plane.</p>
+<p class="p1">TXV Transform 3D [1] is used to scale and rotate the sea plane.</p>
+<p class="p1">TXV Transform 3D [2] is used to scale the falling cones made by Particles 3D.</p>
+<p class="p1"><br></p>
+<p class="p1">TXV Particles 3D [1] is the group of falling cones. Each shape is created by taking a long rounded cone and adding Bend to distort it slightly. Gravity is used to move the cones downwards, as if they are falling into the sea.</p>
+<p class="p1">If you click on the “Triggering” button and below that the “Options” button, you can see triggerContinuously is set on, and numParticlesPerTrigger is set to 6. This means that 6 new shapes are created every time the module is triggered.</p>
+<p class="p1">If you click on the “Trig Delay” button you can see “trigDelayRandom” is set to 1 meaning a random delay will be added to spread out the particles over the whole stepTimeBeats time period.</p>
+<p class="p1">If you click on the “BPM, Step Time, Lifetime” button to the right of the “Options” button, you can see “bpm” is set to 60, meaning each beat lasts 1 second.</p>
+<p class="p1">“stepTimeBeats” is set to 6, meaning there is a new trigger every 6 seconds which creates 6 new shapes (because numParticlesPerTrigger is 6) at random times during the 6 seconds.</p>
+<p class="p1">“lifetimeBeats” is set to 16 which means each shape will be alive for 16 seconds, then it will disappear.</p>
+<p class="p1">If you click on the “Shape” button and below that the “Type & Options” button, you can change the shape to something else.</p>
+<p class="p1">If you click on the “Draw” button and below that the “Scale” button, you can see that there are 3 curves - scaleXCurve, scaleYCurve & scaleZCurve - that change the scale of the shape along the X, Y and Z axes. (Actually, each curve is the same but they start at different points in the cycle).</p>
+<p class="p1">The curves show changes to the scale over the lifetime of the shape. In this example each X/Y/Z dimension is stretched and squeezed twice at different times over the 16 second lifetime of the shape. The effect of these curves is to add a slowly-moving wobble through the shape.</p>
+<p class="p1"><br></p>
+</body>
+</html>

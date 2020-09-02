@@ -52,9 +52,9 @@ TXSystem1 {		// system module 1
 	*initClass{
 		// create event and set variables:
 		dataBank = ();
-		dataBank.systemVersion = "088";					// version of the TX Modular system shown in gui
-		dataBank.standaloneName = "TX_Modular_088s";
-		dataBank.systemRevision = 1005;					// current revision no of the system
+		dataBank.systemVersion = "089";					// version of the TX Modular system shown in gui
+		dataBank.standaloneName = "TX_Modular_089s";
+		dataBank.systemRevision = 1007;					// current revision no of the system
 
 		dataBank.savedSystemRevision = 0;
 		//dataBank.modulesVisibleOrigin = Point.new(0,0);
@@ -98,7 +98,8 @@ TXSystem1 {		// system module 1
 			'TXBusAudioAux',
 			'TXBusControlAux',
 			//
-			//	N.B. ADD ANY NEW MODULES INTO THIS LIST (by alpha) AND FOLLOWING ONES (by category):  --->
+			//	N.B. ADD ANY NEW MODULES INTO THIS LIST (by alpha)
+			//       AND ADD THEM TO THE FOLLOWING LISTS (by category):  --->
 			//
 			// other modules in ALPHA order', by their defaultName
 			'TXActionSeq3',
@@ -246,6 +247,8 @@ TXSystem1 {		// system module 1
 			'TXMonoEnvDADSSR',
 			'TXMultiTapDelay2',
 			'TXMultiTrackSeq',
+			'TXNHHall',
+			'TXNHHallSt',
 			'TXNoiseGate',
 			'TXNoiseGateSt',
 			'TXNoiseWhitePink',
@@ -331,7 +334,7 @@ TXSystem1 {		// system module 1
 			'TXTrig2Gate',
 			'TXTrigImpulse',
 			'TXTubes',
-			//'TXV_System', // not working
+			'TXV_System', // removed if not found
 			'TXVocoder2',
 			'TXVocoderFX2',
 			'TXVosim',
@@ -360,6 +363,11 @@ TXSystem1 {		// system module 1
 			'TXXFader2to1C',
 			'TXXFader4to2',
 		];
+		// remove TXV_System if class not found
+		if ('TXV_System'.asClass.isNil, {
+			arrAllPossModules.remove('TXV_System');
+		});
+
 	}
 
 	*buildArrays2 {
@@ -481,8 +489,13 @@ TXSystem1 {		// system module 1
 			["Control: Switch", "Toggle Switch", TXToggleSwitch],
 			// ["Control: Quartz", "QC Particles", TXQCParticles2], // not currently working
 			// ["Control: Quartz", "Quartz Player", TXQCPlayer4], // not currently working
-			// ["Control: TXV System", "TXV System", TXV_System], // not currently working
+			["Control: TXV System", "TXV System", 'TXV_System'.asClass], // removed if not found
 		];
+		// remove TXV_System if class not found
+		if ('TXV_System'.asClass.isNil, {
+			dataBank.arrSourceModulesByCategory.removeAllSuchThat({arg item, i; item[1] == "TXV System";})
+		});
+		// add alphabetical array
 		dataBank.arrSourceModulesByCategoryWithAlpha = dataBank.arrSourceModulesByCategory.collect({arg item, i;
 			["All Source Modules ", item[1], item[2]];
 		})
@@ -621,6 +634,8 @@ TXSystem1 {		// system module 1
 			["   Infinity St", TXInfinitySt, "audio"],
 			["   JPverb", TXJPverb, "audio"],
 			["   JPverb St", TXJPverbSt, "audio"],
+			["   NHHall", TXNHHall, "audio"],
+			["   NHHall St", TXNHHallSt, "audio"],
 			["   Reverb", TXReverb2, "audio"],
 			["   Reverb St", TXReverbSt2, "audio"],
 			["   ReverbA", TXReverbA, "audio"],
@@ -808,6 +823,9 @@ TXSystem1 {		// system module 1
 	*startMain{ arg argFileNameString;
 		var	holdFileName, holdData, holdFileNameString, holdString;
 		var holdInfoScreen, holdStartFunction;
+
+		// kill all servers - cleanup
+		Server.killAll;
 
 		// Create a new instance of ServerOptions
 		dataBank.holdServerOptions = ServerOptions.new;
@@ -1064,6 +1082,7 @@ TXSystem1 {		// system module 1
 			});
 			TXClipboardWindow.closeWindow;
 			TXCurveBuilder.closeWindow;
+			TXPointsCurveEditor.closeWindow;
 			TXColor.closePickerWindow;
 			// empty system
 			this.emptySystem;
@@ -1866,7 +1885,7 @@ TXSystem1 {		// system module 1
 			var holdModule;
 			// try to get module from ID. if found load data
 			holdModule = this.getModuleFromID(item.at(2));
-			if (holdModule != 0, {holdModule.loadData(item);});
+			if (holdModule != 0, {holdModule.loadData(item, true);});
 
 		});
 		// for each saved channel - load data

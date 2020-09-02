@@ -69,14 +69,14 @@ TXColour : Color {		// TX system colours
 	}
 	*sysColourSet2 {  arg argAlpha = 1;
 		classData.sysAlpha = argAlpha;
-		sysGuiCol1 = Color.new255(70, 120, 200).blend(Color.grey(0.65), 0.25).alpha_(argAlpha);
+		sysGuiCol1 = Color.new255(70, 120, 200).blend(Color.grey(0.35), 0.25).alpha_(argAlpha);
 		// sysGuiCol2 = Color.new255(0, 110, 140).alpha_(argAlpha);
 		//sysGuiCol2 = Color.new255(140, 180, 180).alpha_(argAlpha);
 		//sysGuiCol2 = Color.new255(90, 140, 160).alpha_(argAlpha);
-		sysGuiCol2 = Color.new255(90, 140, 160).blend(Color.grey(0.6), 0.25).alpha_(argAlpha);
+		sysGuiCol2 = Color.new255(90, 140, 160).blend(Color.grey(0.3), 0.25).alpha_(argAlpha);
 		sysGuiCol3 = Color.new255(255, 169, 100).blend(Color.grey(0.65), 0.2).alpha_(argAlpha);
 		//sysGuiCol4 = Color.new255(150, 200, 250).blend(Color.grey(0.6), 0.45).alpha_(argAlpha);
-		sysGuiCol4 = Color.new255(70, 120, 200).blend(Color.grey(0.8), 0.7).alpha_(argAlpha);
+		sysGuiCol4 = Color.new255(70, 120, 200).blend(Color.grey(0.6), 0.7).alpha_(argAlpha);
 		sysMainWindow = Color.grey(0.85).blend(sysGuiCol1, 0.1).alpha_(argAlpha);
 		sysInterface = Color.new255(99.5, 130, 250, 255).alpha_(argAlpha);
 		sysChannelAudio = Color.grey(0.83).blend(TXColor.sysGuiCol1, 0.3).alpha_(argAlpha);
@@ -86,10 +86,10 @@ TXColour : Color {		// TX system colours
 		sysModuleName =  TXColor.paleYellow.alpha_(argAlpha);
 		sysSelectedModString =  Color.new255(250, 255, 120) .alpha_(argAlpha);
 		//sysDeleteCol = Color.new255(130, 135, 135).alpha_(argAlpha);
-		sysDeleteCol = Color.new255(120, 127, 127).alpha_(argAlpha);
+		sysDeleteCol = Color.new255(120, 127, 127).blend(Color.black, 0.1).alpha_(argAlpha);
 		sysRecordCol = this.red.blend(TXColor.grey, 0.5);
 		sysEditCol = sysGuiCol3;
-		sysHelpCol = this.purple.blend(Color.grey(0.8), 0.6).alpha_(argAlpha);
+		sysHelpCol = this.purple.blend(Color.grey(0.6), 0.6).alpha_(argAlpha);
 		// sysGuiCol1 = Color.new255(0, 0, 220).alpha_(argAlpha);
 		//sysGuiCol1 = Color.new255(150, 150, 190).alpha_(argAlpha);
 		//sysGuiCol1 = Color.new255(70, 160, 200).alpha_(argAlpha);
@@ -97,7 +97,7 @@ TXColour : Color {		// TX system colours
 		sysInterfaceButton = Color.new255(70, 120, 200).alpha_(argAlpha);
 		//sysLabelBackground =  Color.new255(140, 190, 235).alpha_(argAlpha);
 		//sysLabelBackground =  Color.grey(0.73).alpha_(argAlpha);
-		sysLabelBackground =  Color.new255(164, 170, 175).alpha_(argAlpha);
+		sysLabelBackground =  Color.new255(164, 170, 175).blend(Color.black, 0.1).alpha_(argAlpha);
 		// sysViewHighlight =   Color.new255(76, 168, 5).alpha_(argAlpha);
 		sysViewHighlight =   Color.new255(255, 255, 190).alpha_(argAlpha);
 	}

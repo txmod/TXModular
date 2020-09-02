@@ -1,0 +1,36 @@
+Building TXV in openFrameworks
+
+- The following notes are about what is required to build TXV and hopefully this will work on all platforms (so far this has only been tested on MacOS 10.11.1 and Windows 10)
+
+- to build TXV you will need to following:
+
+- Download openFrameworks 0.9.8 for your platform (https://openframeworks.cc)
+(note:  0.9.8 is not the latest version of openFrameworks but is the one currently used for TXV.)
+
+- Download  the TXV project folder which contains Addons_modified_for_TXV,  src & data folders.
+All required OF addons are in the folder “Addons_modified_for_TXV” and should be added to the OF addons folder:
+- Use TXV version of the following addons, with changes marked below:
+ofxAssimpModelLoader
+ofxImageSequenceRecorder
+ofxMathMesh - TXV version has changes to ofxParametricSurface.cpp (search for “Paul”)
+ofxMSACore
+ofxMSAFluid
+ofxMSAPerlin
+ofxOrnament - TXV version has various changes in order to add zoomX/Y, shiftX/Y & rotate
+ofxOSC
+ofxSvg - TXV version has new method clear()
+ofxThreadedImageLoader
+ofxTweenLite
+ofxVideoRecorder - On Mac, use TXV version with changes for latest ffmpeg . On Windows, download this modified version: http://github.com/DomAmato/ofxVideoRecorder
+- TXV is currently untested on Linux.
+
+- using the OF Project Generator, build an empty project called TXV adding in all the required addons listed before.
+- NOTE: you may later need to add the addon ofxTweenLite into the project yourself - it may not have worked by adding it with the Project Generator.
+
+- Once the TXV Project has been created, add in the TXV src folder and put the TXV data folder into the bin folder.
+
+- Download the latest version of ffmpeg (http://ffmpeg.org/download) for your platform and add it to the /bin/data folder in the TXV OF project. 
+ffmpeg is used by TXV to save video files.
+
+Hopefully now you will have everything you need to build TXV for your platform.
+

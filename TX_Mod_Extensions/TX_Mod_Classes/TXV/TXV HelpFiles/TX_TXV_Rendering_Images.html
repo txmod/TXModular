@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Rendering Images</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">Within TXV, some modules are able to render images directly. This is shown in the module properties at the top of each module's help file, marked as "Renders".</p>
+<p class="p1">The help file <A href="TX_TXV_List_Of_All_Modules.html">TXV List Of All Modules<A> shows the properties of all modules. They are shown in groups:<br>
+In the group <b>Draw Sources</b>, a few modules render an image - for example TXV Gradient & TXV Slide Show.<br>
+In the group <b>Image FX</b> <b><i>all</i></b> the modules render an image.<br>
+In the group <b>Draw Destinations</b>, a few modules render an image - for example TXV EnvMap & TXV Feedback.<p>
+<p class="p1">Any other module that uses images can import the rendered image directly. So for example, by using each rendered image as the source of the next effect, you could create a chain of FX before using the final FX image in the material wrapped around a 3D shape.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>TXV Render Image - render & save images & video</i></b></p>
+<p class="p1">The <A href="TX_TXV Render Image.html">TXV Render Image<A> module can be used to create an image from drawn elements. It is a Draw Destination module, so other modules can be drawn onto it.</p>
+<p class="p1">For example, you might want to create an image from some drawn 2D shapes to be used as a mask image. </p>
+<p class="p1">TXV Render Image module can also record single images or continuous video, so this is how you would save any output from the TXV.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>TXV Image vs. TXV Tile & Mask</i></b></p>
+<p class="p1">The difference between these 2 modules is also to do with rendering:</p>
+<p class="p1">The <A href="TX_TXV Image.html">TXV Image<A> module draws an image (or part of it) with optional tiling and masking.</p>
+<p class="p1"><A href="TX_TXV Tile & Mask.html">TXV Tile & Mask<A> is exactly the same except that it also renders the image before drawing it. This is useful if you need to import the tiled or masked image directly into another module, rather than just drawing it.</p>
+<p class="p1"><br></p>
+</body>
+</html>

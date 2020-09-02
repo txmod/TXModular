@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<meta name="Generator" content="Cocoa HTML Writer">
+<meta name="CocoaVersion" content="1138.47">
+<style type="text/css">
+p.p1 {margin: 8.0px 0.0px 0.0px 0.0px; font: 15.0px Helvetica; line-height: 18.0px}
+</style>
+</head>
+<body>
+<p class="p1"><b>TXV Ex 4 Image FX</b></p>
+<p class="p1"><br></p>
+<p class="p1"><i>See also: </i><A href="TX_TXV System.html">TXV System<A>, <A href="TX_TXV_Rendering_Images.html">TXV Rendering Images<A> & <A href="TX_TXV_Assets.html">TXV Assets<A></p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Introduction</i></b></p>
+<p class="p1">This help file uses an example file “Ex_4 Image FX" found in the folder "TXV_Examples".</p>
+<p class="p1">Please open the example in the TX Modular system.</p>
+<p class="p1">In order to start the TXV software, you can use the “Start TXV” button if you are using the standalone TX Modular (for MacOS) which includes TXV inside it.  If you are using another platform, you will need to have a TXV build ready for your platform and open it separately.</p>
+<p class="p1">Once TXV has been started, press the button “Rebuild TXV System” which will send all the data from the TX Modular to TXV.</p>
+<p class="p1">You should then see a large red hexagon with a black border rotating in a circle, with multi-coloured stars rising and falling, with the whole image being distorted as it moves.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Overview</i></b></p>
+<p class="p1">This example has been built in stages:</p>
+<p class="p1">First, the initial image was created by drawing moving shapes to a TXV Render Image module.</p>
+<p class="p1">Then this image was sent through a chain of Image FX modules to change its colours, add blurring, and finally to add “wobble” which distorts the image.</p>
+<p class="p1">If you move the sliders on the Interface window, you can see how each of the Image FX changes the image in different ways.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Drawing and rendering the initial image</i></b></p>
+<p class="p1">If you click on the button “Modules + Channels”, you can see in the left-hand column all the modules used.</p>
+<p class="p1">The red hexagon with a black border is created in TXV Shape 2D [1]. If you open it up and click on the “Shape” button, you will see the shapeType is “Circle”.  However, below that the “circleResolution” is set to 6 - in other words the hexagon is a circle made up of 6 lines. If you set the circleResolution to a higher value it will look more like a circle (although the wobble is distorting its shape).</p>
+<p class="p1"><br></p>
+<p class="p1">The multi-coloured stars are created in TXV Shape2D Multi [1]. If you open it up and click on the “Shape” button, you will see  the shapeType is “Star”.</p>
+<p class="p1">Below that “numCopies” is set to 16 so there will be 16 stars.</p>
+<p class="p1">Further down you will see that “circleResolution” is set to 8 giving stars with 8 points.</p>
+<p class="p1">If you click on the “Colors” button, and click on "Fill Color", you will see the colorHue and colorHueEnd are set to different values. Then click on the “Color Spread” button and you will see the colorSpreadCurve is a linear ramp, meaning that the stars are each given a hue spread evenly between colorHue and colorHueEnd values.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open TXV DrawConnection [1] and [2], you can see that the hexagon and stars are drawn to Layers 1 and 2 of the Render Image [1] module, so the stars will be in front of the hexagon.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open the TXV Render Image [1] module and click on the “Clear & Render” button and then below that the “Clear” button, you will see that “clearBeforeRender” in on. This means that a background colour, in this case light blue, is drawn on the image before the shapes are drawn.</p>
+<p class="p1"><br></p>
+<p class="p1"><b><i>Chaining Image FX</i></b></p>
+<p class="p1">If you open the TXV Color Controls [1] module and click on the “Image” button, you will see “extSourceImageModule” is set to “TXV Render Image [1]” and “useExternalSourceImage” is set on. This means that this module takes the image created by TXV Render Image [1] and modifies it.</p>
+<p class="p1">If you click on the “Color Adjust” button, you can see all the ways that the colors on the image can be changed. Try changing some of the values and see what effect it has on the image.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open the TXV Blur [1] module and click on the “Image & Blur” button, you will see “extSourceImageModule” is set to “TXV Color Controls [1]” and “useExternalSourceImage” is set on.</p>
+<p class="p1">This means that the Blur is being added after the Color Controls.</p>
+<p class="p1"><br></p>
+<p class="p1">If you open the TXV Wobble [1] module and click on the “Source Image & Wobble” button, you will see “extSourceImageModule” is set to “TXV Blur [1]” and “useExternalSourceImage” is set on.</p>
+<p class="p1">So the Wobble is being added after the Blur.</p>
+<p class="p1"><br></p>
+<p class="p1">Since the Wobble is the last of the Image FX we want to add, the Wobble can then be drawn to the main window.</p>
+<p class="p1">This can be seen by opening “TXV DrawConnection [3].</p>
+<p class="p1"><br></p>
+<p class="p1">If you open “TXV System [1]” and click on the “Image Connections” button, you can see an overview of how the images are chained in the Image FX modules.
+<p class="p1"><br></p>
+<p class="p1"><b><i>Using your own images in the FX chain</i></b></p>
+<p class="p1">First of all you need to add Image Assets to the TXV System:</p>
+<p class="p1">Open “TXV System [1]”,  click on the “Assets” button, and make sure “Asset type” is set to Image.</p>
+<p class="p1">Now you can drag multiple image files to the yellow box to add them to the system. Alternatively, you can type in the file path of a single image file and use the “Add Image File” button to add images one by one.</p>
+<p class="p1"><br></p>
+<p class="p1">Once you have added your image assets, open the TXV Color Controls [1] module and click on the “Image” button.</p>
+<p class="p1">Turn off “useExternalSourceImage” so that an image asset will be used as the source image instead.</p>
+<p class="p1">Then you use “sourceImageAsset” to select whichever image you want to use, and your image will now be used in the whole FX chain.</p>
+<p class="p1">Finally, click on the "Run Interface" button, and move the Image FX sliders to see the how your image is affected.</p>
+<p class="p1"><br></p>
+</body>
+</html>
